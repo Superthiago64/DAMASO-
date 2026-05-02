@@ -1,0 +1,731 @@
+```html
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth" style="scroll-padding-top: 140px;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DAMASO | Alta Iluminación Editorial</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- HTML2PDF para generar cotizaciones reales -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#030303',
+                            surface: '#111111',
+                            border: '#333333',
+                            text: '#f2f2f2',
+                            muted: '#a1a1a1'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        editorial: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* SOLUCIÓN AL BUG DEL SCROLL HORIZONTAL */
+        html, body { 
+            background-color: #030303; 
+            color: #f2f2f2; 
+            max-width: 100vw;
+            overflow-x: hidden; 
+            width: 100%;
+            position: relative;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #030303; }
+        ::-webkit-scrollbar-thumb { background: #333333; border-radius: 10px; }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .img-catalog { transition: transform 0.8s ease; cursor: pointer; }
+        .group:hover .img-catalog { transform: scale(1.05); }
+
+        .modal-overlay { backdrop-filter: blur(10px); }
+        
+        /* Plantilla de PDF escondida fuera de la pantalla para no romper el ancho en móviles */
+        #pdf-render-container {
+            position: absolute;
+            top: 0;
+            left: -9999px; /* Aleja el div 800px fuera de la vista */
+            z-index: -9999;
+            opacity: 0;
+            pointer-events: none;
+            width: 800px;
+        }
+
+        /* Quitar scroll del input search webkit */
+        input[type="search"]::-webkit-search-decoration,
+        input[type="search"]::-webkit-search-cancel-button,
+        input[type="search"]::-webkit-search-results-button,
+        input[type="search"]::-webkit-search-results-decoration { display: none; }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-white selection:text-black">
+
+    <!-- Navegación Superior -->
+    <nav class="fixed w-full z-40 bg-brand-bg/95 backdrop-blur-xl border-b border-brand-border transition-all duration-500 flex flex-col" id="navbar">
+        <!-- Barra Principal -->
+        <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
+            
+            <div class="flex items-center space-x-6">
+                <!-- Botón de Menú Hamburguesa (Categorías) -->
+                <button onclick="toggleCategories()" class="text-white hover:text-brand-muted transition-colors p-2 focus:outline-none relative z-50">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
+                </button>
+                
+                <!-- Logo -->
+                <a href="#" class="font-editorial text-3xl tracking-[0.25em] text-white uppercase font-bold">Damaso</a>
+            </div>
+
+            <!-- Menú Desplegable (Controlado por JS) -->
+            <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 bg-brand-surface border border-brand-border py-2 shadow-2xl opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-50">
+                <div class="px-6 py-3 text-[9px] text-brand-muted tracking-[0.3em] uppercase border-b border-brand-border mb-2 font-bold">Catálogo</div>
+                <a href="#coleccion" onclick="filterCatalog('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-white/10 uppercase transition-all">Ver Todo</a>
+                <a href="#coleccion" onclick="filterCatalog('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de mesa</a>
+                <a href="#coleccion" onclick="filterCatalog('pie')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de pie</a>
+                <a href="#coleccion" onclick="filterCatalog('techo')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de techo</a>
+                <a href="#coleccion" onclick="filterCatalog('candiles')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Candiles</a>
+                <a href="#coleccion" onclick="filterCatalog('arbotantes')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Arbotantes</a>
+                <a href="#coleccion" onclick="filterCatalog('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de exterior</a>
+                <a href="#coleccion" onclick="filterCatalog('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Proyectos especiales</a>
+                <a href="#coleccion" onclick="filterCatalog('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Espejos</a>
+                
+                <!-- Links extra para móviles -->
+                <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
+                    <a href="#disenador" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">El Diseñador</a>
+                    <a href="#manifiesto" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Manifiesto</a>
+                    <a href="#contacto" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Contacto</a>
+                </div>
+            </div>
+
+            <!-- Menú Central -->
+            <div class="hidden md:flex items-center space-x-10">
+                <a href="#disenador" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">El Diseñador</a>
+                <a href="#manifiesto" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">Manifiesto</a>
+                <a href="#contacto" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">Contacto</a>
+            </div>
+
+            <!-- Icono Carrito -->
+            <div class="flex items-center">
+                <button onclick="toggleCart()" class="text-white hover:text-brand-muted transition-colors relative p-2">
+                    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-white text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Barra de Búsqueda Permanente (Reemplaza a los antiguos botones de categorías) -->
+        <div class="w-full bg-brand-surface/80 border-t border-brand-border h-14 flex items-center justify-center px-4">
+            <div class="w-full max-w-3xl relative flex items-center">
+                <i data-lucide="search" class="w-4 h-4 text-brand-muted absolute left-4"></i>
+                <input type="search" id="live-search" placeholder="Buscar pieza, modelo o SKU..." class="w-full bg-transparent border-none text-[11px] tracking-widest text-white placeholder-brand-muted focus:outline-none pl-12 py-2 uppercase">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Modal de Especificaciones -->
+    <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/80 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
+        <div class="bg-brand-surface border border-brand-border w-full max-w-6xl max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
+            <button onclick="closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+            
+            <div class="w-full md:w-1/2 bg-brand-bg relative min-h-[300px]">
+                <img id="modal-img" src="" class="absolute inset-0 w-full h-full object-cover">
+            </div>
+            
+            <div class="w-full md:w-1/2 p-8 sm:p-12 text-sm font-light flex flex-col">
+                <h2 id="modal-title" class="font-editorial text-4xl text-white mb-2 uppercase"></h2>
+                <p id="modal-desc" class="text-brand-muted mb-8 italic"></p>
+                
+                <div class="space-y-4 text-brand-muted flex-1 overflow-y-auto pr-4 custom-scroll">
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Código SKU:</span>
+                        <span class="col-span-2" id="modal-sku"></span>
+                    </div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Specs Lumínicas:</span>
+                        <span class="col-span-2" id="modal-luz"></span>
+                    </div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Voltaje:</span>
+                        <span class="col-span-2" id="modal-volt"></span>
+                    </div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Cable:</span>
+                        <span class="col-span-2" id="modal-cable"></span>
+                    </div>
+                    
+                    <div class="py-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px] block mb-2">Dimensiones:</span>
+                        <div class="grid grid-cols-2 gap-2 pl-4 text-xs">
+                            <div>Ancho: <span id="modal-w" class="text-white"></span></div>
+                            <div>Alto: <span id="modal-h" class="text-white"></span></div>
+                            <div>Fondo: <span id="modal-d" class="text-white"></span></div>
+                            <div>Diámetro: <span id="modal-dia" class="text-white"></span></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Peso:</span>
+                        <span class="col-span-2" id="modal-peso"></span>
+                    </div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Materiales:</span>
+                        <span class="col-span-2" id="modal-mat"></span>
+                    </div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Acabados:</span>
+                        <span class="col-span-2" id="modal-fin"></span>
+                    </div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Tiempo Entrega:</span>
+                        <span class="col-span-2" id="modal-time"></span>
+                    </div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Certificaciones:</span>
+                        <span class="col-span-2" id="modal-cert"></span>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-brand-border flex items-center justify-between">
+                    <span id="modal-price" class="font-editorial text-2xl text-white"></span>
+                    <button id="modal-add-btn" class="bg-white text-black px-6 py-3 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-brand-muted transition-colors">
+                        Agregar a Cotización
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carrito Lateral -->
+    <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-brand-border transform translate-x-full transition-transform duration-500 flex flex-col">
+        <div class="p-8 border-b border-brand-border flex justify-between items-center">
+            <h2 class="font-editorial text-2xl tracking-wider text-white">Mi Selección</h2>
+            <button onclick="toggleCart()" class="text-brand-muted hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-8 space-y-6" id="cart-items"></div>
+        
+        <!-- Zona de Checkout / PDF -->
+        <div class="p-8 border-t border-brand-border bg-black">
+            <!-- Dos inputs: Nombre y Correo -->
+            <div class="mb-6 space-y-3">
+                <input type="text" id="client-name" placeholder="Nombre del Cliente / Proyecto" class="w-full bg-brand-surface border border-brand-border p-3 text-xs text-white focus:outline-none focus:border-white transition-colors">
+                <input type="email" id="client-email" placeholder="Correo Electrónico" class="w-full bg-brand-surface border border-brand-border p-3 text-xs text-white focus:outline-none focus:border-white transition-colors">
+            </div>
+            
+            <div class="flex justify-between text-white font-editorial text-xl mb-6">
+                <span>Total Estimado</span><span id="cart-total">$0 MXN</span>
+            </div>
+            
+            <div class="space-y-3">
+                <button onclick="checkoutPDF()" class="w-full bg-transparent border border-white text-white py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white hover:text-black transition-colors flex justify-center items-center gap-2">
+                    <i data-lucide="download" class="w-4 h-4"></i> Descargar Cotización (PDF)
+                </button>
+                <button onclick="checkoutWhatsApp()" class="w-full bg-[#25D366] text-black py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-[#20b858] transition-colors flex justify-center items-center gap-2">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+    <!-- Hero -->
+    <header class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden bg-black">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2574&auto=format&fit=crop" alt="Damaso Hero" class="w-full h-full object-cover opacity-60 brightness-110">
+            <div class="absolute inset-0 bg-gradient-to-b from-brand-bg/40 via-transparent to-brand-bg"></div>
+        </div>
+        <div class="relative z-10 w-full max-w-[95%] mx-auto flex flex-col items-center text-center px-4">
+            <div class="reveal">
+                <p class="text-[10px] tracking-[0.4em] text-white/80 uppercase mb-4 font-semibold italic">Luxury Lighting Studio</p>
+                <h1 class="font-editorial text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-8">Damaso<br><span class="italic text-brand-muted">Studio</span></h1>
+                <p class="text-lg md:text-xl text-white/90 font-light mx-auto max-w-2xl mb-12">Esculpiendo la oscuridad con piezas de diseño atemporal. Hecho a mano en México.</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                    <a href="#coleccion" class="w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] text-black bg-white uppercase font-bold px-10 py-5 hover:bg-brand-muted transition-all">VER COLECCIÓN <i data-lucide="chevron-right" class="w-4 h-4 ml-2"></i></a>
+                    <a href="https://wa.me/523338703071?text=Hola%20Damaso,%20me%20gustaría%20cotizar%20una%20pieza." target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] text-white border border-white uppercase font-bold px-10 py-5 hover:bg-white hover:text-black transition-all">CONTACTO DIRECTO <i data-lucide="message-circle" class="w-4 h-4 ml-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Catálogo -->
+    <section id="coleccion" class="py-32 bg-brand-bg">
+        <div class="max-w-[95%] mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+                <div>
+                    <h2 class="font-editorial text-5xl md:text-7xl text-white mb-6" id="catalog-title">Catálogo</h2>
+                    <p class="text-brand-muted text-sm tracking-widest uppercase" id="catalog-subtitle">Diseño de Autor 2026</p>
+                </div>
+            </div>
+            <!-- Grid de Productos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-24" id="catalog-grid"></div>
+        </div>
+    </section>
+
+    <!-- Diseñador -->
+    <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border">
+        <div class="max-w-[95%] mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                <div class="lg:col-span-5 reveal">
+                    <!-- FOTOGRAFÍA DEL DISEÑADOR: Reemplaza el src con la ruta de tu foto -->
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop" alt="Iván Damaso" class="w-full aspect-[3/4] object-cover grayscale brightness-110 border border-brand-border">
+                </div>
+                <div class="lg:col-span-7 reveal">
+                    <h2 class="font-editorial text-5xl md:text-8xl text-white mb-12">Iván<br>Damaso</h2>
+                    <p class="text-xl text-white font-light italic border-l-2 border-white pl-8 mb-8">"La luz es el alma de la arquitectura."</p>
+                    <p class="text-brand-muted max-w-xl">Diseñador radicado en San Agustín, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manifiesto -->
+    <section id="manifiesto" class="py-40 bg-black text-center reveal">
+        <div class="max-w-4xl mx-auto px-6">
+            <p class="text-[10px] tracking-[0.5em] text-brand-muted uppercase mb-12">Filosofía de marca</p>
+            <h2 class="font-editorial text-4xl md:text-6xl text-white leading-tight">
+                No fabricamos lámparas. Creamos puntos de enfoque que transforman lo cotidiano en algo <span class="italic">extraordinario</span>.
+            </h2>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto" class="bg-brand-surface pt-32 pb-12 border-t border-brand-border">
+        <div class="max-w-[95%] mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24 reveal">
+                <div class="md:col-span-2">
+                    <h3 class="font-editorial text-4xl text-white uppercase mb-8">Damaso</h3>
+                    <p class="text-brand-muted max-w-sm font-light">Alta iluminación y objetos de diseño.</p>
+                </div>
+                <div>
+                    <h4 class="text-[10px] tracking-[0.3em] text-white uppercase mb-8 font-bold">Estudio</h4>
+                    <p class="text-brand-muted text-sm font-light">San Agustín, Jalisco. México.<br>T. +52 33 3870 3071</p>
+                </div>
+                <div>
+                    <h4 class="text-[10px] tracking-[0.3em] text-white uppercase mb-8 font-bold">Social</h4>
+                    <ul class="text-brand-muted text-sm space-y-4 font-light">
+                        <!-- Enlace de Instagram Real -->
+                        <li><a href="https://www.instagram.com/damaso_lamparas?igsh=MTkxcDU0anJweWxvcQ==" target="_blank" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="instagram" class="w-4 h-4"></i> Instagram</a></li>
+                        <li><a href="https://www.facebook.com/damaso.lighting" target="_blank" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="facebook" class="w-4 h-4"></i> Facebook</a></li>
+                        <li><a href="https://wa.me/523338703071" target="_blank" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="message-square" class="w-4 h-4"></i> WhatsApp</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-center text-[10px] tracking-[0.2em] text-brand-muted uppercase pt-12 border-t border-brand-border">&copy; 2026 DAMASO STUDIO. IVÁN DAMASO. JALISCO, MÉXICO.</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Flotante -->
+    <a href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#25D366] text-white p-5 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 z-50"><i data-lucide="phone" class="w-6 h-6"></i></a>
+
+
+    <!-- TEMPLATE PARA GENERACIÓN DE PDF (Seguro y oculto del flujo visual) -->
+    <div id="pdf-render-container">
+        <div id="invoice-template" class="bg-white text-black p-12 font-sans" style="width: 800px; min-height: 1122px;">
+            <div class="flex justify-between items-end border-b-2 border-black pb-8 mb-8">
+                <div>
+                    <h1 class="font-editorial text-5xl font-bold uppercase tracking-widest">Damaso</h1>
+                    <p class="text-sm mt-2 text-gray-600">Alta Iluminación Editorial</p>
+                    <p class="text-xs text-gray-500 mt-1">San Agustín, Jalisco, México | +52 33 3870 3071</p>
+                </div>
+                <div class="text-right">
+                    <h2 class="text-2xl font-bold text-gray-800 tracking-widest uppercase">Cotización</h2>
+                    <p class="text-sm text-gray-600 mt-2">Fecha: <span id="pdf-date"></span></p>
+                    <p class="text-sm text-gray-600">Folio: <span id="pdf-folio"></span></p>
+                </div>
+            </div>
+            
+            <div class="mb-10 flex flex-col space-y-1">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Datos del Cliente</h3>
+                <p class="text-lg font-medium border-b border-gray-300 pb-1" id="pdf-client-name">Cliente General</p>
+                <p class="text-sm text-gray-700 pt-1" id="pdf-client-email">correo@ejemplo.com</p>
+            </div>
+            
+            <table class="w-full text-left mb-10 border-collapse">
+                <thead>
+                    <tr class="border-b border-black text-xs uppercase tracking-widest">
+                        <th class="py-3 w-1/6">SKU</th>
+                        <th class="py-3 w-3/6">Modelo / Descripción</th>
+                        <th class="py-3 w-1/6 text-center">Cant.</th>
+                        <th class="py-3 w-1/6 text-right">Precio Unit.</th>
+                    </tr>
+                </thead>
+                <tbody id="pdf-items">
+                    <!-- Inyectado por JS -->
+                </tbody>
+            </table>
+            
+            <div class="flex justify-end mb-16">
+                <div class="w-1/3 border-t-2 border-black pt-4">
+                    <div class="flex justify-between font-bold text-xl">
+                        <span>TOTAL</span>
+                        <span id="pdf-total">$0.00 MXN</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-xs text-gray-500 space-y-2 mt-auto pt-10 border-t border-gray-300">
+                <p><strong class="text-black">Condiciones Comerciales:</strong></p>
+                <p>- Precios sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.</p>
+                <p>- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).</p>
+                <p class="font-bold text-black">- No se aceptan anticipos.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- SCRIPT PRINCIPAL -->
+    <script>
+        lucide.createIcons();
+
+        // BASE DE DATOS EXTENDIDA 
+        const dbProducts = [
+            { 
+                id: 1, name: "Monolito Noir", category: "mesa", price: 6500, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800",
+                sku: "DM-MES-001",
+                desc: "Presencia sólida. Pieza torneada que proyecta luz focal.",
+                specsLight: "LED Integrado 12W, 2700K (Cálida), 1100lm, Dimerizable",
+                cable: "Textil negro 2.0m con interruptor en línea",
+                dims: { w: "20 cm", h: "45 cm", d: "20 cm", dia: "N/A" },
+                peso: "4.5 kg",
+                volt: "110-240V 50/60Hz",
+                mat: "Acero al carbón sólido de 3/16\"",
+                fin: "Pavonado negro mate artesanal",
+                time: "4 a 6 semanas",
+                cert: "NOM, CE"
+            },
+            { 
+                id: 2, name: "Estela Vertical", category: "pie", price: 12800, img: "https://images.unsplash.com/photo-1513506003901-1e6a229e9d15?q=80&w=800",
+                sku: "DM-PIE-002", desc: "Minimalismo escultórico. Anclaje de concreto con varilla difusora.",
+                specsLight: "Tira LED COB 24V, 3000K, 2200lm", cable: "PVC transparente 3.0m, pedal on/off",
+                dims: { w: "30 cm", h: "180 cm", d: "30 cm", dia: "30 cm (base)" }, peso: "12 kg", volt: "110V-220V", mat: "Concreto pulido y Latón macizo", fin: "Gris natural y Latón cepillado", time: "6 semanas", cert: "NOM"
+            },
+            { 
+                id: 3, name: "Órbita Suspendida", category: "techo", price: 8900, img: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=800",
+                sku: "DM-TEC-003", desc: "Aro de luz cenital suspendido por tensores invisibles.",
+                specsLight: "LED SMD 40W, 4000K (Neutra)", cable: "Tensores de acero y cable transparente 1.5m",
+                dims: { w: "N/A", h: "5 cm", d: "N/A", dia: "80 cm" }, peso: "3.2 kg", volt: "110-240V", mat: "Aluminio aeroespacial, difusor acrílico", fin: "Anodizado negro/plata", time: "3 a 4 semanas", cert: "CE, RoHS"
+            },
+            { 
+                id: 4, name: "Cúpula Brutal", category: "candiles", price: 32000, img: "https://images.unsplash.com/photo-1543198126-a8ad8e47fb22?q=80&w=800",
+                sku: "DM-CAN-004", desc: "Candil monumental forjado con acabados industriales crudos.",
+                specsLight: "6x E26 Bulb Vintage 4W (Incluidas)", cable: "Cadena de acero y cable textil 2m",
+                dims: { w: "120 cm", h: "60 cm", d: "120 cm", dia: "120 cm" }, peso: "24 kg", volt: "110V", mat: "Acero estructural, cristal opaco", fin: "Óxido estabilizado y negro mate", time: "8 semanas", cert: "NOM"
+            },
+            { 
+                id: 5, name: "Sombra Muro", category: "arbotantes", price: 3400, img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=800",
+                sku: "DM-ARB-005", desc: "Baño de luz indirecta arquitectónica mediante dobleces de placa.",
+                specsLight: "LED 8W, 2700K indirecto", cable: "Conexión directa a muro (sin cable visto)",
+                dims: { w: "15 cm", h: "30 cm", d: "8 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-220V", mat: "Placa de acero doblada CNC", fin: "Pintura electrostática Arena", time: "2 a 3 semanas", cert: "NOM"
+            },
+            { 
+                id: 6, name: "Espejo Obsidiana", category: "espejos", price: 15400, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=800",
+                sku: "DM-ESP-006", desc: "Espejo retroiluminado con marco perimetral robusto flotante.",
+                specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro",
+                dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "100 cm" }, peso: "18 kg", volt: "110V (Driver incluido)", mat: "Cristal plata 6mm, herraje de hierro", fin: "Hierro forjado oscuro, luna clara", time: "4 semanas", cert: "NOM"
+            }
+        ];
+
+        let cart = [];
+
+        // RENDER CATÁLOGO
+        function renderCatalog(products) {
+            const grid = document.getElementById('catalog-grid');
+            grid.innerHTML = '';
+            
+            if(products.length === 0) {
+                grid.innerHTML = '<p class="text-brand-muted col-span-full">No se encontraron piezas con esa búsqueda.</p>';
+                return;
+            }
+
+            products.forEach(p => {
+                grid.innerHTML += `
+                    <div class="group reveal">
+                        <div class="relative overflow-hidden bg-brand-surface aspect-square border border-brand-border">
+                            <img src="${p.img}" class="img-catalog w-full h-full object-cover" onclick="openSpecModal(${p.id})">
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 pointer-events-none">
+                                <button class="bg-transparent border border-white text-white text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-2 hover:bg-white hover:text-black transition-all pointer-events-auto" onclick="openSpecModal(${p.id})">Ver Specs</button>
+                                <button onclick="addToCart(${p.id})" class="bg-white text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-brand-muted transition-all pointer-events-auto">Agregar Cotización</button>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex justify-between">
+                            <div><h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-muted" onclick="openSpecModal(${p.id})">${p.name}</h3><p class="text-[10px] tracking-[0.2em] text-brand-muted uppercase">${p.category}</p></div>
+                            <p class="font-editorial text-lg text-white">$${p.price.toLocaleString()}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            initReveal();
+        }
+
+        // CONTROL MENÚ HAMBURGUESA
+        function toggleCategories() {
+            const menu = document.getElementById('dropdown-menu');
+            if (menu.classList.contains('opacity-0')) {
+                menu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+                menu.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                menu.classList.remove('opacity-100', 'translate-y-0');
+            }
+        }
+
+        // FILTRO POR CATEGORÍA
+        function filterCatalog(cat) {
+            document.getElementById('live-search').value = ''; // Limpiar barra
+            const filtered = cat === 'all' ? dbProducts : dbProducts.filter(p => p.category === cat);
+            renderCatalog(filtered);
+            
+            document.getElementById('catalog-title').innerText = cat === 'all' ? "Catálogo Completo" : cat.charAt(0).toUpperCase() + cat.slice(1);
+            document.getElementById('catalog-subtitle').innerText = "Colección 2026";
+            
+            toggleCategories(); // Cerrar menú
+            
+            // Scroll suave hacia el catálogo
+            document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // BÚSQUEDA EN VIVO (Barra permanente)
+        document.getElementById('live-search').addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            if(q.length === 0) { 
+                renderCatalog(dbProducts); 
+                document.getElementById('catalog-title').innerText = "Catálogo Completo";
+                document.getElementById('catalog-subtitle').innerText = "Colección 2026";
+                return; 
+            }
+            const results = dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q) || p.mat.toLowerCase().includes(q));
+            renderCatalog(results);
+            document.getElementById('catalog-title').innerText = "Resultados";
+            document.getElementById('catalog-subtitle').innerText = `Búsqueda: "${q}"`;
+            
+            // Si el usuario escribe, asegurar que está viendo el catálogo
+            const catalogTop = document.getElementById('coleccion').getBoundingClientRect().top;
+            if (catalogTop > window.innerHeight || catalogTop < 0) {
+                document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // MODAL ESPECIFICACIONES
+        function openSpecModal(id) {
+            const p = dbProducts.find(x => x.id === id);
+            if(!p) return;
+            
+            document.getElementById('modal-img').src = p.img;
+            document.getElementById('modal-title').innerText = p.name;
+            document.getElementById('modal-desc').innerText = p.desc;
+            document.getElementById('modal-sku').innerText = p.sku;
+            document.getElementById('modal-luz').innerText = p.specsLight;
+            document.getElementById('modal-volt').innerText = p.volt;
+            document.getElementById('modal-cable').innerText = p.cable;
+            
+            document.getElementById('modal-w').innerText = p.dims.w;
+            document.getElementById('modal-h').innerText = p.dims.h;
+            document.getElementById('modal-d').innerText = p.dims.d;
+            document.getElementById('modal-dia').innerText = p.dims.dia;
+            
+            document.getElementById('modal-peso').innerText = p.peso;
+            document.getElementById('modal-mat').innerText = p.mat;
+            document.getElementById('modal-fin').innerText = p.fin;
+            document.getElementById('modal-time').innerText = p.time;
+            document.getElementById('modal-cert').innerText = p.cert;
+            
+            document.getElementById('modal-price').innerText = "$" + p.price.toLocaleString() + " MXN";
+            
+            const btn = document.getElementById('modal-add-btn');
+            btn.onclick = () => { addToCart(p.id); closeSpecModal(); };
+
+            const modal = document.getElementById('spec-modal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSpecModal() {
+            document.getElementById('spec-modal').classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = 'auto';
+        }
+
+        // FUNCIONES DE CARRITO
+        function addToCart(id) {
+            const product = dbProducts.find(p => p.id === id);
+            const exist = cart.find(i => i.id === id);
+            if(exist) exist.qty += 1;
+            else cart.push({...product, qty: 1});
+            
+            updateCartUI();
+            if(document.getElementById('cart-drawer').classList.contains('translate-x-full')) toggleCart();
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(i => i.id !== id);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const itemsCont = document.getElementById('cart-items');
+            const totalCont = document.getElementById('cart-total');
+            const countCont = document.getElementById('cart-count');
+            
+            const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+            countCont.innerText = totalItems;
+            countCont.style.opacity = totalItems > 0 ? "1" : "0";
+            
+            if(cart.length === 0) { 
+                itemsCont.innerHTML = '<p class="text-brand-muted text-sm text-center mt-10 uppercase tracking-widest">Tu selección está vacía</p>'; 
+                totalCont.innerText = "$0 MXN"; 
+                return; 
+            }
+            
+            itemsCont.innerHTML = '';
+            let total = 0;
+            cart.forEach((item) => {
+                const itemTotal = item.price * item.qty;
+                total += itemTotal;
+                itemsCont.innerHTML += `
+                    <div class="flex items-center gap-4 border-b border-brand-border pb-4">
+                        <img src="${item.img}" class="w-16 h-16 object-cover grayscale">
+                        <div class="flex-1">
+                            <h4 class="font-editorial text-white text-sm">${item.name}</h4>
+                            <p class="text-[10px] text-brand-muted uppercase tracking-widest mt-1">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
+                        </div>
+                        <button onclick="removeFromCart(${item.id})" class="text-brand-muted hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                `;
+            });
+            totalCont.innerText = `$${total.toLocaleString()} MXN`;
+            lucide.createIcons();
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-drawer').classList.toggle('translate-x-full');
+            document.getElementById('cart-overlay').classList.toggle('opacity-0');
+            document.getElementById('cart-overlay').classList.toggle('pointer-events-none');
+        }
+
+        // GENERACIÓN DE PDF SEGURA Y SIN CORTES
+        function checkoutPDF() {
+            if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
+            
+            const clientName = document.getElementById('client-name').value || "A quien corresponda";
+            const clientEmail = document.getElementById('client-email').value || "No proporcionado";
+            const date = new Date().toLocaleDateString('es-MX');
+            const folio = "COT-" + Math.floor(Math.random() * 9000 + 1000);
+            
+            document.getElementById('pdf-date').innerText = date;
+            document.getElementById('pdf-folio').innerText = folio;
+            document.getElementById('pdf-client-name').innerText = clientName;
+            document.getElementById('pdf-client-email').innerText = clientEmail;
+            
+            const tbody = document.getElementById('pdf-items');
+            tbody.innerHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const sum = item.price * item.qty;
+                total += sum;
+                tbody.innerHTML += `
+                    <tr class="border-b border-gray-200 text-sm">
+                        <td class="py-4 text-gray-600 text-xs">${item.sku}</td>
+                        <td class="py-4 font-editorial font-bold">${item.name}</td>
+                        <td class="py-4 text-center">${item.qty}</td>
+                        <td class="py-4 text-right">$${item.price.toLocaleString()}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('pdf-total').innerText = `$${total.toLocaleString()} MXN`;
+
+            const element = document.getElementById('invoice-template');
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Generando PDF...`;
+            
+            // scrollY: 0 es la clave para que no se corte sin importar en qué parte de la web esté el usuario
+            const opt = {
+              margin:       0,
+              filename:     `${folio}_Damaso.pdf`,
+              image:        { type: 'jpeg', quality: 0.98 },
+              html2canvas:  { scale: 2, scrollY: 0, windowWidth: 800 }, 
+              jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+                lucide.createIcons();
+            });
+        }
+
+        // WHATSAPP OPTIMIZADO PARA MÓVILES (IPHONE)
+        function checkoutWhatsApp() {
+            if(cart.length === 0) { alert("Tu carrito está vacío."); return; }
+            
+            const clientName = document.getElementById('client-name').value;
+            const clientEmail = document.getElementById('client-email').value;
+            
+            let msg = `Hola Iván, me interesa cotizar las siguientes piezas:\n\n`;
+            if (clientName) msg += `*Nombre:* ${clientName}\n`;
+            if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
+            
+            let total = 0;
+            cart.forEach(i => {
+                msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`;
+                total += (i.price * i.qty);
+            });
+            msg += `\n*Total Estimado:* $${total.toLocaleString()} MXN\n`;
+            
+            const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
+            
+            // Método seguro para que abra en iPhone Safari sin que lo bloquee
+            const link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function initReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCatalog(dbProducts);
+            // Detectar clics fuera del menú hamburguesa para cerrarlo
+            document.addEventListener('click', function(event) {
+                const menu = document.getElementById('dropdown-menu');
+                const btn = document.querySelector('button[onclick="toggleCategories()"]');
+                if (!menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) {
+                    toggleCategories();
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
+
+
+```
