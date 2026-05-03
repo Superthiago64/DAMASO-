@@ -13,7 +13,26 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- HTML2PDF para generar cotizaciones reales -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></// 1. Importar las herramientas de la nube (formato para web)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+
+// 2. Tu configuración real de la imagen
+const firebaseConfig = {
+  apiKey: "AIzaSyC4SRh7GKB8KkDyao6aw0S1...", 
+  authDomain: "damaso-978c9.firebaseapp.com",
+  projectId: "damaso-978c9",
+  storageBucket: "damaso-978c9.firebasestorage.app",
+  messagingSenderId: "545014965592",
+  appId: "1:545014965592:web:b153522ffcf...",
+  measurementId: "G-KNE9YV19H3"
+};
+
+// 3. Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+// AQUÍ ABAJO SIGUE TU CÓDIGO NORMAL
 
     <script>
         tailwind.config = {
