@@ -13,26 +13,30 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- HTML2PDF para generar cotizaciones reales -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></// 1. Importar las herramientas de la nube (formato para web)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- ... tus otros scripts arriba ... -->
 
-// 2. Tu configuración real de la imagen
-const firebaseConfig = {
-  apiKey: "AIzaSyC4SRh7GKB8KkDyao6aw0S1...", 
-  authDomain: "damaso-978c9.firebaseapp.com",
-  projectId: "damaso-978c9",
-  storageBucket: "damaso-978c9.firebasestorage.app",
-  messagingSenderId: "545014965592",
-  appId: "1:545014965592:web:b153522ffcf...",
-  measurementId: "G-KNE9YV19H3"
-};
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 
-// 3. Inicializar Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+  const firebaseConfig = {
+    apiKey: "AIzaSyC4SRh7GKB8KkDyao6aw0S1...",
+    authDomain: "damaso-978c9.firebaseapp.com",
+    projectId: "damaso-978c9",
+    storageBucket: "damaso-978c9.firebasestorage.app",
+    messagingSenderId: "545014965592",
+    appId: "1:545014965592:web:b153522ffcf...",
+    measurementId: "G-KNE9YV19H3"
+  };
 
-// AQUÍ ABAJO SIGUE TU CÓDIGO NORMAL
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  
+  console.log("¡Firebase ahora sí está activo!");
+</script>
+
+</head>
 
     <script>
         tailwind.config = {
@@ -171,18 +175,35 @@ const analytics = getAnalytics(app);
             <h2 class="font-editorial text-3xl text-white mb-8 border-b border-brand-border pb-4 uppercase tracking-widest">Añadir Nueva Pieza</h2>
             
             <div class="flex flex-col md:flex-row gap-8">
-                <!-- Columna Izquierda: Imagen -->
+                <!-- Columna Izquierda: Imagen (Botones Separados) -->
                 <div class="w-full md:w-1/3 flex flex-col gap-4">
                     <label class="font-bold text-[10px] tracking-[0.2em] uppercase text-brand-muted">Fotografía</label>
-                    <div class="relative w-full aspect-square border-2 border-dashed border-brand-border flex items-center justify-center bg-brand-bg hover:border-white transition-colors cursor-pointer overflow-hidden group" onclick="document.getElementById('new-img-input').click()">
-                        <img id="new-img-preview" src="" class="absolute inset-0 w-full h-full object-cover hidden z-10">
-                        <div class="text-center z-0 group-hover:text-white text-brand-muted transition-colors flex flex-col items-center">
-                            <i data-lucide="camera" class="w-8 h-8 mb-2"></i>
-                            <span class="text-[10px] uppercase tracking-widest">Seleccionar o Tomar Foto</span>
-                        </div>
+                    
+                    <!-- Botones de Acción (Galería y Cámara) -->
+                    <div class="flex gap-4">
+                        <button onclick="document.getElementById('new-img-gallery').click()" class="flex-1 border border-brand-border py-4 flex flex-col items-center justify-center hover:bg-white/10 transition-colors group">
+                            <i data-lucide="image" class="w-6 h-6 text-brand-muted group-hover:text-white mb-2 transition-colors"></i>
+                            <span class="text-[10px] uppercase tracking-widest text-brand-muted group-hover:text-white transition-colors">Galería</span>
+                        </button>
+                        <button onclick="document.getElementById('new-img-camera').click()" class="flex-1 border border-brand-border py-4 flex flex-col items-center justify-center hover:bg-white/10 transition-colors group">
+                            <i data-lucide="camera" class="w-6 h-6 text-brand-muted group-hover:text-white mb-2 transition-colors"></i>
+                            <span class="text-[10px] uppercase tracking-widest text-brand-muted group-hover:text-white transition-colors">Cámara</span>
+                        </button>
                     </div>
-                    <!-- Input oculto para subir archivo o tomar foto -->
-                    <input type="file" id="new-img-input" accept="image/*" capture="environment" class="hidden" onchange="handleImageUpload(event)">
+
+                    <!-- Inputs ocultos -->
+                    <!-- Input sin capture para ir a galería -->
+                    <input type="file" id="new-img-gallery" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                    <!-- Input con capture para abrir cámara directo en iPhone -->
+                    <input type="file" id="new-img-camera" accept="image/*" capture="environment" class="hidden" onchange="handleImageUpload(event)">
+
+                    <!-- Contenedor de Previsualización (Oculto hasta que haya foto) -->
+                    <div id="new-img-preview-container" class="relative w-full aspect-square border-2 border-dashed border-brand-border hidden items-center justify-center bg-brand-bg mt-2">
+                        <img id="new-img-preview" src="" class="absolute inset-0 w-full h-full object-cover z-10">
+                        <button onclick="clearImagePreview()" class="absolute top-2 right-2 z-20 bg-black/70 p-2 text-white hover:bg-white hover:text-black transition-colors rounded">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Columna Derecha: Formulario Especificaciones -->
@@ -470,7 +491,7 @@ const analytics = getAnalytics(app);
     <script>
         lucide.createIcons();
 
-        // BASE DE DATOS (Estela Vertical eliminada)
+        // BASE DE DATOS
         let dbProducts = [
             { 
                 id: 1, name: "Monolito Noir", category: "mesa", price: 6500, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800",
@@ -594,12 +615,25 @@ const analytics = getAnalytics(app);
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     newImageBase64 = e.target.result;
+                    const previewContainer = document.getElementById('new-img-preview-container');
                     const preview = document.getElementById('new-img-preview');
                     preview.src = newImageBase64;
-                    preview.classList.remove('hidden');
+                    previewContainer.classList.remove('hidden');
+                    previewContainer.classList.add('flex');
                 };
                 reader.readAsDataURL(file);
             }
+            // Limpiar inputs para permitir volver a seleccionar la misma foto si se borró
+            event.target.value = '';
+        }
+
+        function clearImagePreview() {
+            newImageBase64 = "";
+            const previewContainer = document.getElementById('new-img-preview-container');
+            const preview = document.getElementById('new-img-preview');
+            preview.src = "";
+            previewContainer.classList.add('hidden');
+            previewContainer.classList.remove('flex');
         }
 
         function saveNewProduct() {
@@ -609,11 +643,10 @@ const analytics = getAnalytics(app);
             const category = document.getElementById('new-cat').value;
             const price = parseFloat(document.getElementById('new-precio').value) || 0;
             
-            // Si no subió foto, ponemos un placeholder elegante gris
             const img = newImageBase64 || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop"; 
 
             const newProduct = {
-                id: Date.now(), // ID único basado en timestamp
+                id: Date.now(), 
                 name: name,
                 category: category,
                 price: price,
@@ -636,16 +669,13 @@ const analytics = getAnalytics(app);
                 cert: document.getElementById('new-cert').value || "N/A"
             };
 
-            dbProducts.unshift(newProduct); // Añadir al principio del catálogo
-            renderCatalog(dbProducts); // Refrescar vista
+            dbProducts.unshift(newProduct); 
+            renderCatalog(dbProducts); 
             
-            // Limpiar formulario y cerrar
+            // Limpiar
             document.querySelectorAll('#add-product-modal input').forEach(input => input.value = '');
-            document.getElementById('new-img-preview').classList.add('hidden');
-            newImageBase64 = "";
+            clearImagePreview();
             toggleAddProductModal();
-            
-            // Hacer scroll a la colección para que vea su nueva pieza
             document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -846,4 +876,6 @@ const analytics = getAnalytics(app);
 </html>
 
 
-```
+
+
+
