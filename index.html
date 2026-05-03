@@ -12,7 +12,7 @@
     <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- HTML2PDF para generar cotizaciones reales -->
+    <!-- HTML2PDF para generar cotizaciones -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
@@ -42,7 +42,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* SOLUCIÓN AL BUG DEL SCROLL HORIZONTAL */
         html, body { 
             background-color: #030303; 
             color: #f2f2f2; 
@@ -64,10 +63,8 @@
 
         .modal-overlay { backdrop-filter: blur(10px); }
         
-        /* Oculta PDF del render en móviles */
         #pdf-render-container { position: absolute; top: 0; left: -9999px; z-index: -9999; opacity: 0; pointer-events: none; width: 800px; }
 
-        /* Estilo para inputs del formulario de nueva pieza */
         .input-form {
             background-color: transparent;
             border: none;
@@ -87,6 +84,12 @@
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-white selection:text-black">
+
+    <!-- Alerta de Firebase (Solo visible si hay error de permisos) -->
+    <div id="firebase-warning" class="hidden fixed top-0 w-full z-[100] bg-red-600 text-white text-xs text-center py-3 px-4 font-bold shadow-lg">
+        ¡Atención Thiago! Tu base de datos Firebase tiene un candado. Ve a tu consola de Firebase > Firestore Database > Reglas, y cambia a: <code class="bg-black/30 px-2 py-1 rounded mx-1">allow read, write: if true;</code>
+        <button onclick="document.getElementById('firebase-warning').classList.add('hidden')" class="ml-4 underline">Cerrar</button>
+    </div>
 
     <!-- Navegación Superior -->
     <nav class="fixed w-full z-40 bg-brand-bg/95 backdrop-blur-xl border-b border-brand-border transition-all duration-500 flex flex-col" id="navbar">
@@ -122,13 +125,10 @@
                 <a href="#contacto" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">Contacto</a>
             </div>
 
-            <!-- Iconos de Acción -->
             <div class="flex items-center space-x-2 sm:space-x-4">
-                <!-- Botón Agregar Pieza (+) -->
                 <button onclick="window.toggleAddProductModal()" class="text-white hover:text-brand-muted transition-colors p-2" aria-label="Agregar Producto">
                     <i data-lucide="plus" class="w-6 h-6"></i>
                 </button>
-                <!-- Botón Carrito -->
                 <button onclick="window.toggleCart()" class="text-white hover:text-brand-muted transition-colors relative p-2">
                     <i data-lucide="shopping-bag" class="w-6 h-6"></i>
                     <span id="cart-count" class="absolute top-0 right-0 bg-white text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0">0</span>
@@ -144,50 +144,32 @@
         </div>
     </nav>
 
-    <!-- MODAL PARA AGREGAR NUEVA PIEZA (+) -->
+    <!-- MODAL AÑADIR PIEZA (+) -->
     <div id="add-product-modal" class="fixed inset-0 z-[80] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4">
         <div class="bg-brand-surface border border-brand-border w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col relative custom-scroll p-6 sm:p-10">
             <button onclick="window.toggleAddProductModal()" class="absolute top-4 right-4 z-10 text-brand-muted hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
-            
             <h2 class="font-editorial text-3xl text-white mb-8 border-b border-brand-border pb-4 uppercase tracking-widest">Añadir Nueva Pieza</h2>
-            
             <div class="flex flex-col md:flex-row gap-8">
-                <!-- Columna Izquierda: Imagen -->
                 <div class="w-full md:w-1/3 flex flex-col gap-4">
                     <label class="font-bold text-[10px] tracking-[0.2em] uppercase text-brand-muted">Fotografía</label>
-                    
                     <div class="flex gap-4">
                         <button onclick="document.getElementById('new-img-gallery').click()" class="flex-1 border border-brand-border py-4 flex flex-col items-center justify-center hover:bg-white/10 transition-colors group">
-                            <i data-lucide="image" class="w-6 h-6 text-brand-muted group-hover:text-white mb-2 transition-colors"></i>
-                            <span class="text-[10px] uppercase tracking-widest text-brand-muted group-hover:text-white transition-colors">Galería</span>
+                            <i data-lucide="image" class="w-6 h-6 text-brand-muted group-hover:text-white mb-2 transition-colors"></i><span class="text-[10px] uppercase tracking-widest text-brand-muted group-hover:text-white transition-colors">Galería</span>
                         </button>
                         <button onclick="document.getElementById('new-img-camera').click()" class="flex-1 border border-brand-border py-4 flex flex-col items-center justify-center hover:bg-white/10 transition-colors group">
-                            <i data-lucide="camera" class="w-6 h-6 text-brand-muted group-hover:text-white mb-2 transition-colors"></i>
-                            <span class="text-[10px] uppercase tracking-widest text-brand-muted group-hover:text-white transition-colors">Cámara</span>
+                            <i data-lucide="camera" class="w-6 h-6 text-brand-muted group-hover:text-white mb-2 transition-colors"></i><span class="text-[10px] uppercase tracking-widest text-brand-muted group-hover:text-white transition-colors">Cámara</span>
                         </button>
                     </div>
-
                     <input type="file" id="new-img-gallery" accept="image/*" class="hidden" onchange="window.handleImageUpload(event)">
                     <input type="file" id="new-img-camera" accept="image/*" capture="environment" class="hidden" onchange="window.handleImageUpload(event)">
-
                     <div id="new-img-preview-container" class="relative w-full aspect-square border-2 border-dashed border-brand-border hidden items-center justify-center bg-brand-bg mt-2">
                         <img id="new-img-preview" src="" class="absolute inset-0 w-full h-full object-cover z-10">
-                        <button onclick="window.clearImagePreview()" class="absolute top-2 right-2 z-20 bg-black/70 p-2 text-white hover:bg-white hover:text-black transition-colors rounded">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
+                        <button onclick="window.clearImagePreview()" class="absolute top-2 right-2 z-20 bg-black/70 p-2 text-white hover:bg-white hover:text-black transition-colors rounded"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </div>
                 </div>
-
-                <!-- Columna Derecha: Formulario -->
                 <div class="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-                    <div class="sm:col-span-2">
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Modelo</label>
-                        <input type="text" id="new-modelo" class="input-form" placeholder="Ej: Esfera Cobre">
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Descripción</label>
-                        <input type="text" id="new-desc" class="input-form" placeholder="Descripción breve de la pieza">
-                    </div>
+                    <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Modelo</label><input type="text" id="new-modelo" class="input-form" placeholder="Ej: Esfera Cobre"></div>
+                    <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Descripción</label><input type="text" id="new-desc" class="input-form" placeholder="Descripción breve de la pieza"></div>
                     <div>
                         <label class="text-[10px] text-brand-muted uppercase tracking-widest">Categoría</label>
                         <select id="new-cat" class="input-form bg-brand-surface text-white">
@@ -196,15 +178,11 @@
                             <option value="exterior">Exterior</option><option value="proyectos">Proyectos Especiales</option><option value="espejos">Espejos</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Precio (MXN)</label>
-                        <input type="number" id="new-precio" class="input-form" placeholder="Ej: 5000">
-                    </div>
+                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Precio (MXN)</label><input type="number" id="new-precio" class="input-form" placeholder="Ej: 5000"></div>
                     <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Código SKU</label><input type="text" id="new-sku" class="input-form" placeholder="Ej: DM-CUS-001"></div>
                     <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Espec. Lumínicas</label><input type="text" id="new-luz" class="input-form" placeholder="Ej: LED 12W 3000K"></div>
                     <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Voltaje</label><input type="text" id="new-volt" class="input-form" placeholder="Ej: 110V"></div>
                     <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Cable</label><input type="text" id="new-cable" class="input-form" placeholder="Ej: Textil negro 2m"></div>
-                    
                     <div class="sm:col-span-2 mt-2">
                         <label class="text-[10px] font-bold text-white uppercase tracking-widest border-b border-brand-border w-full block pb-1">Dimensiones</label>
                         <div class="grid grid-cols-4 gap-4 mt-2">
@@ -219,7 +197,6 @@
                     <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Certificaciones</label><input type="text" id="new-cert" class="input-form" placeholder="Ej: NOM"></div>
                 </div>
             </div>
-
             <div class="mt-8 pt-6 border-t border-brand-border flex justify-end">
                 <button onclick="window.saveNewProduct()" class="bg-white text-black px-10 py-4 text-xs tracking-[0.2em] uppercase font-bold hover:bg-brand-muted transition-colors flex items-center justify-center" id="btn-publish">
                     <span id="btn-publish-text">Publicar en Vivo</span>
@@ -228,7 +205,7 @@
         </div>
     </div>
 
-    <!-- Modal de Especificaciones de Pieza Individual -->
+    <!-- Modal de Especificaciones -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/80 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
         <div class="bg-brand-surface border border-brand-border w-full max-w-6xl max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
             <button onclick="window.closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -318,20 +295,14 @@
         </div>
     </section>
 
-    <!-- Diseñador (Imagen vinculada a image.png local) -->
-    <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border">
-        <div class="max-w-[95%] mx-auto px-4">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-                <div class="lg:col-span-5 reveal">
-                    <!-- FOTO DEL DISEÑADOR: Lee el archivo image.png de tu carpeta -->
-                    <img src="image.png" onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop'" alt="Iván Damaso" class="w-full aspect-[3/4] object-cover grayscale brightness-110 border border-brand-border">
-                </div>
-                <div class="lg:col-span-7 reveal">
-                    <h2 class="font-editorial text-5xl md:text-8xl text-white mb-12">Iván<br>Damaso</h2>
-                    <p class="text-xl text-white font-light italic border-l-2 border-white pl-8 mb-8">"La luz es el alma de la arquitectura."</p>
-                    <p class="text-brand-muted max-w-xl">Diseñador radicado en San Agustín, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo.</p>
-                </div>
-            </div>
+    <!-- Diseñador (Sin foto, texto centrado editorial) -->
+    <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex items-center justify-center">
+        <div class="max-w-4xl mx-auto px-4 text-center reveal">
+            <h2 class="font-editorial text-5xl md:text-8xl text-white mb-12">Iván<br>Damaso</h2>
+            <p class="text-xl text-white font-light italic mb-8 border-b border-brand-border pb-8 inline-block px-8">"La luz es el alma de la arquitectura."</p>
+            <p class="text-brand-muted mx-auto leading-relaxed max-w-2xl">
+                Diseñador radicado en San Agustín, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo. Cada pieza nace de la experimentación de texturas, volúmenes y sombras proyectadas.
+            </p>
         </div>
     </section>
 
@@ -420,14 +391,11 @@
         </div>
     </div>
 
-
-    <!-- FIREBASE & LÓGICA PRINCIPAL (MODULAR) -->
+    <!-- FIREBASE & LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        // CONFIGURACIÓN DE FIREBASE (La que proporcionaste)
         const firebaseConfig = {
           apiKey: "AIzaSyC4SRh7GKB8KkDYao6aw0S1JnLzNOjRcY0",
           authDomain: "damaso-978c9.firebaseapp.com",
@@ -439,70 +407,47 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
-        // Variables Globales
-        let dbProducts = []; // Array principal que se llenará con Base Local + Firebase
+        let dbProducts = [];
         let cart = [];
         let newImageBase64 = "";
 
-        // BASE DE DATOS LOCAL (Plantillas fijas)
         const staticProducts = [
-            { 
-                id: 1, name: "Monolito Noir", category: "mesa", price: 6500, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800",
-                sku: "DM-MES-001", desc: "Presencia sólida. Pieza torneada que proyecta luz focal.", specsLight: "LED Integrado 12W, 2700K (Cálida), 1100lm", cable: "Textil negro 2.0m",
-                dims: { w: "20 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-240V 50/60Hz", mat: "Acero al carbón sólido", fin: "Pavonado negro mate", time: "4 a 6 semanas", cert: "NOM, CE"
-            },
-            { 
-                id: 3, name: "Órbita Suspendida", category: "techo", price: 8900, img: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=800",
-                sku: "DM-TEC-003", desc: "Aro de luz cenital suspendido por tensores invisibles.", specsLight: "LED SMD 40W, 4000K (Neutra)", cable: "Tensores de acero y cable 1.5m",
-                dims: { w: "N/A", h: "5 cm", d: "N/A", dia: "80 cm" }, peso: "3.2 kg", volt: "110-240V", mat: "Aluminio aeroespacial", fin: "Anodizado negro/plata", time: "3 a 4 semanas", cert: "CE, RoHS"
-            },
-            { 
-                id: 4, name: "Cúpula Brutal", category: "candiles", price: 32000, img: "https://images.unsplash.com/photo-1543198126-a8ad8e47fb22?q=80&w=800",
-                sku: "DM-CAN-004", desc: "Candil monumental forjado con acabados industriales.", specsLight: "6x E26 Bulb Vintage 4W", cable: "Cadena de acero y textil 2m",
-                dims: { w: "120 cm", h: "60 cm", d: "120 cm", dia: "120 cm" }, peso: "24 kg", volt: "110V", mat: "Acero estructural", fin: "Óxido estabilizado y negro", time: "8 semanas", cert: "NOM"
-            },
-            { 
-                id: 5, name: "Sombra Muro", category: "arbotantes", price: 3400, img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=800",
-                sku: "DM-ARB-005", desc: "Baño de luz indirecta arquitectónica mediante dobleces de placa.", specsLight: "LED 8W, 2700K indirecto", cable: "Conexión directa a muro",
-                dims: { w: "15 cm", h: "30 cm", d: "8 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-220V", mat: "Placa de acero doblada CNC", fin: "Pintura electrostática", time: "2 a 3 semanas", cert: "NOM"
-            },
-            { 
-                id: 6, name: "Espejo Obsidiana", category: "espejos", price: 15400, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=800",
-                sku: "DM-ESP-006", desc: "Espejo retroiluminado con marco perimetral robusto flotante.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro",
-                dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "100 cm" }, peso: "18 kg", volt: "110V", mat: "Cristal plata 6mm", fin: "Hierro forjado oscuro", time: "4 semanas", cert: "NOM"
-            }
+            { id: 1, timestamp: 1, name: "Monolito Noir", category: "mesa", price: 6500, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800", sku: "DM-MES-001", desc: "Presencia sólida. Pieza torneada que proyecta luz focal.", specsLight: "LED Integrado 12W, 2700K (Cálida), 1100lm", cable: "Textil negro 2.0m", dims: { w: "20 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-240V 50/60Hz", mat: "Acero al carbón sólido", fin: "Pavonado negro mate", time: "4 a 6 semanas", cert: "NOM, CE" },
+            { id: 3, timestamp: 2, name: "Órbita Suspendida", category: "techo", price: 8900, img: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=800", sku: "DM-TEC-003", desc: "Aro de luz cenital suspendido por tensores invisibles.", specsLight: "LED SMD 40W, 4000K (Neutra)", cable: "Tensores de acero y cable 1.5m", dims: { w: "N/A", h: "5 cm", d: "N/A", dia: "80 cm" }, peso: "3.2 kg", volt: "110-240V", mat: "Aluminio aeroespacial", fin: "Anodizado negro/plata", time: "3 a 4 semanas", cert: "CE, RoHS" },
+            { id: 4, timestamp: 3, name: "Cúpula Brutal", category: "candiles", price: 32000, img: "https://images.unsplash.com/photo-1543198126-a8ad8e47fb22?q=80&w=800", sku: "DM-CAN-004", desc: "Candil monumental forjado con acabados industriales.", specsLight: "6x E26 Bulb Vintage 4W", cable: "Cadena de acero y textil 2m", dims: { w: "120 cm", h: "60 cm", d: "120 cm", dia: "120 cm" }, peso: "24 kg", volt: "110V", mat: "Acero estructural", fin: "Óxido estabilizado y negro", time: "8 semanas", cert: "NOM" },
+            { id: 5, timestamp: 4, name: "Sombra Muro", category: "arbotantes", price: 3400, img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=800", sku: "DM-ARB-005", desc: "Baño de luz indirecta arquitectónica mediante dobleces de placa.", specsLight: "LED 8W, 2700K indirecto", cable: "Conexión directa a muro", dims: { w: "15 cm", h: "30 cm", d: "8 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-220V", mat: "Placa de acero doblada CNC", fin: "Pintura electrostática", time: "2 a 3 semanas", cert: "NOM" },
+            { id: 6, timestamp: 5, name: "Espejo Obsidiana", category: "espejos", price: 15400, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=800", sku: "DM-ESP-006", desc: "Espejo retroiluminado con marco perimetral robusto flotante.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "100 cm" }, peso: "18 kg", volt: "110V", mat: "Cristal plata 6mm", fin: "Hierro forjado oscuro", time: "4 semanas", cert: "NOM" }
         ];
 
-        // SINCRONIZACIÓN EN TIEMPO REAL CON FIREBASE
-        const productsQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
-        onSnapshot(productsQuery, (snapshot) => {
+        // Escucha a Firebase en tiempo real
+        const productsCol = collection(db, "products");
+        onSnapshot(productsCol, (snapshot) => {
             const firebaseProducts = [];
-            snapshot.forEach((doc) => {
-                firebaseProducts.push({ id: doc.id, ...doc.data() });
-            });
-            // Mezclar Firebase + Estáticos (Los nuevos salen arriba)
+            snapshot.forEach((doc) => firebaseProducts.push({ id: doc.id, ...doc.data() }));
+            
+            // Unimos todo y ordenamos del más nuevo al más viejo
             dbProducts = [...firebaseProducts, ...staticProducts];
+            dbProducts.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            
             window.renderCatalog(dbProducts);
         }, (error) => {
-            console.error("Firebase Error. Usando catálogo offline.", error);
+            console.error("Error Firebase:", error);
+            // Mostrar alerta de seguridad si los permisos fallan
+            if(error.code === 'permission-denied') {
+                document.getElementById('firebase-warning').classList.remove('hidden');
+            }
             dbProducts = [...staticProducts];
             window.renderCatalog(dbProducts);
         });
 
-        // FUNCIONES GLOBALES (Asignadas a Window para que HTML las pueda usar)
-        
         window.renderCatalog = function(products) {
             const grid = document.getElementById('catalog-grid');
             grid.innerHTML = '';
-            
             if(products.length === 0) {
-                grid.innerHTML = '<p class="text-brand-muted col-span-full">No se encontraron piezas con esa búsqueda.</p>';
-                return;
+                grid.innerHTML = '<p class="text-brand-muted col-span-full">No se encontraron piezas.</p>'; return;
             }
-
             products.forEach(p => {
                 grid.innerHTML += `
                     <div class="group reveal">
@@ -520,18 +465,21 @@
                     </div>
                 `;
             });
-            initReveal();
+            setTimeout(() => {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+                }, { threshold: 0.1 });
+                document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            }, 100);
         };
 
         window.toggleCategories = function() {
             const menu = document.getElementById('dropdown-menu');
-            if (menu.classList.contains('opacity-0')) {
-                menu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
-                menu.classList.add('opacity-100', 'translate-y-0');
-            } else {
-                menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-                menu.classList.remove('opacity-100', 'translate-y-0');
-            }
+            menu.classList.toggle('opacity-0');
+            menu.classList.toggle('pointer-events-none');
+            menu.classList.toggle('-translate-y-2');
+            menu.classList.toggle('translate-y-0');
+            menu.classList.toggle('opacity-100');
         };
 
         window.filterCatalog = function(cat) {
@@ -549,8 +497,7 @@
             if(q.length === 0) { 
                 window.renderCatalog(dbProducts); 
                 document.getElementById('catalog-title').innerText = "Catálogo Completo";
-                document.getElementById('catalog-subtitle').innerText = "Colección 2026";
-                return; 
+                document.getElementById('catalog-subtitle').innerText = "Colección 2026"; return; 
             }
             const results = dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
             window.renderCatalog(results);
@@ -560,16 +507,11 @@
 
         window.toggleAddProductModal = function() {
             const modal = document.getElementById('add-product-modal');
-            if (modal.classList.contains('opacity-0')) {
-                modal.classList.remove('opacity-0', 'pointer-events-none');
-                document.body.style.overflow = 'hidden';
-            } else {
-                modal.classList.add('opacity-0', 'pointer-events-none');
-                document.body.style.overflow = 'auto';
-            }
+            modal.classList.toggle('opacity-0');
+            modal.classList.toggle('pointer-events-none');
+            document.body.style.overflow = modal.classList.contains('opacity-0') ? 'auto' : 'hidden';
         };
 
-        // COMPRESOR DE IMAGEN PARA IPHONE (Para que Firebase no se bloquee)
         window.handleImageUpload = function(event) {
             const file = event.target.files[0];
             if (file) {
@@ -579,26 +521,18 @@
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        const MAX_WIDTH = 800; // Reducimos tamaño para la base de datos
+                        const MAX_WIDTH = 800; 
                         let width = img.width;
                         let height = img.height;
 
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                        canvas.width = width;
-                        canvas.height = height;
+                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                        canvas.width = width; canvas.height = height;
                         ctx.drawImage(img, 0, 0, width, height);
                         
-                        // Guardar en formato JPEG comprimido
                         newImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                        
                         const previewContainer = document.getElementById('new-img-preview-container');
-                        const preview = document.getElementById('new-img-preview');
-                        preview.src = newImageBase64;
-                        previewContainer.classList.remove('hidden');
-                        previewContainer.classList.add('flex');
+                        document.getElementById('new-img-preview').src = newImageBase64;
+                        previewContainer.classList.remove('hidden'); previewContainer.classList.add('flex');
                     }
                     img.src = e.target.result;
                 };
@@ -610,13 +544,10 @@
         window.clearImagePreview = function() {
             newImageBase64 = "";
             const previewContainer = document.getElementById('new-img-preview-container');
-            const preview = document.getElementById('new-img-preview');
-            preview.src = "";
-            previewContainer.classList.add('hidden');
-            previewContainer.classList.remove('flex');
+            document.getElementById('new-img-preview').src = "";
+            previewContainer.classList.add('hidden'); previewContainer.classList.remove('flex');
         };
 
-        // GUARDAR PIEZA DIRECTO A FIREBASE CLOUD
         window.saveNewProduct = async function() {
             const btn = document.getElementById('btn-publish');
             const originalText = document.getElementById('btn-publish-text').innerText;
@@ -626,6 +557,7 @@
                 btn.disabled = true;
 
                 const newProduct = {
+                    timestamp: Date.now(),
                     name: document.getElementById('new-modelo').value || "Nueva Pieza Damaso",
                     desc: document.getElementById('new-desc').value || "Descripción no especificada.",
                     sku: document.getElementById('new-sku').value || "DM-NEW-000",
@@ -635,32 +567,24 @@
                     specsLight: document.getElementById('new-luz').value || "N/A",
                     cable: document.getElementById('new-cable').value || "N/A",
                     dims: {
-                        w: document.getElementById('new-w').value || "N/A",
-                        h: document.getElementById('new-h').value || "N/A",
-                        d: document.getElementById('new-d').value || "N/A",
-                        dia: document.getElementById('new-dia').value || "N/A"
+                        w: document.getElementById('new-w').value || "N/A", h: document.getElementById('new-h').value || "N/A",
+                        d: document.getElementById('new-d').value || "N/A", dia: document.getElementById('new-dia').value || "N/A"
                     },
-                    peso: document.getElementById('new-peso').value || "N/A",
-                    volt: document.getElementById('new-volt').value || "N/A",
-                    mat: document.getElementById('new-mat').value || "N/A",
-                    fin: document.getElementById('new-fin').value || "N/A",
-                    time: document.getElementById('new-time').value || "N/A",
-                    cert: document.getElementById('new-cert').value || "N/A",
-                    createdAt: serverTimestamp() // Tiempo exacto en Firebase
+                    peso: document.getElementById('new-peso').value || "N/A", volt: document.getElementById('new-volt').value || "N/A",
+                    mat: document.getElementById('new-mat').value || "N/A", fin: document.getElementById('new-fin').value || "N/A",
+                    time: document.getElementById('new-time').value || "N/A", cert: document.getElementById('new-cert').value || "N/A"
                 };
 
-                // Enviar a la nube (Se actualizará solo gracias a onSnapshot)
                 await addDoc(collection(db, "products"), newProduct);
                 
-                // Limpiar
                 document.querySelectorAll('#add-product-modal input').forEach(input => input.value = '');
                 window.clearImagePreview();
                 window.toggleAddProductModal();
                 document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
 
             } catch (error) {
-                console.error("Error subiendo a Firebase: ", error);
-                alert("Hubo un error de permisos. Asegúrate de poner tus reglas de Firebase en 'true'.");
+                console.error("Error subiendo: ", error);
+                alert("Error: Tu base de datos Firebase está bloqueada. Cambia las reglas a 'true' en tu consola de Firebase.");
             } finally {
                 document.getElementById('btn-publish-text').innerText = originalText;
                 btn.disabled = false;
@@ -689,7 +613,6 @@
             document.getElementById('modal-fin').innerText = p.fin;
             document.getElementById('modal-time').innerText = p.time;
             document.getElementById('modal-cert').innerText = p.cert;
-            
             document.getElementById('modal-price').innerText = "$" + Number(p.price).toLocaleString() + " MXN";
             
             const btn = document.getElementById('modal-add-btn');
@@ -708,9 +631,7 @@
         window.addToCart = function(id) {
             const product = dbProducts.find(p => String(p.id) === String(id));
             const exist = cart.find(i => String(i.id) === String(id));
-            if(exist) exist.qty += 1;
-            else cart.push({...product, qty: 1});
-            
+            if(exist) exist.qty += 1; else cart.push({...product, qty: 1});
             window.updateCartUI();
             if(document.getElementById('cart-drawer').classList.contains('translate-x-full')) window.toggleCart();
         };
@@ -731,8 +652,7 @@
             
             if(cart.length === 0) { 
                 itemsCont.innerHTML = '<p class="text-brand-muted text-sm text-center mt-10 uppercase tracking-widest">Tu selección está vacía</p>'; 
-                totalCont.innerText = "$0 MXN"; 
-                return; 
+                totalCont.innerText = "$0 MXN"; return; 
             }
             
             itemsCont.innerHTML = '';
@@ -743,10 +663,7 @@
                 itemsCont.innerHTML += `
                     <div class="flex items-center gap-4 border-b border-brand-border pb-4">
                         <img src="${item.img}" class="w-16 h-16 object-cover grayscale">
-                        <div class="flex-1">
-                            <h4 class="font-editorial text-white text-sm">${item.name}</h4>
-                            <p class="text-[10px] text-brand-muted uppercase tracking-widest mt-1">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
-                        </div>
+                        <div class="flex-1"><h4 class="font-editorial text-white text-sm">${item.name}</h4><p class="text-[10px] text-brand-muted uppercase tracking-widest mt-1">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p></div>
                         <button onclick="window.removeFromCart('${item.id}')" class="text-brand-muted hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </div>
                 `;
@@ -764,15 +681,10 @@
         window.checkoutPDF = function() {
             if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
             
-            const clientName = document.getElementById('client-name').value || "A quien corresponda";
-            const clientEmail = document.getElementById('client-email').value || "No proporcionado";
-            const date = new Date().toLocaleDateString('es-MX');
-            const folio = "COT-" + Math.floor(Math.random() * 9000 + 1000);
-            
-            document.getElementById('pdf-date').innerText = date;
-            document.getElementById('pdf-folio').innerText = folio;
-            document.getElementById('pdf-client-name').innerText = clientName;
-            document.getElementById('pdf-client-email').innerText = clientEmail;
+            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('es-MX');
+            document.getElementById('pdf-folio').innerText = "COT-" + Math.floor(Math.random() * 9000 + 1000);
+            document.getElementById('pdf-client-name').innerText = document.getElementById('client-name').value || "A quien corresponda";
+            document.getElementById('pdf-client-email').innerText = document.getElementById('client-email').value || "No proporcionado";
             
             const tbody = document.getElementById('pdf-items');
             tbody.innerHTML = '';
@@ -783,10 +695,8 @@
                 total += sum;
                 tbody.innerHTML += `
                     <tr class="border-b border-gray-200 text-sm">
-                        <td class="py-4 text-gray-600 text-xs">${item.sku}</td>
-                        <td class="py-4 font-editorial font-bold">${item.name}</td>
-                        <td class="py-4 text-center">${item.qty}</td>
-                        <td class="py-4 text-right">$${Number(item.price).toLocaleString()}</td>
+                        <td class="py-4 text-gray-600 text-xs">${item.sku}</td><td class="py-4 font-editorial font-bold">${item.name}</td>
+                        <td class="py-4 text-center">${item.qty}</td><td class="py-4 text-right">$${Number(item.price).toLocaleString()}</td>
                     </tr>
                 `;
             });
@@ -797,23 +707,12 @@
             const originalText = btn.innerHTML;
             btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Generando PDF...`;
             
-            const opt = {
-              margin:       0,
-              filename:     `${folio}_Damaso.pdf`,
-              image:        { type: 'jpeg', quality: 0.98 },
-              html2canvas:  { scale: 2, scrollY: 0, windowWidth: 800 }, 
-              jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                btn.innerHTML = originalText;
-                lucide.createIcons();
-            });
+            const opt = { margin: 0, filename: `Cotizacion_Damaso.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, scrollY: 0, windowWidth: 800 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
+            html2pdf().set(opt).from(element).save().then(() => { btn.innerHTML = originalText; lucide.createIcons(); });
         };
 
         window.checkoutWhatsApp = function() {
             if(cart.length === 0) { alert("Tu carrito está vacío."); return; }
-            
             const clientName = document.getElementById('client-name').value;
             const clientEmail = document.getElementById('client-email').value;
             
@@ -822,41 +721,29 @@
             if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
             
             let total = 0;
-            cart.forEach(i => {
-                msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`;
-                total += (Number(i.price) * i.qty);
-            });
+            cart.forEach(i => { msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`; total += (Number(i.price) * i.qty); });
             msg += `\n*Total Estimado:* $${total.toLocaleString()} MXN\n`;
             
-            const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
             const link = document.createElement('a');
-            link.href = url;
+            link.href = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
             link.target = '_blank';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         };
 
-        function initReveal() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
-            }, { threshold: 0.1 });
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             document.addEventListener('click', function(event) {
                 const menu = document.getElementById('dropdown-menu');
                 const btn = document.querySelector('button[onclick="window.toggleCategories()"]');
-                if (!menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) {
-                    window.toggleCategories();
-                }
+                if (!menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) window.toggleCategories();
             });
         });
     </script>
 </body>
 </html>
+
 
 
 
