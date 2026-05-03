@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth" style="scroll-padding-top: 140px;">
 <head>
@@ -12,37 +12,8 @@
     <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- HTML2PDF para generar cotizaciones -->
+    <!-- HTML2PDF para generar cotizaciones reales -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script type="module">
-  // 1. Importar herramientas de la nube
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  // 2. Tus llaves de DAMASO
-  const firebaseConfig = {
-    apiKey: "AIzaSyC4SRh7GKB8KkDYao6aw0S1JnLzNOjRcY0",
-    authDomain: "damaso-978c9.firebaseapp.com",
-    projectId: "damaso-978c9",
-    storageBucket: "damaso-978c9.firebasestorage.app",
-    messagingSenderId: "545014965592",
-    appId: "1:545014965592:web:58aec27da0472c6ace712d",
-    measurementId: "G-GGC2PTKLS8"
-  };
-
-  // 3. Encender la conexión
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  
-  console.log("¡Conexión lista con Firestore!");
-
-  // 4. Hacer que los datos se compartan (ejemplo rápido)
-  // Esta parte le dice a tu web que escuche a la nube
-  onSnapshot(collection(db, "lámparas"), (snapshot) => {
-    console.log("Hay cambios en las lámparas de la nube");
-    // Aquí el otro chat te ayudará a poner el código que dibuja las lámparas
-  });
-</script>
 
     <script>
         tailwind.config = {
@@ -71,6 +42,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
+        /* SOLUCIÓN AL BUG DEL SCROLL HORIZONTAL */
         html, body { 
             background-color: #030303; 
             color: #f2f2f2; 
@@ -92,6 +64,7 @@
 
         .modal-overlay { backdrop-filter: blur(10px); }
         
+        /* Oculta PDF del render en móviles */
         #pdf-render-container { position: absolute; top: 0; left: -9999px; z-index: -9999; opacity: 0; pointer-events: none; width: 800px; }
 
         .input-form {
@@ -114,9 +87,9 @@
 </head>
 <body class="font-sans antialiased selection:bg-white selection:text-black">
 
-    <!-- Alerta de Firebase (Solo visible si hay error de permisos) -->
+    <!-- Alerta de Firebase (Oculta por defecto) -->
     <div id="firebase-warning" class="hidden fixed top-0 w-full z-[100] bg-red-600 text-white text-xs text-center py-3 px-4 font-bold shadow-lg">
-        ¡Atención Thiago! Tu base de datos Firebase tiene un candado. Ve a tu consola de Firebase > Firestore Database > Reglas, y cambia a: <code class="bg-black/30 px-2 py-1 rounded mx-1">allow read, write: if true;</code>
+        ¡Aviso! Tu base de datos Firebase requiere configuración pública. Ve a Firestore > Reglas y pon: <code class="bg-black/30 px-2 py-1 rounded mx-1">allow read, write: if true;</code>
         <button onclick="document.getElementById('firebase-warning').classList.add('hidden')" class="ml-4 underline">Cerrar</button>
     </div>
 
@@ -227,14 +200,15 @@
                 </div>
             </div>
             <div class="mt-8 pt-6 border-t border-brand-border flex justify-end">
-                <button onclick="window.saveNewProduct()" class="bg-white text-black px-10 py-4 text-xs tracking-[0.2em] uppercase font-bold hover:bg-brand-muted transition-colors flex items-center justify-center" id="btn-publish">
+                <!-- Botón de Publicar que se quedará pensando 3 segundos -->
+                <button onclick="window.saveNewProduct()" class="bg-white text-black px-10 py-4 text-xs tracking-[0.2em] uppercase font-bold hover:bg-brand-muted transition-colors flex items-center justify-center min-w-[200px]" id="btn-publish">
                     <span id="btn-publish-text">Publicar en Vivo</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Especificaciones -->
+    <!-- Modal de Especificaciones Individual -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/80 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
         <div class="bg-brand-surface border border-brand-border w-full max-w-6xl max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
             <button onclick="window.closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -324,7 +298,7 @@
         </div>
     </section>
 
-    <!-- Diseñador (Sin foto, texto centrado editorial) -->
+    <!-- Diseñador (Elegante, Sin foto) -->
     <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex items-center justify-center">
         <div class="max-w-4xl mx-auto px-4 text-center reveal">
             <h2 class="font-editorial text-5xl md:text-8xl text-white mb-12">Iván<br>Damaso</h2>
@@ -420,55 +394,81 @@
         </div>
     </div>
 
-    <!-- FIREBASE & LÓGICA -->
+    <!-- FIREBASE & LÓGICA DE APLICACIÓN -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        const firebaseConfig = {
-          apiKey: "AIzaSyC4SRh7GKB8KkDYao6aw0S1JnLzNOjRcY0",
-          authDomain: "damaso-978c9.firebaseapp.com",
-          projectId: "damaso-978c9",
-          storageBucket: "damaso-978c9.firebasestorage.app",
-          messagingSenderId: "545014965592",
-          appId: "1:545014965592:web:58aec27da0472c6ace712d",
-          measurementId: "G-GGC2PTKLS8"
+        // Configuración Universal (Funciona tanto en tu servidor como en el editor)
+        let app, db, auth, productsPath;
+
+        // Se usa tu configuración de la nube para producción
+        const userFirebaseConfig = {
+            apiKey: "AIzaSyC4SRh7GKB8KkDYao6aw0S1JnLzNOjRcY0",
+            authDomain: "damaso-978c9.firebaseapp.com",
+            projectId: "damaso-978c9",
+            storageBucket: "damaso-978c9.firebasestorage.app",
+            messagingSenderId: "545014965592",
+            appId: "1:545014965592:web:58aec27da0472c6ace712d",
+            measurementId: "G-GGC2PTKLS8"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        // Si se abre en tu servidor Netlify o Vercel, usará tu base de datos
+        if (typeof __firebase_config === 'undefined') {
+            app = initializeApp(userFirebaseConfig);
+            productsPath = "products";
+        } else {
+            // Entorno de prueba del editor web
+            app = initializeApp(JSON.parse(__firebase_config));
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'damaso';
+            productsPath = `artifacts/${appId}/public/data/products`;
+        }
+
+        db = getFirestore(app);
+        auth = getAuth(app);
 
         let dbProducts = [];
         let cart = [];
         let newImageBase64 = "";
 
+        // Catálogo base para que nunca esté vacío
         const staticProducts = [
-            { id: 1, timestamp: 1, name: "Monolito Noir", category: "mesa", price: 6500, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800", sku: "DM-MES-001", desc: "Presencia sólida. Pieza torneada que proyecta luz focal.", specsLight: "LED Integrado 12W, 2700K (Cálida), 1100lm", cable: "Textil negro 2.0m", dims: { w: "20 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-240V 50/60Hz", mat: "Acero al carbón sólido", fin: "Pavonado negro mate", time: "4 a 6 semanas", cert: "NOM, CE" },
-            { id: 3, timestamp: 2, name: "Órbita Suspendida", category: "techo", price: 8900, img: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=800", sku: "DM-TEC-003", desc: "Aro de luz cenital suspendido por tensores invisibles.", specsLight: "LED SMD 40W, 4000K (Neutra)", cable: "Tensores de acero y cable 1.5m", dims: { w: "N/A", h: "5 cm", d: "N/A", dia: "80 cm" }, peso: "3.2 kg", volt: "110-240V", mat: "Aluminio aeroespacial", fin: "Anodizado negro/plata", time: "3 a 4 semanas", cert: "CE, RoHS" },
-            { id: 4, timestamp: 3, name: "Cúpula Brutal", category: "candiles", price: 32000, img: "https://images.unsplash.com/photo-1543198126-a8ad8e47fb22?q=80&w=800", sku: "DM-CAN-004", desc: "Candil monumental forjado con acabados industriales.", specsLight: "6x E26 Bulb Vintage 4W", cable: "Cadena de acero y textil 2m", dims: { w: "120 cm", h: "60 cm", d: "120 cm", dia: "120 cm" }, peso: "24 kg", volt: "110V", mat: "Acero estructural", fin: "Óxido estabilizado y negro", time: "8 semanas", cert: "NOM" },
+            { id: 1, timestamp: 1, name: "Monolito Noir", category: "mesa", price: 6500, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800", sku: "DM-MES-001", desc: "Presencia sólida. Pieza torneada que proyecta luz focal.", specsLight: "LED Integrado 12W, 2700K", cable: "Textil negro 2.0m", dims: { w: "20 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-240V", mat: "Acero al carbón sólido", fin: "Pavonado negro mate", time: "4 a 6 semanas", cert: "NOM, CE" },
+            { id: 3, timestamp: 2, name: "Órbita Suspendida", category: "techo", price: 8900, img: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=800", sku: "DM-TEC-003", desc: "Aro de luz cenital suspendido por tensores invisibles.", specsLight: "LED SMD 40W, 4000K", cable: "Tensores de acero 1.5m", dims: { w: "N/A", h: "5 cm", d: "N/A", dia: "80 cm" }, peso: "3.2 kg", volt: "110-240V", mat: "Aluminio aeroespacial", fin: "Anodizado negro/plata", time: "3 a 4 semanas", cert: "CE, RoHS" },
+            { id: 4, timestamp: 3, name: "Cúpula Brutal", category: "candiles", price: 32000, img: "https://images.unsplash.com/photo-1543198126-a8ad8e47fb22?q=80&w=800", sku: "DM-CAN-004", desc: "Candil monumental forjado con acabados industriales.", specsLight: "6x E26 Bulb Vintage 4W", cable: "Cadena de acero 2m", dims: { w: "120 cm", h: "60 cm", d: "120 cm", dia: "120 cm" }, peso: "24 kg", volt: "110V", mat: "Acero estructural", fin: "Óxido estabilizado", time: "8 semanas", cert: "NOM" },
             { id: 5, timestamp: 4, name: "Sombra Muro", category: "arbotantes", price: 3400, img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=800", sku: "DM-ARB-005", desc: "Baño de luz indirecta arquitectónica mediante dobleces de placa.", specsLight: "LED 8W, 2700K indirecto", cable: "Conexión directa a muro", dims: { w: "15 cm", h: "30 cm", d: "8 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-220V", mat: "Placa de acero doblada CNC", fin: "Pintura electrostática", time: "2 a 3 semanas", cert: "NOM" },
             { id: 6, timestamp: 5, name: "Espejo Obsidiana", category: "espejos", price: 15400, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=800", sku: "DM-ESP-006", desc: "Espejo retroiluminado con marco perimetral robusto flotante.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "100 cm" }, peso: "18 kg", volt: "110V", mat: "Cristal plata 6mm", fin: "Hierro forjado oscuro", time: "4 semanas", cert: "NOM" }
         ];
 
-        // Escucha a Firebase en tiempo real
-        const productsCol = collection(db, "products");
-        onSnapshot(productsCol, (snapshot) => {
-            const firebaseProducts = [];
-            snapshot.forEach((doc) => firebaseProducts.push({ id: doc.id, ...doc.data() }));
-            
-            // Unimos todo y ordenamos del más nuevo al más viejo
-            dbProducts = [...firebaseProducts, ...staticProducts];
-            dbProducts.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-            
-            window.renderCatalog(dbProducts);
-        }, (error) => {
-            console.error("Error Firebase:", error);
-            // Mostrar alerta de seguridad si los permisos fallan
-            if(error.code === 'permission-denied') {
-                document.getElementById('firebase-warning').classList.remove('hidden');
+        // 1. Iniciamos sesión anónima automáticamente (Requerido para guardar en Firebase sin fallar)
+        signInAnonymously(auth).catch((error) => {
+            console.error("Error de Autenticación:", error);
+            window.renderCatalog(staticProducts);
+        });
+
+        // 2. Escuchamos cambios en tiempo real desde Firebase
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const productsCol = collection(db, productsPath);
+                
+                // onSnapshot mantiene sincronizada la web con todos los dispositivos del mundo al instante
+                onSnapshot(productsCol, (snapshot) => {
+                    const firebaseProducts = [];
+                    snapshot.forEach((doc) => firebaseProducts.push({ id: doc.id, ...doc.data() }));
+                    
+                    // Unimos Firebase + Base Fija y los ordenamos por fecha
+                    dbProducts = [...firebaseProducts, ...staticProducts];
+                    dbProducts.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    
+                    window.renderCatalog(dbProducts);
+                }, (error) => {
+                    console.error("Error Firebase:", error);
+                    document.getElementById('firebase-warning').classList.remove('hidden');
+                    dbProducts = [...staticProducts];
+                    window.renderCatalog(dbProducts);
+                });
             }
-            dbProducts = [...staticProducts];
-            window.renderCatalog(dbProducts);
         });
 
         window.renderCatalog = function(products) {
@@ -577,14 +577,19 @@
             previewContainer.classList.add('hidden'); previewContainer.classList.remove('flex');
         };
 
+        // FUNCIÓN MAESTRA PARA GUARDAR EN FIREBASE CON ESPERA DE 3 SEGUNDOS
         window.saveNewProduct = async function() {
             const btn = document.getElementById('btn-publish');
             const originalText = document.getElementById('btn-publish-text').innerText;
+            const originalIcon = '<i data-lucide="loader" class="w-4 h-4 animate-spin mr-2"></i>';
             
             try {
-                document.getElementById('btn-publish-text').innerText = "Subiendo...";
+                // 1. Mostrar estado de subida (Experiencia de Usuario)
+                document.getElementById('btn-publish-text').innerHTML = originalIcon + " Subiendo y Guardando...";
                 btn.disabled = true;
+                lucide.createIcons();
 
+                // 2. Armar el producto
                 const newProduct = {
                     timestamp: Date.now(),
                     name: document.getElementById('new-modelo').value || "Nueva Pieza Damaso",
@@ -604,18 +609,26 @@
                     time: document.getElementById('new-time').value || "N/A", cert: document.getElementById('new-cert').value || "N/A"
                 };
 
-                await addDoc(collection(db, "products"), newProduct);
+                // 3. Ejecutar Promesas de forma simultánea (Subir a Firebase Y esperar 3 segundos visuales)
+                const uploadPromise = addDoc(collection(db, productsPath), newProduct);
+                const delayPromise = new Promise(resolve => setTimeout(resolve, 3000));
                 
+                await Promise.all([uploadPromise, delayPromise]);
+
+                // 4. Limpiar Formulario una vez finalizado todo
                 document.querySelectorAll('#add-product-modal input').forEach(input => input.value = '');
                 window.clearImagePreview();
                 window.toggleAddProductModal();
+                
+                // 5. Bajar al catálogo automáticamente
                 document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
 
             } catch (error) {
                 console.error("Error subiendo: ", error);
-                alert("Error: Tu base de datos Firebase está bloqueada. Cambia las reglas a 'true' en tu consola de Firebase.");
+                alert("Hubo un problema. Si la base de datos está recién creada, no olvides activar las reglas en Firebase.");
             } finally {
-                document.getElementById('btn-publish-text').innerText = originalText;
+                // Restaurar botón a su estado normal
+                document.getElementById('btn-publish-text').innerHTML = originalText;
                 btn.disabled = false;
             }
         };
@@ -631,12 +644,10 @@
             document.getElementById('modal-luz').innerText = p.specsLight;
             document.getElementById('modal-volt').innerText = p.volt;
             document.getElementById('modal-cable').innerText = p.cable;
-            
             document.getElementById('modal-w').innerText = p.dims.w;
             document.getElementById('modal-h').innerText = p.dims.h;
             document.getElementById('modal-d').innerText = p.dims.d;
             document.getElementById('modal-dia').innerText = p.dims.dia;
-            
             document.getElementById('modal-peso').innerText = p.peso;
             document.getElementById('modal-mat').innerText = p.mat;
             document.getElementById('modal-fin').innerText = p.fin;
@@ -774,5 +785,5 @@
 </html>
 
 
-
+```
 
