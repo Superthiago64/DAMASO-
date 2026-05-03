@@ -14,29 +14,7 @@
 
     <!-- HTML2PDF para generar cotizaciones reales -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyC4SRh7GKB8KkDYao6aw0S1JnLzNOjRcY0",
-    authDomain: "damaso-978c9.firebaseapp.com",
-    projectId: "damaso-978c9",
-    storageBucket: "damaso-978c9.firebasestorage.app",
-    messagingSenderId: "545014965592",
-    appId: "1:545014965592:web:58aec27da0472c6ace712d",
-    measurementId: "G-GGC2PTKLS8"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
     <script>
         tailwind.config = {
             theme: {
@@ -114,7 +92,7 @@
     <nav class="fixed w-full z-40 bg-brand-bg/95 backdrop-blur-xl border-b border-brand-border transition-all duration-500 flex flex-col" id="navbar">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div class="flex items-center space-x-6">
-                <button onclick="toggleCategories()" class="text-white hover:text-brand-muted transition-colors p-2 focus:outline-none relative z-50">
+                <button onclick="window.toggleCategories()" class="text-white hover:text-brand-muted transition-colors p-2 focus:outline-none relative z-50">
                     <i data-lucide="menu" class="w-7 h-7"></i>
                 </button>
                 <a href="#" class="font-editorial text-3xl tracking-[0.25em] text-white uppercase font-bold">Damaso</a>
@@ -122,19 +100,19 @@
 
             <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 bg-brand-surface border border-brand-border py-2 shadow-2xl opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-50">
                 <div class="px-6 py-3 text-[9px] text-brand-muted tracking-[0.3em] uppercase border-b border-brand-border mb-2 font-bold">Catálogo</div>
-                <a href="#coleccion" onclick="filterCatalog('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-white/10 uppercase transition-all">Ver Todo</a>
-                <a href="#coleccion" onclick="filterCatalog('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de mesa</a>
-                <a href="#coleccion" onclick="filterCatalog('pie')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de pie</a>
-                <a href="#coleccion" onclick="filterCatalog('techo')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de techo</a>
-                <a href="#coleccion" onclick="filterCatalog('candiles')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Candiles</a>
-                <a href="#coleccion" onclick="filterCatalog('arbotantes')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Arbotantes</a>
-                <a href="#coleccion" onclick="filterCatalog('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de exterior</a>
-                <a href="#coleccion" onclick="filterCatalog('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Proyectos especiales</a>
-                <a href="#coleccion" onclick="filterCatalog('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Espejos</a>
+                <a href="#coleccion" onclick="window.filterCatalog('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-white/10 uppercase transition-all">Ver Todo</a>
+                <a href="#coleccion" onclick="window.filterCatalog('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de mesa</a>
+                <a href="#coleccion" onclick="window.filterCatalog('pie')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de pie</a>
+                <a href="#coleccion" onclick="window.filterCatalog('techo')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de techo</a>
+                <a href="#coleccion" onclick="window.filterCatalog('candiles')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Candiles</a>
+                <a href="#coleccion" onclick="window.filterCatalog('arbotantes')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Arbotantes</a>
+                <a href="#coleccion" onclick="window.filterCatalog('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de exterior</a>
+                <a href="#coleccion" onclick="window.filterCatalog('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Proyectos especiales</a>
+                <a href="#coleccion" onclick="window.filterCatalog('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Espejos</a>
                 <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
-                    <a href="#disenador" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">El Diseñador</a>
-                    <a href="#manifiesto" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Manifiesto</a>
-                    <a href="#contacto" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Contacto</a>
+                    <a href="#disenador" onclick="window.toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">El Diseñador</a>
+                    <a href="#manifiesto" onclick="window.toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Manifiesto</a>
+                    <a href="#contacto" onclick="window.toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Contacto</a>
                 </div>
             </div>
 
@@ -147,11 +125,11 @@
             <!-- Iconos de Acción -->
             <div class="flex items-center space-x-2 sm:space-x-4">
                 <!-- Botón Agregar Pieza (+) -->
-                <button onclick="toggleAddProductModal()" class="text-white hover:text-brand-muted transition-colors p-2" aria-label="Agregar Producto">
+                <button onclick="window.toggleAddProductModal()" class="text-white hover:text-brand-muted transition-colors p-2" aria-label="Agregar Producto">
                     <i data-lucide="plus" class="w-6 h-6"></i>
                 </button>
                 <!-- Botón Carrito -->
-                <button onclick="toggleCart()" class="text-white hover:text-brand-muted transition-colors relative p-2">
+                <button onclick="window.toggleCart()" class="text-white hover:text-brand-muted transition-colors relative p-2">
                     <i data-lucide="shopping-bag" class="w-6 h-6"></i>
                     <span id="cart-count" class="absolute top-0 right-0 bg-white text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0">0</span>
                 </button>
@@ -169,16 +147,15 @@
     <!-- MODAL PARA AGREGAR NUEVA PIEZA (+) -->
     <div id="add-product-modal" class="fixed inset-0 z-[80] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4">
         <div class="bg-brand-surface border border-brand-border w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col relative custom-scroll p-6 sm:p-10">
-            <button onclick="toggleAddProductModal()" class="absolute top-4 right-4 z-10 text-brand-muted hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <button onclick="window.toggleAddProductModal()" class="absolute top-4 right-4 z-10 text-brand-muted hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
             
             <h2 class="font-editorial text-3xl text-white mb-8 border-b border-brand-border pb-4 uppercase tracking-widest">Añadir Nueva Pieza</h2>
             
             <div class="flex flex-col md:flex-row gap-8">
-                <!-- Columna Izquierda: Imagen (Botones Separados) -->
+                <!-- Columna Izquierda: Imagen -->
                 <div class="w-full md:w-1/3 flex flex-col gap-4">
                     <label class="font-bold text-[10px] tracking-[0.2em] uppercase text-brand-muted">Fotografía</label>
                     
-                    <!-- Botones de Acción (Galería y Cámara) -->
                     <div class="flex gap-4">
                         <button onclick="document.getElementById('new-img-gallery').click()" class="flex-1 border border-brand-border py-4 flex flex-col items-center justify-center hover:bg-white/10 transition-colors group">
                             <i data-lucide="image" class="w-6 h-6 text-brand-muted group-hover:text-white mb-2 transition-colors"></i>
@@ -190,22 +167,18 @@
                         </button>
                     </div>
 
-                    <!-- Inputs ocultos -->
-                    <!-- Input sin capture para ir a galería -->
-                    <input type="file" id="new-img-gallery" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
-                    <!-- Input con capture para abrir cámara directo en iPhone -->
-                    <input type="file" id="new-img-camera" accept="image/*" capture="environment" class="hidden" onchange="handleImageUpload(event)">
+                    <input type="file" id="new-img-gallery" accept="image/*" class="hidden" onchange="window.handleImageUpload(event)">
+                    <input type="file" id="new-img-camera" accept="image/*" capture="environment" class="hidden" onchange="window.handleImageUpload(event)">
 
-                    <!-- Contenedor de Previsualización (Oculto hasta que haya foto) -->
                     <div id="new-img-preview-container" class="relative w-full aspect-square border-2 border-dashed border-brand-border hidden items-center justify-center bg-brand-bg mt-2">
                         <img id="new-img-preview" src="" class="absolute inset-0 w-full h-full object-cover z-10">
-                        <button onclick="clearImagePreview()" class="absolute top-2 right-2 z-20 bg-black/70 p-2 text-white hover:bg-white hover:text-black transition-colors rounded">
+                        <button onclick="window.clearImagePreview()" class="absolute top-2 right-2 z-20 bg-black/70 p-2 text-white hover:bg-white hover:text-black transition-colors rounded">
                             <i data-lucide="trash-2" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Columna Derecha: Formulario Especificaciones -->
+                <!-- Columna Derecha: Formulario -->
                 <div class="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
                     <div class="sm:col-span-2">
                         <label class="text-[10px] text-brand-muted uppercase tracking-widest">Modelo</label>
@@ -215,81 +188,41 @@
                         <label class="text-[10px] text-brand-muted uppercase tracking-widest">Descripción</label>
                         <input type="text" id="new-desc" class="input-form" placeholder="Descripción breve de la pieza">
                     </div>
-                    
-                    <!-- Fila -->
                     <div>
                         <label class="text-[10px] text-brand-muted uppercase tracking-widest">Categoría</label>
                         <select id="new-cat" class="input-form bg-brand-surface text-white">
-                            <option value="mesa">Mesa</option>
-                            <option value="pie">Pie</option>
-                            <option value="techo">Techo</option>
-                            <option value="candiles">Candiles</option>
-                            <option value="arbotantes">Arbotantes</option>
-                            <option value="exterior">Exterior</option>
-                            <option value="proyectos">Proyectos Especiales</option>
-                            <option value="espejos">Espejos</option>
+                            <option value="mesa">Mesa</option><option value="pie">Pie</option><option value="techo">Techo</option>
+                            <option value="candiles">Candiles</option><option value="arbotantes">Arbotantes</option>
+                            <option value="exterior">Exterior</option><option value="proyectos">Proyectos Especiales</option><option value="espejos">Espejos</option>
                         </select>
                     </div>
                     <div>
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Precio (MXN) para cotizar</label>
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Precio (MXN)</label>
                         <input type="number" id="new-precio" class="input-form" placeholder="Ej: 5000">
                     </div>
-
-                    <!-- Especificaciones Requeridas -->
-                    <div>
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Código SKU</label>
-                        <input type="text" id="new-sku" class="input-form" placeholder="Ej: DM-CUS-001">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Espec. Lumínicas</label>
-                        <input type="text" id="new-luz" class="input-form" placeholder="Ej: LED 12W 3000K">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Voltaje</label>
-                        <input type="text" id="new-volt" class="input-form" placeholder="Ej: 110V">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Cable</label>
-                        <input type="text" id="new-cable" class="input-form" placeholder="Ej: Textil negro 2m">
-                    </div>
-
-                    <!-- Dimensiones -->
+                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Código SKU</label><input type="text" id="new-sku" class="input-form" placeholder="Ej: DM-CUS-001"></div>
+                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Espec. Lumínicas</label><input type="text" id="new-luz" class="input-form" placeholder="Ej: LED 12W 3000K"></div>
+                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Voltaje</label><input type="text" id="new-volt" class="input-form" placeholder="Ej: 110V"></div>
+                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Cable</label><input type="text" id="new-cable" class="input-form" placeholder="Ej: Textil negro 2m"></div>
+                    
                     <div class="sm:col-span-2 mt-2">
                         <label class="text-[10px] font-bold text-white uppercase tracking-widest border-b border-brand-border w-full block pb-1">Dimensiones</label>
                         <div class="grid grid-cols-4 gap-4 mt-2">
-                            <div><input type="text" id="new-w" class="input-form" placeholder="Ancho"></div>
-                            <div><input type="text" id="new-h" class="input-form" placeholder="Alto"></div>
-                            <div><input type="text" id="new-d" class="input-form" placeholder="Fondo"></div>
-                            <div><input type="text" id="new-dia" class="input-form" placeholder="Diámetro"></div>
+                            <div><input type="text" id="new-w" class="input-form" placeholder="Ancho"></div><div><input type="text" id="new-h" class="input-form" placeholder="Alto"></div>
+                            <div><input type="text" id="new-d" class="input-form" placeholder="Fondo"></div><div><input type="text" id="new-dia" class="input-form" placeholder="Diámetro"></div>
                         </div>
                     </div>
-
-                    <div>
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Peso</label>
-                        <input type="text" id="new-peso" class="input-form" placeholder="Ej: 3.5 kg">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Tiempo Entrega</label>
-                        <input type="text" id="new-time" class="input-form" placeholder="Ej: 4 semanas">
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Materiales</label>
-                        <input type="text" id="new-mat" class="input-form" placeholder="Ej: Acero y Cristal">
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Acabados</label>
-                        <input type="text" id="new-fin" class="input-form" placeholder="Ej: Negro Mate">
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Certificaciones</label>
-                        <input type="text" id="new-cert" class="input-form" placeholder="Ej: NOM">
-                    </div>
+                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Peso</label><input type="text" id="new-peso" class="input-form" placeholder="Ej: 3.5 kg"></div>
+                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Tiempo Entrega</label><input type="text" id="new-time" class="input-form" placeholder="Ej: 4 semanas"></div>
+                    <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Materiales</label><input type="text" id="new-mat" class="input-form" placeholder="Ej: Acero y Cristal"></div>
+                    <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Acabados</label><input type="text" id="new-fin" class="input-form" placeholder="Ej: Negro Mate"></div>
+                    <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Certificaciones</label><input type="text" id="new-cert" class="input-form" placeholder="Ej: NOM"></div>
                 </div>
             </div>
 
             <div class="mt-8 pt-6 border-t border-brand-border flex justify-end">
-                <button onclick="saveNewProduct()" class="bg-white text-black px-10 py-4 text-xs tracking-[0.2em] uppercase font-bold hover:bg-brand-muted transition-colors">
-                    Listo
+                <button onclick="window.saveNewProduct()" class="bg-white text-black px-10 py-4 text-xs tracking-[0.2em] uppercase font-bold hover:bg-brand-muted transition-colors flex items-center justify-center" id="btn-publish">
+                    <span id="btn-publish-text">Publicar en Vivo</span>
                 </button>
             </div>
         </div>
@@ -298,7 +231,7 @@
     <!-- Modal de Especificaciones de Pieza Individual -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/80 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
         <div class="bg-brand-surface border border-brand-border w-full max-w-6xl max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
-            <button onclick="closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <button onclick="window.closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
             <div class="w-full md:w-1/2 bg-brand-bg relative min-h-[300px]">
                 <img id="modal-img" src="" class="absolute inset-0 w-full h-full object-cover">
             </div>
@@ -335,7 +268,7 @@
     <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-brand-border transform translate-x-full transition-transform duration-500 flex flex-col">
         <div class="p-8 border-b border-brand-border flex justify-between items-center">
             <h2 class="font-editorial text-2xl tracking-wider text-white">Mi Selección</h2>
-            <button onclick="toggleCart()" class="text-brand-muted hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <button onclick="window.toggleCart()" class="text-brand-muted hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
         <div class="flex-1 overflow-y-auto p-8 space-y-6" id="cart-items"></div>
         <div class="p-8 border-t border-brand-border bg-black">
@@ -345,12 +278,12 @@
             </div>
             <div class="flex justify-between text-white font-editorial text-xl mb-6"><span>Total Estimado</span><span id="cart-total">$0 MXN</span></div>
             <div class="space-y-3">
-                <button onclick="checkoutPDF()" class="w-full bg-transparent border border-white text-white py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white hover:text-black transition-colors flex justify-center items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Descargar Cotización (PDF)</button>
-                <button onclick="checkoutWhatsApp()" class="w-full bg-[#25D366] text-black py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-[#20b858] transition-colors flex justify-center items-center gap-2"><i data-lucide="message-circle" class="w-4 h-4"></i> Enviar por WhatsApp</button>
+                <button onclick="window.checkoutPDF()" class="w-full bg-transparent border border-white text-white py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white hover:text-black transition-colors flex justify-center items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Descargar Cotización (PDF)</button>
+                <button onclick="window.checkoutWhatsApp()" class="w-full bg-[#25D366] text-black py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-[#20b858] transition-colors flex justify-center items-center gap-2"><i data-lucide="message-circle" class="w-4 h-4"></i> Enviar por WhatsApp</button>
             </div>
         </div>
     </div>
-    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <div id="cart-overlay" onclick="window.toggleCart()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
     <!-- Hero -->
     <header class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden bg-black">
@@ -385,14 +318,20 @@
         </div>
     </section>
 
-    <!-- Diseñador (Imagen eliminada, texto centrado) -->
+    <!-- Diseñador (Imagen vinculada a image.png local) -->
     <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border">
-        <div class="max-w-4xl mx-auto px-4 text-center reveal">
-            <h2 class="font-editorial text-5xl md:text-8xl text-white mb-12">Iván<br>Damaso</h2>
-            <p class="text-xl text-white font-light italic mb-8 border-b border-brand-border pb-8 inline-block px-8">"La luz es el alma de la arquitectura."</p>
-            <p class="text-brand-muted mx-auto leading-relaxed">
-                Diseñador radicado en San Agustín, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo. Cada pieza nace de la experimentación de texturas, volúmenes y sombras proyectadas.
-            </p>
+        <div class="max-w-[95%] mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                <div class="lg:col-span-5 reveal">
+                    <!-- FOTO DEL DISEÑADOR: Lee el archivo image.png de tu carpeta -->
+                    <img src="image.png" onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop'" alt="Iván Damaso" class="w-full aspect-[3/4] object-cover grayscale brightness-110 border border-brand-border">
+                </div>
+                <div class="lg:col-span-7 reveal">
+                    <h2 class="font-editorial text-5xl md:text-8xl text-white mb-12">Iván<br>Damaso</h2>
+                    <p class="text-xl text-white font-light italic border-l-2 border-white pl-8 mb-8">"La luz es el alma de la arquitectura."</p>
+                    <p class="text-brand-muted max-w-xl">Diseñador radicado en San Agustín, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -431,10 +370,9 @@
         </div>
     </footer>
 
-    <!-- WhatsApp Flotante -->
     <a href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#25D366] text-white p-5 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 z-50"><i data-lucide="phone" class="w-6 h-6"></i></a>
 
-    <!-- TEMPLATE PARA GENERACIÓN DE PDF -->
+    <!-- TEMPLATE PDF -->
     <div id="pdf-render-container">
         <div id="invoice-template" class="bg-white text-black p-12 font-sans" style="width: 800px; min-height: 1122px;">
             <div class="flex justify-between items-end border-b-2 border-black pb-8 mb-8">
@@ -449,13 +387,11 @@
                     <p class="text-sm text-gray-600">Folio: <span id="pdf-folio"></span></p>
                 </div>
             </div>
-            
             <div class="mb-10 flex flex-col space-y-1">
                 <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Datos del Cliente</h3>
                 <p class="text-lg font-medium border-b border-gray-300 pb-1" id="pdf-client-name">Cliente General</p>
                 <p class="text-sm text-gray-700 pt-1" id="pdf-client-email">correo@ejemplo.com</p>
             </div>
-            
             <table class="w-full text-left mb-10 border-collapse">
                 <thead>
                     <tr class="border-b border-black text-xs uppercase tracking-widest">
@@ -467,7 +403,6 @@
                 </thead>
                 <tbody id="pdf-items"></tbody>
             </table>
-            
             <div class="flex justify-end mb-16">
                 <div class="w-1/3 border-t-2 border-black pt-4">
                     <div class="flex justify-between font-bold text-xl">
@@ -476,7 +411,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="text-xs text-gray-500 space-y-2 mt-auto pt-10 border-t border-gray-300">
                 <p><strong class="text-black">Condiciones Comerciales:</strong></p>
                 <p>- Precios sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.</p>
@@ -486,52 +420,81 @@
         </div>
     </div>
 
-    <!-- SCRIPT PRINCIPAL -->
-    <script>
-        lucide.createIcons();
 
-        // BASE DE DATOS
-        let dbProducts = [
-            { 
-                id: 1, name: "Monolito Noir", category: "mesa", price: 6500, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800",
-                sku: "DM-MES-001",
-                desc: "Presencia sólida. Pieza torneada que proyecta luz focal.",
-                specsLight: "LED Integrado 12W, 2700K (Cálida), 1100lm, Dimerizable",
-                cable: "Textil negro 2.0m con interruptor en línea",
-                dims: { w: "20 cm", h: "45 cm", d: "20 cm", dia: "N/A" },
-                peso: "4.5 kg", volt: "110-240V 50/60Hz", mat: "Acero al carbón sólido de 3/16\"", fin: "Pavonado negro mate artesanal", time: "4 a 6 semanas", cert: "NOM, CE"
-            },
-            { 
-                id: 3, name: "Órbita Suspendida", category: "techo", price: 8900, img: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=800",
-                sku: "DM-TEC-003", desc: "Aro de luz cenital suspendido por tensores invisibles.",
-                specsLight: "LED SMD 40W, 4000K (Neutra)", cable: "Tensores de acero y cable transparente 1.5m",
-                dims: { w: "N/A", h: "5 cm", d: "N/A", dia: "80 cm" }, peso: "3.2 kg", volt: "110-240V", mat: "Aluminio aeroespacial, difusor acrílico", fin: "Anodizado negro/plata", time: "3 a 4 semanas", cert: "CE, RoHS"
-            },
-            { 
-                id: 4, name: "Cúpula Brutal", category: "candiles", price: 32000, img: "https://images.unsplash.com/photo-1543198126-a8ad8e47fb22?q=80&w=800",
-                sku: "DM-CAN-004", desc: "Candil monumental forjado con acabados industriales crudos.",
-                specsLight: "6x E26 Bulb Vintage 4W (Incluidas)", cable: "Cadena de acero y cable textil 2m",
-                dims: { w: "120 cm", h: "60 cm", d: "120 cm", dia: "120 cm" }, peso: "24 kg", volt: "110V", mat: "Acero estructural, cristal opaco", fin: "Óxido estabilizado y negro mate", time: "8 semanas", cert: "NOM"
-            },
-            { 
-                id: 5, name: "Sombra Muro", category: "arbotantes", price: 3400, img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=800",
-                sku: "DM-ARB-005", desc: "Baño de luz indirecta arquitectónica mediante dobleces de placa.",
-                specsLight: "LED 8W, 2700K indirecto", cable: "Conexión directa a muro (sin cable visto)",
-                dims: { w: "15 cm", h: "30 cm", d: "8 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-220V", mat: "Placa de acero doblada CNC", fin: "Pintura electrostática Arena", time: "2 a 3 semanas", cert: "NOM"
-            },
-            { 
-                id: 6, name: "Espejo Obsidiana", category: "espejos", price: 15400, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=800",
-                sku: "DM-ESP-006", desc: "Espejo retroiluminado con marco perimetral robusto flotante.",
-                specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro",
-                dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "100 cm" }, peso: "18 kg", volt: "110V (Driver incluido)", mat: "Cristal plata 6mm, herraje de hierro", fin: "Hierro forjado oscuro, luna clara", time: "4 semanas", cert: "NOM"
-            }
-        ];
+    <!-- FIREBASE & LÓGICA PRINCIPAL (MODULAR) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
+        // CONFIGURACIÓN DE FIREBASE (La que proporcionaste)
+        const firebaseConfig = {
+          apiKey: "AIzaSyC4SRh7GKB8KkDYao6aw0S1JnLzNOjRcY0",
+          authDomain: "damaso-978c9.firebaseapp.com",
+          projectId: "damaso-978c9",
+          storageBucket: "damaso-978c9.firebasestorage.app",
+          messagingSenderId: "545014965592",
+          appId: "1:545014965592:web:58aec27da0472c6ace712d",
+          measurementId: "G-GGC2PTKLS8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Variables Globales
+        let dbProducts = []; // Array principal que se llenará con Base Local + Firebase
         let cart = [];
         let newImageBase64 = "";
 
-        // RENDER CATÁLOGO
-        function renderCatalog(products) {
+        // BASE DE DATOS LOCAL (Plantillas fijas)
+        const staticProducts = [
+            { 
+                id: 1, name: "Monolito Noir", category: "mesa", price: 6500, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800",
+                sku: "DM-MES-001", desc: "Presencia sólida. Pieza torneada que proyecta luz focal.", specsLight: "LED Integrado 12W, 2700K (Cálida), 1100lm", cable: "Textil negro 2.0m",
+                dims: { w: "20 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-240V 50/60Hz", mat: "Acero al carbón sólido", fin: "Pavonado negro mate", time: "4 a 6 semanas", cert: "NOM, CE"
+            },
+            { 
+                id: 3, name: "Órbita Suspendida", category: "techo", price: 8900, img: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=800",
+                sku: "DM-TEC-003", desc: "Aro de luz cenital suspendido por tensores invisibles.", specsLight: "LED SMD 40W, 4000K (Neutra)", cable: "Tensores de acero y cable 1.5m",
+                dims: { w: "N/A", h: "5 cm", d: "N/A", dia: "80 cm" }, peso: "3.2 kg", volt: "110-240V", mat: "Aluminio aeroespacial", fin: "Anodizado negro/plata", time: "3 a 4 semanas", cert: "CE, RoHS"
+            },
+            { 
+                id: 4, name: "Cúpula Brutal", category: "candiles", price: 32000, img: "https://images.unsplash.com/photo-1543198126-a8ad8e47fb22?q=80&w=800",
+                sku: "DM-CAN-004", desc: "Candil monumental forjado con acabados industriales.", specsLight: "6x E26 Bulb Vintage 4W", cable: "Cadena de acero y textil 2m",
+                dims: { w: "120 cm", h: "60 cm", d: "120 cm", dia: "120 cm" }, peso: "24 kg", volt: "110V", mat: "Acero estructural", fin: "Óxido estabilizado y negro", time: "8 semanas", cert: "NOM"
+            },
+            { 
+                id: 5, name: "Sombra Muro", category: "arbotantes", price: 3400, img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=800",
+                sku: "DM-ARB-005", desc: "Baño de luz indirecta arquitectónica mediante dobleces de placa.", specsLight: "LED 8W, 2700K indirecto", cable: "Conexión directa a muro",
+                dims: { w: "15 cm", h: "30 cm", d: "8 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-220V", mat: "Placa de acero doblada CNC", fin: "Pintura electrostática", time: "2 a 3 semanas", cert: "NOM"
+            },
+            { 
+                id: 6, name: "Espejo Obsidiana", category: "espejos", price: 15400, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=800",
+                sku: "DM-ESP-006", desc: "Espejo retroiluminado con marco perimetral robusto flotante.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro",
+                dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "100 cm" }, peso: "18 kg", volt: "110V", mat: "Cristal plata 6mm", fin: "Hierro forjado oscuro", time: "4 semanas", cert: "NOM"
+            }
+        ];
+
+        // SINCRONIZACIÓN EN TIEMPO REAL CON FIREBASE
+        const productsQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
+        onSnapshot(productsQuery, (snapshot) => {
+            const firebaseProducts = [];
+            snapshot.forEach((doc) => {
+                firebaseProducts.push({ id: doc.id, ...doc.data() });
+            });
+            // Mezclar Firebase + Estáticos (Los nuevos salen arriba)
+            dbProducts = [...firebaseProducts, ...staticProducts];
+            window.renderCatalog(dbProducts);
+        }, (error) => {
+            console.error("Firebase Error. Usando catálogo offline.", error);
+            dbProducts = [...staticProducts];
+            window.renderCatalog(dbProducts);
+        });
+
+        // FUNCIONES GLOBALES (Asignadas a Window para que HTML las pueda usar)
+        
+        window.renderCatalog = function(products) {
             const grid = document.getElementById('catalog-grid');
             grid.innerHTML = '';
             
@@ -544,24 +507,23 @@
                 grid.innerHTML += `
                     <div class="group reveal">
                         <div class="relative overflow-hidden bg-brand-surface aspect-square border border-brand-border">
-                            <img src="${p.img}" class="img-catalog w-full h-full object-cover" onclick="openSpecModal(${p.id})">
+                            <img src="${p.img}" class="img-catalog w-full h-full object-cover" onclick="window.openSpecModal('${p.id}')">
                             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 pointer-events-none">
-                                <button class="bg-transparent border border-white text-white text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-2 hover:bg-white hover:text-black transition-all pointer-events-auto" onclick="openSpecModal(${p.id})">Ver Specs</button>
-                                <button onclick="addToCart(${p.id})" class="bg-white text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-brand-muted transition-all pointer-events-auto">Agregar Cotización</button>
+                                <button class="bg-transparent border border-white text-white text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-2 hover:bg-white hover:text-black transition-all pointer-events-auto" onclick="window.openSpecModal('${p.id}')">Ver Specs</button>
+                                <button onclick="window.addToCart('${p.id}')" class="bg-white text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-brand-muted transition-all pointer-events-auto">Agregar Cotización</button>
                             </div>
                         </div>
                         <div class="mt-6 flex justify-between">
-                            <div><h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-muted" onclick="openSpecModal(${p.id})">${p.name}</h3><p class="text-[10px] tracking-[0.2em] text-brand-muted uppercase">${p.category}</p></div>
-                            <p class="font-editorial text-lg text-white">$${p.price.toLocaleString()}</p>
+                            <div><h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-muted" onclick="window.openSpecModal('${p.id}')">${p.name}</h3><p class="text-[10px] tracking-[0.2em] text-brand-muted uppercase">${p.category}</p></div>
+                            <p class="font-editorial text-lg text-white">$${Number(p.price).toLocaleString()}</p>
                         </div>
                     </div>
                 `;
             });
             initReveal();
-        }
+        };
 
-        // CONTROL DE MODALES Y MENÚS
-        function toggleCategories() {
+        window.toggleCategories = function() {
             const menu = document.getElementById('dropdown-menu');
             if (menu.classList.contains('opacity-0')) {
                 menu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
@@ -570,34 +532,33 @@
                 menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
                 menu.classList.remove('opacity-100', 'translate-y-0');
             }
-        }
+        };
 
-        function filterCatalog(cat) {
+        window.filterCatalog = function(cat) {
             document.getElementById('live-search').value = '';
             const filtered = cat === 'all' ? dbProducts : dbProducts.filter(p => p.category === cat);
-            renderCatalog(filtered);
+            window.renderCatalog(filtered);
             document.getElementById('catalog-title').innerText = cat === 'all' ? "Catálogo Completo" : cat.charAt(0).toUpperCase() + cat.slice(1);
             document.getElementById('catalog-subtitle').innerText = "Colección 2026";
-            toggleCategories();
+            window.toggleCategories();
             document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
-        }
+        };
 
         document.getElementById('live-search').addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase();
             if(q.length === 0) { 
-                renderCatalog(dbProducts); 
+                window.renderCatalog(dbProducts); 
                 document.getElementById('catalog-title').innerText = "Catálogo Completo";
                 document.getElementById('catalog-subtitle').innerText = "Colección 2026";
                 return; 
             }
-            const results = dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q) || p.mat.toLowerCase().includes(q));
-            renderCatalog(results);
+            const results = dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+            window.renderCatalog(results);
             document.getElementById('catalog-title').innerText = "Resultados";
             document.getElementById('catalog-subtitle').innerText = `Búsqueda: "${q}"`;
         });
 
-        // MODAL AGREGAR NUEVO PRODUCTO (+)
-        function toggleAddProductModal() {
+        window.toggleAddProductModal = function() {
             const modal = document.getElementById('add-product-modal');
             if (modal.classList.contains('opacity-0')) {
                 modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -606,81 +567,108 @@
                 modal.classList.add('opacity-0', 'pointer-events-none');
                 document.body.style.overflow = 'auto';
             }
-        }
+        };
 
-        function handleImageUpload(event) {
+        // COMPRESOR DE IMAGEN PARA IPHONE (Para que Firebase no se bloquee)
+        window.handleImageUpload = function(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    newImageBase64 = e.target.result;
-                    const previewContainer = document.getElementById('new-img-preview-container');
-                    const preview = document.getElementById('new-img-preview');
-                    preview.src = newImageBase64;
-                    previewContainer.classList.remove('hidden');
-                    previewContainer.classList.add('flex');
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 800; // Reducimos tamaño para la base de datos
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Guardar en formato JPEG comprimido
+                        newImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                        
+                        const previewContainer = document.getElementById('new-img-preview-container');
+                        const preview = document.getElementById('new-img-preview');
+                        preview.src = newImageBase64;
+                        previewContainer.classList.remove('hidden');
+                        previewContainer.classList.add('flex');
+                    }
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             }
-            // Limpiar inputs para permitir volver a seleccionar la misma foto si se borró
             event.target.value = '';
-        }
+        };
 
-        function clearImagePreview() {
+        window.clearImagePreview = function() {
             newImageBase64 = "";
             const previewContainer = document.getElementById('new-img-preview-container');
             const preview = document.getElementById('new-img-preview');
             preview.src = "";
             previewContainer.classList.add('hidden');
             previewContainer.classList.remove('flex');
-        }
+        };
 
-        function saveNewProduct() {
-            const name = document.getElementById('new-modelo').value || "Nueva Pieza Damaso";
-            const desc = document.getElementById('new-desc').value || "Descripción no especificada.";
-            const sku = document.getElementById('new-sku').value || "DM-NEW-000";
-            const category = document.getElementById('new-cat').value;
-            const price = parseFloat(document.getElementById('new-precio').value) || 0;
+        // GUARDAR PIEZA DIRECTO A FIREBASE CLOUD
+        window.saveNewProduct = async function() {
+            const btn = document.getElementById('btn-publish');
+            const originalText = document.getElementById('btn-publish-text').innerText;
             
-            const img = newImageBase64 || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop"; 
+            try {
+                document.getElementById('btn-publish-text').innerText = "Subiendo...";
+                btn.disabled = true;
 
-            const newProduct = {
-                id: Date.now(), 
-                name: name,
-                category: category,
-                price: price,
-                img: img,
-                sku: sku,
-                desc: desc,
-                specsLight: document.getElementById('new-luz').value || "N/A",
-                cable: document.getElementById('new-cable').value || "N/A",
-                dims: {
-                    w: document.getElementById('new-w').value || "N/A",
-                    h: document.getElementById('new-h').value || "N/A",
-                    d: document.getElementById('new-d').value || "N/A",
-                    dia: document.getElementById('new-dia').value || "N/A"
-                },
-                peso: document.getElementById('new-peso').value || "N/A",
-                volt: document.getElementById('new-volt').value || "N/A",
-                mat: document.getElementById('new-mat').value || "N/A",
-                fin: document.getElementById('new-fin').value || "N/A",
-                time: document.getElementById('new-time').value || "N/A",
-                cert: document.getElementById('new-cert').value || "N/A"
-            };
+                const newProduct = {
+                    name: document.getElementById('new-modelo').value || "Nueva Pieza Damaso",
+                    desc: document.getElementById('new-desc').value || "Descripción no especificada.",
+                    sku: document.getElementById('new-sku').value || "DM-NEW-000",
+                    category: document.getElementById('new-cat').value,
+                    price: parseFloat(document.getElementById('new-precio').value) || 0,
+                    img: newImageBase64 || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop", 
+                    specsLight: document.getElementById('new-luz').value || "N/A",
+                    cable: document.getElementById('new-cable').value || "N/A",
+                    dims: {
+                        w: document.getElementById('new-w').value || "N/A",
+                        h: document.getElementById('new-h').value || "N/A",
+                        d: document.getElementById('new-d').value || "N/A",
+                        dia: document.getElementById('new-dia').value || "N/A"
+                    },
+                    peso: document.getElementById('new-peso').value || "N/A",
+                    volt: document.getElementById('new-volt').value || "N/A",
+                    mat: document.getElementById('new-mat').value || "N/A",
+                    fin: document.getElementById('new-fin').value || "N/A",
+                    time: document.getElementById('new-time').value || "N/A",
+                    cert: document.getElementById('new-cert').value || "N/A",
+                    createdAt: serverTimestamp() // Tiempo exacto en Firebase
+                };
 
-            dbProducts.unshift(newProduct); 
-            renderCatalog(dbProducts); 
-            
-            // Limpiar
-            document.querySelectorAll('#add-product-modal input').forEach(input => input.value = '');
-            clearImagePreview();
-            toggleAddProductModal();
-            document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
-        }
+                // Enviar a la nube (Se actualizará solo gracias a onSnapshot)
+                await addDoc(collection(db, "products"), newProduct);
+                
+                // Limpiar
+                document.querySelectorAll('#add-product-modal input').forEach(input => input.value = '');
+                window.clearImagePreview();
+                window.toggleAddProductModal();
+                document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
 
-        // MODAL ESPECIFICACIONES PIEZA
-        function openSpecModal(id) {
-            const p = dbProducts.find(x => x.id === id);
+            } catch (error) {
+                console.error("Error subiendo a Firebase: ", error);
+                alert("Hubo un error de permisos. Asegúrate de poner tus reglas de Firebase en 'true'.");
+            } finally {
+                document.getElementById('btn-publish-text').innerText = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        window.openSpecModal = function(id) {
+            const p = dbProducts.find(x => String(x.id) === String(id));
             if(!p) return;
             
             document.getElementById('modal-img').src = p.img;
@@ -702,38 +690,37 @@
             document.getElementById('modal-time').innerText = p.time;
             document.getElementById('modal-cert').innerText = p.cert;
             
-            document.getElementById('modal-price').innerText = "$" + p.price.toLocaleString() + " MXN";
+            document.getElementById('modal-price').innerText = "$" + Number(p.price).toLocaleString() + " MXN";
             
             const btn = document.getElementById('modal-add-btn');
-            btn.onclick = () => { addToCart(p.id); closeSpecModal(); };
+            btn.onclick = () => { window.addToCart(p.id); window.closeSpecModal(); };
 
             const modal = document.getElementById('spec-modal');
             modal.classList.remove('opacity-0', 'pointer-events-none');
             document.body.style.overflow = 'hidden';
-        }
+        };
 
-        function closeSpecModal() {
+        window.closeSpecModal = function() {
             document.getElementById('spec-modal').classList.add('opacity-0', 'pointer-events-none');
             document.body.style.overflow = 'auto';
-        }
+        };
 
-        // FUNCIONES DE CARRITO
-        function addToCart(id) {
-            const product = dbProducts.find(p => p.id === id);
-            const exist = cart.find(i => i.id === id);
+        window.addToCart = function(id) {
+            const product = dbProducts.find(p => String(p.id) === String(id));
+            const exist = cart.find(i => String(i.id) === String(id));
             if(exist) exist.qty += 1;
             else cart.push({...product, qty: 1});
             
-            updateCartUI();
-            if(document.getElementById('cart-drawer').classList.contains('translate-x-full')) toggleCart();
-        }
+            window.updateCartUI();
+            if(document.getElementById('cart-drawer').classList.contains('translate-x-full')) window.toggleCart();
+        };
 
-        function removeFromCart(id) {
-            cart = cart.filter(i => i.id !== id);
-            updateCartUI();
-        }
+        window.removeFromCart = function(id) {
+            cart = cart.filter(i => String(i.id) !== String(id));
+            window.updateCartUI();
+        };
 
-        function updateCartUI() {
+        window.updateCartUI = function() {
             const itemsCont = document.getElementById('cart-items');
             const totalCont = document.getElementById('cart-total');
             const countCont = document.getElementById('cart-count');
@@ -751,7 +738,7 @@
             itemsCont.innerHTML = '';
             let total = 0;
             cart.forEach((item) => {
-                const itemTotal = item.price * item.qty;
+                const itemTotal = Number(item.price) * item.qty;
                 total += itemTotal;
                 itemsCont.innerHTML += `
                     <div class="flex items-center gap-4 border-b border-brand-border pb-4">
@@ -760,22 +747,21 @@
                             <h4 class="font-editorial text-white text-sm">${item.name}</h4>
                             <p class="text-[10px] text-brand-muted uppercase tracking-widest mt-1">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
                         </div>
-                        <button onclick="removeFromCart(${item.id})" class="text-brand-muted hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        <button onclick="window.removeFromCart('${item.id}')" class="text-brand-muted hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </div>
                 `;
             });
             totalCont.innerText = `$${total.toLocaleString()} MXN`;
             lucide.createIcons();
-        }
+        };
 
-        function toggleCart() {
+        window.toggleCart = function() {
             document.getElementById('cart-drawer').classList.toggle('translate-x-full');
             document.getElementById('cart-overlay').classList.toggle('opacity-0');
             document.getElementById('cart-overlay').classList.toggle('pointer-events-none');
-        }
+        };
 
-        // GENERACIÓN DE PDF SEGURA
-        function checkoutPDF() {
+        window.checkoutPDF = function() {
             if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
             
             const clientName = document.getElementById('client-name').value || "A quien corresponda";
@@ -793,14 +779,14 @@
             let total = 0;
             
             cart.forEach(item => {
-                const sum = item.price * item.qty;
+                const sum = Number(item.price) * item.qty;
                 total += sum;
                 tbody.innerHTML += `
                     <tr class="border-b border-gray-200 text-sm">
                         <td class="py-4 text-gray-600 text-xs">${item.sku}</td>
                         <td class="py-4 font-editorial font-bold">${item.name}</td>
                         <td class="py-4 text-center">${item.qty}</td>
-                        <td class="py-4 text-right">$${item.price.toLocaleString()}</td>
+                        <td class="py-4 text-right">$${Number(item.price).toLocaleString()}</td>
                     </tr>
                 `;
             });
@@ -823,10 +809,9 @@
                 btn.innerHTML = originalText;
                 lucide.createIcons();
             });
-        }
+        };
 
-        // WHATSAPP OPTIMIZADO
-        function checkoutWhatsApp() {
+        window.checkoutWhatsApp = function() {
             if(cart.length === 0) { alert("Tu carrito está vacío."); return; }
             
             const clientName = document.getElementById('client-name').value;
@@ -839,19 +824,18 @@
             let total = 0;
             cart.forEach(i => {
                 msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`;
-                total += (i.price * i.qty);
+                total += (Number(i.price) * i.qty);
             });
             msg += `\n*Total Estimado:* $${total.toLocaleString()} MXN\n`;
             
             const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
-            
             const link = document.createElement('a');
             link.href = url;
             link.target = '_blank';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }
+        };
 
         function initReveal() {
             const observer = new IntersectionObserver((entries) => {
@@ -861,12 +845,12 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderCatalog(dbProducts);
+            lucide.createIcons();
             document.addEventListener('click', function(event) {
                 const menu = document.getElementById('dropdown-menu');
-                const btn = document.querySelector('button[onclick="toggleCategories()"]');
+                const btn = document.querySelector('button[onclick="window.toggleCategories()"]');
                 if (!menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) {
-                    toggleCategories();
+                    window.toggleCategories();
                 }
             });
         });
