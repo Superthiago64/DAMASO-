@@ -14,6 +14,35 @@
 
     <!-- HTML2PDF para generar cotizaciones -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script type="module">
+  // 1. Importar herramientas de la nube
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // 2. Tus llaves de DAMASO
+  const firebaseConfig = {
+    apiKey: "AIzaSyC4SRh7GKB8KkDYao6aw0S1JnLzNOjRcY0",
+    authDomain: "damaso-978c9.firebaseapp.com",
+    projectId: "damaso-978c9",
+    storageBucket: "damaso-978c9.firebasestorage.app",
+    messagingSenderId: "545014965592",
+    appId: "1:545014965592:web:58aec27da0472c6ace712d",
+    measurementId: "G-GGC2PTKLS8"
+  };
+
+  // 3. Encender la conexión
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  
+  console.log("¡Conexión lista con Firestore!");
+
+  // 4. Hacer que los datos se compartan (ejemplo rápido)
+  // Esta parte le dice a tu web que escuche a la nube
+  onSnapshot(collection(db, "lámparas"), (snapshot) => {
+    console.log("Hay cambios en las lámparas de la nube");
+    // Aquí el otro chat te ayudará a poner el código que dibuja las lámparas
+  });
+</script>
 
     <script>
         tailwind.config = {
