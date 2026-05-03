@@ -1,17 +1,14 @@
 
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth" style="scroll-padding-top: 140px;">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DAMASO | Alta Iluminación Editorial</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (El único script externo requerido para diseño) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Iconos Lucide -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
     <!-- HTML2PDF para generar cotizaciones reales -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -20,13 +17,7 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            bg: '#030303',
-                            surface: '#111111',
-                            border: '#333333',
-                            text: '#f2f2f2',
-                            muted: '#a1a1a1'
-                        }
+                        brand: { bg: '#030303', surface: '#111111', border: '#333333', text: '#f2f2f2', muted: '#a1a1a1' }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -42,190 +33,150 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* SOLUCIÓN AL BUG DEL SCROLL HORIZONTAL */
+        /* Base sólida y a prueba de errores */
         html, body { 
             background-color: #030303; 
             color: #f2f2f2; 
-            max-width: 100vw;
+            max-width: 100vw; 
             overflow-x: hidden; 
-            width: 100%;
-            position: relative;
+            width: 100%; 
+            margin: 0; 
+            padding: 0;
         }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #030303; }
         ::-webkit-scrollbar-thumb { background: #333333; border-radius: 10px; }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
+        /* Efectos visuales de catálogo */
         .img-catalog { transition: transform 0.8s ease; cursor: pointer; }
         .group:hover .img-catalog { transform: scale(1.05); }
-
         .modal-overlay { backdrop-filter: blur(10px); }
         
-        /* Oculta PDF del render en móviles */
+        /* Oculta plantilla de PDF para no deformar la página */
         #pdf-render-container { position: absolute; top: 0; left: -9999px; z-index: -9999; opacity: 0; pointer-events: none; width: 800px; }
 
-        .input-form {
-            background-color: transparent;
-            border: none;
-            border-bottom: 1px solid #333333;
-            color: white;
-            font-size: 12px;
-            padding: 8px 0;
-            width: 100%;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        .input-form:focus { border-bottom-color: white; }
-        .input-form::placeholder { color: #555; }
-        
-        input[type="search"]::-webkit-search-decoration,
-        input[type="search"]::-webkit-search-cancel-button { display: none; }
+        /* Barra de búsqueda limpia */
+        input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { display: none; }
 
-        /* Estilo para imágenes no encontradas (fallback elegante) */
-        .img-fallback {
-            background-color: #111;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        /* Animación Marquesina para Clientes */
+        .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; display: flex; background-color: #111; padding: 25px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; }
+        .marquee-content { display: flex; animation: marquee 40s linear infinite; }
+        .marquee-content:hover { animation-play-state: paused; }
+        @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+        
+        .client-group { margin: 0 30px; display: inline-flex; align-items: center; }
+        .client-title { font-family: 'Playfair Display', serif; font-style: italic; color: #fff; margin-right: 15px; font-size: 1.1rem; }
+        .client-names { font-family: 'Inter', sans-serif; color: #a1a1a1; font-weight: 300; letter-spacing: 1px; font-size: 0.80rem; text-transform: uppercase; }
+        .dot { margin: 0 10px; color: #333; }
+        
+        .chat-scroll::-webkit-scrollbar { width: 4px; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-white selection:text-black">
 
-    <!-- Alerta de Firebase -->
-    <div id="firebase-warning" class="hidden fixed top-0 w-full z-[100] bg-red-600 text-white text-xs text-center py-3 px-4 font-bold shadow-lg">
-        ¡Aviso! Tu base de datos Firebase requiere configuración pública. Ve a Firestore > Reglas y pon: <code class="bg-black/30 px-2 py-1 rounded mx-1">allow read, write: if true;</code>
-        <button onclick="document.getElementById('firebase-warning').classList.add('hidden')" class="ml-4 underline">Cerrar</button>
-    </div>
-
-    <!-- Navegación Superior -->
+    <!-- Navegación Superior Fija -->
     <nav class="fixed w-full z-40 bg-brand-bg/95 backdrop-blur-xl border-b border-brand-border transition-all duration-500 flex flex-col" id="navbar">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
+            
             <div class="flex items-center space-x-6">
-                <button onclick="window.toggleCategories()" class="text-white hover:text-brand-muted transition-colors p-2 focus:outline-none relative z-50">
-                    <i data-lucide="menu" class="w-7 h-7"></i>
+                <!-- Botón Menú 3 líneas (SVG Inline seguro) -->
+                <button onclick="toggleCategories()" class="text-white hover:text-brand-muted transition-colors p-2 focus:outline-none relative z-50">
+                    <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 </button>
                 <a href="#" class="font-editorial text-3xl tracking-[0.25em] text-white uppercase font-bold">Damaso</a>
             </div>
 
+            <!-- Menú Desplegable de Categorías -->
             <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 bg-brand-surface border border-brand-border py-2 shadow-2xl opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-50">
                 <div class="px-6 py-3 text-[9px] text-brand-muted tracking-[0.3em] uppercase border-b border-brand-border mb-2 font-bold">Catálogo</div>
-                <a href="#coleccion" onclick="window.filterCatalog('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-white/10 uppercase transition-all">Ver Todo</a>
-                <a href="#coleccion" onclick="window.filterCatalog('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de mesa</a>
-                <a href="#coleccion" onclick="window.filterCatalog('pie')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de pie</a>
-                <a href="#coleccion" onclick="window.filterCatalog('techo')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de techo</a>
-                <a href="#coleccion" onclick="window.filterCatalog('candiles')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Candiles</a>
-                <a href="#coleccion" onclick="window.filterCatalog('arbotantes')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Arbotantes</a>
-                <a href="#coleccion" onclick="window.filterCatalog('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de exterior</a>
-                <a href="#coleccion" onclick="window.filterCatalog('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Proyectos especiales</a>
-                <a href="#coleccion" onclick="window.filterCatalog('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Espejos</a>
+                <a href="#coleccion" onclick="filterCatalog('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-white/10 uppercase transition-all">Ver Todo</a>
+                <a href="#coleccion" onclick="filterCatalog('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de mesa</a>
+                <a href="#coleccion" onclick="filterCatalog('pie')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de pie</a>
+                <a href="#coleccion" onclick="filterCatalog('techo')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de techo</a>
+                <a href="#coleccion" onclick="filterCatalog('candiles')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Candiles</a>
+                <a href="#coleccion" onclick="filterCatalog('arbotantes')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Arbotantes</a>
+                <a href="#coleccion" onclick="filterCatalog('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de exterior</a>
+                <a href="#coleccion" onclick="filterCatalog('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Proyectos especiales</a>
+                <a href="#coleccion" onclick="filterCatalog('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Espejos</a>
+                
                 <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
-                    <a href="#disenador" onclick="window.toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">El Diseñador</a>
-                    <a href="#manifiesto" onclick="window.toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Manifiesto</a>
-                    <a href="#contacto" onclick="window.toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Contacto</a>
+                    <a href="#clientes" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Clientes</a>
+                    <a href="#disenador" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">El Diseñador</a>
                 </div>
             </div>
 
             <div class="hidden md:flex items-center space-x-10">
+                <a href="#clientes" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">Clientes</a>
                 <a href="#disenador" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">El Diseñador</a>
-                <a href="#manifiesto" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">Manifiesto</a>
-                <a href="#contacto" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">Contacto</a>
             </div>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
-                <button onclick="window.toggleAddProductModal()" class="text-white hover:text-brand-muted transition-colors p-2" aria-label="Agregar Producto">
-                    <i data-lucide="plus" class="w-6 h-6"></i>
+                <!-- Botón Chatbot (SVG Inline) -->
+                <button onclick="toggleChatbot()" class="text-white hover:text-brand-muted transition-colors p-2" aria-label="Asistente Virtual">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>
                 </button>
-                <button onclick="window.toggleCart()" class="text-white hover:text-brand-muted transition-colors relative p-2">
-                    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
-                    <span id="cart-count" class="absolute top-0 right-0 bg-white text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0">0</span>
+                <!-- Botón Carrito (SVG Inline) -->
+                <button onclick="toggleCart()" class="text-white hover:text-brand-muted transition-colors relative p-2">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-white text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0 transition-opacity">0</span>
                 </button>
             </div>
         </div>
 
+        <!-- Barra de Búsqueda Permanente -->
         <div class="w-full bg-brand-surface/80 border-t border-brand-border h-14 flex items-center justify-center px-4">
             <div class="w-full max-w-3xl relative flex items-center">
-                <i data-lucide="search" class="w-4 h-4 text-brand-muted absolute left-4"></i>
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" class="text-brand-muted absolute left-4"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 <input type="search" id="live-search" placeholder="Buscar pieza, modelo o SKU..." class="w-full bg-transparent border-none text-[11px] tracking-widest text-white placeholder-brand-muted focus:outline-none pl-12 py-2 uppercase">
             </div>
         </div>
     </nav>
 
-    <!-- MODAL AÑADIR PIEZA (+) -->
-    <div id="add-product-modal" class="fixed inset-0 z-[80] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4">
-        <div class="bg-brand-surface border border-brand-border w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col relative custom-scroll p-6 sm:p-10">
-            <button onclick="window.toggleAddProductModal()" class="absolute top-4 right-4 z-10 text-brand-muted hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <h2 class="font-editorial text-3xl text-white mb-8 border-b border-brand-border pb-4 uppercase tracking-widest">Añadir Nueva Pieza</h2>
-            <div class="flex flex-col md:flex-row gap-8">
-                <div class="w-full md:w-1/3 flex flex-col gap-4">
-                    <label class="font-bold text-[10px] tracking-[0.2em] uppercase text-brand-muted">Fotografía</label>
-                    <div class="flex gap-4">
-                        <button onclick="document.getElementById('new-img-gallery').click()" class="flex-1 border border-brand-border py-4 flex flex-col items-center justify-center hover:bg-white/10 transition-colors group">
-                            <i data-lucide="image" class="w-6 h-6 text-brand-muted group-hover:text-white mb-2 transition-colors"></i><span class="text-[10px] uppercase tracking-widest text-brand-muted group-hover:text-white transition-colors">Galería</span>
-                        </button>
-                        <button onclick="document.getElementById('new-img-camera').click()" class="flex-1 border border-brand-border py-4 flex flex-col items-center justify-center hover:bg-white/10 transition-colors group">
-                            <i data-lucide="camera" class="w-6 h-6 text-brand-muted group-hover:text-white mb-2 transition-colors"></i><span class="text-[10px] uppercase tracking-widest text-brand-muted group-hover:text-white transition-colors">Cámara</span>
-                        </button>
-                    </div>
-                    <input type="file" id="new-img-gallery" accept="image/*" class="hidden" onchange="window.handleImageUpload(event)">
-                    <input type="file" id="new-img-camera" accept="image/*" capture="environment" class="hidden" onchange="window.handleImageUpload(event)">
-                    <div id="new-img-preview-container" class="relative w-full aspect-square border-2 border-dashed border-brand-border hidden items-center justify-center bg-brand-bg mt-2">
-                        <img id="new-img-preview" src="" class="absolute inset-0 w-full h-full object-cover z-10">
-                        <button onclick="window.clearImagePreview()" class="absolute top-2 right-2 z-20 bg-black/70 p-2 text-white hover:bg-white hover:text-black transition-colors rounded"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </div>
+    <!-- CHATBOT ASISTENTE -->
+    <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-brand-border transform -translate-x-full transition-transform duration-500 flex flex-col shadow-2xl">
+        <div class="p-6 border-b border-brand-border flex justify-between items-center bg-black">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>
                 </div>
-                <div class="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-                    <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Modelo</label><input type="text" id="new-modelo" class="input-form" placeholder="Ej: Esfera Cobre"></div>
-                    <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Descripción</label><input type="text" id="new-desc" class="input-form" placeholder="Descripción breve de la pieza"></div>
-                    <div>
-                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Categoría</label>
-                        <select id="new-cat" class="input-form bg-brand-surface text-white">
-                            <option value="mesa">Mesa</option><option value="pie">Pie</option><option value="techo">Techo</option>
-                            <option value="candiles">Candiles</option><option value="arbotantes">Arbotantes</option>
-                            <option value="exterior">Exterior</option><option value="proyectos">Proyectos Especiales</option><option value="espejos">Espejos</option>
-                        </select>
-                    </div>
-                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Precio (MXN)</label><input type="number" id="new-precio" class="input-form" placeholder="Ej: 5000"></div>
-                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Código SKU</label><input type="text" id="new-sku" class="input-form" placeholder="Ej: DM-CUS-001"></div>
-                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Espec. Lumínicas</label><input type="text" id="new-luz" class="input-form" placeholder="Ej: LED 12W 3000K"></div>
-                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Voltaje</label><input type="text" id="new-volt" class="input-form" placeholder="Ej: 110V"></div>
-                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Cable</label><input type="text" id="new-cable" class="input-form" placeholder="Ej: Textil negro 2m"></div>
-                    <div class="sm:col-span-2 mt-2">
-                        <label class="text-[10px] font-bold text-white uppercase tracking-widest border-b border-brand-border w-full block pb-1">Dimensiones</label>
-                        <div class="grid grid-cols-4 gap-4 mt-2">
-                            <div><input type="text" id="new-w" class="input-form" placeholder="Ancho"></div><div><input type="text" id="new-h" class="input-form" placeholder="Alto"></div>
-                            <div><input type="text" id="new-d" class="input-form" placeholder="Fondo"></div><div><input type="text" id="new-dia" class="input-form" placeholder="Diámetro"></div>
-                        </div>
-                    </div>
-                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Peso</label><input type="text" id="new-peso" class="input-form" placeholder="Ej: 3.5 kg"></div>
-                    <div><label class="text-[10px] text-brand-muted uppercase tracking-widest">Tiempo Entrega</label><input type="text" id="new-time" class="input-form" placeholder="Ej: 4 semanas"></div>
-                    <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Materiales</label><input type="text" id="new-mat" class="input-form" placeholder="Ej: Acero y Cristal"></div>
-                    <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Acabados</label><input type="text" id="new-fin" class="input-form" placeholder="Ej: Negro Mate"></div>
-                    <div class="sm:col-span-2"><label class="text-[10px] text-brand-muted uppercase tracking-widest">Certificaciones</label><input type="text" id="new-cert" class="input-form" placeholder="Ej: NOM"></div>
+                <h2 class="font-editorial text-xl tracking-wider text-white">Asistente Damaso</h2>
+            </div>
+            <button onclick="toggleChatbot()" class="text-brand-muted hover:text-white">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-6 space-y-4 chat-scroll bg-[#0a0a0a]" id="chat-messages">
+            <div class="flex flex-col items-start max-w-[85%]">
+                <div class="bg-brand-border text-white text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed">
+                    ¡Hola! Soy el asistente virtual de DAMASO Studio. Estoy aquí para explicarte cómo cotizar y usar el catálogo. ¿En qué te puedo ayudar?
                 </div>
             </div>
-            <div class="mt-8 pt-6 border-t border-brand-border flex justify-end">
-                <!-- Botón Sin Retraso -->
-                <button onclick="window.saveNewProduct()" class="bg-white text-black px-10 py-4 text-xs tracking-[0.2em] uppercase font-bold hover:bg-brand-muted transition-colors flex items-center justify-center min-w-[200px]" id="btn-publish">
-                    <span id="btn-publish-text">Publicar en Vivo</span>
-                </button>
+            <div class="flex flex-wrap gap-2 mt-2" id="chat-suggestions">
+                <button onclick="sendPredefinedMessage('¿Cómo cotizo?')" class="text-[10px] border border-brand-muted text-brand-muted px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-colors">¿Cómo cotizo?</button>
+                <button onclick="sendPredefinedMessage('Generar PDF')" class="text-[10px] border border-brand-muted text-brand-muted px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-colors">Generar PDF</button>
+                <button onclick="sendPredefinedMessage('Tiempos de entrega')" class="text-[10px] border border-brand-muted text-brand-muted px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-colors">Tiempos de entrega</button>
             </div>
         </div>
+        <div class="p-4 border-t border-brand-border bg-black flex items-center gap-2">
+            <input type="text" id="chat-input" placeholder="Escribe tu pregunta..." class="flex-1 bg-transparent border border-brand-border rounded-full px-4 py-2 text-xs text-white focus:outline-none focus:border-white transition-colors" onkeypress="if(event.key === 'Enter') sendChatMessage()">
+            <button onclick="sendChatMessage()" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-brand-muted transition-colors">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+        </div>
     </div>
+    <div id="chat-overlay" onclick="toggleChatbot()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- Modal de Especificaciones Individual -->
+    <!-- Modal de Especificaciones de Pieza -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/80 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
         <div class="bg-brand-surface border border-brand-border w-full max-w-6xl max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
-            <button onclick="window.closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <div class="w-full md:w-1/2 bg-brand-bg relative min-h-[300px] flex items-center justify-center">
-                <img id="modal-img" src="" class="absolute inset-0 w-full h-full object-cover">
+            <button onclick="closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="w-full md:w-1/2 bg-brand-bg relative min-h-[300px] flex items-center justify-center overflow-hidden">
+                <!-- Se inyectará la imagen mediante JS de forma segura -->
+                <div id="modal-img-container" class="absolute inset-0 w-full h-full"></div>
             </div>
             <div class="w-full md:w-1/2 p-8 sm:p-12 text-sm font-light flex flex-col">
                 <h2 id="modal-title" class="font-editorial text-4xl text-white mb-2 uppercase"></h2>
@@ -260,7 +211,9 @@
     <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-brand-border transform translate-x-full transition-transform duration-500 flex flex-col">
         <div class="p-8 border-b border-brand-border flex justify-between items-center">
             <h2 class="font-editorial text-2xl tracking-wider text-white">Mi Selección</h2>
-            <button onclick="window.toggleCart()" class="text-brand-muted hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <button onclick="toggleCart()" class="text-brand-muted hover:text-white">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
         </div>
         <div class="flex-1 overflow-y-auto p-8 space-y-6" id="cart-items"></div>
         <div class="p-8 border-t border-brand-border bg-black">
@@ -270,27 +223,31 @@
             </div>
             <div class="flex justify-between text-white font-editorial text-xl mb-6"><span>Total Estimado</span><span id="cart-total">$0 MXN</span></div>
             <div class="space-y-3">
-                <button onclick="window.checkoutPDF()" class="w-full bg-transparent border border-white text-white py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white hover:text-black transition-colors flex justify-center items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Descargar Cotización (PDF)</button>
-                <button onclick="window.checkoutWhatsApp()" class="w-full bg-[#25D366] text-black py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-[#20b858] transition-colors flex justify-center items-center gap-2"><i data-lucide="message-circle" class="w-4 h-4"></i> Enviar por WhatsApp</button>
+                <button onclick="checkoutPDF(event)" class="w-full bg-transparent border border-white text-white py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white hover:text-black transition-colors flex justify-center items-center gap-2">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Descargar PDF
+                </button>
+                <button onclick="checkoutWhatsApp()" class="w-full bg-[#25D366] text-black py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-[#20b858] transition-colors flex justify-center items-center gap-2">
+                    Enviar por WhatsApp
+                </button>
             </div>
         </div>
     </div>
-    <div id="cart-overlay" onclick="window.toggleCart()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- Hero -->
+    <!-- HERO PRINCIPAL (Visible de inmediato) -->
     <header class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden bg-black">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2574&auto=format&fit=crop" alt="Damaso Hero" class="w-full h-full object-cover opacity-60 brightness-110">
             <div class="absolute inset-0 bg-gradient-to-b from-brand-bg/40 via-transparent to-brand-bg"></div>
         </div>
         <div class="relative z-10 w-full max-w-[95%] mx-auto flex flex-col items-center text-center px-4">
-            <div class="reveal">
+            <div>
                 <p class="text-[10px] tracking-[0.4em] text-white/80 uppercase mb-4 font-semibold italic">Luxury Lighting Studio</p>
                 <h1 class="font-editorial text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-8">Damaso<br><span class="italic text-brand-muted">Studio</span></h1>
                 <p class="text-lg md:text-xl text-white/90 font-light mx-auto max-w-2xl mb-12">Esculpiendo la oscuridad con piezas de diseño atemporal. Hecho a mano en México.</p>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                    <a href="#coleccion" class="w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] text-black bg-white uppercase font-bold px-10 py-5 hover:bg-brand-muted transition-all">VER COLECCIÓN <i data-lucide="chevron-right" class="w-4 h-4 ml-2"></i></a>
-                    <a href="https://wa.me/523338703071?text=Hola%20Damaso,%20me%20gustaría%20cotizar%20una%20pieza." target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] text-white border border-white uppercase font-bold px-10 py-5 hover:bg-white hover:text-black transition-all">CONTACTO DIRECTO <i data-lucide="message-circle" class="w-4 h-4 ml-2"></i></a>
+                    <a href="#coleccion" class="w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] text-black bg-white uppercase font-bold px-10 py-5 hover:bg-brand-muted transition-all">VER COLECCIÓN</a>
+                    <a href="https://wa.me/523338703071?text=Hola%20Damaso,%20me%20gustaría%20cotizar%20una%20pieza." target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] text-white border border-white uppercase font-bold px-10 py-5 hover:bg-white hover:text-black transition-all">CONTACTO DIRECTO</a>
                 </div>
             </div>
         </div>
@@ -299,30 +256,54 @@
     <!-- Catálogo -->
     <section id="coleccion" class="py-32 bg-brand-bg">
         <div class="max-w-[95%] mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16">
                 <div>
                     <h2 class="font-editorial text-5xl md:text-7xl text-white mb-6" id="catalog-title">Catálogo Completo</h2>
                     <p class="text-brand-muted text-sm tracking-widest uppercase" id="catalog-subtitle">Colección 2026</p>
                 </div>
             </div>
-            <!-- Grid de Productos -->
+            <!-- Grid de Productos Inyectados por JS -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-24" id="catalog-grid"></div>
         </div>
     </section>
 
-    <!-- Diseñador -->
+    <!-- SECCIÓN DE CLIENTES (MARQUESINA FLUIDA) -->
+    <section id="clientes" class="pt-32 pb-16 bg-black border-t border-brand-border">
+        <div class="max-w-[95%] mx-auto px-4 mb-12 text-center">
+            <p class="text-[10px] tracking-[0.5em] text-brand-muted uppercase mb-4">Confianza que ilumina</p>
+            <h2 class="font-editorial text-4xl text-white">Nuestros Clientes</h2>
+        </div>
+        
+        <div class="marquee-container">
+            <div class="marquee-content">
+                <!-- Se repite dos veces para el loop infinito sin saltos -->
+                <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín</span></div>
+                <div class="client-group"><span class="client-title">RESTAURANTES</span><span class="client-names">Lorenza <span class="dot">•</span> Casa de Leo <span class="dot">•</span> Garra <span class="dot">•</span> Los Arcos <span class="dot">•</span> Cabana <span class="dot">•</span> Madelina <span class="dot">•</span> Tequila Orendain</span></div>
+                <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
+                <div class="client-group"><span class="client-title">DESPACHOS</span><span class="client-names">AHA Internacional <span class="dot">•</span> Arquitectura de Interiores <span class="dot">•</span> Rockwell Group Nueva York</span></div>
+                
+                <!-- DUPLICADO PARA EFECTO INFINITO -->
+                <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín</span></div>
+                <div class="client-group"><span class="client-title">RESTAURANTES</span><span class="client-names">Lorenza <span class="dot">•</span> Casa de Leo <span class="dot">•</span> Garra <span class="dot">•</span> Los Arcos <span class="dot">•</span> Cabana <span class="dot">•</span> Madelina <span class="dot">•</span> Tequila Orendain</span></div>
+                <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
+                <div class="client-group"><span class="client-title">DESPACHOS</span><span class="client-names">AHA Internacional <span class="dot">•</span> Arquitectura de Interiores <span class="dot">•</span> Rockwell Group Nueva York</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diseñador (Sin Foto) -->
     <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex items-center justify-center">
-        <div class="max-w-4xl mx-auto px-4 text-center reveal">
+        <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="font-editorial text-5xl md:text-8xl text-white mb-12">Iván<br>Damaso</h2>
             <p class="text-xl text-white font-light italic mb-8 border-b border-brand-border pb-8 inline-block px-8">"La luz es el alma de la arquitectura."</p>
             <p class="text-brand-muted mx-auto leading-relaxed max-w-2xl">
-                Diseñador radicado en San Agustín, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo. Cada pieza nace de la experimentación de texturas, volúmenes y sombras proyectadas.
+                Diseñador radicado en Guadalajara, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo. Cada pieza nace de la experimentación de texturas, volúmenes y sombras proyectadas.
             </p>
         </div>
     </section>
 
     <!-- Manifiesto -->
-    <section id="manifiesto" class="py-40 bg-black text-center reveal">
+    <section id="manifiesto" class="py-40 bg-black text-center">
         <div class="max-w-4xl mx-auto px-6">
             <p class="text-[10px] tracking-[0.5em] text-brand-muted uppercase mb-12">Filosofía de marca</p>
             <h2 class="font-editorial text-4xl md:text-6xl text-white leading-tight">
@@ -334,38 +315,41 @@
     <!-- Footer -->
     <footer id="contacto" class="bg-brand-surface pt-32 pb-12 border-t border-brand-border">
         <div class="max-w-[95%] mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24 reveal">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24">
                 <div class="md:col-span-2">
                     <h3 class="font-editorial text-4xl text-white uppercase mb-8">Damaso</h3>
                     <p class="text-brand-muted max-w-sm font-light">Alta iluminación y objetos de diseño.</p>
                 </div>
                 <div>
                     <h4 class="text-[10px] tracking-[0.3em] text-white uppercase mb-8 font-bold">Estudio</h4>
-                    <p class="text-brand-muted text-sm font-light">San Agustín, Jalisco. México.<br>T. +52 33 3870 3071</p>
+                    <p class="text-brand-muted text-sm font-light">Guadalajara, Jalisco. México.<br>T. +52 33 3870 3071</p>
                 </div>
                 <div>
                     <h4 class="text-[10px] tracking-[0.3em] text-white uppercase mb-8 font-bold">Social</h4>
                     <ul class="text-brand-muted text-sm space-y-4 font-light">
-                        <li><a href="https://www.instagram.com/damaso_lamparas?igsh=MTkxcDU0anJweWxvcQ==" target="_blank" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="instagram" class="w-4 h-4"></i> Instagram</a></li>
-                        <li><a href="https://www.facebook.com/damaso.lighting" target="_blank" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="facebook" class="w-4 h-4"></i> Facebook</a></li>
-                        <li><a href="https://wa.me/523338703071" target="_blank" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="message-square" class="w-4 h-4"></i> WhatsApp</a></li>
+                        <li><a href="https://www.instagram.com/damaso_lamparas?igsh=MTkxcDU0anJweWxvcQ==" target="_blank" class="hover:text-white transition-colors flex items-center gap-2">Instagram</a></li>
+                        <li><a href="https://www.facebook.com/damaso.lighting" target="_blank" class="hover:text-white transition-colors flex items-center gap-2">Facebook</a></li>
+                        <li><a href="https://wa.me/523338703071" target="_blank" class="hover:text-white transition-colors flex items-center gap-2">WhatsApp</a></li>
                     </ul>
                 </div>
             </div>
-            <p class="text-center text-[10px] tracking-[0.2em] text-brand-muted uppercase pt-12 border-t border-brand-border">&copy; 2026 DAMASO STUDIO. IVÁN DAMASO. JALISCO, MÉXICO.</p>
+            <p class="text-center text-[10px] tracking-[0.2em] text-brand-muted uppercase pt-12 border-t border-brand-border">&copy; 2026 DAMASO STUDIO. IVÁN DAMASO. GUADALAJARA, MÉXICO.</p>
         </div>
     </footer>
 
-    <a href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#25D366] text-white p-5 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 z-50"><i data-lucide="phone" class="w-6 h-6"></i></a>
+    <!-- Botón WhatsApp Flotante -->
+    <a href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 z-50">
+        <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+    </a>
 
-    <!-- TEMPLATE PDF -->
+    <!-- TEMPLATE PDF (Oculto) -->
     <div id="pdf-render-container">
         <div id="invoice-template" class="bg-white text-black p-12 font-sans" style="width: 800px; min-height: 1122px;">
             <div class="flex justify-between items-end border-b-2 border-black pb-8 mb-8">
                 <div>
                     <h1 class="font-editorial text-5xl font-bold uppercase tracking-widest">Damaso</h1>
                     <p class="text-sm mt-2 text-gray-600">Alta Iluminación Editorial</p>
-                    <p class="text-xs text-gray-500 mt-1">San Agustín, Jalisco, México | +52 33 3870 3071</p>
+                    <p class="text-xs text-gray-500 mt-1">Guadalajara, Jalisco, México | +52 33 3870 3071</p>
                 </div>
                 <div class="text-right">
                     <h2 class="text-2xl font-bold text-gray-800 tracking-widest uppercase">Cotización</h2>
@@ -406,277 +390,161 @@
         </div>
     </div>
 
-    <!-- FIREBASE & LÓGICA DE APLICACIÓN -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-        let app, db, auth, productsPath;
-
-        const userFirebaseConfig = {
-            apiKey: "AIzaSyC4SRh7GKB8KkDYao6aw0S1JnLzNOjRcY0",
-            authDomain: "damaso-978c9.firebaseapp.com",
-            projectId: "damaso-978c9",
-            storageBucket: "damaso-978c9.firebasestorage.app",
-            messagingSenderId: "545014965592",
-            appId: "1:545014965592:web:58aec27da0472c6ace712d",
-            measurementId: "G-GGC2PTKLS8"
-        };
-
-        if (typeof __firebase_config === 'undefined') {
-            app = initializeApp(userFirebaseConfig);
-            productsPath = "products";
-        } else {
-            app = initializeApp(JSON.parse(__firebase_config));
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'damaso';
-            productsPath = `artifacts/${appId}/public/data/products`;
-        }
-
-        db = getFirestore(app);
-        auth = getAuth(app);
-
-        let dbProducts = [];
-        let cart = [];
-        let newImageBase64 = "";
-
-        // LAS 5 PIEZAS REALES DE THIAGO
-        const staticProducts = [
-            { id: 1, timestamp: 5, name: "Lámpara Trípode OAK", category: "pie", price: 7500, img: "tripode.png", sku: "DM-PIE-001", desc: "Lámpara de pie con base de trípode en madera sólida y pantalla cilíndrica de lino.", specsLight: "1x E26 LED 9W (Recomendado), Cálida", cable: "Textil negro 2.5m con interruptor de pie", dims: { w: "50 cm", h: "160 cm", d: "50 cm", dia: "45 cm (pantalla)" }, peso: "4.0 kg", volt: "110-120V", mat: "Madera de encino y pantalla de lino", fin: "Madera natural mate, pantalla beige", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 2, timestamp: 4, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-002", desc: "Espectacular candil de doble altura con esferas suspendidas en acabado dual.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero ajustables (hasta 3m)", dims: { w: "80 cm", h: "250 cm", d: "80 cm", dia: "80 cm" }, peso: "25 kg", volt: "110-240V", mat: "Aluminio torneado, cristal opalino", fin: "Bronce envejecido y cristal opalino", time: "6 a 8 semanas", cert: "NOM, CE" },
-            { id: 3, timestamp: 3, name: "Espejo Óvalo Profundo", category: "espejos", price: 12500, img: "espejo.png", sku: "DM-ESP-003", desc: "Espejo circular de gran formato con marco de lámina rolada profundo.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "120 cm" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de acero", fin: "Exterior negro mate, interior latón avejentado", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 4, timestamp: 2, name: "Suspensión Estriada", category: "techo", price: 4800, img: "colgante.png", sku: "DM-TEC-004", desc: "Lámpara colgante con pantalla de cristal ahumado acanalado.", specsLight: "1x E26 LED 8W, 2700K (Incluido)", cable: "Coaxial transparente 1.5m", dims: { w: "N/A", h: "35 cm", d: "N/A", dia: "25 cm" }, peso: "2.5 kg", volt: "110-240V", mat: "Cristal soplado y acero inoxidable", fin: "Cristal humo, herrajes cromo pulido", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 5, timestamp: 1, name: "Arbotante Esfera Concreto", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-005", desc: "Arbotante que fusiona cristal opalino con un cilindro de concreto texturizado.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "15 cm", h: "38 cm", d: "18 cm", dia: "15 cm (esfera)" }, peso: "2.8 kg", volt: "110-120V", mat: "Cristal soplado, concreto colado, acero", fin: "Blanco mate, concreto gris, cromo", time: "3 a 4 semanas", cert: "NOM, CE" }
+    <!-- SCRIPT PRINCIPAL DE LA PÁGINA (ESTABLE Y SEGURO) -->
+    <script>
+        // Catálogo fijo y robusto
+        const dbProducts = [
+            { 
+                id: 1, name: "Lámpara Trípode OAK", category: "pie", price: 7500, img: "tripode.png", 
+                sku: "DM-PIE-001", desc: "Lámpara de pie con base de trípode en madera sólida cruzada y pantalla cilíndrica de lino.", 
+                specsLight: "1x E26 LED 9W (Recomendado), Cálida", cable: "Cordon Textil 2.5m con interruptor de pie", 
+                dims: { w: "45 cm", h: "165 cm", d: "45 cm", dia: "45 cm (pantalla)" }, 
+                peso: "3.5 kg", volt: "110-120V", mat: "Madera de encino estufado y lino", fin: "Madera natural mate, pantalla beige", time: "2 a 3 semanas", cert: "NOM, CE" 
+            },
+            { 
+                id: 2, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", 
+                sku: "DM-CAN-002", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", 
+                specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", 
+                dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, 
+                peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" 
+            },
+            { 
+                id: 3, name: "Espejo Óvalo Profundo", category: "espejos", price: 12500, img: "espejo.png", 
+                sku: "DM-ESP-003", desc: "Espejo circular de gran formato con marco de lámina rolada de alta profundidad.", 
+                specsLight: "N/A (Opcional tira LED trasera)", cable: "N/A", 
+                dims: { w: "120 cm", h: "120 cm", d: "10 cm", dia: "120 cm" }, 
+                peso: "22 kg", volt: "N/A", mat: "Cristal plata 6mm inastillable, marco de placa de acero", fin: "Exterior negro mate, canto latonado", time: "3 a 4 semanas", cert: "N/A" 
+            },
+            { 
+                id: 4, name: "Suspensión Estriada Drop", category: "techo", price: 4800, img: "colgante.png", 
+                sku: "DM-TEC-004", desc: "Lámpara colgante estilo gota con pantalla de cristal moldeado y acanalado.", 
+                specsLight: "1x E26 LED 8W, 2700K (Foco incluido)", cable: "Cable coaxial transparente con alma de acero 1.5m", 
+                dims: { w: "22 cm", h: "40 cm", d: "22 cm", dia: "22 cm" }, 
+                peso: "2.1 kg", volt: "110-240V", mat: "Cristal templado y herraje de aluminio", fin: "Cristal traslúcido estriado, chapetón cromo", time: "2 semanas", cert: "NOM" 
+            },
+            { 
+                id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", 
+                sku: "DM-ARB-005", desc: "Arbotante decorativo que fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", 
+                specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro eléctrico en muro", 
+                dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm (esfera)" }, 
+                peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino soplado, pasta de concreto ligero, herraje cromado", fin: "Blanco mate, gris texturizado, acentos cromo", time: "3 a 4 semanas", cert: "NOM, CE" 
+            }
         ];
 
-        signInAnonymously(auth).catch((error) => {
-            console.error("Error de Autenticación:", error);
-            window.renderCatalog(staticProducts);
-        });
+        let cart = [];
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const productsCol = collection(db, productsPath);
-                
-                onSnapshot(productsCol, (snapshot) => {
-                    const firebaseProducts = [];
-                    snapshot.forEach((doc) => firebaseProducts.push({ id: doc.id, ...doc.data() }));
-                    
-                    dbProducts = [...firebaseProducts, ...staticProducts];
-                    dbProducts.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                    
-                    window.renderCatalog(dbProducts);
-                }, (error) => {
-                    console.error("Error Firebase:", error);
-                    document.getElementById('firebase-warning').classList.remove('hidden');
-                    dbProducts = [...staticProducts];
-                    window.renderCatalog(dbProducts);
-                });
-            }
-        });
-
-        window.renderCatalog = function(products) {
+        function renderCatalog(products) {
             const grid = document.getElementById('catalog-grid');
             grid.innerHTML = '';
             if(products.length === 0) {
                 grid.innerHTML = '<p class="text-brand-muted col-span-full">No se encontraron piezas.</p>'; return;
             }
             products.forEach(p => {
+                // Inyectamos HTML seguro. Si la foto no existe localmente, mostramos un fallback gris en lugar de romper el diseño.
                 grid.innerHTML += `
-                    <div class="group reveal">
+                    <div class="group">
                         <div class="relative overflow-hidden bg-brand-surface aspect-square border border-brand-border flex items-center justify-center">
-                            <!-- Si no encuentra tu foto local, muestra un cuadro elegante -->
-                            <img src="${p.img}" onerror="this.onerror=null; this.outerHTML='<div class=\\'absolute inset-0 img-fallback\\'>Imagen No Encontrada</div>';" class="img-catalog w-full h-full object-cover" onclick="window.openSpecModal('${p.id}')">
+                            <img src="${p.img}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'400\\'><rect width=\\'400\\' height=\\'400\\' fill=\\'%23111\\'/><text x=\\'50%\\' y=\\'50%\\' fill=\\'%23555\\' font-family=\\'sans-serif\\' font-size=\\'14\\' text-anchor=\\'middle\\'>FALTA FOTO: ${p.img}</text></svg>';" class="img-catalog w-full h-full object-cover" onclick="openSpecModal(${p.id})">
                             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 pointer-events-none">
-                                <button class="bg-transparent border border-white text-white text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-2 hover:bg-white hover:text-black transition-all pointer-events-auto" onclick="window.openSpecModal('${p.id}')">Ver Specs</button>
-                                <button onclick="window.addToCart('${p.id}')" class="bg-white text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-brand-muted transition-all pointer-events-auto">Agregar Cotización</button>
+                                <button class="bg-transparent border border-white text-white text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-2 hover:bg-white hover:text-black transition-all pointer-events-auto" onclick="openSpecModal(${p.id})">Ver Specs</button>
+                                <button onclick="addToCart(${p.id})" class="bg-white text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-brand-muted transition-all pointer-events-auto">Agregar Cotización</button>
                             </div>
                         </div>
                         <div class="mt-6 flex justify-between">
-                            <div><h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-muted" onclick="window.openSpecModal('${p.id}')">${p.name}</h3><p class="text-[10px] tracking-[0.2em] text-brand-muted uppercase">${p.category}</p></div>
+                            <div><h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-muted" onclick="openSpecModal(${p.id})">${p.name}</h3><p class="text-[10px] tracking-[0.2em] text-brand-muted uppercase">${p.category}</p></div>
                             <p class="font-editorial text-lg text-white">$${Number(p.price).toLocaleString()}</p>
                         </div>
                     </div>
                 `;
             });
-            setTimeout(() => {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
-                }, { threshold: 0.1 });
-                document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-            }, 100);
-        };
+        }
 
-        window.toggleCategories = function() {
+        function toggleCategories() {
             const menu = document.getElementById('dropdown-menu');
             menu.classList.toggle('opacity-0');
             menu.classList.toggle('pointer-events-none');
             menu.classList.toggle('-translate-y-2');
             menu.classList.toggle('translate-y-0');
             menu.classList.toggle('opacity-100');
-        };
+        }
 
-        window.filterCatalog = function(cat) {
+        function filterCatalog(cat) {
             document.getElementById('live-search').value = '';
             const filtered = cat === 'all' ? dbProducts : dbProducts.filter(p => p.category === cat);
-            window.renderCatalog(filtered);
+            renderCatalog(filtered);
             document.getElementById('catalog-title').innerText = cat === 'all' ? "Catálogo Completo" : cat.charAt(0).toUpperCase() + cat.slice(1);
             document.getElementById('catalog-subtitle').innerText = "Colección 2026";
-            window.toggleCategories();
+            toggleCategories();
             document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
-        };
+        }
 
         document.getElementById('live-search').addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase();
             if(q.length === 0) { 
-                window.renderCatalog(dbProducts); 
+                renderCatalog(dbProducts); 
                 document.getElementById('catalog-title').innerText = "Catálogo Completo";
                 document.getElementById('catalog-subtitle').innerText = "Colección 2026"; return; 
             }
             const results = dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
-            window.renderCatalog(results);
+            renderCatalog(results);
             document.getElementById('catalog-title').innerText = "Resultados";
             document.getElementById('catalog-subtitle').innerText = `Búsqueda: "${q}"`;
         });
 
-        window.toggleAddProductModal = function() {
-            const modal = document.getElementById('add-product-modal');
-            modal.classList.toggle('opacity-0');
-            modal.classList.toggle('pointer-events-none');
-            document.body.style.overflow = modal.classList.contains('opacity-0') ? 'auto' : 'hidden';
-        };
-
-        window.handleImageUpload = function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        const MAX_WIDTH = 800; 
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                        canvas.width = width; canvas.height = height;
-                        ctx.drawImage(img, 0, 0, width, height);
-                        
-                        newImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                        const previewContainer = document.getElementById('new-img-preview-container');
-                        document.getElementById('new-img-preview').src = newImageBase64;
-                        previewContainer.classList.remove('hidden'); previewContainer.classList.add('flex');
-                    }
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-            event.target.value = '';
-        };
-
-        window.clearImagePreview = function() {
-            newImageBase64 = "";
-            const previewContainer = document.getElementById('new-img-preview-container');
-            document.getElementById('new-img-preview').src = "";
-            previewContainer.classList.add('hidden'); previewContainer.classList.remove('flex');
-        };
-
-        // SUBIDA A FIREBASE INSTANTÁNEA
-        window.saveNewProduct = async function() {
-            const btn = document.getElementById('btn-publish');
-            const originalText = document.getElementById('btn-publish-text').innerText;
-            
-            try {
-                document.getElementById('btn-publish-text').innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin mr-2"></i> Subiendo...';
-                btn.disabled = true;
-                lucide.createIcons();
-
-                const newProduct = {
-                    timestamp: Date.now(),
-                    name: document.getElementById('new-modelo').value || "Nueva Pieza Damaso",
-                    desc: document.getElementById('new-desc').value || "Descripción no especificada.",
-                    sku: document.getElementById('new-sku').value || "DM-NEW-000",
-                    category: document.getElementById('new-cat').value,
-                    price: parseFloat(document.getElementById('new-precio').value) || 0,
-                    img: newImageBase64 || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop", 
-                    specsLight: document.getElementById('new-luz').value || "N/A",
-                    cable: document.getElementById('new-cable').value || "N/A",
-                    dims: {
-                        w: document.getElementById('new-w').value || "N/A", h: document.getElementById('new-h').value || "N/A",
-                        d: document.getElementById('new-d').value || "N/A", dia: document.getElementById('new-dia').value || "N/A"
-                    },
-                    peso: document.getElementById('new-peso').value || "N/A", volt: document.getElementById('new-volt').value || "N/A",
-                    mat: document.getElementById('new-mat').value || "N/A", fin: document.getElementById('new-fin').value || "N/A",
-                    time: document.getElementById('new-time').value || "N/A", cert: document.getElementById('new-cert').value || "N/A"
-                };
-
-                await addDoc(collection(db, productsPath), newProduct);
-
-                document.querySelectorAll('#add-product-modal input').forEach(input => input.value = '');
-                window.clearImagePreview();
-                window.toggleAddProductModal();
-                
-                document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
-
-            } catch (error) {
-                console.error("Error subiendo: ", error);
-                alert("Hubo un problema. Si la base de datos está recién creada, no olvides activar las reglas en Firebase.");
-            } finally {
-                document.getElementById('btn-publish-text').innerHTML = originalText;
-                btn.disabled = false;
-            }
-        };
-
-        window.openSpecModal = function(id) {
-            const p = dbProducts.find(x => String(x.id) === String(id));
+        function openSpecModal(id) {
+            const p = dbProducts.find(x => x.id === parseInt(id));
             if(!p) return;
             
-            document.getElementById('modal-img').src = p.img;
+            const container = document.getElementById('modal-img-container');
+            container.innerHTML = `<img src="${p.img}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'400\\'><rect width=\\'400\\' height=\\'400\\' fill=\\'%23111\\'/><text x=\\'50%\\' y=\\'50%\\' fill=\\'%23555\\' font-family=\\'sans-serif\\' font-size=\\'14\\' text-anchor=\\'middle\\'>FALTA FOTO: ${p.img}</text></svg>';" class="absolute inset-0 w-full h-full object-cover">`;
+            
             document.getElementById('modal-title').innerText = p.name;
             document.getElementById('modal-desc').innerText = p.desc;
             document.getElementById('modal-sku').innerText = p.sku;
             document.getElementById('modal-luz').innerText = p.specsLight;
             document.getElementById('modal-volt').innerText = p.volt;
             document.getElementById('modal-cable').innerText = p.cable;
+            
             document.getElementById('modal-w').innerText = p.dims.w;
             document.getElementById('modal-h').innerText = p.dims.h;
             document.getElementById('modal-d').innerText = p.dims.d;
             document.getElementById('modal-dia').innerText = p.dims.dia;
+            
             document.getElementById('modal-peso').innerText = p.peso;
             document.getElementById('modal-mat').innerText = p.mat;
             document.getElementById('modal-fin').innerText = p.fin;
             document.getElementById('modal-time').innerText = p.time;
             document.getElementById('modal-cert').innerText = p.cert;
+            
             document.getElementById('modal-price').innerText = "$" + Number(p.price).toLocaleString() + " MXN";
             
             const btn = document.getElementById('modal-add-btn');
-            btn.onclick = () => { window.addToCart(p.id); window.closeSpecModal(); };
+            btn.onclick = () => { addToCart(p.id); closeSpecModal(); };
 
             const modal = document.getElementById('spec-modal');
             modal.classList.remove('opacity-0', 'pointer-events-none');
             document.body.style.overflow = 'hidden';
-        };
+        }
 
-        window.closeSpecModal = function() {
+        function closeSpecModal() {
             document.getElementById('spec-modal').classList.add('opacity-0', 'pointer-events-none');
             document.body.style.overflow = 'auto';
-        };
+        }
 
-        window.addToCart = function(id) {
-            const product = dbProducts.find(p => String(p.id) === String(id));
-            const exist = cart.find(i => String(i.id) === String(id));
+        function addToCart(id) {
+            const product = dbProducts.find(p => p.id === parseInt(id));
+            const exist = cart.find(i => i.id === parseInt(id));
             if(exist) exist.qty += 1; else cart.push({...product, qty: 1});
-            window.updateCartUI();
-            if(document.getElementById('cart-drawer').classList.contains('translate-x-full')) window.toggleCart();
-        };
+            updateCartUI();
+            if(document.getElementById('cart-drawer').classList.contains('translate-x-full')) toggleCart();
+        }
 
-        window.removeFromCart = function(id) {
-            cart = cart.filter(i => String(i.id) !== String(id));
-            window.updateCartUI();
-        };
+        function removeFromCart(id) {
+            cart = cart.filter(i => i.id !== parseInt(id));
+            updateCartUI();
+        }
 
-        window.updateCartUI = function() {
+        function updateCartUI() {
             const itemsCont = document.getElementById('cart-items');
             const totalCont = document.getElementById('cart-total');
             const countCont = document.getElementById('cart-count');
@@ -697,23 +565,71 @@
                 total += itemTotal;
                 itemsCont.innerHTML += `
                     <div class="flex items-center gap-4 border-b border-brand-border pb-4">
-                        <img src="${item.img}" class="w-16 h-16 object-cover grayscale">
-                        <div class="flex-1"><h4 class="font-editorial text-white text-sm">${item.name}</h4><p class="text-[10px] text-brand-muted uppercase tracking-widest mt-1">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p></div>
-                        <button onclick="window.removeFromCart('${item.id}')" class="text-brand-muted hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        <img src="${item.img}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'64\\' height=\\'64\\'><rect width=\\'64\\' height=\\'64\\' fill=\\'%23111\\'/></svg>';" class="w-16 h-16 object-cover grayscale">
+                        <div class="flex-1">
+                            <h4 class="font-editorial text-white text-sm">${item.name}</h4>
+                            <p class="text-[10px] text-brand-muted uppercase tracking-widest mt-1">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
+                        </div>
+                        <button onclick="removeFromCart(${item.id})" class="text-brand-muted hover:text-white">
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
                     </div>
                 `;
             });
             totalCont.innerText = `$${total.toLocaleString()} MXN`;
-            lucide.createIcons();
-        };
+        }
 
-        window.toggleCart = function() {
+        function toggleCart() {
             document.getElementById('cart-drawer').classList.toggle('translate-x-full');
             document.getElementById('cart-overlay').classList.toggle('opacity-0');
             document.getElementById('cart-overlay').classList.toggle('pointer-events-none');
-        };
+        }
 
-        window.checkoutPDF = function() {
+        function toggleChatbot() {
+            const drawer = document.getElementById('chatbot-drawer');
+            const overlay = document.getElementById('chat-overlay');
+            drawer.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('opacity-0');
+            overlay.classList.toggle('pointer-events-none');
+        }
+
+        function sendPredefinedMessage(text) {
+            document.getElementById('chat-input').value = text;
+            sendChatMessage();
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if(!text) return;
+            
+            const chatBox = document.getElementById('chat-messages');
+            chatBox.innerHTML += `
+                <div class="flex flex-col items-end w-full mt-4">
+                    <div class="bg-white text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%]">${text}</div>
+                </div>
+            `;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            setTimeout(() => {
+                let response = "¡Claro! En DAMASO estamos a tus órdenes. Selecciona tus piezas y usa el carrito para cotizar por PDF o WhatsApp directo a nuestro estudio en Guadalajara.";
+                const lowerText = text.toLowerCase();
+                
+                if(lowerText.includes("cotiz")) response = "Para cotizar, simplemente haz clic en 'Agregar a Cotización' en cualquier pieza de nuestro catálogo. Luego, abre el ícono de la bolsa arriba a la derecha para ver tu total y descargar el PDF.";
+                else if(lowerText.includes("pdf")) response = "Una vez que tengas tus piezas en el carrito (ícono de bolsa), ingresa tu nombre y haz clic en 'Descargar Cotización (PDF)'. Se generará un archivo profesional listo para imprimir o enviar.";
+                else if(lowerText.includes("entrega") || lowerText.includes("tiempo")) response = "Nuestros tiempos de entrega varían por pieza (generalmente 4 a 6 semanas). Puedes ver el tiempo exacto haciendo clic en 'Ver Specs' sobre la fotografía de cada lámpara.";
+                
+                chatBox.innerHTML += `
+                    <div class="flex flex-col items-start max-w-[85%] mt-4">
+                        <div class="bg-brand-border text-white text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed">${response}</div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 800);
+        }
+
+        function checkoutPDF(event) {
             if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
             
             document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('es-MX');
@@ -730,8 +646,10 @@
                 total += sum;
                 tbody.innerHTML += `
                     <tr class="border-b border-gray-200 text-sm">
-                        <td class="py-4 text-gray-600 text-xs">${item.sku}</td><td class="py-4 font-editorial font-bold">${item.name}</td>
-                        <td class="py-4 text-center">${item.qty}</td><td class="py-4 text-right">$${Number(item.price).toLocaleString()}</td>
+                        <td class="py-4 text-gray-600 text-xs">${item.sku}</td>
+                        <td class="py-4 font-editorial font-bold">${item.name}</td>
+                        <td class="py-4 text-center">${item.qty}</td>
+                        <td class="py-4 text-right">$${Number(item.price).toLocaleString()}</td>
                     </tr>
                 `;
             });
@@ -740,14 +658,24 @@
             const element = document.getElementById('invoice-template');
             const btn = event.currentTarget;
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Generando PDF...`;
+            btn.innerHTML = `<svg class="animate-spin mr-2" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
             
-            const opt = { margin: 0, filename: `Cotizacion_Damaso.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, scrollY: 0, windowWidth: 800 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
-            html2pdf().set(opt).from(element).save().then(() => { btn.innerHTML = originalText; lucide.createIcons(); });
-        };
+            const opt = {
+              margin:       0,
+              filename:     `Cotizacion_Damaso.pdf`,
+              image:        { type: 'jpeg', quality: 0.98 },
+              html2canvas:  { scale: 2, scrollY: 0, windowWidth: 800 }, 
+              jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
 
-        window.checkoutWhatsApp = function() {
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+            });
+        }
+
+        function checkoutWhatsApp() {
             if(cart.length === 0) { alert("Tu carrito está vacío."); return; }
+            
             const clientName = document.getElementById('client-name').value;
             const clientEmail = document.getElementById('client-email').value;
             
@@ -756,26 +684,37 @@
             if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
             
             let total = 0;
-            cart.forEach(i => { msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`; total += (Number(i.price) * i.qty); });
+            cart.forEach(i => {
+                msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`;
+                total += (Number(i.price) * i.qty);
+            });
             msg += `\n*Total Estimado:* $${total.toLocaleString()} MXN\n`;
             
+            const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
             const link = document.createElement('a');
-            link.href = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
+            link.href = url;
             link.target = '_blank';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        };
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            document.addEventListener('click', function(event) {
-                const menu = document.getElementById('dropdown-menu');
-                const btn = document.querySelector('button[onclick="window.toggleCategories()"]');
-                if (!menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) window.toggleCategories();
-            });
+            renderCatalog(dbProducts);
         });
     </script>
+
+    <!-- FIREBASE PREPARADO PARA EL FUTURO (Desactivado temporalmente) -->
+    <!-- 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // Aquí iría tu configuración de Firebase
+        // El código está documentado para que no cause errores en la página actual.
+    </script> 
+    -->
 </body>
 </html>
 
