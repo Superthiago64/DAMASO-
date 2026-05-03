@@ -64,42 +64,40 @@
 
         .modal-overlay { backdrop-filter: blur(10px); }
         
-        /* Plantilla de PDF escondida fuera de la pantalla para no romper el ancho en móviles */
-        #pdf-render-container {
-            position: absolute;
-            top: 0;
-            left: -9999px; /* Aleja el div 800px fuera de la vista */
-            z-index: -9999;
-            opacity: 0;
-            pointer-events: none;
-            width: 800px;
-        }
+        /* Oculta PDF del render en móviles */
+        #pdf-render-container { position: absolute; top: 0; left: -9999px; z-index: -9999; opacity: 0; pointer-events: none; width: 800px; }
 
-        /* Quitar scroll del input search webkit */
+        /* Estilo para inputs del formulario de nueva pieza */
+        .input-form {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid #333333;
+            color: white;
+            font-size: 12px;
+            padding: 8px 0;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .input-form:focus { border-bottom-color: white; }
+        .input-form::placeholder { color: #555; }
+        
         input[type="search"]::-webkit-search-decoration,
-        input[type="search"]::-webkit-search-cancel-button,
-        input[type="search"]::-webkit-search-results-button,
-        input[type="search"]::-webkit-search-results-decoration { display: none; }
+        input[type="search"]::-webkit-search-cancel-button { display: none; }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-white selection:text-black">
 
     <!-- Navegación Superior -->
     <nav class="fixed w-full z-40 bg-brand-bg/95 backdrop-blur-xl border-b border-brand-border transition-all duration-500 flex flex-col" id="navbar">
-        <!-- Barra Principal -->
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
-            
             <div class="flex items-center space-x-6">
-                <!-- Botón de Menú Hamburguesa (Categorías) -->
                 <button onclick="toggleCategories()" class="text-white hover:text-brand-muted transition-colors p-2 focus:outline-none relative z-50">
                     <i data-lucide="menu" class="w-7 h-7"></i>
                 </button>
-                
-                <!-- Logo -->
                 <a href="#" class="font-editorial text-3xl tracking-[0.25em] text-white uppercase font-bold">Damaso</a>
             </div>
 
-            <!-- Menú Desplegable (Controlado por JS) -->
             <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 bg-brand-surface border border-brand-border py-2 shadow-2xl opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-50">
                 <div class="px-6 py-3 text-[9px] text-brand-muted tracking-[0.3em] uppercase border-b border-brand-border mb-2 font-bold">Catálogo</div>
                 <a href="#coleccion" onclick="filterCatalog('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-white/10 uppercase transition-all">Ver Todo</a>
@@ -111,8 +109,6 @@
                 <a href="#coleccion" onclick="filterCatalog('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de exterior</a>
                 <a href="#coleccion" onclick="filterCatalog('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Proyectos especiales</a>
                 <a href="#coleccion" onclick="filterCatalog('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Espejos</a>
-                
-                <!-- Links extra para móviles -->
                 <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
                     <a href="#disenador" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">El Diseñador</a>
                     <a href="#manifiesto" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Manifiesto</a>
@@ -120,15 +116,19 @@
                 </div>
             </div>
 
-            <!-- Menú Central -->
             <div class="hidden md:flex items-center space-x-10">
                 <a href="#disenador" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">El Diseñador</a>
                 <a href="#manifiesto" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">Manifiesto</a>
                 <a href="#contacto" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-muted transition-colors uppercase font-medium">Contacto</a>
             </div>
 
-            <!-- Icono Carrito -->
-            <div class="flex items-center">
+            <!-- Iconos de Acción -->
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <!-- Botón Agregar Pieza (+) -->
+                <button onclick="toggleAddProductModal()" class="text-white hover:text-brand-muted transition-colors p-2" aria-label="Agregar Producto">
+                    <i data-lucide="plus" class="w-6 h-6"></i>
+                </button>
+                <!-- Botón Carrito -->
                 <button onclick="toggleCart()" class="text-white hover:text-brand-muted transition-colors relative p-2">
                     <i data-lucide="shopping-bag" class="w-6 h-6"></i>
                     <span id="cart-count" class="absolute top-0 right-0 bg-white text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0">0</span>
@@ -136,7 +136,6 @@
             </div>
         </div>
 
-        <!-- Barra de Búsqueda Permanente (Reemplaza a los antiguos botones de categorías) -->
         <div class="w-full bg-brand-surface/80 border-t border-brand-border h-14 flex items-center justify-center px-4">
             <div class="w-full max-w-3xl relative flex items-center">
                 <i data-lucide="search" class="w-4 h-4 text-brand-muted absolute left-4"></i>
@@ -145,74 +144,149 @@
         </div>
     </nav>
 
-    <!-- Modal de Especificaciones -->
-    <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/80 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
-        <div class="bg-brand-surface border border-brand-border w-full max-w-6xl max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
-            <button onclick="closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+    <!-- MODAL PARA AGREGAR NUEVA PIEZA (+) -->
+    <div id="add-product-modal" class="fixed inset-0 z-[80] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4">
+        <div class="bg-brand-surface border border-brand-border w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col relative custom-scroll p-6 sm:p-10">
+            <button onclick="toggleAddProductModal()" class="absolute top-4 right-4 z-10 text-brand-muted hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
             
-            <div class="w-full md:w-1/2 bg-brand-bg relative min-h-[300px]">
-                <img id="modal-img" src="" class="absolute inset-0 w-full h-full object-cover">
-            </div>
+            <h2 class="font-editorial text-3xl text-white mb-8 border-b border-brand-border pb-4 uppercase tracking-widest">Añadir Nueva Pieza</h2>
             
-            <div class="w-full md:w-1/2 p-8 sm:p-12 text-sm font-light flex flex-col">
-                <h2 id="modal-title" class="font-editorial text-4xl text-white mb-2 uppercase"></h2>
-                <p id="modal-desc" class="text-brand-muted mb-8 italic"></p>
-                
-                <div class="space-y-4 text-brand-muted flex-1 overflow-y-auto pr-4 custom-scroll">
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
-                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Código SKU:</span>
-                        <span class="col-span-2" id="modal-sku"></span>
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Columna Izquierda: Imagen -->
+                <div class="w-full md:w-1/3 flex flex-col gap-4">
+                    <label class="font-bold text-[10px] tracking-[0.2em] uppercase text-brand-muted">Fotografía</label>
+                    <div class="relative w-full aspect-square border-2 border-dashed border-brand-border flex items-center justify-center bg-brand-bg hover:border-white transition-colors cursor-pointer overflow-hidden group" onclick="document.getElementById('new-img-input').click()">
+                        <img id="new-img-preview" src="" class="absolute inset-0 w-full h-full object-cover hidden z-10">
+                        <div class="text-center z-0 group-hover:text-white text-brand-muted transition-colors flex flex-col items-center">
+                            <i data-lucide="camera" class="w-8 h-8 mb-2"></i>
+                            <span class="text-[10px] uppercase tracking-widest">Seleccionar o Tomar Foto</span>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
-                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Specs Lumínicas:</span>
-                        <span class="col-span-2" id="modal-luz"></span>
+                    <!-- Input oculto para subir archivo o tomar foto -->
+                    <input type="file" id="new-img-input" accept="image/*" capture="environment" class="hidden" onchange="handleImageUpload(event)">
+                </div>
+
+                <!-- Columna Derecha: Formulario Especificaciones -->
+                <div class="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                    <div class="sm:col-span-2">
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Modelo</label>
+                        <input type="text" id="new-modelo" class="input-form" placeholder="Ej: Esfera Cobre">
                     </div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
-                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Voltaje:</span>
-                        <span class="col-span-2" id="modal-volt"></span>
-                    </div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
-                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Cable:</span>
-                        <span class="col-span-2" id="modal-cable"></span>
+                    <div class="sm:col-span-2">
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Descripción</label>
+                        <input type="text" id="new-desc" class="input-form" placeholder="Descripción breve de la pieza">
                     </div>
                     
-                    <div class="py-2">
-                        <span class="text-white font-medium uppercase tracking-widest text-[10px] block mb-2">Dimensiones:</span>
-                        <div class="grid grid-cols-2 gap-2 pl-4 text-xs">
-                            <div>Ancho: <span id="modal-w" class="text-white"></span></div>
-                            <div>Alto: <span id="modal-h" class="text-white"></span></div>
-                            <div>Fondo: <span id="modal-d" class="text-white"></span></div>
-                            <div>Diámetro: <span id="modal-dia" class="text-white"></span></div>
+                    <!-- Fila -->
+                    <div>
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Categoría</label>
+                        <select id="new-cat" class="input-form bg-brand-surface text-white">
+                            <option value="mesa">Mesa</option>
+                            <option value="pie">Pie</option>
+                            <option value="techo">Techo</option>
+                            <option value="candiles">Candiles</option>
+                            <option value="arbotantes">Arbotantes</option>
+                            <option value="exterior">Exterior</option>
+                            <option value="proyectos">Proyectos Especiales</option>
+                            <option value="espejos">Espejos</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Precio (MXN) para cotizar</label>
+                        <input type="number" id="new-precio" class="input-form" placeholder="Ej: 5000">
+                    </div>
+
+                    <!-- Especificaciones Requeridas -->
+                    <div>
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Código SKU</label>
+                        <input type="text" id="new-sku" class="input-form" placeholder="Ej: DM-CUS-001">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Espec. Lumínicas</label>
+                        <input type="text" id="new-luz" class="input-form" placeholder="Ej: LED 12W 3000K">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Voltaje</label>
+                        <input type="text" id="new-volt" class="input-form" placeholder="Ej: 110V">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Cable</label>
+                        <input type="text" id="new-cable" class="input-form" placeholder="Ej: Textil negro 2m">
+                    </div>
+
+                    <!-- Dimensiones -->
+                    <div class="sm:col-span-2 mt-2">
+                        <label class="text-[10px] font-bold text-white uppercase tracking-widest border-b border-brand-border w-full block pb-1">Dimensiones</label>
+                        <div class="grid grid-cols-4 gap-4 mt-2">
+                            <div><input type="text" id="new-w" class="input-form" placeholder="Ancho"></div>
+                            <div><input type="text" id="new-h" class="input-form" placeholder="Alto"></div>
+                            <div><input type="text" id="new-d" class="input-form" placeholder="Fondo"></div>
+                            <div><input type="text" id="new-dia" class="input-form" placeholder="Diámetro"></div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
-                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Peso:</span>
-                        <span class="col-span-2" id="modal-peso"></span>
+                    <div>
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Peso</label>
+                        <input type="text" id="new-peso" class="input-form" placeholder="Ej: 3.5 kg">
                     </div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
-                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Materiales:</span>
-                        <span class="col-span-2" id="modal-mat"></span>
+                    <div>
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Tiempo Entrega</label>
+                        <input type="text" id="new-time" class="input-form" placeholder="Ej: 4 semanas">
                     </div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
-                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Acabados:</span>
-                        <span class="col-span-2" id="modal-fin"></span>
+                    <div class="sm:col-span-2">
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Materiales</label>
+                        <input type="text" id="new-mat" class="input-form" placeholder="Ej: Acero y Cristal">
                     </div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
-                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Tiempo Entrega:</span>
-                        <span class="col-span-2" id="modal-time"></span>
+                    <div class="sm:col-span-2">
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Acabados</label>
+                        <input type="text" id="new-fin" class="input-form" placeholder="Ej: Negro Mate">
                     </div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2">
-                        <span class="text-white font-medium uppercase tracking-widest text-[10px]">Certificaciones:</span>
-                        <span class="col-span-2" id="modal-cert"></span>
+                    <div class="sm:col-span-2">
+                        <label class="text-[10px] text-brand-muted uppercase tracking-widest">Certificaciones</label>
+                        <input type="text" id="new-cert" class="input-form" placeholder="Ej: NOM">
                     </div>
                 </div>
+            </div>
 
+            <div class="mt-8 pt-6 border-t border-brand-border flex justify-end">
+                <button onclick="saveNewProduct()" class="bg-white text-black px-10 py-4 text-xs tracking-[0.2em] uppercase font-bold hover:bg-brand-muted transition-colors">
+                    Listo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Especificaciones de Pieza Individual -->
+    <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/80 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
+        <div class="bg-brand-surface border border-brand-border w-full max-w-6xl max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
+            <button onclick="closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <div class="w-full md:w-1/2 bg-brand-bg relative min-h-[300px]">
+                <img id="modal-img" src="" class="absolute inset-0 w-full h-full object-cover">
+            </div>
+            <div class="w-full md:w-1/2 p-8 sm:p-12 text-sm font-light flex flex-col">
+                <h2 id="modal-title" class="font-editorial text-4xl text-white mb-2 uppercase"></h2>
+                <p id="modal-desc" class="text-brand-muted mb-8 italic"></p>
+                <div class="space-y-4 text-brand-muted flex-1 overflow-y-auto pr-4 custom-scroll">
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-white font-medium uppercase tracking-widest text-[10px]">Código SKU:</span><span class="col-span-2" id="modal-sku"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-white font-medium uppercase tracking-widest text-[10px]">Specs Lumínicas:</span><span class="col-span-2" id="modal-luz"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-white font-medium uppercase tracking-widest text-[10px]">Voltaje:</span><span class="col-span-2" id="modal-volt"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-white font-medium uppercase tracking-widest text-[10px]">Cable:</span><span class="col-span-2" id="modal-cable"></span></div>
+                    <div class="py-2">
+                        <span class="text-white font-medium uppercase tracking-widest text-[10px] block mb-2">Dimensiones:</span>
+                        <div class="grid grid-cols-2 gap-2 pl-4 text-xs">
+                            <div>Ancho: <span id="modal-w" class="text-white"></span></div><div>Alto: <span id="modal-h" class="text-white"></span></div>
+                            <div>Fondo: <span id="modal-d" class="text-white"></span></div><div>Diámetro: <span id="modal-dia" class="text-white"></span></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-white font-medium uppercase tracking-widest text-[10px]">Peso:</span><span class="col-span-2" id="modal-peso"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-white font-medium uppercase tracking-widest text-[10px]">Materiales:</span><span class="col-span-2" id="modal-mat"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-white font-medium uppercase tracking-widest text-[10px]">Acabados:</span><span class="col-span-2" id="modal-fin"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-white font-medium uppercase tracking-widest text-[10px]">Tiempo Entrega:</span><span class="col-span-2" id="modal-time"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-white font-medium uppercase tracking-widest text-[10px]">Certificaciones:</span><span class="col-span-2" id="modal-cert"></span></div>
+                </div>
                 <div class="mt-8 pt-6 border-t border-brand-border flex items-center justify-between">
                     <span id="modal-price" class="font-editorial text-2xl text-white"></span>
-                    <button id="modal-add-btn" class="bg-white text-black px-6 py-3 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-brand-muted transition-colors">
-                        Agregar a Cotización
-                    </button>
+                    <button id="modal-add-btn" class="bg-white text-black px-6 py-3 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-brand-muted transition-colors">Agregar a Cotización</button>
                 </div>
             </div>
         </div>
@@ -225,26 +299,15 @@
             <button onclick="toggleCart()" class="text-brand-muted hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
         <div class="flex-1 overflow-y-auto p-8 space-y-6" id="cart-items"></div>
-        
-        <!-- Zona de Checkout / PDF -->
         <div class="p-8 border-t border-brand-border bg-black">
-            <!-- Dos inputs: Nombre y Correo -->
             <div class="mb-6 space-y-3">
                 <input type="text" id="client-name" placeholder="Nombre del Cliente / Proyecto" class="w-full bg-brand-surface border border-brand-border p-3 text-xs text-white focus:outline-none focus:border-white transition-colors">
                 <input type="email" id="client-email" placeholder="Correo Electrónico" class="w-full bg-brand-surface border border-brand-border p-3 text-xs text-white focus:outline-none focus:border-white transition-colors">
             </div>
-            
-            <div class="flex justify-between text-white font-editorial text-xl mb-6">
-                <span>Total Estimado</span><span id="cart-total">$0 MXN</span>
-            </div>
-            
+            <div class="flex justify-between text-white font-editorial text-xl mb-6"><span>Total Estimado</span><span id="cart-total">$0 MXN</span></div>
             <div class="space-y-3">
-                <button onclick="checkoutPDF()" class="w-full bg-transparent border border-white text-white py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white hover:text-black transition-colors flex justify-center items-center gap-2">
-                    <i data-lucide="download" class="w-4 h-4"></i> Descargar Cotización (PDF)
-                </button>
-                <button onclick="checkoutWhatsApp()" class="w-full bg-[#25D366] text-black py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-[#20b858] transition-colors flex justify-center items-center gap-2">
-                    <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar por WhatsApp
-                </button>
+                <button onclick="checkoutPDF()" class="w-full bg-transparent border border-white text-white py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white hover:text-black transition-colors flex justify-center items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Descargar Cotización (PDF)</button>
+                <button onclick="checkoutWhatsApp()" class="w-full bg-[#25D366] text-black py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-[#20b858] transition-colors flex justify-center items-center gap-2"><i data-lucide="message-circle" class="w-4 h-4"></i> Enviar por WhatsApp</button>
             </div>
         </div>
     </div>
@@ -274,8 +337,8 @@
         <div class="max-w-[95%] mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
                 <div>
-                    <h2 class="font-editorial text-5xl md:text-7xl text-white mb-6" id="catalog-title">Catálogo</h2>
-                    <p class="text-brand-muted text-sm tracking-widest uppercase" id="catalog-subtitle">Diseño de Autor 2026</p>
+                    <h2 class="font-editorial text-5xl md:text-7xl text-white mb-6" id="catalog-title">Catálogo Completo</h2>
+                    <p class="text-brand-muted text-sm tracking-widest uppercase" id="catalog-subtitle">Colección 2026</p>
                 </div>
             </div>
             <!-- Grid de Productos -->
@@ -283,20 +346,14 @@
         </div>
     </section>
 
-    <!-- Diseñador -->
+    <!-- Diseñador (Imagen eliminada, texto centrado) -->
     <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border">
-        <div class="max-w-[95%] mx-auto px-4">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-                <div class="lg:col-span-5 reveal">
-                    <!-- FOTOGRAFÍA DEL DISEÑADOR: Reemplaza el src con la ruta de tu foto -->
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop" alt="Iván Damaso" class="w-full aspect-[3/4] object-cover grayscale brightness-110 border border-brand-border">
-                </div>
-                <div class="lg:col-span-7 reveal">
-                    <h2 class="font-editorial text-5xl md:text-8xl text-white mb-12">Iván<br>Damaso</h2>
-                    <p class="text-xl text-white font-light italic border-l-2 border-white pl-8 mb-8">"La luz es el alma de la arquitectura."</p>
-                    <p class="text-brand-muted max-w-xl">Diseñador radicado en San Agustín, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo.</p>
-                </div>
-            </div>
+        <div class="max-w-4xl mx-auto px-4 text-center reveal">
+            <h2 class="font-editorial text-5xl md:text-8xl text-white mb-12">Iván<br>Damaso</h2>
+            <p class="text-xl text-white font-light italic mb-8 border-b border-brand-border pb-8 inline-block px-8">"La luz es el alma de la arquitectura."</p>
+            <p class="text-brand-muted mx-auto leading-relaxed">
+                Diseñador radicado en San Agustín, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo. Cada pieza nace de la experimentación de texturas, volúmenes y sombras proyectadas.
+            </p>
         </div>
     </section>
 
@@ -325,7 +382,6 @@
                 <div>
                     <h4 class="text-[10px] tracking-[0.3em] text-white uppercase mb-8 font-bold">Social</h4>
                     <ul class="text-brand-muted text-sm space-y-4 font-light">
-                        <!-- Enlace de Instagram Real -->
                         <li><a href="https://www.instagram.com/damaso_lamparas?igsh=MTkxcDU0anJweWxvcQ==" target="_blank" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="instagram" class="w-4 h-4"></i> Instagram</a></li>
                         <li><a href="https://www.facebook.com/damaso.lighting" target="_blank" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="facebook" class="w-4 h-4"></i> Facebook</a></li>
                         <li><a href="https://wa.me/523338703071" target="_blank" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="message-square" class="w-4 h-4"></i> WhatsApp</a></li>
@@ -339,8 +395,7 @@
     <!-- WhatsApp Flotante -->
     <a href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#25D366] text-white p-5 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 z-50"><i data-lucide="phone" class="w-6 h-6"></i></a>
 
-
-    <!-- TEMPLATE PARA GENERACIÓN DE PDF (Seguro y oculto del flujo visual) -->
+    <!-- TEMPLATE PARA GENERACIÓN DE PDF -->
     <div id="pdf-render-container">
         <div id="invoice-template" class="bg-white text-black p-12 font-sans" style="width: 800px; min-height: 1122px;">
             <div class="flex justify-between items-end border-b-2 border-black pb-8 mb-8">
@@ -371,9 +426,7 @@
                         <th class="py-3 w-1/6 text-right">Precio Unit.</th>
                     </tr>
                 </thead>
-                <tbody id="pdf-items">
-                    <!-- Inyectado por JS -->
-                </tbody>
+                <tbody id="pdf-items"></tbody>
             </table>
             
             <div class="flex justify-end mb-16">
@@ -394,13 +447,12 @@
         </div>
     </div>
 
-
     <!-- SCRIPT PRINCIPAL -->
     <script>
         lucide.createIcons();
 
-        // BASE DE DATOS EXTENDIDA 
-        const dbProducts = [
+        // BASE DE DATOS (Estela Vertical eliminada)
+        let dbProducts = [
             { 
                 id: 1, name: "Monolito Noir", category: "mesa", price: 6500, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800",
                 sku: "DM-MES-001",
@@ -408,18 +460,7 @@
                 specsLight: "LED Integrado 12W, 2700K (Cálida), 1100lm, Dimerizable",
                 cable: "Textil negro 2.0m con interruptor en línea",
                 dims: { w: "20 cm", h: "45 cm", d: "20 cm", dia: "N/A" },
-                peso: "4.5 kg",
-                volt: "110-240V 50/60Hz",
-                mat: "Acero al carbón sólido de 3/16\"",
-                fin: "Pavonado negro mate artesanal",
-                time: "4 a 6 semanas",
-                cert: "NOM, CE"
-            },
-            { 
-                id: 2, name: "Estela Vertical", category: "pie", price: 12800, img: "https://images.unsplash.com/photo-1513506003901-1e6a229e9d15?q=80&w=800",
-                sku: "DM-PIE-002", desc: "Minimalismo escultórico. Anclaje de concreto con varilla difusora.",
-                specsLight: "Tira LED COB 24V, 3000K, 2200lm", cable: "PVC transparente 3.0m, pedal on/off",
-                dims: { w: "30 cm", h: "180 cm", d: "30 cm", dia: "30 cm (base)" }, peso: "12 kg", volt: "110V-220V", mat: "Concreto pulido y Latón macizo", fin: "Gris natural y Latón cepillado", time: "6 semanas", cert: "NOM"
+                peso: "4.5 kg", volt: "110-240V 50/60Hz", mat: "Acero al carbón sólido de 3/16\"", fin: "Pavonado negro mate artesanal", time: "4 a 6 semanas", cert: "NOM, CE"
             },
             { 
                 id: 3, name: "Órbita Suspendida", category: "techo", price: 8900, img: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=800",
@@ -448,6 +489,7 @@
         ];
 
         let cart = [];
+        let newImageBase64 = "";
 
         // RENDER CATÁLOGO
         function renderCatalog(products) {
@@ -479,7 +521,7 @@
             initReveal();
         }
 
-        // CONTROL MENÚ HAMBURGUESA
+        // CONTROL DE MODALES Y MENÚS
         function toggleCategories() {
             const menu = document.getElementById('dropdown-menu');
             if (menu.classList.contains('opacity-0')) {
@@ -491,22 +533,16 @@
             }
         }
 
-        // FILTRO POR CATEGORÍA
         function filterCatalog(cat) {
-            document.getElementById('live-search').value = ''; // Limpiar barra
+            document.getElementById('live-search').value = '';
             const filtered = cat === 'all' ? dbProducts : dbProducts.filter(p => p.category === cat);
             renderCatalog(filtered);
-            
             document.getElementById('catalog-title').innerText = cat === 'all' ? "Catálogo Completo" : cat.charAt(0).toUpperCase() + cat.slice(1);
             document.getElementById('catalog-subtitle').innerText = "Colección 2026";
-            
-            toggleCategories(); // Cerrar menú
-            
-            // Scroll suave hacia el catálogo
+            toggleCategories();
             document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // BÚSQUEDA EN VIVO (Barra permanente)
         document.getElementById('live-search').addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase();
             if(q.length === 0) { 
@@ -519,15 +555,82 @@
             renderCatalog(results);
             document.getElementById('catalog-title').innerText = "Resultados";
             document.getElementById('catalog-subtitle').innerText = `Búsqueda: "${q}"`;
-            
-            // Si el usuario escribe, asegurar que está viendo el catálogo
-            const catalogTop = document.getElementById('coleccion').getBoundingClientRect().top;
-            if (catalogTop > window.innerHeight || catalogTop < 0) {
-                document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
-            }
         });
 
-        // MODAL ESPECIFICACIONES
+        // MODAL AGREGAR NUEVO PRODUCTO (+)
+        function toggleAddProductModal() {
+            const modal = document.getElementById('add-product-modal');
+            if (modal.classList.contains('opacity-0')) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    newImageBase64 = e.target.result;
+                    const preview = document.getElementById('new-img-preview');
+                    preview.src = newImageBase64;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveNewProduct() {
+            const name = document.getElementById('new-modelo').value || "Nueva Pieza Damaso";
+            const desc = document.getElementById('new-desc').value || "Descripción no especificada.";
+            const sku = document.getElementById('new-sku').value || "DM-NEW-000";
+            const category = document.getElementById('new-cat').value;
+            const price = parseFloat(document.getElementById('new-precio').value) || 0;
+            
+            // Si no subió foto, ponemos un placeholder elegante gris
+            const img = newImageBase64 || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop"; 
+
+            const newProduct = {
+                id: Date.now(), // ID único basado en timestamp
+                name: name,
+                category: category,
+                price: price,
+                img: img,
+                sku: sku,
+                desc: desc,
+                specsLight: document.getElementById('new-luz').value || "N/A",
+                cable: document.getElementById('new-cable').value || "N/A",
+                dims: {
+                    w: document.getElementById('new-w').value || "N/A",
+                    h: document.getElementById('new-h').value || "N/A",
+                    d: document.getElementById('new-d').value || "N/A",
+                    dia: document.getElementById('new-dia').value || "N/A"
+                },
+                peso: document.getElementById('new-peso').value || "N/A",
+                volt: document.getElementById('new-volt').value || "N/A",
+                mat: document.getElementById('new-mat').value || "N/A",
+                fin: document.getElementById('new-fin').value || "N/A",
+                time: document.getElementById('new-time').value || "N/A",
+                cert: document.getElementById('new-cert').value || "N/A"
+            };
+
+            dbProducts.unshift(newProduct); // Añadir al principio del catálogo
+            renderCatalog(dbProducts); // Refrescar vista
+            
+            // Limpiar formulario y cerrar
+            document.querySelectorAll('#add-product-modal input').forEach(input => input.value = '');
+            document.getElementById('new-img-preview').classList.add('hidden');
+            newImageBase64 = "";
+            toggleAddProductModal();
+            
+            // Hacer scroll a la colección para que vea su nueva pieza
+            document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // MODAL ESPECIFICACIONES PIEZA
         function openSpecModal(id) {
             const p = dbProducts.find(x => x.id === id);
             if(!p) return;
@@ -623,7 +726,7 @@
             document.getElementById('cart-overlay').classList.toggle('pointer-events-none');
         }
 
-        // GENERACIÓN DE PDF SEGURA Y SIN CORTES
+        // GENERACIÓN DE PDF SEGURA
         function checkoutPDF() {
             if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
             
@@ -660,7 +763,6 @@
             const originalText = btn.innerHTML;
             btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Generando PDF...`;
             
-            // scrollY: 0 es la clave para que no se corte sin importar en qué parte de la web esté el usuario
             const opt = {
               margin:       0,
               filename:     `${folio}_Damaso.pdf`,
@@ -675,7 +777,7 @@
             });
         }
 
-        // WHATSAPP OPTIMIZADO PARA MÓVILES (IPHONE)
+        // WHATSAPP OPTIMIZADO
         function checkoutWhatsApp() {
             if(cart.length === 0) { alert("Tu carrito está vacío."); return; }
             
@@ -695,7 +797,6 @@
             
             const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
             
-            // Método seguro para que abra en iPhone Safari sin que lo bloquee
             const link = document.createElement('a');
             link.href = url;
             link.target = '_blank';
@@ -713,7 +814,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             renderCatalog(dbProducts);
-            // Detectar clics fuera del menú hamburguesa para cerrarlo
             document.addEventListener('click', function(event) {
                 const menu = document.getElementById('dropdown-menu');
                 const btn = document.querySelector('button[onclick="toggleCategories()"]');
@@ -722,7 +822,6 @@
                 }
             });
         });
-
     </script>
 </body>
 </html>
