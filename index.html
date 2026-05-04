@@ -12,8 +12,9 @@
     <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- HTML2PDF para generar cotizaciones -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Generador de PDF Nativo (100% estable en Móviles y PC) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -36,7 +37,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* Base sólida sin desbordamientos */
         html, body { background-color: #030303; color: #f2f2f2; max-width: 100vw; overflow-x: hidden; width: 100%; position: relative; margin: 0; padding: 0; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #030303; }
@@ -47,9 +47,6 @@
         .img-catalog { transition: transform 0.8s ease; cursor: pointer; }
         .group:hover .img-catalog { transform: scale(1.05); }
         .modal-overlay { backdrop-filter: blur(10px); }
-        
-        /* SOLUCIÓN DEFINITIVA PDF: Position fixed asegura que se renderice siempre alineado a la pantalla virtual de html2canvas */
-        #pdf-render-container { position: fixed; top: 0; left: -9999px; z-index: -9999; opacity: 0.01; pointer-events: none; width: 800px; background: white; }
 
         input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { display: none; }
         .img-fallback { background-color: #111; display: flex; align-items: center; justify-content: center; color: #333; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; text-align: center; padding: 20px;}
@@ -107,11 +104,9 @@
             </div>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
-                <!-- Botón Chatbot -->
                 <button onclick="toggleChatbot()" class="text-white hover:text-brand-muted transition-colors p-2" aria-label="Asistente Virtual">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>
                 </button>
-                <!-- Botón Carrito -->
                 <button onclick="toggleCart()" class="text-white hover:text-brand-muted transition-colors relative p-2">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                     <span id="cart-count" class="absolute top-0 right-0 bg-white text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0 transition-opacity">0</span>
@@ -119,7 +114,6 @@
             </div>
         </div>
 
-        <!-- Barra de Búsqueda Permanente -->
         <div class="w-full bg-brand-surface/80 border-t border-brand-border h-14 flex items-center justify-center px-4">
             <div class="w-full max-w-3xl relative flex items-center">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" class="text-brand-muted absolute left-4"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -258,7 +252,7 @@
         </div>
     </section>
 
-    <!-- SECCIÓN DE CLIENTES (MARQUESINA FLUIDA) -->
+    <!-- Marquesina de Clientes -->
     <section id="clientes" class="pt-32 pb-16 bg-black border-t border-brand-border">
         <div class="max-w-[95%] mx-auto px-4 mb-12 text-center">
             <p class="text-[10px] tracking-[0.5em] text-brand-muted uppercase mb-4">Confianza que ilumina</p>
@@ -273,7 +267,6 @@
                 <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
                 <div class="client-group"><span class="client-title">DESPACHOS</span><span class="client-names">AHA Internacional <span class="dot">•</span> Arquitectura de Interiores <span class="dot">•</span> Rockwell Group Nueva York</span></div>
                 
-                <!-- DUPLICADO PARA EFECTO INFINITO -->
                 <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín</span></div>
                 <div class="client-group"><span class="client-title">RESTAURANTES</span><span class="client-names">Lorenza <span class="dot">•</span> Casa de Leo <span class="dot">•</span> Garra <span class="dot">•</span> Los Arcos <span class="dot">•</span> Cabana <span class="dot">•</span> Madelina <span class="dot">•</span> Tequila Orendain</span></div>
                 <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
@@ -282,7 +275,7 @@
         </div>
     </section>
 
-    <!-- Diseñador (Sin Foto) -->
+    <!-- Diseñador -->
     <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex items-center justify-center">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="font-editorial text-5xl md:text-8xl text-white mb-12">Iván<br>Damaso</h2>
@@ -333,55 +326,7 @@
         <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
     </a>
 
-    <!-- TEMPLATE PDF (Posición Fija y Estable) -->
-    <div id="pdf-render-container" class="bg-white">
-        <div id="invoice-template" class="bg-white text-black p-12 font-sans" style="width: 800px; max-width: 800px; min-height: 1122px; box-sizing: border-box;">
-            <div class="flex justify-between items-end border-b-2 border-black pb-8 mb-8">
-                <div>
-                    <h1 class="font-editorial text-5xl font-bold uppercase tracking-widest">Damaso</h1>
-                    <p class="text-sm mt-2 text-gray-600">Alta Iluminación Editorial</p>
-                    <p class="text-xs text-gray-500 mt-1">Guadalajara, Jalisco, México | +52 33 3870 3071</p>
-                </div>
-                <div class="text-right">
-                    <h2 class="text-2xl font-bold text-gray-800 tracking-widest uppercase">Cotización</h2>
-                    <p class="text-sm text-gray-600 mt-2">Fecha: <span id="pdf-date"></span></p>
-                    <p class="text-sm text-gray-600">Folio: <span id="pdf-folio"></span></p>
-                </div>
-            </div>
-            <div class="mb-10 flex flex-col space-y-1">
-                <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Datos del Cliente</h3>
-                <p class="text-lg font-medium border-b border-gray-300 pb-1" id="pdf-client-name">Cliente General</p>
-                <p class="text-sm text-gray-700 pt-1" id="pdf-client-email">correo@ejemplo.com</p>
-            </div>
-            <table class="w-full text-left mb-10 border-collapse">
-                <thead>
-                    <tr class="border-b border-black text-xs uppercase tracking-widest">
-                        <th class="py-3 w-1/6">SKU</th>
-                        <th class="py-3 w-3/6">Modelo / Descripción</th>
-                        <th class="py-3 w-1/6 text-center">Cant.</th>
-                        <th class="py-3 w-1/6 text-right">Precio Unit.</th>
-                    </tr>
-                </thead>
-                <tbody id="pdf-items"></tbody>
-            </table>
-            <div class="flex justify-end mb-16">
-                <div class="w-1/3 border-t-2 border-black pt-4">
-                    <div class="flex justify-between font-bold text-xl">
-                        <span>TOTAL</span>
-                        <span id="pdf-total">$0.00 MXN</span>
-                    </div>
-                </div>
-            </div>
-            <div class="text-xs text-gray-500 space-y-2 mt-auto pt-10 border-t border-gray-300">
-                <p><strong class="text-black">Condiciones Comerciales:</strong></p>
-                <p>- Precios sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.</p>
-                <p>- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).</p>
-                <p class="font-bold text-black">- No se aceptan anticipos.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- SCRIPT PRINCIPAL DE LA PÁGINA (ESTABLE Y SEGURO) -->
+    <!-- SCRIPT PRINCIPAL -->
     <script>
         // Catálogo fijo y robusto con tus 5 piezas
         const dbProducts = [
@@ -574,7 +519,6 @@
             document.getElementById('cart-overlay').classList.toggle('pointer-events-none');
         }
 
-        // LÓGICA DE CHATBOT INTELIGENTE
         function toggleChatbot() {
             const drawer = document.getElementById('chatbot-drawer');
             const overlay = document.getElementById('chat-overlay');
@@ -603,46 +547,48 @@
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Procesamiento de respuesta (Analiza dbProducts dinámicamente)
+            // Procesamiento de respuesta inteligente y educada (Sin nombres)
             setTimeout(() => {
                 let response = "";
                 let foundProduct = null;
 
-                // Búsqueda inteligente en la base de datos
                 for(let p of dbProducts) {
                     let words = p.name.toLowerCase().split(" ");
-                    // Busca si alguna palabra mayor a 3 letras coincide, o si el SKU coincide
-                    let match = words.some(w => w.length >= 3 && text.includes(w)) || text.includes(p.sku.toLowerCase());
+                    let match = words.some(w => w.length >= 3 && text.includes(w)) || text.includes(p.sku.toLowerCase()) || text.includes(p.category.toLowerCase());
                     if(match) {
                         foundProduct = p;
                         break;
                     }
                 }
 
-                if (foundProduct) {
+                if (text.includes("gracias") || text.includes("agradezco") || text.includes("perfecto") || text.includes("excelente")) {
+                    response = "¡Con muchísimo gusto! Estoy aquí para servirte y hacer que tu experiencia en DAMASO sea excelente. ¿Hay algo más en lo que pueda ayudarte?";
+                } else if (text.includes("porfa") || text.includes("por favor") || text.includes("pls")) {
+                    response = "¡Claro que sí, con mucho gusto! Dime, ¿qué necesitas saber exactamente?";
+                } else if (text.includes("hola") || text.includes("buenas") || text.includes("buenos días") || text.includes("buenas tardes")) {
+                    response = "¡Hola! Qué gusto saludarte. Soy el asistente inteligente de DAMASO Studio. Pregúntame sobre cualquier lámpara del catálogo, precios, materiales, tiempos de entrega o ubicación.";
+                } else if (foundProduct) {
                     if (text.includes("tiempo") || text.includes("entrega") || text.includes("tarda")) {
-                        response = `El tiempo de entrega estimado para **${foundProduct.name}** es de ${foundProduct.time}.`;
+                        response = `El tiempo de entrega estimado para la pieza **${foundProduct.name}** es de ${foundProduct.time}.`;
                     } else if (text.includes("precio") || text.includes("costo") || text.includes("cuesta") || text.includes("vale")) {
-                        response = `El precio de lista de **${foundProduct.name}** es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
+                        response = `El precio de lista de la pieza **${foundProduct.name}** es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
                     } else if (text.includes("material") || text.includes("acabado") || text.includes("hech")) {
-                        response = `**${foundProduct.name}** está fabricada con ${foundProduct.mat}. Su acabado final es ${foundProduct.fin}.`;
+                        response = `**${foundProduct.name}** está fabricada con: ${foundProduct.mat}. Su acabado final es ${foundProduct.fin}.`;
                     } else if (text.includes("medida") || text.includes("tamaño") || text.includes("dimension")) {
-                        response = `Las dimensiones de **${foundProduct.name}** son: Ancho ${foundProduct.dims.w}, Alto ${foundProduct.dims.h}, Fondo ${foundProduct.dims.d}. Su peso es de ${foundProduct.peso}.`;
+                        response = `Las dimensiones precisas de **${foundProduct.name}** son:\nAncho: ${foundProduct.dims.w}\nAlto: ${foundProduct.dims.h}\nFondo: ${foundProduct.dims.d}\nPeso: ${foundProduct.peso}.`;
                     } else if (text.includes("info") || text.includes("todo") || text.includes("detalles") || text.includes("masiva")) {
-                        response = `**Resumen de ${foundProduct.name}:**\nSKU: ${foundProduct.sku}\nPrecio: $${Number(foundProduct.price).toLocaleString()} MXN\nTiempo de entrega: ${foundProduct.time}\nLuz: ${foundProduct.specsLight}\nMaterial: ${foundProduct.mat}\nMedidas: ${foundProduct.dims.w} x ${foundProduct.dims.h} x ${foundProduct.dims.d}.`;
+                        response = `**Ficha Técnica Completa de ${foundProduct.name}:**\n\nSKU: ${foundProduct.sku}\nPrecio: $${Number(foundProduct.price).toLocaleString()} MXN\nEntrega: ${foundProduct.time}\nLuz: ${foundProduct.specsLight}\nMaterial: ${foundProduct.mat}\nAcabado: ${foundProduct.fin}\nMedidas: ${foundProduct.dims.w} x ${foundProduct.dims.h} x ${foundProduct.dims.d}.`;
                     } else {
-                        response = `**${foundProduct.name}** es una excelente elección. Su precio es de $${Number(foundProduct.price).toLocaleString()} MXN y la entregamos en ${foundProduct.time}. Pregúntame por sus materiales o medidas completas si lo necesitas.`;
+                        response = `**${foundProduct.name}** es una excelente elección. Su precio es de $${Number(foundProduct.price).toLocaleString()} MXN y la entregamos en ${foundProduct.time}. Pregúntame por sus materiales, acabados o medidas completas si lo necesitas.`;
                     }
                 } else if (text.includes("ubicaci") || text.includes("dónde") || text.includes("donde") || text.includes("direccion") || text.includes("dirección")) {
-                    response = "Nuestro estudio está ubicado en **Guadalajara, Jalisco, México**. Desde aquí diseñamos y enviamos nuestras piezas a todo el país.";
+                    response = "Nuestro estudio está ubicado en **Guadalajara, Jalisco, México**. Desde aquí diseñamos y enviamos nuestras piezas de iluminación a todo el país.";
                 } else if (text.includes("contacto") || text.includes("telefono") || text.includes("teléfono") || text.includes("whatsapp")) {
                     response = "Puedes contactarnos directamente por WhatsApp al **+52 33 3870 3071** o en nuestro Instagram oficial **@damaso_lamparas**.";
-                } else if (text.includes("cotiz") || text.includes("compr")) {
-                    response = "Para cotizar, haz clic en 'Agregar a Cotización' en la ficha de cualquier lámpara. Luego abre el ícono de la bolsa (arriba a la derecha) para generar tu PDF o contactarnos por WhatsApp.";
-                } else if (text.includes("pdf")) {
-                    response = "Abre el ícono de la bolsa (carrito), ingresa tu nombre y haz clic en 'Descargar Cotización (PDF)'. Se generará tu documento al instante.";
+                } else if (text.includes("cotiz") || text.includes("compr") || text.includes("pdf")) {
+                    response = "Para cotizar, simplemente haz clic en 'Agregar a Cotización' en la ficha de cualquier lámpara del catálogo. Luego abre el ícono de la bolsa (arriba a la derecha) para generar tu PDF o contactarnos por WhatsApp directamente.";
                 } else {
-                    response = "¡Hola! Soy el bot inteligente de DAMASO. Conozco todo el catálogo. Dime el nombre de una pieza (ej. Trípode, Candil) y pregúntame por su tiempo de entrega, precio, materiales o información masiva. También respondo sobre nuestra ubicación.";
+                    response = "No detecté a qué pieza te refieres. Dime el nombre de una lámpara (ej. Trípode, Candil, Espejo) y pregúntame por su tiempo de entrega, precio, materiales o ficha técnica completa. También puedo responder sobre nuestra ubicación en Guadalajara.";
                 }
                 
                 chatBox.innerHTML += `
@@ -654,51 +600,119 @@
             }, 600);
         }
 
-        // GENERACIÓN DE PDF SEGURO PARA DESKTOP Y MÓVIL
+        // --- SOLUCIÓN DEFINITIVA DE PDF PARA MÓVIL Y COMPUTADORA (PDF Nativo Real) ---
         function checkoutPDF(event) {
             if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
-            
-            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('es-MX');
-            document.getElementById('pdf-folio').innerText = "COT-" + Math.floor(Math.random() * 9000 + 1000);
-            document.getElementById('pdf-client-name').innerText = document.getElementById('client-name').value || "A quien corresponda";
-            document.getElementById('pdf-client-email').innerText = document.getElementById('client-email').value || "No proporcionado";
-            
-            const tbody = document.getElementById('pdf-items');
-            tbody.innerHTML = '';
-            let total = 0;
-            
-            cart.forEach(item => {
-                const sum = Number(item.price) * item.qty;
-                total += sum;
-                tbody.innerHTML += `
-                    <tr class="border-b border-gray-200 text-sm">
-                        <td class="py-4 text-gray-600 text-xs">${item.sku}</td>
-                        <td class="py-4 font-editorial font-bold">${item.name}</td>
-                        <td class="py-4 text-center">${item.qty}</td>
-                        <td class="py-4 text-right">$${Number(item.price).toLocaleString()}</td>
-                    </tr>
-                `;
-            });
-            document.getElementById('pdf-total').innerText = `$${total.toLocaleString()} MXN`;
 
             const btn = event.currentTarget;
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<svg class="animate-spin mr-2" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
-            
-            const element = document.getElementById('invoice-template');
-            
-            const opt = {
-              margin:       0,
-              filename:     `Cotizacion_Damaso.pdf`,
-              image:        { type: 'jpeg', quality: 1 },
-              // scrollY y scrollX en 0 alinean perfectamente la captura independientemente de si hiciste scroll en la PC
-              html2canvas:  { scale: 2, scrollY: 0, scrollX: 0, windowWidth: 800, width: 800, useCORS: true }, 
-              jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
+            btn.innerHTML = `<svg class="animate-spin mr-2 inline-block" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando PDF...`;
 
-            html2pdf().set(opt).from(element).save().then(() => {
+            // En lugar de tomar "foto" a la web, escribimos un documento PDF nativo. 
+            // Esto anula cualquier problema de resolución de celulares (iPhone) o scroll de computadora.
+            setTimeout(() => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                const clientName = document.getElementById('client-name').value || "A quien corresponda";
+                const clientEmail = document.getElementById('client-email').value || "No proporcionado";
+                const date = new Date().toLocaleDateString('es-MX');
+                const folio = "COT-" + Math.floor(Math.random() * 9000 + 1000);
+
+                // Configuración Cabecera Izquierda
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(28);
+                doc.text("DAMASO", 14, 25);
+                
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(100);
+                doc.text("Alta Iluminación Editorial", 14, 32);
+                doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 14, 37);
+
+                // Configuración Cabecera Derecha
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(16);
+                doc.setTextColor(0);
+                doc.text("COTIZACIÓN", 196, 25, { align: "right" });
+                
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(100);
+                doc.text(`Fecha: ${date}`, 196, 32, { align: "right" });
+                doc.text(`Folio: ${folio}`, 196, 37, { align: "right" });
+
+                // Línea separadora
+                doc.setDrawColor(0);
+                doc.setLineWidth(0.5);
+                doc.line(14, 42, 196, 42);
+
+                // Datos del Cliente
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(10);
+                doc.setTextColor(100);
+                doc.text("DATOS DEL CLIENTE", 14, 52);
+                
+                doc.setFontSize(12);
+                doc.setTextColor(0);
+                doc.text(clientName, 14, 58);
+                
+                doc.setFontSize(10);
+                doc.setTextColor(100);
+                doc.text(clientEmail, 14, 63);
+
+                // Tabla de Productos
+                let total = 0;
+                const tableBody = cart.map(item => {
+                    const sum = Number(item.price) * item.qty;
+                    total += sum;
+                    return [item.sku, item.name, item.qty.toString(), `$${Number(item.price).toLocaleString()}`];
+                });
+
+                doc.autoTable({
+                    startY: 70,
+                    head: [['SKU', 'Modelo / Descripción', 'Cant.', 'Precio Unit.']],
+                    body: tableBody,
+                    theme: 'plain',
+                    headStyles: { fontStyle: 'bold', textColor: [0, 0, 0], borderBottomColor: [0, 0, 0], borderBottomWidth: 0.5 },
+                    bodyStyles: { borderBottomColor: [200, 200, 200], borderBottomWidth: 0.1, textColor: [50, 50, 50] },
+                    columnStyles: {
+                        0: { cellWidth: 35 },
+                        1: { cellWidth: 'auto' },
+                        2: { cellWidth: 20, halign: 'center' },
+                        3: { cellWidth: 35, halign: 'right' }
+                    }
+                });
+
+                // Total Final
+                let finalY = doc.lastAutoTable.finalY + 15;
+                doc.setDrawColor(0);
+                doc.setLineWidth(0.5);
+                doc.line(130, finalY - 5, 196, finalY - 5); 
+                
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(14);
+                doc.setTextColor(0);
+                doc.text("TOTAL", 130, finalY);
+                doc.text(`$${total.toLocaleString()} MXN`, 196, finalY, { align: "right" });
+
+                // Condiciones Comerciales
+                finalY += 25;
+                doc.setFontSize(9);
+                doc.setTextColor(100);
+                doc.text("Condiciones Comerciales:", 14, finalY);
+                doc.setFont("helvetica", "normal");
+                doc.text("- Precios sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.", 14, finalY + 5);
+                doc.text("- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).", 14, finalY + 10);
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(0);
+                doc.text("- No se aceptan anticipos.", 14, finalY + 15);
+
+                // Guardar PDF directo al dispositivo
+                doc.save(`Cotizacion_Damaso_${folio}.pdf`);
+
                 btn.innerHTML = originalText;
-            });
+            }, 300);
         }
 
         function checkoutWhatsApp() {
@@ -730,6 +744,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderCatalog(dbProducts);
             
+            // Cerrar menú 3 lineas si se hace clic fuera
             document.addEventListener('click', function(event) {
                 const menu = document.getElementById('dropdown-menu');
                 const btn = document.querySelector('button[onclick="toggleCategories()"]');
@@ -741,5 +756,6 @@
     </script>
 </body>
 </html>
+
 
 
