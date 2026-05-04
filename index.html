@@ -1,15 +1,18 @@
 
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es" class="scroll-smooth" style="scroll-padding-top: 140px;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DAMASO | Alta Iluminación Editorial</title>
     
-    <!-- Tailwind CSS (El único script externo requerido para diseño) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- HTML2PDF para generar cotizaciones reales -->
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- HTML2PDF para generar cotizaciones -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
@@ -33,33 +36,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* Base sólida y a prueba de errores */
-        html, body { 
-            background-color: #030303; 
-            color: #f2f2f2; 
-            max-width: 100vw; 
-            overflow-x: hidden; 
-            width: 100%; 
-            margin: 0; 
-            padding: 0;
-        }
-
+        /* Base sólida sin desbordamientos */
+        html, body { background-color: #030303; color: #f2f2f2; max-width: 100vw; overflow-x: hidden; width: 100%; position: relative; margin: 0; padding: 0; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #030303; }
         ::-webkit-scrollbar-thumb { background: #333333; border-radius: 10px; }
 
-        /* Efectos visuales de catálogo */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
         .img-catalog { transition: transform 0.8s ease; cursor: pointer; }
         .group:hover .img-catalog { transform: scale(1.05); }
         .modal-overlay { backdrop-filter: blur(10px); }
         
-        /* Oculta plantilla de PDF para no deformar la página */
-        #pdf-render-container { position: absolute; top: 0; left: -9999px; z-index: -9999; opacity: 0; pointer-events: none; width: 800px; }
+        /* SOLUCIÓN DEFINITIVA PDF: Position fixed asegura que se renderice siempre alineado a la pantalla virtual de html2canvas */
+        #pdf-render-container { position: fixed; top: 0; left: -9999px; z-index: -9999; opacity: 0.01; pointer-events: none; width: 800px; background: white; }
 
-        /* Barra de búsqueda limpia */
         input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { display: none; }
+        .img-fallback { background-color: #111; display: flex; align-items: center; justify-content: center; color: #333; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; text-align: center; padding: 20px;}
 
-        /* Animación Marquesina para Clientes */
+        /* Marquesina de Clientes (Loop Infinito) */
         .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; display: flex; background-color: #111; padding: 25px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; }
         .marquee-content { display: flex; animation: marquee 40s linear infinite; }
         .marquee-content:hover { animation-play-state: paused; }
@@ -81,7 +76,6 @@
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             
             <div class="flex items-center space-x-6">
-                <!-- Botón Menú 3 líneas (SVG Inline seguro) -->
                 <button onclick="toggleCategories()" class="text-white hover:text-brand-muted transition-colors p-2 focus:outline-none relative z-50">
                     <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 </button>
@@ -113,11 +107,11 @@
             </div>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
-                <!-- Botón Chatbot (SVG Inline) -->
+                <!-- Botón Chatbot -->
                 <button onclick="toggleChatbot()" class="text-white hover:text-brand-muted transition-colors p-2" aria-label="Asistente Virtual">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>
                 </button>
-                <!-- Botón Carrito (SVG Inline) -->
+                <!-- Botón Carrito -->
                 <button onclick="toggleCart()" class="text-white hover:text-brand-muted transition-colors relative p-2">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                     <span id="cart-count" class="absolute top-0 right-0 bg-white text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0 transition-opacity">0</span>
@@ -134,7 +128,7 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-brand-border transform -translate-x-full transition-transform duration-500 flex flex-col shadow-2xl">
         <div class="p-6 border-b border-brand-border flex justify-between items-center bg-black">
             <div class="flex items-center gap-3">
@@ -150,13 +144,13 @@
         <div class="flex-1 overflow-y-auto p-6 space-y-4 chat-scroll bg-[#0a0a0a]" id="chat-messages">
             <div class="flex flex-col items-start max-w-[85%]">
                 <div class="bg-brand-border text-white text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed">
-                    ¡Hola! Soy el asistente virtual de DAMASO Studio. Estoy aquí para explicarte cómo cotizar y usar el catálogo. ¿En qué te puedo ayudar?
+                    ¡Hola! Soy el asistente virtual de DAMASO Studio. Puedo darte detalles sobre nuestras piezas (materiales, tiempos de entrega, medidas), o información de contacto y ubicación. ¿En qué te ayudo?
                 </div>
             </div>
             <div class="flex flex-wrap gap-2 mt-2" id="chat-suggestions">
-                <button onclick="sendPredefinedMessage('¿Cómo cotizo?')" class="text-[10px] border border-brand-muted text-brand-muted px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-colors">¿Cómo cotizo?</button>
-                <button onclick="sendPredefinedMessage('Generar PDF')" class="text-[10px] border border-brand-muted text-brand-muted px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-colors">Generar PDF</button>
-                <button onclick="sendPredefinedMessage('Tiempos de entrega')" class="text-[10px] border border-brand-muted text-brand-muted px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-colors">Tiempos de entrega</button>
+                <button onclick="sendPredefinedMessage('¿Dónde están ubicados?')" class="text-[10px] border border-brand-muted text-brand-muted px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-colors">Ubicación</button>
+                <button onclick="sendPredefinedMessage('¿Qué materiales tiene la Lámpara Trípode?')" class="text-[10px] border border-brand-muted text-brand-muted px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-colors">Info Trípode</button>
+                <button onclick="sendPredefinedMessage('¿Cómo genero un PDF?')" class="text-[10px] border border-brand-muted text-brand-muted px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-colors">Generar Cotización</button>
             </div>
         </div>
         <div class="p-4 border-t border-brand-border bg-black flex items-center gap-2">
@@ -168,14 +162,11 @@
     </div>
     <div id="chat-overlay" onclick="toggleChatbot()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- Modal de Especificaciones de Pieza -->
+    <!-- Modal de Especificaciones -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/80 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
         <div class="bg-brand-surface border border-brand-border w-full max-w-6xl max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
-            <button onclick="closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
+            <button onclick="closeSpecModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full text-white hover:bg-white hover:text-black transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
             <div class="w-full md:w-1/2 bg-brand-bg relative min-h-[300px] flex items-center justify-center overflow-hidden">
-                <!-- Se inyectará la imagen mediante JS de forma segura -->
                 <div id="modal-img-container" class="absolute inset-0 w-full h-full"></div>
             </div>
             <div class="w-full md:w-1/2 p-8 sm:p-12 text-sm font-light flex flex-col">
@@ -234,7 +225,7 @@
     </div>
     <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- HERO PRINCIPAL (Visible de inmediato) -->
+    <!-- HERO PRINCIPAL VISIBLE -->
     <header class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden bg-black">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2574&auto=format&fit=crop" alt="Damaso Hero" class="w-full h-full object-cover opacity-60 brightness-110">
@@ -342,9 +333,9 @@
         <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
     </a>
 
-    <!-- TEMPLATE PDF (Oculto) -->
-    <div id="pdf-render-container">
-        <div id="invoice-template" class="bg-white text-black p-12 font-sans" style="width: 800px; min-height: 1122px;">
+    <!-- TEMPLATE PDF (Posición Fija y Estable) -->
+    <div id="pdf-render-container" class="bg-white">
+        <div id="invoice-template" class="bg-white text-black p-12 font-sans" style="width: 800px; max-width: 800px; min-height: 1122px; box-sizing: border-box;">
             <div class="flex justify-between items-end border-b-2 border-black pb-8 mb-8">
                 <div>
                     <h1 class="font-editorial text-5xl font-bold uppercase tracking-widest">Damaso</h1>
@@ -392,7 +383,7 @@
 
     <!-- SCRIPT PRINCIPAL DE LA PÁGINA (ESTABLE Y SEGURO) -->
     <script>
-        // Catálogo fijo y robusto
+        // Catálogo fijo y robusto con tus 5 piezas
         const dbProducts = [
             { 
                 id: 1, name: "Lámpara Trípode OAK", category: "pie", price: 7500, img: "tripode.png", 
@@ -440,7 +431,6 @@
                 grid.innerHTML = '<p class="text-brand-muted col-span-full">No se encontraron piezas.</p>'; return;
             }
             products.forEach(p => {
-                // Inyectamos HTML seguro. Si la foto no existe localmente, mostramos un fallback gris en lugar de romper el diseño.
                 grid.innerHTML += `
                     <div class="group">
                         <div class="relative overflow-hidden bg-brand-surface aspect-square border border-brand-border flex items-center justify-center">
@@ -504,18 +494,15 @@
             document.getElementById('modal-luz').innerText = p.specsLight;
             document.getElementById('modal-volt').innerText = p.volt;
             document.getElementById('modal-cable').innerText = p.cable;
-            
             document.getElementById('modal-w').innerText = p.dims.w;
             document.getElementById('modal-h').innerText = p.dims.h;
             document.getElementById('modal-d').innerText = p.dims.d;
             document.getElementById('modal-dia').innerText = p.dims.dia;
-            
             document.getElementById('modal-peso').innerText = p.peso;
             document.getElementById('modal-mat').innerText = p.mat;
             document.getElementById('modal-fin').innerText = p.fin;
             document.getElementById('modal-time').innerText = p.time;
             document.getElementById('modal-cert').innerText = p.cert;
-            
             document.getElementById('modal-price').innerText = "$" + Number(p.price).toLocaleString() + " MXN";
             
             const btn = document.getElementById('modal-add-btn');
@@ -529,6 +516,8 @@
         function closeSpecModal() {
             document.getElementById('spec-modal').classList.add('opacity-0', 'pointer-events-none');
             document.body.style.overflow = 'auto';
+            const container = document.getElementById('modal-img-container');
+            container.innerHTML = '';
         }
 
         function addToCart(id) {
@@ -585,6 +574,7 @@
             document.getElementById('cart-overlay').classList.toggle('pointer-events-none');
         }
 
+        // LÓGICA DE CHATBOT INTELIGENTE
         function toggleChatbot() {
             const drawer = document.getElementById('chatbot-drawer');
             const overlay = document.getElementById('chat-overlay');
@@ -600,35 +590,71 @@
 
         function sendChatMessage() {
             const input = document.getElementById('chat-input');
-            const text = input.value.trim();
+            const rawText = input.value.trim();
+            const text = rawText.toLowerCase();
             if(!text) return;
             
             const chatBox = document.getElementById('chat-messages');
             chatBox.innerHTML += `
                 <div class="flex flex-col items-end w-full mt-4">
-                    <div class="bg-white text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%]">${text}</div>
+                    <div class="bg-white text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%]">${rawText}</div>
                 </div>
             `;
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
+            // Procesamiento de respuesta (Analiza dbProducts dinámicamente)
             setTimeout(() => {
-                let response = "¡Claro! En DAMASO estamos a tus órdenes. Selecciona tus piezas y usa el carrito para cotizar por PDF o WhatsApp directo a nuestro estudio en Guadalajara.";
-                const lowerText = text.toLowerCase();
-                
-                if(lowerText.includes("cotiz")) response = "Para cotizar, simplemente haz clic en 'Agregar a Cotización' en cualquier pieza de nuestro catálogo. Luego, abre el ícono de la bolsa arriba a la derecha para ver tu total y descargar el PDF.";
-                else if(lowerText.includes("pdf")) response = "Una vez que tengas tus piezas en el carrito (ícono de bolsa), ingresa tu nombre y haz clic en 'Descargar Cotización (PDF)'. Se generará un archivo profesional listo para imprimir o enviar.";
-                else if(lowerText.includes("entrega") || lowerText.includes("tiempo")) response = "Nuestros tiempos de entrega varían por pieza (generalmente 4 a 6 semanas). Puedes ver el tiempo exacto haciendo clic en 'Ver Specs' sobre la fotografía de cada lámpara.";
+                let response = "";
+                let foundProduct = null;
+
+                // Búsqueda inteligente en la base de datos
+                for(let p of dbProducts) {
+                    let words = p.name.toLowerCase().split(" ");
+                    // Busca si alguna palabra mayor a 3 letras coincide, o si el SKU coincide
+                    let match = words.some(w => w.length >= 3 && text.includes(w)) || text.includes(p.sku.toLowerCase());
+                    if(match) {
+                        foundProduct = p;
+                        break;
+                    }
+                }
+
+                if (foundProduct) {
+                    if (text.includes("tiempo") || text.includes("entrega") || text.includes("tarda")) {
+                        response = `El tiempo de entrega estimado para **${foundProduct.name}** es de ${foundProduct.time}.`;
+                    } else if (text.includes("precio") || text.includes("costo") || text.includes("cuesta") || text.includes("vale")) {
+                        response = `El precio de lista de **${foundProduct.name}** es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
+                    } else if (text.includes("material") || text.includes("acabado") || text.includes("hech")) {
+                        response = `**${foundProduct.name}** está fabricada con ${foundProduct.mat}. Su acabado final es ${foundProduct.fin}.`;
+                    } else if (text.includes("medida") || text.includes("tamaño") || text.includes("dimension")) {
+                        response = `Las dimensiones de **${foundProduct.name}** son: Ancho ${foundProduct.dims.w}, Alto ${foundProduct.dims.h}, Fondo ${foundProduct.dims.d}. Su peso es de ${foundProduct.peso}.`;
+                    } else if (text.includes("info") || text.includes("todo") || text.includes("detalles") || text.includes("masiva")) {
+                        response = `**Resumen de ${foundProduct.name}:**\nSKU: ${foundProduct.sku}\nPrecio: $${Number(foundProduct.price).toLocaleString()} MXN\nTiempo de entrega: ${foundProduct.time}\nLuz: ${foundProduct.specsLight}\nMaterial: ${foundProduct.mat}\nMedidas: ${foundProduct.dims.w} x ${foundProduct.dims.h} x ${foundProduct.dims.d}.`;
+                    } else {
+                        response = `**${foundProduct.name}** es una excelente elección. Su precio es de $${Number(foundProduct.price).toLocaleString()} MXN y la entregamos en ${foundProduct.time}. Pregúntame por sus materiales o medidas completas si lo necesitas.`;
+                    }
+                } else if (text.includes("ubicaci") || text.includes("dónde") || text.includes("donde") || text.includes("direccion") || text.includes("dirección")) {
+                    response = "Nuestro estudio está ubicado en **Guadalajara, Jalisco, México**. Desde aquí diseñamos y enviamos nuestras piezas a todo el país.";
+                } else if (text.includes("contacto") || text.includes("telefono") || text.includes("teléfono") || text.includes("whatsapp")) {
+                    response = "Puedes contactarnos directamente por WhatsApp al **+52 33 3870 3071** o en nuestro Instagram oficial **@damaso_lamparas**.";
+                } else if (text.includes("cotiz") || text.includes("compr")) {
+                    response = "Para cotizar, haz clic en 'Agregar a Cotización' en la ficha de cualquier lámpara. Luego abre el ícono de la bolsa (arriba a la derecha) para generar tu PDF o contactarnos por WhatsApp.";
+                } else if (text.includes("pdf")) {
+                    response = "Abre el ícono de la bolsa (carrito), ingresa tu nombre y haz clic en 'Descargar Cotización (PDF)'. Se generará tu documento al instante.";
+                } else {
+                    response = "¡Hola! Soy el bot inteligente de DAMASO. Conozco todo el catálogo. Dime el nombre de una pieza (ej. Trípode, Candil) y pregúntame por su tiempo de entrega, precio, materiales o información masiva. También respondo sobre nuestra ubicación.";
+                }
                 
                 chatBox.innerHTML += `
                     <div class="flex flex-col items-start max-w-[85%] mt-4">
-                        <div class="bg-brand-border text-white text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed">${response}</div>
+                        <div class="bg-brand-border text-white text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed whitespace-pre-line">${response}</div>
                     </div>
                 `;
                 chatBox.scrollTop = chatBox.scrollHeight;
-            }, 800);
+            }, 600);
         }
 
+        // GENERACIÓN DE PDF SEGURO PARA DESKTOP Y MÓVIL
         function checkoutPDF(event) {
             if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
             
@@ -655,16 +681,18 @@
             });
             document.getElementById('pdf-total').innerText = `$${total.toLocaleString()} MXN`;
 
-            const element = document.getElementById('invoice-template');
             const btn = event.currentTarget;
             const originalText = btn.innerHTML;
             btn.innerHTML = `<svg class="animate-spin mr-2" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
             
+            const element = document.getElementById('invoice-template');
+            
             const opt = {
               margin:       0,
               filename:     `Cotizacion_Damaso.pdf`,
-              image:        { type: 'jpeg', quality: 0.98 },
-              html2canvas:  { scale: 2, scrollY: 0, windowWidth: 800 }, 
+              image:        { type: 'jpeg', quality: 1 },
+              // scrollY y scrollX en 0 alinean perfectamente la captura independientemente de si hiciste scroll en la PC
+              html2canvas:  { scale: 2, scrollY: 0, scrollX: 0, windowWidth: 800, width: 800, useCORS: true }, 
               jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
@@ -701,22 +729,17 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             renderCatalog(dbProducts);
+            
+            document.addEventListener('click', function(event) {
+                const menu = document.getElementById('dropdown-menu');
+                const btn = document.querySelector('button[onclick="toggleCategories()"]');
+                if (menu && btn && !menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) {
+                    toggleCategories();
+                }
+            });
         });
     </script>
-
-    <!-- FIREBASE PREPARADO PARA EL FUTURO (Desactivado temporalmente) -->
-    <!-- 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-        // Aquí iría tu configuración de Firebase
-        // El código está documentado para que no cause errores en la página actual.
-    </script> 
-    -->
 </body>
 </html>
-
 
 
