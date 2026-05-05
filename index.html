@@ -12,7 +12,7 @@
     <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Generadores de PDF Nativos (Totalmente estables en iPhone y PC) -->
+    <!-- Generador de PDF Nativo (100% estable en Móviles y PC) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
@@ -224,7 +224,7 @@
     </div>
     <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- HERO PRINCIPAL -->
+    <!-- HERO PRINCIPAL VISIBLE -->
     <header class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden bg-black">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2574&auto=format&fit=crop" alt="Damaso Hero" class="w-full h-full object-cover opacity-60 brightness-110">
@@ -252,7 +252,6 @@
                     <p class="text-brand-muted text-sm tracking-widest uppercase" id="catalog-subtitle">Colección 2026</p>
                 </div>
             </div>
-            <!-- Grid de Productos Inyectados por JS -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-24" id="catalog-grid"></div>
         </div>
     </section>
@@ -263,10 +262,8 @@
             <p class="text-[10px] tracking-[0.5em] text-brand-muted uppercase mb-4">Confianza que ilumina</p>
             <h2 class="font-editorial text-4xl text-white">Nuestros Clientes</h2>
         </div>
-        
         <div class="marquee-container">
             <div class="marquee-content">
-                <!-- Se repite dos veces para el loop infinito sin saltos -->
                 <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín</span></div>
                 <div class="client-group"><span class="client-title">RESTAURANTES</span><span class="client-names">Lorenza <span class="dot">•</span> Casa de Leo <span class="dot">•</span> Garra <span class="dot">•</span> Los Arcos <span class="dot">•</span> Cabana <span class="dot">•</span> Madelina <span class="dot">•</span> Tequila Orendain</span></div>
                 <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
@@ -331,9 +328,9 @@
         <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
     </a>
 
-    <!-- SCRIPT PRINCIPAL DE LA PÁGINA (ESTABLE Y SEGURO) -->
+    <!-- SCRIPT PRINCIPAL -->
     <script>
-        // EL CATÁLOGO OFICIAL Y DEFINITIVO
+        // EL CATÁLOGO OFICIAL Y DEFINITIVO (Con el nuevo espejo Antiquité)
         const dbProducts = [
             { 
                 id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", 
@@ -385,54 +382,47 @@
                 peso: "19 kg", volt: "N/A", mat: "Cristal plata de fondo, varilla de acero frontal", fin: "Acero en negro electrostático", time: "4 a 5 semanas", cert: "N/A"
             },
             {
-                id: 8, name: "Espejo Óvalo Lisse", category: "espejos", price: 13500, img: "espejo_6.png",
-                sku: "DM-ESP-011", desc: "Espejo ovalado de diseño escandinavo con marco de encino natural, ideal para aportar calidez a salas y recibidores.",
-                specsLight: "N/A", cable: "N/A",
-                dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" },
-                peso: "14 kg", volt: "N/A", mat: "Cristal plata inastillable, marco en madera de encino", fin: "Madera natural mate", time: "3 a 4 semanas", cert: "N/A"
-            },
-            {
-                id: 9, name: "Espejo Óvalo Contour", category: "espejos", price: 15200, img: "espejo_7.png",
-                sku: "DM-ESP-012", desc: "Elegante espejo ovalado con perfil ultra delgado de latón cobrizado, diseñado para integrarse en espacios contemporáneos.",
-                specsLight: "N/A", cable: "N/A",
-                dims: { w: "70 cm", h: "160 cm", d: "2.5 cm", dia: "N/A" },
-                peso: "18 kg", volt: "N/A", mat: "Cristal plata 6mm, herraje de latón macizo", fin: "Latón cobrizado avejentado", time: "4 semanas", cert: "N/A"
-            },
-            // NUEVAS PIEZAS AGREGADAS AQUÍ
-            {
-                id: 10, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_1.png",
+                id: 8, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_1.png",
                 sku: "DM-ESP-014", desc: "Espejo circular de gran formato con un marco perimetral cóncavo en acabado de latón oscurecido.",
                 specsLight: "N/A", cable: "N/A",
                 dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "130 cm" },
                 peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de placa de acero", fin: "Latón oscurecido y bronce", time: "3 a 4 semanas", cert: "N/A"
             },
             {
-                id: 11, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_2.png",
+                id: 9, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_2.png",
                 sku: "DM-ESP-015", desc: "Espejo monumental cuadrado enmarcado en maderas nobles, ideal para rematar pasillos o salas de estar.",
                 specsLight: "N/A", cable: "N/A",
                 dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" },
                 peso: "24 kg", volt: "N/A", mat: "Cristal plata inastillable, marco de nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A"
             },
             {
-                id: 12, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_3.png",
+                id: 10, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_3.png",
                 sku: "DM-ESP-016", desc: "Espejo circular perfecto con iluminación indirecta de halo perimetral cálido que baña el muro de soporte.",
                 specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a muro (Driver interno)",
                 dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "110 cm" },
                 peso: "19 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable, bastidor interior metálico", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM"
             },
             {
-                id: 13, name: "Espejo Óvalo Halo", category: "espejos", price: 21500, img: "nuevo_espejo_4.png",
+                id: 11, name: "Espejo Óvalo Halo", category: "espejos", price: 21500, img: "nuevo_espejo_4.png",
                 sku: "DM-ESP-017", desc: "Imponente espejo en forma de óvalo asimétrico con marco metálico delgado e iluminación integrada.",
                 specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro",
                 dims: { w: "80 cm", h: "170 cm", d: "5 cm", dia: "N/A" },
                 peso: "22 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje de latón", fin: "Latón avejentado", time: "4 a 5 semanas", cert: "NOM"
             },
             {
-                id: 14, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.png",
+                id: 12, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.png",
                 sku: "DM-PRO-001", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.",
                 specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero",
                 dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" },
                 peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM"
+            },
+            // NUEVO ESPEJO ANTIQUITÉ AGREGADO
+            {
+                id: 13, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_9.png",
+                sku: "DM-ESP-018", desc: "Espejo rectangular de gran formato con marco de latón y cristal envejecido químicamente, aportando un carácter histórico y sofisticado.",
+                specsLight: "N/A", cable: "N/A",
+                dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" },
+                peso: "18 kg", volt: "N/A", mat: "Cristal plata envejecido, marco de latón cepillado", fin: "Latón mate, cristal avejentado", time: "4 a 5 semanas", cert: "N/A"
             }
         ];
 
@@ -601,7 +591,6 @@
             sendChatMessage();
         }
 
-        // CHATBOT AVANZADO Y CALCULADORA MATEMÁTICA
         function sendChatMessage() {
             const input = document.getElementById('chat-input');
             const rawText = input.value.trim();
@@ -621,18 +610,16 @@
                 let response = "";
                 let foundProduct = null;
 
-                // Detector de cálculos matemáticos puros
                 const mathRegex = /^[\d\s\+\-\*\/\(\)\.]+$/;
                 if (mathRegex.test(rawText) && rawText.match(/\d/)) {
                     try {
                         const result = eval(rawText);
-                        response = `El resultado de tu cálculo es: **${result.toLocaleString()}**`;
+                        response = `El resultado exacto de tu cálculo es: **${result.toLocaleString()}**`;
                     } catch(e) {
                         response = "Esa parece una operación matemática, pero le falta algún dato o formato. ¿Podrías escribirla de nuevo?";
                     }
                 } 
                 else {
-                    // Buscar coincidencia en catálogo dinámico
                     for(let p of dbProducts) {
                         let words = p.name.toLowerCase().split(" ");
                         let match = words.some(w => w.length >= 3 && text.includes(w)) || text.includes(p.sku.toLowerCase()) || text.includes(p.category.toLowerCase());
@@ -642,13 +629,12 @@
                         }
                     }
 
-                    // Lógica Condicional
                     if (text.includes("gracias") || text.includes("agradezco") || text.includes("perfecto") || text.includes("excelente")) {
                         response = "¡Con muchísimo gusto! Es un placer servirte y asegurar que tu experiencia en DAMASO sea excelente. ¿Hay algo más en lo que pueda apoyarte hoy?";
                     } else if (text.includes("porfa") || text.includes("por favor") || text.includes("pls")) {
                         response = "¡Claro que sí, con mucho gusto! Dime exactamente en qué te ayudo y lo resolvemos de inmediato.";
                     } else if (text.includes("hola") || text.includes("buenas") || text.includes("buenos días") || text.includes("buenas tardes")) {
-                        response = "¡Hola! Qué gusto saludarte. Soy el asistente inteligente de DAMASO Studio. Pregúntame sobre cualquier pieza de nuestro catálogo, precios, tiempos de entrega, ubicación, o si gustas, haz operaciones matemáticas de cotización aquí mismo.";
+                        response = "¡Hola! Qué gusto saludarte. Soy el asistente inteligente de DAMASO Studio. Pregúntame sobre cualquier lámpara o espejo del catálogo, o si gustas, úsame como calculadora matemática escribiendo las cantidades.";
                     } else if (foundProduct) {
                         if (text.includes("tiempo") || text.includes("entrega") || text.includes("tarda")) {
                             response = `El tiempo de entrega de la pieza **${foundProduct.name}** es de aproximadamente ${foundProduct.time}.`;
@@ -689,128 +675,77 @@
             }, 600);
         }
 
-        // GENERACIÓN DE PDF NATIVO E INFALIBLE (A prueba de PC y iPhones)
+        // GENERACIÓN DE PDF PERFECTA EN PC Y MÓVILES (Con Clonación Estable)
         function checkoutPDF(event) {
             if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
             
+            // Forzamos el reinicio temporal del scroll real antes de capturar para evitar cortes en PC
+            const currentScrollY = window.scrollY;
+            const currentScrollX = window.scrollX;
+            window.scrollTo(0, 0);
+
+            // Poblar Datos
+            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('es-MX');
+            document.getElementById('pdf-folio').innerText = "COT-" + Math.floor(Math.random() * 9000 + 1000);
+            document.getElementById('pdf-client-name').innerText = document.getElementById('client-name').value || "A quien corresponda";
+            document.getElementById('pdf-client-email').innerText = document.getElementById('client-email').value || "No proporcionado";
+            
+            const tbody = document.getElementById('pdf-items');
+            tbody.innerHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const sum = Number(item.price) * item.qty;
+                total += sum;
+                tbody.innerHTML += `
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 12px 0; color: #4b5563; font-size: 11px;">${item.sku}</td>
+                        <td style="padding: 12px 0; font-family: 'Playfair Display', serif; font-weight: bold;">${item.name}</td>
+                        <td style="padding: 12px 0; text-align: center;">${item.qty}</td>
+                        <td style="padding: 12px 0; text-align: right;">$${Number(item.price).toLocaleString()}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('pdf-total').innerText = `$${total.toLocaleString()} MXN`;
+
             const btn = event.currentTarget;
             const originalText = btn.innerHTML;
             btn.innerHTML = `<svg class="animate-spin mr-2 inline-block" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
             
+            // EL SECRETO DEFINITIVO PARA MÓVILES Y COMPUTADORAS:
+            // Clonar el template original e inyectarlo en un contenedor con position absoluta, pero invisible.
+            // Esto garantiza que html2canvas siempre tome las medidas correctas, sin importar la pantalla o el scroll de la PC.
+            const element = document.getElementById('invoice-template');
+            const clone = element.cloneNode(true);
+            
+            const wrapper = document.createElement('div');
+            wrapper.appendChild(clone);
+            wrapper.style.position = 'absolute';
+            wrapper.style.top = '0';
+            wrapper.style.left = '0';
+            wrapper.style.width = '800px';
+            wrapper.style.backgroundColor = 'white';
+            wrapper.style.zIndex = '-9999';
+            document.body.appendChild(wrapper);
+            
+            const opt = {
+              margin:       0.4, 
+              filename:     `Cotizacion_Damaso.pdf`,
+              image:        { type: 'jpeg', quality: 1 },
+              // html2canvas lee el clon que mide 800px, ignorando el ancho de tu celular.
+              html2canvas:  { scale: 2, scrollY: 0, scrollX: 0, windowWidth: 800, width: 800, useCORS: true }, 
+              jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
             setTimeout(() => {
-                try {
-                    // Extraemos jsPDF y lo configuramos estrictamente en Vertical (Portrait), Milímetros y tamaño Carta
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
-
-                    const clientName = document.getElementById('client-name').value || "A quien corresponda";
-                    const clientEmail = document.getElementById('client-email').value || "No proporcionado";
-                    const date = new Date().toLocaleDateString('es-MX');
-                    const folio = "COT-" + Math.floor(Math.random() * 9000 + 1000);
-
-                    // ================= CABECERA =================
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(26);
-                    doc.setTextColor(0, 0, 0); // Negro
-                    doc.text("DAMASO", 15, 25);
-
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100); // Gris
-                    doc.text("Alta Iluminación Editorial", 15, 31);
-                    doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
-
-                    // Titulo Derecho
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(16);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text("COTIZACIÓN", 200, 25, { align: "right" });
-
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text(`Fecha: ${date}`, 200, 31, { align: "right" });
-                    doc.text(`Folio: ${folio}`, 200, 36, { align: "right" });
-
-                    // Línea separadora superior
-                    doc.setDrawColor(0);
-                    doc.setLineWidth(0.5);
-                    doc.line(15, 42, 200, 42);
-
-                    // ================= CLIENTE =================
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(9);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text("DATOS DEL CLIENTE", 15, 52);
-
-                    doc.setFontSize(12);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text(clientName, 15, 58);
-
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text(clientEmail, 15, 63);
-
-                    // ================= TABLA DE PRODUCTOS =================
-                    let total = 0;
-                    const tableBody = cart.map(item => {
-                        const sum = Number(item.price) * item.qty;
-                        total += sum;
-                        return [item.sku, item.name, item.qty.toString(), `$${Number(item.price).toLocaleString()}`];
-                    });
-
-                    // Generamos tabla de manera inteligente y fluida
-                    doc.autoTable({
-                        startY: 72,
-                        head: [['SKU', 'Modelo / Descripción', 'Cant.', 'Precio Unit.']],
-                        body: tableBody,
-                        theme: 'plain',
-                        headStyles: { fontStyle: 'bold', textColor: [0,0,0], borderBottomColor: [0,0,0], borderBottomWidth: 0.5 },
-                        bodyStyles: { textColor: [50,50,50], borderBottomColor: [200,200,200], borderBottomWidth: 0.1 },
-                        columnStyles: {
-                            0: { cellWidth: 35 },
-                            1: { cellWidth: 'auto' },
-                            2: { cellWidth: 20, halign: 'center' },
-                            3: { cellWidth: 35, halign: 'right' }
-                        }
-                    });
-
-                    // ================= TOTAL =================
-                    let finalY = doc.lastAutoTable.finalY + 15;
-                    doc.setDrawColor(0);
-                    doc.setLineWidth(0.5);
-                    doc.line(130, finalY - 5, 200, finalY - 5);
-
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(14);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text("TOTAL", 130, finalY);
-                    doc.text(`$${total.toLocaleString()} MXN`, 200, finalY, { align: "right" });
-
-                    // ================= CONDICIONES =================
-                    finalY += 25;
-                    doc.setFontSize(9);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text("Condiciones Comerciales:", 15, finalY);
-                    
-                    doc.setFont("helvetica", "normal");
-                    doc.text("- Precios sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.", 15, finalY + 6);
-                    doc.text("- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).", 15, finalY + 11);
-                    
-                    doc.setFont("helvetica", "bold");
-                    doc.setTextColor(0, 0, 0);
-                    doc.text("- No se aceptan anticipos.", 15, finalY + 16);
-
-                    // Descargamos el archivo directamente al dispositivo
-                    doc.save(`Cotizacion_Damaso_${folio}.pdf`);
-
-                } catch (e) {
-                    console.error("Error generating PDF:", e);
-                    alert("Hubo un error al generar el PDF. Por favor, intenta de nuevo.");
-                } finally {
-                    // Restauramos el botón
+                html2pdf().set(opt).from(clone).save().then(() => {
+                    document.body.removeChild(wrapper); 
+                    window.scrollTo(currentScrollX, currentScrollY); // Restauramos el scroll a donde estabas
                     btn.innerHTML = originalText;
-                }
+                }).catch(() => {
+                    btn.innerHTML = originalText;
+                    window.scrollTo(currentScrollX, currentScrollY);
+                });
             }, 100);
         }
 
@@ -820,7 +755,7 @@
             const clientName = document.getElementById('client-name').value;
             const clientEmail = document.getElementById('client-email').value;
             
-            let msg = `Hola Equipo DAMASO, me interesa cotizar las siguientes piezas:\n\n`;
+            let msg = `Hola equipo DAMASO, me interesa cotizar las siguientes piezas:\n\n`;
             if (clientName) msg += `*Nombre:* ${clientName}\n`;
             if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
             
