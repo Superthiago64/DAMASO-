@@ -9,6 +9,9 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <!-- HTML2PDF para generar cotizaciones -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -44,13 +47,13 @@
         .group:hover .img-catalog { transform: scale(1.05); }
         .modal-overlay { backdrop-filter: blur(10px); }
         
-        /* Contenedor del PDF (Oculto) */
+        /* Contenedor Oculto para la plantilla PDF Base */
         #pdf-render-container { position: absolute; top: 0; left: -9999px; z-index: -9999; opacity: 0; pointer-events: none; width: 800px; overflow: hidden; }
 
         input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { display: none; }
         .img-fallback { background-color: #111; display: flex; align-items: center; justify-content: center; color: #333; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; text-align: center; padding: 20px;}
 
-        /* Marquesina de Clientes */
+        /* Marquesina de Clientes (Loop Infinito) */
         .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; display: flex; background-color: #111; padding: 25px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; }
         .marquee-content { display: flex; animation: marquee 40s linear infinite; }
         .marquee-content:hover { animation-play-state: paused; }
@@ -78,6 +81,7 @@
                 <a href="#" class="font-editorial text-3xl tracking-[0.25em] text-white uppercase font-bold">Damaso</a>
             </div>
 
+            <!-- Menú Desplegable de Categorías -->
             <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 bg-brand-surface border border-brand-border py-2 shadow-2xl opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-50">
                 <div class="px-6 py-3 text-[9px] text-brand-muted tracking-[0.3em] uppercase border-b border-brand-border mb-2 font-bold">Catálogo</div>
                 <a href="#coleccion" onclick="filterCatalog('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-white/10 uppercase transition-all">Ver Todo</a>
@@ -157,7 +161,7 @@
     <!-- MODAL DE ESPECIFICACIONES CON FLECHA DE REGRESO -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/80 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
         
-        <!-- Botón de Flecha Fijo y muy visible -->
+        <!-- Botón de Flecha Fijo y muy visible fuera del área con scroll -->
         <button onclick="closeSpecModal()" class="fixed top-6 left-6 md:top-8 md:left-8 z-[100] bg-white text-black p-3 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto border border-gray-300">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
@@ -222,7 +226,7 @@
     </div>
     <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- HERO PRINCIPAL -->
+    <!-- HERO PRINCIPAL VISIBLE -->
     <header class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden bg-black">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2574&auto=format&fit=crop" alt="Damaso Hero" class="w-full h-full object-cover opacity-60 brightness-110">
@@ -261,8 +265,10 @@
             <p class="text-[10px] tracking-[0.5em] text-brand-muted uppercase mb-4">Confianza que ilumina</p>
             <h2 class="font-editorial text-4xl text-white">Nuestros Clientes</h2>
         </div>
+        
         <div class="marquee-container">
             <div class="marquee-content">
+                <!-- Se repite dos veces para el loop infinito sin saltos -->
                 <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín</span></div>
                 <div class="client-group"><span class="client-title">RESTAURANTES</span><span class="client-names">Lorenza <span class="dot">•</span> Casa de Leo <span class="dot">•</span> Garra <span class="dot">•</span> Los Arcos <span class="dot">•</span> Cabana <span class="dot">•</span> Madelina <span class="dot">•</span> Tequila Orendain</span></div>
                 <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
@@ -382,7 +388,7 @@
 
     <!-- SCRIPT PRINCIPAL DE LA PÁGINA -->
     <script>
-        // EL CATÁLOGO OFICIAL CON LAS 5 PIEZAS DE ESPEJOS (Eliminadas las antiguas lámparas)
+        // EL CATÁLOGO OFICIAL CON LÁMPARAS Y LOS 6 ESPEJOS NUEVOS
         const dbProducts = [
             { 
                 id: 2, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", 
@@ -446,6 +452,13 @@
                 specsLight: "N/A", cable: "N/A",
                 dims: { w: "70 cm", h: "160 cm", d: "2.5 cm", dia: "N/A" },
                 peso: "18 kg", volt: "N/A", mat: "Cristal plata 6mm, herraje de latón macizo", fin: "Latón cobrizado avejentado", time: "4 semanas", cert: "N/A"
+            },
+            {
+                id: 13, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_8.png",
+                sku: "DM-ESP-013", desc: "Espejo rectangular de gran formato con marco de latón y cristal envejecido químicamente, aportando un carácter histórico y sofisticado.",
+                specsLight: "N/A", cable: "N/A",
+                dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" },
+                peso: "18 kg", volt: "N/A", mat: "Cristal plata envejecido, marco de latón cepillado", fin: "Latón mate, cristal avejentado", time: "4 a 5 semanas", cert: "N/A"
             }
         ];
 
@@ -638,7 +651,6 @@
                 const mathRegex = /^[\d\s\+\-\*\/\(\)\.]+$/;
                 if (mathRegex.test(rawText) && rawText.match(/\d/)) {
                     try {
-                        // Calcula de manera nativa
                         const result = eval(rawText);
                         response = `El resultado exacto de tu cálculo es: **${result.toLocaleString()}**`;
                     } catch(e) {
@@ -658,39 +670,39 @@
 
                     // 2. Lógica Condicional del Bot Educado (Cero nombres)
                     if (text.includes("gracias") || text.includes("agradezco") || text.includes("perfecto") || text.includes("excelente")) {
-                        response = "¡Con muchísimo gusto! Estoy aquí para servirte y hacer que tu experiencia en DAMASO sea excelente. ¿Hay algo más en lo que pueda apoyarte hoy?";
+                        response = "¡Con muchísimo gusto! Es un placer servirte y asegurar que tu experiencia en DAMASO sea excelente. ¿Hay algo más en lo que pueda apoyarte hoy?";
                     } else if (text.includes("porfa") || text.includes("por favor") || text.includes("pls")) {
-                        response = "¡Claro que sí, con mucho gusto! Dime exactamente en qué te ayudo y lo resolvemos.";
+                        response = "¡Claro que sí, con mucho gusto! Dime exactamente en qué te ayudo y lo resolvemos de inmediato.";
                     } else if (text.includes("hola") || text.includes("buenas") || text.includes("buenos días") || text.includes("buenas tardes")) {
-                        response = "¡Hola! Qué gusto saludarte. Soy el asistente inteligente de DAMASO Studio. Pregúntame sobre cualquier lámpara o espejo del catálogo, o si gustas, úsame como calculadora matemática escribiendo las cantidades.";
+                        response = "¡Hola! Qué gusto saludarte. Soy el asistente inteligente de DAMASO. Pregúntame sobre cualquier pieza de nuestro catálogo, precios, tiempos de entrega, ubicación, o si gustas, haz operaciones matemáticas de cotización aquí mismo.";
                     } else if (foundProduct) {
                         if (text.includes("tiempo") || text.includes("entrega") || text.includes("tarda")) {
-                            response = `El tiempo de entrega estimado para la pieza **${foundProduct.name}** es de ${foundProduct.time}.`;
+                            response = `El tiempo de entrega de la pieza **${foundProduct.name}** es de aproximadamente ${foundProduct.time}.`;
                         } else if (text.includes("precio") || text.includes("costo") || text.includes("cuesta") || text.includes("vale")) {
-                            response = `El precio oficial de la pieza **${foundProduct.name}** es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
+                            response = `El precio oficial de **${foundProduct.name}** es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
                         } else if (text.includes("material") || text.includes("acabado") || text.includes("hech")) {
-                            response = `**${foundProduct.name}** está fabricada con: ${foundProduct.mat}. Su acabado final es ${foundProduct.fin}.`;
+                            response = `**${foundProduct.name}** está fabricada con: ${foundProduct.mat}. Su elegante acabado final es ${foundProduct.fin}.`;
                         } else if (text.includes("medida") || text.includes("tamaño") || text.includes("dimension")) {
-                            response = `Las dimensiones precisas de **${foundProduct.name}** son:\nAncho: ${foundProduct.dims.w}\nAlto: ${foundProduct.dims.h}\nFondo: ${foundProduct.dims.d}\nPeso: ${foundProduct.peso}.`;
+                            response = `Las dimensiones de **${foundProduct.name}** son:\nAncho: ${foundProduct.dims.w}\nAlto: ${foundProduct.dims.h}\nFondo: ${foundProduct.dims.d}\nDiámetro: ${foundProduct.dims.dia}\nPeso: ${foundProduct.peso}.`;
                         } else if (text.includes("ilumina") || text.includes("luz") || text.includes("foco") || text.includes("voltaje") || text.includes("cable")) {
                             if(foundProduct.specsLight === "N/A" || !foundProduct.specsLight) {
-                                response = `La pieza **${foundProduct.name}** no cuenta con sistema eléctrico integrado ni luces LED. Es una pieza puramente decorativa y arquitectónica.`;
+                                response = `**${foundProduct.name}** no cuenta con sistema eléctrico integrado ni luces LED. Es una pieza puramente decorativa y arquitectónica.`;
                             } else {
                                 response = `Detalles eléctricos de **${foundProduct.name}**:\nLuminaria: ${foundProduct.specsLight}\nVoltaje: ${foundProduct.volt}\nCableado: ${foundProduct.cable}.`;
                             }
                         } else if (text.includes("info") || text.includes("todo") || text.includes("detalles") || text.includes("masiva")) {
-                            response = `**Ficha Técnica Completa de ${foundProduct.name}:**\n\nSKU: ${foundProduct.sku}\nPrecio: $${Number(foundProduct.price).toLocaleString()} MXN\nEntrega: ${foundProduct.time}\nLuz: ${foundProduct.specsLight}\nMaterial: ${foundProduct.mat}\nAcabado: ${foundProduct.fin}\nMedidas: ${foundProduct.dims.w} x ${foundProduct.dims.h} x ${foundProduct.dims.d}.`;
+                            response = `**Ficha de ${foundProduct.name}:**\nSKU: ${foundProduct.sku}\nPrecio: $${Number(foundProduct.price).toLocaleString()} MXN\nEntrega: ${foundProduct.time}\nLuz: ${foundProduct.specsLight}\nVoltaje: ${foundProduct.volt}\nMaterial: ${foundProduct.mat}\nMedidas: ${foundProduct.dims.w}x${foundProduct.dims.h}x${foundProduct.dims.d}.`;
                         } else {
-                            response = `**${foundProduct.name}** es una excelente elección. Su precio es de $${Number(foundProduct.price).toLocaleString()} MXN y la entregamos en ${foundProduct.time}. Pregúntame por sus materiales, acabados o medidas completas si lo necesitas.`;
+                            response = `**${foundProduct.name}** es una obra excepcional. Cuesta $${Number(foundProduct.price).toLocaleString()} MXN y la entregamos en ${foundProduct.time}. Pregúntame por sus materiales, medidas completas o instalación eléctrica si lo requieres.`;
                         }
                     } else if (text.includes("ubicaci") || text.includes("dónde") || text.includes("donde") || text.includes("direccion") || text.includes("dirección")) {
-                        response = "Nuestro estudio está ubicado en **Guadalajara, Jalisco, México**. Desde aquí diseñamos y enviamos nuestras piezas de iluminación a todo el país.";
+                        response = "El estudio creativo de DAMASO está ubicado en **Guadalajara, Jalisco, México**. Desde aquí forjamos y enviamos nuestras piezas a todo el país.";
                     } else if (text.includes("contacto") || text.includes("telefono") || text.includes("teléfono") || text.includes("whatsapp")) {
-                        response = "Puedes contactarnos directamente por WhatsApp al **+52 33 3870 3071** o en nuestro Instagram oficial **@damaso_lamparas**.";
+                        response = "Es muy fácil contactarnos: escríbenos directamente por WhatsApp al **+52 33 3870 3071** o visítanos en nuestro Instagram oficial **@damaso_lamparas**.";
                     } else if (text.includes("cotiz") || text.includes("compr") || text.includes("pdf")) {
-                        response = "Para cotizar, simplemente haz clic en 'Agregar a Cotización' en la ficha de cualquier lámpara del catálogo. Luego abre el ícono de la bolsa (arriba a la derecha) para generar tu PDF o contactarnos por WhatsApp directamente.";
+                        response = "Hacer una cotización es súper sencillo: entra a 'Ver Specs' en cualquier pieza, da clic en 'Agregar a Cotización' y luego abre el icono de la bolsa de compras arriba a la derecha. Ahí podrás descargar tu PDF al instante.";
                     } else {
-                        response = "Perdona, no detecté a qué pieza te refieres. Dime el nombre de un espejo o lámpara y pregúntame por su tiempo de entrega, precio, materiales o información masiva. También puedo resolver cálculos numéricos.";
+                        response = "Perdona, no reconocí a qué pieza te refieres. Dime el nombre de una lámpara o espejo (ej. Candil Cascada, Espejo Roble) y pregúntame por su precio o medidas. También puedes usarme como calculadora ingresando números.";
                     }
                 }
                 
@@ -703,27 +715,22 @@
             }, 600);
         }
 
-        // GENERACIÓN PDF A PRUEBA DE DISPOSITIVOS Y SCROLL
+        // GENERACIÓN DE PDF PERFECTA EN PC Y MÓVILES (Con Clonación Estable)
         function checkoutPDF(event) {
             if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
             
-            const btn = event.currentTarget;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<svg class="animate-spin mr-2 inline-block" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
+            // Forzamos el reinicio temporal del scroll real antes de capturar para evitar cortes en PC
+            const currentScrollY = window.scrollY;
+            const currentScrollX = window.scrollX;
+            window.scrollTo(0, 0);
+
+            // Poblar Datos
+            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('es-MX');
+            document.getElementById('pdf-folio').innerText = "COT-" + Math.floor(Math.random() * 9000 + 1000);
+            document.getElementById('pdf-client-name').innerText = document.getElementById('client-name').value || "A quien corresponda";
+            document.getElementById('pdf-client-email').innerText = document.getElementById('client-email').value || "No proporcionado";
             
-            // LA CLAVE DEFINITIVA PARA COMPUTADORAS Y TELÉFONOS:
-            // Clonamos el template original y lo inyectamos en un contenedor absoluto fuera de la pantalla.
-            // Esto anula de raíz el problema del scroll que deformaba o movía la captura en PC o Móvil.
-            const element = document.getElementById('invoice-template');
-            const clone = element.cloneNode(true);
-            
-            // Llenar datos en el clon
-            clone.querySelector('#pdf-date').innerText = new Date().toLocaleDateString('es-MX');
-            clone.querySelector('#pdf-folio').innerText = "COT-" + Math.floor(Math.random() * 9000 + 1000);
-            clone.querySelector('#pdf-client-name').innerText = document.getElementById('client-name').value || "A quien corresponda";
-            clone.querySelector('#pdf-client-email').innerText = document.getElementById('client-email').value || "No proporcionado";
-            
-            const tbody = clone.querySelector('#pdf-items');
+            const tbody = document.getElementById('pdf-items');
             tbody.innerHTML = '';
             let total = 0;
             
@@ -739,35 +746,45 @@
                     </tr>
                 `;
             });
-            clone.querySelector('#pdf-total').innerText = `$${total.toLocaleString()} MXN`;
+            document.getElementById('pdf-total').innerText = `$${total.toLocaleString()} MXN`;
+
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<svg class="animate-spin mr-2 inline-block" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
             
-            // Renderizamos el clon invisible con dimensiones súper estrictas
+            // EL SECRETO DEFINITIVO PARA MÓVILES Y COMPUTADORAS:
+            // Clonar el template original e inyectarlo en un contenedor con position absoluta, pero invisible.
+            // Esto garantiza que html2canvas siempre tome las medidas correctas, sin importar la pantalla o el scroll de la PC.
+            const element = document.getElementById('invoice-template');
+            const clone = element.cloneNode(true);
+            
             const wrapper = document.createElement('div');
             wrapper.appendChild(clone);
             wrapper.style.position = 'absolute';
-            wrapper.style.top = '-10000px';
-            wrapper.style.left = '-10000px';
+            wrapper.style.top = '0';
+            wrapper.style.left = '0';
             wrapper.style.width = '800px';
             wrapper.style.backgroundColor = 'white';
+            wrapper.style.zIndex = '-9999';
             document.body.appendChild(wrapper);
             
             const opt = {
               margin:       0.4, 
               filename:     `Cotizacion_Damaso.pdf`,
               image:        { type: 'jpeg', quality: 1 },
-              // Forzamos a html2canvas a usar exactamente 800px de ancho para que coincida con el A4/Carta
-              html2canvas:  { scale: 2, useCORS: true, width: 800, windowWidth: 800 }, 
+              // html2canvas lee el clon que mide 800px, ignorando el ancho de tu celular.
+              html2canvas:  { scale: 2, scrollY: 0, scrollX: 0, windowWidth: 800, width: 800, useCORS: true }, 
               jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
-            // Damos tiempo a que el navegador acomode el clon en memoria y procese el PDF perfecto
             setTimeout(() => {
-                html2pdf().set(opt).from(wrapper).save().then(() => {
+                html2pdf().set(opt).from(clone).save().then(() => {
                     document.body.removeChild(wrapper); 
+                    window.scrollTo(currentScrollX, currentScrollY); // Restauramos el scroll a donde estabas
                     btn.innerHTML = originalText;
                 }).catch(() => {
-                    document.body.removeChild(wrapper); 
                     btn.innerHTML = originalText;
+                    window.scrollTo(currentScrollX, currentScrollY);
                 });
             }, 100);
         }
@@ -778,7 +795,7 @@
             const clientName = document.getElementById('client-name').value;
             const clientEmail = document.getElementById('client-email').value;
             
-            let msg = `Hola Equipo DAMASO, me interesa cotizar las siguientes piezas:\n\n`;
+            let msg = `Hola equipo DAMASO, me interesa cotizar las siguientes piezas:\n\n`;
             if (clientName) msg += `*Nombre:* ${clientName}\n`;
             if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
             
@@ -801,6 +818,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderCatalog(dbProducts);
             
+            // Cerrar menú 3 lineas si se hace clic fuera
             document.addEventListener('click', function(event) {
                 const menu = document.getElementById('dropdown-menu');
                 const btn = document.querySelector('button[onclick="toggleCategories()"]');
