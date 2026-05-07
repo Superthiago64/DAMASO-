@@ -44,6 +44,9 @@
         .img-catalog { transition: transform 0.8s ease; cursor: pointer; }
         .group:hover .img-catalog { transform: scale(1.05); }
         .modal-overlay { backdrop-filter: blur(10px); }
+        
+        /* Contenedor Oculto para la plantilla PDF Base */
+        #pdf-render-container { position: absolute; top: 0; left: -9999px; z-index: -9999; opacity: 0; pointer-events: none; width: 800px; overflow: hidden; }
 
         input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { display: none; }
         .img-fallback { background-color: #111; display: flex; align-items: center; justify-content: center; color: #333; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; text-align: center; padding: 20px;}
@@ -69,12 +72,12 @@
     <nav class="fixed w-full z-40 bg-brand-bg/95 backdrop-blur-xl border-b border-brand-border transition-all duration-500 flex flex-col" id="navbar">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             
-            <div class="flex items-center space-x-6">
-                <!-- Botón de Menú con área grande y pointer-events-none en el SVG para evitar toques fantasma -->
-                <button id="btn-menu" onclick="toggleCategories(event)" class="text-white hover:text-brand-muted transition-colors w-12 h-12 flex items-center justify-center focus:outline-none relative z-50">
-                    <svg class="pointer-events-none" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <div class="flex items-center space-x-4 sm:space-x-6">
+                <!-- BOTÓN DE MENÚ CORREGIDO: Usando p-3 centra perfectamente el botón con el área táctil en iPhone -->
+                <button id="btn-menu" onclick="toggleCategories(event)" class="relative z-[70] p-3 border border-brand-muted rounded-full text-white hover:bg-white/10 transition-colors focus:outline-none touch-manipulation flex items-center justify-center">
+                    <svg class="pointer-events-none w-6 h-6" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 </button>
-                <a href="#" class="font-editorial text-3xl tracking-[0.25em] text-white uppercase font-bold">Damaso</a>
+                <a href="#" class="font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white uppercase font-bold">Damaso</a>
             </div>
 
             <!-- Menú Desplegable -->
@@ -91,8 +94,8 @@
                 <a href="#coleccion" onclick="filterCatalog('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Espejos</a>
                 
                 <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
-                    <a href="#clientes" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Clientes</a>
-                    <a href="#disenador" onclick="toggleCategories()" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">El Diseñador</a>
+                    <a href="#clientes" onclick="toggleCategories(event)" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Clientes</a>
+                    <a href="#disenador" onclick="toggleCategories(event)" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">El Diseñador</a>
                 </div>
             </div>
 
@@ -157,7 +160,7 @@
     <!-- MODAL DE ESPECIFICACIONES CON FLECHA DE REGRESO -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/80 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
         
-        <!-- Botón de Flecha Fijo -->
+        <!-- Botón de Flecha Fijo y muy visible fuera del área con scroll -->
         <button onclick="closeSpecModal()" class="fixed top-6 left-6 md:top-8 md:left-8 z-[100] bg-white text-black p-3 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto border border-gray-300">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
@@ -250,6 +253,7 @@
                     <p class="text-brand-muted text-sm tracking-widest uppercase" id="catalog-subtitle">Colección 2026</p>
                 </div>
             </div>
+            <!-- Grid de Productos Inyectados por JS -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-24" id="catalog-grid"></div>
         </div>
     </section>
@@ -326,9 +330,61 @@
         <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
     </a>
 
-    <!-- SCRIPT PRINCIPAL DE LA PÁGINA -->
+    <!-- TEMPLATE PDF MAESTRO -->
+    <div id="pdf-render-container">
+        <div id="invoice-template" style="background-color: white; color: black; padding: 40px; font-family: sans-serif; box-sizing: border-box; width: 800px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid black; padding-bottom: 20px; margin-bottom: 20px;">
+                <div>
+                    <h1 style="font-family: 'Playfair Display', serif; font-size: 40px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin: 0;">Damaso</h1>
+                    <p style="font-size: 14px; color: #4b5563; margin: 5px 0 0 0;">Alta Iluminación Editorial</p>
+                    <p style="font-size: 12px; color: #6b7280; margin: 2px 0 0 0;">Guadalajara, Jalisco, México | +52 33 3870 3071</p>
+                </div>
+                <div style="text-align: right;">
+                    <h2 style="font-size: 20px; font-weight: bold; color: #1f2937; text-transform: uppercase; letter-spacing: 2px; margin: 0;">Cotización</h2>
+                    <p style="font-size: 14px; color: #4b5563; margin: 5px 0 0 0;">Fecha: <span id="pdf-date"></span></p>
+                    <p style="font-size: 14px; color: #4b5563; margin: 2px 0 0 0;">Folio: <span id="pdf-folio"></span></p>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: #6b7280; margin-bottom: 8px;">Datos del Cliente</h3>
+                <p style="font-size: 16px; font-weight: 500; border-bottom: 1px solid #d1d5db; padding-bottom: 4px; margin: 0;" id="pdf-client-name">Cliente General</p>
+                <p style="font-size: 12px; color: #374151; margin: 4px 0 0 0;" id="pdf-client-email">correo@ejemplo.com</p>
+            </div>
+            
+            <table style="width: 100%; text-align: left; margin-bottom: 30px; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid black; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;">
+                        <th style="padding: 10px 0; width: 15%;">SKU</th>
+                        <th style="padding: 10px 0; width: 50%;">Modelo / Descripción</th>
+                        <th style="padding: 10px 0; width: 15%; text-align: center;">Cant.</th>
+                        <th style="padding: 10px 0; width: 20%; text-align: right;">Precio Unit.</th>
+                    </tr>
+                </thead>
+                <tbody id="pdf-items"></tbody>
+            </table>
+            
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 40px;">
+                <div style="width: 35%; border-top: 2px solid black; padding-top: 15px;">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 18px;">
+                        <span>TOTAL</span>
+                        <span id="pdf-total">$0.00 MXN</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="font-size: 12px; color: #6b7280; margin-top: 40px; padding-top: 20px; border-top: 1px solid #d1d5db;">
+                <p style="margin: 0 0 8px 0;"><strong style="color: black;">Condiciones Comerciales:</strong></p>
+                <p style="margin: 0 0 4px 0;">- Precios sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.</p>
+                <p style="margin: 0 0 4px 0;">- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).</p>
+                <p style="margin: 0; font-weight: bold; color: black;">- No se aceptan anticipos.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT PRINCIPAL DE LA PÁGINA (ESTABLE Y SEGURO) -->
     <script>
-        // EL CATÁLOGO OFICIAL Y EXACTO DE 13 PIEZAS EN PNG
+        // EL CATÁLOGO OFICIAL Y EXACTO DE 13 PIEZAS (Las lámparas clásicas y los nuevos espejos/proyecto)
         const dbProducts = [
             { 
                 id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", 
@@ -450,7 +506,7 @@
             });
         }
 
-        // LÓGICA DE MENÚ ESTABLE EN IPHONE (Área táctil de 48px y bloqueo de toques fantasma)
+        // LÓGICA DE MENÚ ESTABLE EN IPHONE
         function toggleCategories(e) {
             if(e) {
                 e.preventDefault();
@@ -620,7 +676,7 @@
                         const result = eval(rawText);
                         response = `El resultado de tu cálculo es: **${result.toLocaleString()}**`;
                     } catch(e) {
-                        response = "Esa parece una operación matemática, pero le falta algún dato o formato. ¿Podrías escribirla de nuevo?";
+                        response = "Esa parece una operación matemática, pero le falta algún dato. ¿Podrías escribirla de nuevo?";
                     }
                 } 
                 else {
@@ -679,7 +735,7 @@
             }, 600);
         }
 
-        // GENERACIÓN DE PDF NATIVA Y A PRUEBA DE ERRORES DE SCROLL
+        // GENERACIÓN PDF NATIVA
         function checkoutPDF(event) {
             if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
             
@@ -782,7 +838,7 @@
                     doc.setTextColor(0, 0, 0);
                     doc.text("- No se aceptan anticipos.", 15, finalY + 16);
 
-                    // Documento guardado de manera nativa (sin imágenes de pantalla)
+                    // Descargar sin depender de capturas de pantalla
                     doc.save(`Cotizacion_Damaso_${folio}.pdf`);
 
                 } catch (e) {
