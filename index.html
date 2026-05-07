@@ -44,14 +44,11 @@
         .img-catalog { transition: transform 0.8s ease; cursor: pointer; }
         .group:hover .img-catalog { transform: scale(1.05); }
         .modal-overlay { backdrop-filter: blur(10px); }
-        
-        /* Contenedor Oculto para la plantilla PDF Base */
-        #pdf-render-container { position: absolute; top: 0; left: -9999px; z-index: -9999; opacity: 0; pointer-events: none; width: 800px; overflow: hidden; }
 
         input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { display: none; }
         .img-fallback { background-color: #111; display: flex; align-items: center; justify-content: center; color: #333; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; text-align: center; padding: 20px;}
 
-        /* Marquesina de Clientes (Loop Infinito) */
+        /* Marquesina de Clientes */
         .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; display: flex; background-color: #111; padding: 25px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; }
         .marquee-content { display: flex; animation: marquee 40s linear infinite; }
         .marquee-content:hover { animation-play-state: paused; }
@@ -73,8 +70,8 @@
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- Botón de Menú Estable -->
-                <button id="btn-menu" onclick="toggleCategories(event)" class="relative z-[70] p-3 border border-brand-muted rounded-full text-white hover:bg-white/10 transition-colors focus:outline-none touch-manipulation flex items-center justify-center">
+                <!-- Botón de Menú con Área Táctil Precisa -->
+                <button id="btn-menu" onclick="toggleCategories(event)" class="relative z-[70] w-12 h-12 border border-brand-muted rounded-full text-white hover:bg-white/10 transition-colors focus:outline-none touch-manipulation flex items-center justify-center">
                     <svg class="pointer-events-none w-6 h-6" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 </button>
                 <a href="#" class="font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white uppercase font-bold">Damaso</a>
@@ -217,6 +214,8 @@
                     <svg class="pointer-events-none" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Descargar PDF
                 </button>
                 <button onclick="checkoutWhatsApp()" class="w-full bg-[#25D366] text-black py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-[#20b858] transition-colors flex justify-center items-center gap-2">
+                    <!-- Icono oficial WhatsApp -->
+                    <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                     Enviar por WhatsApp
                 </button>
             </div>
@@ -264,6 +263,7 @@
         </div>
         <div class="marquee-container">
             <div class="marquee-content">
+                <!-- Se repite dos veces para el loop infinito sin saltos -->
                 <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín</span></div>
                 <div class="client-group"><span class="client-title">RESTAURANTES</span><span class="client-names">Lorenza <span class="dot">•</span> Casa de Leo <span class="dot">•</span> Garra <span class="dot">•</span> Los Arcos <span class="dot">•</span> Cabana <span class="dot">•</span> Madelina <span class="dot">•</span> Tequila Orendain</span></div>
                 <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
@@ -323,14 +323,14 @@
         </div>
     </footer>
 
-    <!-- Botón WhatsApp Flotante Oficial (Logotipo) -->
+    <!-- Botón WhatsApp Flotante Oficial (Logotipo Completo) -->
     <a href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 z-50 flex items-center justify-center" aria-label="Contacto WhatsApp">
         <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </a>
 
     <!-- TEMPLATE PDF MAESTRO -->
-    <!-- Contenedor absoluto en 0,0 a prueba de distorsiones de móviles y scroll -->
-    <div id="pdf-render-container">
+    <!-- Contenedor absoluto invisible -->
+    <div id="pdf-render-container" style="display: none;">
         <div id="invoice-template" style="background-color: white; color: black; padding: 40px; font-family: sans-serif; box-sizing: border-box; width: 800px;">
             <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid black; padding-bottom: 20px; margin-bottom: 20px;">
                 <div>
@@ -383,7 +383,7 @@
 
     <!-- SCRIPT PRINCIPAL DE LA PÁGINA -->
     <script>
-        // EL CATÁLOGO OFICIAL Y DEFINITIVO DE 15 PIEZAS (Se restauraron Espejo Lisse y Contour)
+        // EL CATÁLOGO OFICIAL CON LAS PIEZAS REALES DE ILUMINACIÓN Y ESPEJOS (Solo 16 productos exactos con el Espejo Lisse y Contour regresados)
         const dbProducts = [
             { 
                 id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", 
@@ -435,61 +435,67 @@
                 peso: "19 kg", volt: "N/A", mat: "Cristal plata de fondo, varilla de acero frontal", fin: "Acero en negro electrostático", time: "4 a 5 semanas", cert: "N/A"
             },
             {
-                id: 8, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_1.png",
-                sku: "DM-ESP-014", desc: "Espejo circular de gran formato con un marco perimetral cóncavo en acabado de latón oscurecido.",
-                specsLight: "N/A", cable: "N/A",
-                dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "130 cm" },
-                peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de placa de acero", fin: "Latón oscurecido y bronce", time: "3 a 4 semanas", cert: "N/A"
-            },
-            {
-                id: 9, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_2.png",
-                sku: "DM-ESP-015", desc: "Espejo monumental cuadrado enmarcado en maderas nobles, ideal para rematar pasillos o salas de estar.",
-                specsLight: "N/A", cable: "N/A",
-                dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" },
-                peso: "24 kg", volt: "N/A", mat: "Cristal plata inastillable, marco de nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A"
-            },
-            {
-                id: 10, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_3.png",
-                sku: "DM-ESP-016", desc: "Espejo circular perfecto con iluminación indirecta de halo perimetral cálido que baña el muro de soporte.",
-                specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a muro (Driver interno)",
-                dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "110 cm" },
-                peso: "19 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable, bastidor interior metálico", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM"
-            },
-            {
-                id: 11, name: "Espejo Óvalo Halo", category: "espejos", price: 21500, img: "nuevo_espejo_4.png",
-                sku: "DM-ESP-017", desc: "Imponente espejo en forma de óvalo asimétrico con marco metálico delgado e iluminación integrada.",
-                specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro",
-                dims: { w: "80 cm", h: "170 cm", d: "5 cm", dia: "N/A" },
-                peso: "22 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje de latón", fin: "Latón avejentado", time: "4 a 5 semanas", cert: "NOM"
-            },
-            {
-                id: 12, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.png",
-                sku: "DM-PRO-001", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.",
-                specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero",
-                dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" },
-                peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM"
-            },
-            {
-                id: 13, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_9.png",
-                sku: "DM-ESP-018", desc: "Espejo rectangular de gran formato con marco de latón y cristal envejecido químicamente, aportando un carácter histórico y sofisticado.",
-                specsLight: "N/A", cable: "N/A",
-                dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" },
-                peso: "18 kg", volt: "N/A", mat: "Cristal plata envejecido, marco de latón cepillado", fin: "Latón mate, cristal avejentado", time: "4 a 5 semanas", cert: "N/A"
-            },
-            // LOS DOS ESPEJOS RESTAURADOS 
-            {
-                id: 14, name: "Espejo Óvalo Lisse", category: "espejos", price: 13500, img: "espejo_6.png",
+                id: 8, name: "Espejo Óvalo Lisse", category: "espejos", price: 13500, img: "espejo_6.png",
                 sku: "DM-ESP-011", desc: "Espejo ovalado de diseño escandinavo con marco de encino natural, ideal para aportar calidez a salas y recibidores.",
                 specsLight: "N/A", cable: "N/A",
                 dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" },
                 peso: "14 kg", volt: "N/A", mat: "Cristal plata inastillable, marco en madera de encino", fin: "Madera natural mate", time: "3 a 4 semanas", cert: "N/A"
             },
             {
-                id: 15, name: "Espejo Óvalo Contour", category: "espejos", price: 15200, img: "espejo_7.png",
+                id: 9, name: "Espejo Óvalo Contour", category: "espejos", price: 15200, img: "espejo_7.png",
                 sku: "DM-ESP-012", desc: "Elegante espejo ovalado con perfil ultra delgado de latón cobrizado, diseñado para integrarse en espacios contemporáneos.",
                 specsLight: "N/A", cable: "N/A",
                 dims: { w: "70 cm", h: "160 cm", d: "2.5 cm", dia: "N/A" },
                 peso: "18 kg", volt: "N/A", mat: "Cristal plata 6mm, herraje de latón macizo", fin: "Latón cobrizado avejentado", time: "4 semanas", cert: "N/A"
+            },
+            {
+                id: 10, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_1.png",
+                sku: "DM-ESP-014", desc: "Espejo circular de gran formato con un marco perimetral cóncavo en acabado de latón oscurecido.",
+                specsLight: "N/A", cable: "N/A",
+                dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "130 cm" },
+                peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de placa de acero", fin: "Latón oscurecido y bronce", time: "3 a 4 semanas", cert: "N/A"
+            },
+            {
+                id: 11, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_2.png",
+                sku: "DM-ESP-015", desc: "Espejo monumental cuadrado enmarcado en maderas nobles, ideal para rematar pasillos o salas de estar.",
+                specsLight: "N/A", cable: "N/A",
+                dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" },
+                peso: "24 kg", volt: "N/A", mat: "Cristal plata inastillable, marco de nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A"
+            },
+            {
+                id: 12, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_3.png",
+                sku: "DM-ESP-016", desc: "Espejo circular perfecto con iluminación indirecta de halo perimetral cálido que baña el muro de soporte.",
+                specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a muro (Driver interno)",
+                dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "110 cm" },
+                peso: "19 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable, bastidor interior metálico", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM"
+            },
+            {
+                id: 13, name: "Espejo Óvalo Halo", category: "espejos", price: 21500, img: "nuevo_espejo_4.png",
+                sku: "DM-ESP-017", desc: "Imponente espejo en forma de óvalo asimétrico con marco metálico delgado e iluminación integrada.",
+                specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro",
+                dims: { w: "80 cm", h: "170 cm", d: "5 cm", dia: "N/A" },
+                peso: "22 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje de latón", fin: "Latón avejentado", time: "4 a 5 semanas", cert: "NOM"
+            },
+            {
+                id: 14, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.png",
+                sku: "DM-PRO-001", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.",
+                specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero",
+                dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" },
+                peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM"
+            },
+            {
+                id: 15, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_9.png",
+                sku: "DM-ESP-018", desc: "Espejo rectangular de gran formato con marco de latón y cristal envejecido químicamente, aportando un carácter histórico y sofisticado.",
+                specsLight: "N/A", cable: "N/A",
+                dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" },
+                peso: "18 kg", volt: "N/A", mat: "Cristal plata envejecido, marco de latón cepillado", fin: "Latón mate, cristal avejentado", time: "4 a 5 semanas", cert: "N/A"
+            },
+            {
+                id: 16, name: "Suspensión Media Luna Latón", category: "techo", price: 14500, img: "lampara_luna.png",
+                sku: "DM-TEC-008", desc: "Elegante luminaria suspendida en forma de cuarto de luna asimétrico, construida en latón sólido cepillado a mano. Ideal para crear composiciones esculturales sobre comedores.",
+                specsLight: "3x G9 LED 5W, 2700K cálida (Focos incluidos)", cable: "Cable transparente y tensores de acero ajustables (2m)",
+                dims: { w: "85 cm", h: "45 cm", d: "20 cm", dia: "N/A" },
+                peso: "6.5 kg", volt: "110-120V", mat: "Lámina de latón sólido, difusor de cristal opalino", fin: "Latón natural cepillado, interior claro", time: "4 a 5 semanas", cert: "NOM"
             }
         ];
 
@@ -520,7 +526,7 @@
             });
         }
 
-        // LÓGICA DE MENÚ ESTABLE EN IPHONE Y PC
+        // LÓGICA DE MENÚ ESTABLE EN IPHONE
         function toggleCategories(e) {
             if(e) {
                 e.preventDefault();
@@ -559,7 +565,6 @@
             document.getElementById('catalog-subtitle').innerText = `Búsqueda: "${q}"`;
         });
 
-        // MODAL CON IMAGEN COMPLETA
         function openSpecModal(id) {
             const p = dbProducts.find(x => x.id === parseInt(id));
             if(!p) return;
@@ -689,7 +694,7 @@
                 if (mathRegex.test(rawText) && rawText.match(/\d/)) {
                     try {
                         const result = eval(rawText);
-                        response = `El resultado de tu cálculo es: **${result.toLocaleString()}**`;
+                        response = `El resultado exacto de tu cálculo es: **${result.toLocaleString()}**`;
                     } catch(e) {
                         response = "Esa parece una operación matemática, pero le falta algún dato o formato. ¿Podrías escribirla de nuevo?";
                     }
@@ -712,9 +717,9 @@
                         response = "¡Hola! Qué gusto saludarte. Soy el asistente inteligente de DAMASO Studio. Pregúntame sobre cualquier lámpara o espejo del catálogo, o si gustas, úsame como calculadora matemática escribiendo las cantidades.";
                     } else if (foundProduct) {
                         if (text.includes("tiempo") || text.includes("entrega") || text.includes("tarda")) {
-                            response = `El tiempo de entrega de la pieza **${foundProduct.name}** es de aproximadamente ${foundProduct.time}.`;
+                            response = `El tiempo de entrega estimado para la pieza **${foundProduct.name}** es de ${foundProduct.time}.`;
                         } else if (text.includes("precio") || text.includes("costo") || text.includes("cuesta") || text.includes("vale")) {
-                            response = `El precio oficial de **${foundProduct.name}** es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
+                            response = `El precio oficial de la pieza **${foundProduct.name}** es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
                         } else if (text.includes("material") || text.includes("acabado") || text.includes("hech")) {
                             response = `**${foundProduct.name}** está fabricada con: ${foundProduct.mat}. Su elegante acabado final es ${foundProduct.fin}.`;
                         } else if (text.includes("medida") || text.includes("tamaño") || text.includes("dimension")) {
@@ -726,18 +731,18 @@
                                 response = `Detalles eléctricos de **${foundProduct.name}**:\nLuminaria: ${foundProduct.specsLight}\nVoltaje: ${foundProduct.volt}\nCableado: ${foundProduct.cable}.`;
                             }
                         } else if (text.includes("info") || text.includes("todo") || text.includes("detalles") || text.includes("masiva")) {
-                            response = `**Ficha de ${foundProduct.name}:**\nSKU: ${foundProduct.sku}\nPrecio: $${Number(foundProduct.price).toLocaleString()} MXN\nEntrega: ${foundProduct.time}\nLuz: ${foundProduct.specsLight}\nVoltaje: ${foundProduct.volt}\nMaterial: ${foundProduct.mat}\nMedidas: ${foundProduct.dims.w}x${foundProduct.dims.h}x${foundProduct.dims.d}.`;
+                            response = `**Ficha Técnica Completa de ${foundProduct.name}:**\n\nSKU: ${foundProduct.sku}\nPrecio: $${Number(foundProduct.price).toLocaleString()} MXN\nEntrega: ${foundProduct.time}\nLuz: ${foundProduct.specsLight}\nVoltaje: ${foundProduct.volt}\nMaterial: ${foundProduct.mat}\nAcabado: ${foundProduct.fin}\nMedidas: ${foundProduct.dims.w} x ${foundProduct.dims.h} x ${foundProduct.dims.d}.`;
                         } else {
-                            response = `**${foundProduct.name}** es una obra excepcional. Cuesta $${Number(foundProduct.price).toLocaleString()} MXN y la entregamos en ${foundProduct.time}. Pregúntame por sus materiales, acabados o medidas completas si lo necesitas.`;
+                            response = `**${foundProduct.name}** es una excelente elección. Su precio es de $${Number(foundProduct.price).toLocaleString()} MXN y la entregamos en ${foundProduct.time}. Pregúntame por sus materiales, acabados o medidas completas si lo necesitas.`;
                         }
                     } else if (text.includes("ubicaci") || text.includes("dónde") || text.includes("donde") || text.includes("direccion") || text.includes("dirección")) {
-                        response = "El estudio creativo de DAMASO está ubicado en **Guadalajara, Jalisco, México**. Desde aquí forjamos y enviamos nuestras piezas a todo el país.";
+                        response = "El estudio creativo de DAMASO está ubicado en **Guadalajara, Jalisco, México**. Desde aquí diseñamos y enviamos nuestras piezas de iluminación a todo el país.";
                     } else if (text.includes("contacto") || text.includes("telefono") || text.includes("teléfono") || text.includes("whatsapp")) {
-                        response = "Es muy fácil contactarnos: escríbenos directamente por WhatsApp al **+52 33 3870 3071** o visítanos en nuestro Instagram oficial **@damaso_lamparas**.";
+                        response = "Puedes contactarnos directamente por WhatsApp al **+52 33 3870 3071** o en nuestro Instagram oficial **@damaso_lamparas**.";
                     } else if (text.includes("cotiz") || text.includes("compr") || text.includes("pdf")) {
-                        response = "Para cotizar, haz clic en 'Agregar a Cotización' en la ficha de cualquier pieza del catálogo. Luego abre el icono de la bolsa de compras arriba a la derecha para generar tu PDF o contactarnos por WhatsApp directamente.";
+                        response = "Para cotizar, haz clic en 'Agregar a Cotización' en la ficha de cualquier lámpara del catálogo. Luego abre el ícono de la bolsa (arriba a la derecha) para generar tu PDF o contactarnos por WhatsApp directamente.";
                     } else {
-                        response = "Perdona, no reconocí a qué pieza te refieres. Dime el nombre de una lámpara o espejo y pregúntame por su precio o medidas. También puedes usarme como calculadora ingresando números.";
+                        response = "No detecté a qué pieza te refieres. Dime el nombre de una lámpara o espejo (ej. Candil Cascada, Espejo Roble) y pregúntame por su tiempo de entrega, precio, materiales o ficha técnica completa. También puedo responder sobre nuestra ubicación en Guadalajara.";
                     }
                 }
                 
@@ -750,7 +755,7 @@
             }, 600);
         }
 
-        // GENERACIÓN DE PDF NATIVO
+        // GENERACIÓN DE PDF NATIVA Y A PRUEBA DE ERRORES DE SCROLL
         function checkoutPDF(event) {
             if(cart.length === 0) { alert("Agrega piezas para cotizar."); return; }
             
@@ -853,7 +858,7 @@
                     doc.setTextColor(0, 0, 0);
                     doc.text("- No se aceptan anticipos.", 15, finalY + 16);
 
-                    // Descargar sin depender de capturas de pantalla
+                    // Documento guardado de manera nativa (sin imágenes de pantalla)
                     doc.save(`Cotizacion_Damaso_${folio}.pdf`);
 
                 } catch (e) {
