@@ -1,4 +1,4 @@
-    BETA 
+esta pagina esta en face BETA 
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth" style="scroll-padding-top: 140px;">
 <head>
@@ -73,18 +73,15 @@
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- BOTÓN DE MENÚ PERFECTO PARA SAFARI:
-                     1. z-[999] para que nada lo estorbe por encima.
-                     2. touch-action: manipulation anula errores de hitbox.
-                     3. flex-shrink-0 mantiene su forma perfecta siempre. -->
-                <button id="btn-menu" onclick="toggleCategories(event)" class="relative z-[999] w-12 h-12 flex-shrink-0 bg-black border border-brand-muted rounded-full text-white hover:bg-brand-surface transition-colors focus:outline-none cursor-pointer flex items-center justify-center" style="touch-action: manipulation;">
+                <!-- Botón de Menú Estable -->
+                <button id="btn-menu" onclick="toggleCategories(event)" class="relative z-[70] w-12 h-12 border border-brand-muted rounded-full text-white hover:bg-white/10 transition-colors focus:outline-none touch-manipulation flex items-center justify-center">
                     <svg class="pointer-events-none w-6 h-6" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 </button>
                 <a href="#" class="font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white uppercase font-bold">Damaso</a>
             </div>
 
             <!-- Menú Desplegable -->
-            <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 bg-brand-surface border border-brand-border py-2 shadow-2xl opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-[990]">
+            <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 bg-brand-surface border border-brand-border py-2 shadow-2xl opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-50">
                 <div class="px-6 py-3 text-[9px] text-brand-muted tracking-[0.3em] uppercase border-b border-brand-border mb-2 font-bold">Catálogo</div>
                 <a href="#coleccion" onclick="filterCatalog('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-white/10 uppercase transition-all">Ver Todo</a>
                 <a href="#coleccion" onclick="filterCatalog('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de mesa</a>
@@ -220,10 +217,8 @@
                     <svg class="pointer-events-none" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Descargar PDF
                 </button>
                 <button onclick="checkoutWhatsApp()" class="w-full bg-[#25D366] text-black py-4 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-[#20b858] transition-colors flex justify-center items-center gap-2">
-                    <!-- Icono oficial WhatsApp Restaurado -->
-                    <svg class="w-4 h-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="currentColor">
-                        <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 448l84.5-22.1c32.7 18.1 69.6 27.7 107.5 27.7 122.4 0 222-99.6 222-222 0-59.3-23.1-115.1-65.1-157.1zm-157 298.9c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 316.5l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-103.5 84.3-187.8 187.8-187.8 55.3 0 107.3 21.5 146.3 60.6 39.1 39.1 60.6 91.1 60.6 146.4-.1 103.4-84.4 187.7-187.9 187.7zm102.9-140c-5.6-2.8-33.5-16.5-38.7-18.4-5.2-1.9-9-2.8-12.8 2.8-3.8 5.6-14.6 18.4-17.9 22.2-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.9-8.8-45.5-25.2-16.8-12.8-28.1-28.7-31.4-34.3-3.3-5.6-.4-8.7 2.4-11.5 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.8-17.5-42.2-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47.1 0 27.8 20.3 54.7 23.1 58.5 2.8 3.8 39.9 60.1 96.6 84.4 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.5-13.7 38.2-26.9 4.7-13.2 4.7-24.5 3.3-26.9-1.3-2.5-5.1-4-10.8-6.8z"/>
-                    </svg>
+                    <!-- Icono de WhatsApp oficial -->
+                    <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                     Enviar por WhatsApp
                 </button>
             </div>
@@ -330,16 +325,67 @@
         </div>
     </footer>
 
-    <!-- Botón WhatsApp Flotante Oficial (Logotipo Completo y Reparado) -->
+    <!-- Botón WhatsApp Flotante Oficial (Logotipo) -->
     <a href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 z-50 flex items-center justify-center" aria-label="Contacto WhatsApp">
-        <svg class="w-8 h-8 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="currentColor">
-            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 448l84.5-22.1c32.7 18.1 69.6 27.7 107.5 27.7 122.4 0 222-99.6 222-222 0-59.3-23.1-115.1-65.1-157.1zm-157 298.9c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 316.5l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-103.5 84.3-187.8 187.8-187.8 55.3 0 107.3 21.5 146.3 60.6 39.1 39.1 60.6 91.1 60.6 146.4-.1 103.4-84.4 187.7-187.9 187.7zm102.9-140c-5.6-2.8-33.5-16.5-38.7-18.4-5.2-1.9-9-2.8-12.8 2.8-3.8 5.6-14.6 18.4-17.9 22.2-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.9-8.8-45.5-25.2-16.8-12.8-28.1-28.7-31.4-34.3-3.3-5.6-.4-8.7 2.4-11.5 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.8-17.5-42.2-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47.1 0 27.8 20.3 54.7 23.1 58.5 2.8 3.8 39.9 60.1 96.6 84.4 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.5-13.7 38.2-26.9 4.7-13.2 4.7-24.5 3.3-26.9-1.3-2.5-5.1-4-10.8-6.8z"/>
-        </svg>
+        <svg class="w-8 h-8 pointer-events-none" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </a>
+
+    <!-- TEMPLATE PDF MAESTRO -->
+    <!-- Contenedor absoluto en 0,0 a prueba de distorsiones de móviles y scroll -->
+    <div id="pdf-render-container">
+        <div id="invoice-template" style="background-color: white; color: black; padding: 40px; font-family: sans-serif; box-sizing: border-box; width: 800px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid black; padding-bottom: 20px; margin-bottom: 20px;">
+                <div>
+                    <h1 style="font-family: 'Playfair Display', serif; font-size: 40px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin: 0;">Damaso</h1>
+                    <p style="font-size: 14px; color: #4b5563; margin: 5px 0 0 0;">Alta Iluminación Editorial</p>
+                    <p style="font-size: 12px; color: #6b7280; margin: 2px 0 0 0;">Guadalajara, Jalisco, México | +52 33 3870 3071</p>
+                </div>
+                <div style="text-align: right;">
+                    <h2 style="font-size: 20px; font-weight: bold; color: #1f2937; text-transform: uppercase; letter-spacing: 2px; margin: 0;">Cotización</h2>
+                    <p style="font-size: 14px; color: #4b5563; margin: 5px 0 0 0;">Fecha: <span id="pdf-date"></span></p>
+                    <p style="font-size: 14px; color: #4b5563; margin: 2px 0 0 0;">Folio: <span id="pdf-folio"></span></p>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: #6b7280; margin-bottom: 8px;">Datos del Cliente</h3>
+                <p style="font-size: 16px; font-weight: 500; border-bottom: 1px solid #d1d5db; padding-bottom: 4px; margin: 0;" id="pdf-client-name">Cliente General</p>
+                <p style="font-size: 12px; color: #374151; margin: 4px 0 0 0;" id="pdf-client-email">correo@ejemplo.com</p>
+            </div>
+            
+            <table style="width: 100%; text-align: left; margin-bottom: 30px; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid black; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;">
+                        <th style="padding: 10px 0; width: 15%;">SKU</th>
+                        <th style="padding: 10px 0; width: 50%;">Modelo / Descripción</th>
+                        <th style="padding: 10px 0; width: 15%; text-align: center;">Cant.</th>
+                        <th style="padding: 10px 0; width: 20%; text-align: right;">Precio Unit.</th>
+                    </tr>
+                </thead>
+                <tbody id="pdf-items"></tbody>
+            </table>
+            
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 40px;">
+                <div style="width: 35%; border-top: 2px solid black; padding-top: 15px;">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 18px;">
+                        <span>TOTAL</span>
+                        <span id="pdf-total">$0.00 MXN</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="font-size: 12px; color: #6b7280; margin-top: 40px; padding-top: 20px; border-top: 1px solid #d1d5db;">
+                <p style="margin: 0 0 8px 0;"><strong style="color: black;">Condiciones Comerciales:</strong></p>
+                <p style="margin: 0 0 4px 0;">- Precios sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.</p>
+                <p style="margin: 0 0 4px 0;">- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).</p>
+                <p style="margin: 0; font-weight: bold; color: black;">- No se aceptan anticipos.</p>
+            </div>
+        </div>
+    </div>
 
     <!-- SCRIPT PRINCIPAL DE LA PÁGINA -->
     <script>
-        // EL CATÁLOGO OFICIAL CON TUS 21 PIEZAS EXACTAS (Sin Lámpara de Mesa Nogal)
+        // EL CATÁLOGO OFICIAL CON TUS 21 PIEZAS EXACTAS 
         const dbProducts = [
             { 
                 id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", 
@@ -685,9 +731,9 @@
                 if (mathRegex.test(rawText) && rawText.match(/\d/)) {
                     try {
                         const result = eval(rawText);
-                        response = `El resultado exacto de tu cálculo es: **${result.toLocaleString()}**`;
+                        response = `El resultado de tu cálculo es: **${result.toLocaleString()}**`;
                     } catch(e) {
-                        response = "Esa parece una operación matemática, pero le falta algún dato o formato. ¿Podrías escribirla de nuevo?";
+                        response = "Esa parece una operación matemática, pero le falta algún dato. ¿Podrías escribirla de nuevo?";
                     }
                 } 
                 else {
@@ -710,11 +756,11 @@
                         if (text.includes("tiempo") || text.includes("entrega") || text.includes("tarda")) {
                             response = `El tiempo de entrega estimado para la pieza **${foundProduct.name}** es de ${foundProduct.time}.`;
                         } else if (text.includes("precio") || text.includes("costo") || text.includes("cuesta") || text.includes("vale")) {
-                            response = `El precio oficial de la pieza **${foundProduct.name}** es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
+                            response = `El precio oficial de **${foundProduct.name}** es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
                         } else if (text.includes("material") || text.includes("acabado") || text.includes("hech")) {
                             response = `**${foundProduct.name}** está fabricada con: ${foundProduct.mat}. Su elegante acabado final es ${foundProduct.fin}.`;
                         } else if (text.includes("medida") || text.includes("tamaño") || text.includes("dimension")) {
-                            response = `Las dimensiones precisas de **${foundProduct.name}** son:\nAncho: ${foundProduct.dims.w}\nAlto: ${foundProduct.dims.h}\nFondo: ${foundProduct.dims.d}\nDiámetro: ${foundProduct.dims.dia}\nPeso: ${foundProduct.peso}.`;
+                            response = `Las dimensiones de **${foundProduct.name}** son:\nAncho: ${foundProduct.dims.w}\nAlto: ${foundProduct.dims.h}\nFondo: ${foundProduct.dims.d}\nDiámetro: ${foundProduct.dims.dia}\nPeso: ${foundProduct.peso}.`;
                         } else if (text.includes("ilumina") || text.includes("luz") || text.includes("foco") || text.includes("voltaje") || text.includes("cable")) {
                             if(foundProduct.specsLight === "N/A" || !foundProduct.specsLight) {
                                 response = `La pieza **${foundProduct.name}** no cuenta con sistema eléctrico integrado ni luces LED. Es una pieza puramente decorativa y arquitectónica.`;
@@ -733,7 +779,7 @@
                     } else if (text.includes("cotiz") || text.includes("compr") || text.includes("pdf")) {
                         response = "Para cotizar, haz clic en 'Agregar a Cotización' en la ficha de cualquier pieza del catálogo. Luego abre el icono de la bolsa de compras arriba a la derecha para generar tu PDF o contactarnos por WhatsApp directamente.";
                     } else {
-                        response = "Perdona, no reconocí a qué pieza te refieres. Dime el nombre de una lámpara o espejo (ej. Candil Cascada, Espejo Roble) y pregúntame por su precio o medidas. También puedes usarme como calculadora ingresando números.";
+                        response = "Perdona, no reconocí a qué pieza te refieres. Dime el nombre de una lámpara o espejo (ej. Candil Cascada, Espejo Roble, Cava Élite) y pregúntame por su precio o medidas. También puedes usarme como calculadora ingresando números.";
                     }
                 }
                 
@@ -913,4 +959,4 @@
 </body>
 </html>
 
-
+no
