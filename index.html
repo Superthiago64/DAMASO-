@@ -1,4 +1,4 @@
----ESTA PAGINA ESTA EN FASE BETA---
+----ESTA PAGINA ESTA EN FASE BETA----
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth" style="scroll-padding-top: 140px;">
 <head>
@@ -398,7 +398,7 @@
 
     <!-- SCRIPT PRINCIPAL DE LA PÁGINA -->
     <script>
-        // EL CATÁLOGO OFICIAL Y DEFINITIVO (49 PIEZAS EN TOTAL, EXTENSIONES .PNG)
+        // EL CATÁLOGO OFICIAL Y DEFINITIVO (Sin la Suspensión Estriada Drop)
         const dbProducts = [
             { 
                 id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", 
@@ -413,13 +413,6 @@
                 specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro eléctrico en muro", 
                 dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm (esfera)" }, 
                 peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino soplado, pasta de concreto ligero, herraje cromado", fin: "Blanco mate, gris texturizado, acentos cromo", time: "3 a 4 semanas", cert: "NOM, CE" 
-            },
-            { 
-                id: 3, name: "Suspensión Estriada Drop", category: "techo", price: 4800, img: "colgante.png", 
-                sku: "DM-TEC-004", desc: "Lámpara colgante estilo gota con pantalla de cristal moldeado y acanalado.", 
-                specsLight: "1x E26 LED 8W, 2700K (Foco incluido)", cable: "Cable coaxial transparente con alma de acero 1.5m", 
-                dims: { w: "22 cm", h: "40 cm", d: "22 cm", dia: "22 cm" }, 
-                peso: "2.1 kg", volt: "110-240V", mat: "Cristal templado y herraje de aluminio", fin: "Cristal traslúcido estriado, chapetón cromo", time: "2 semanas", cert: "NOM" 
             },
             {
                 id: 4, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png",
@@ -520,28 +513,28 @@
                 peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM"
             },
             {
-                id: 18, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "lampara_de_pie_1.png",
+                id: 18, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "nueva_foto_1.png",
                 sku: "DM-PIE-002", desc: "Lámpara de pie escultural con un mástil compuesto por esferas de madera de nogal torneadas a mano.",
                 specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil negro 2.5m con interruptor de pie",
                 dims: { w: "40 cm", h: "160 cm", d: "40 cm", dia: "40 cm (pantalla)" },
                 peso: "5 kg", volt: "110-120V", mat: "Madera de nogal sólido y pantalla de lino", fin: "Nogal mate, lino natural", time: "3 a 4 semanas", cert: "NOM"
             },
             {
-                id: 19, name: "Lámpara de Mesa Cerámica", category: "mesa", price: 4800, img: "lampara_de_mesa_1.png",
+                id: 19, name: "Lámpara de Mesa Cerámica", category: "mesa", price: 4800, img: "nueva_foto_4.png",
                 sku: "DM-MES-002", desc: "Lámpara de mesa con base de cerámica artesanal en forma de gota texturizada, aportando un aire rústico.",
                 specsLight: "1x E26 LED 8W, 2700K", cable: "Cable transparente 1.8m",
                 dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm (pantalla)" },
                 peso: "3 kg", volt: "110-120V", mat: "Cerámica de alta temperatura y lino", fin: "Cerámica beige crudo", time: "3 a 4 semanas", cert: "NOM"
             },
             {
-                id: 20, name: "Colgante Plisado Blanco", category: "techo", price: 5400, img: "lampara_de_techo_1.png",
+                id: 20, name: "Colgante Plisado Blanco", category: "techo", price: 5400, img: "nueva_foto_5.png",
                 sku: "DM-TEC-009", desc: "Luminaria suspendida con una pantalla acampanada de cerámica estriada que proyecta luz directa sobre comedores o cocinas.",
                 specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil blanco 1.5m",
                 dims: { w: "45 cm", h: "35 cm", d: "45 cm", dia: "45 cm" },
                 peso: "2.8 kg", volt: "110-240V", mat: "Cerámica moldeada y herraje de latón", fin: "Blanco mate estriado", time: "2 a 3 semanas", cert: "NOM"
             },
             {
-                id: 21, name: "Lámpara de Buró Texturizada", category: "mesa", price: 4200, img: "lampara_de_mesa_2.png",
+                id: 21, name: "Lámpara de Buró Texturizada", category: "mesa", price: 4200, img: "nueva_foto_6.png",
                 sku: "DM-MES-003", desc: "Lámpara compacta de buró con base de forma de gota en acabado estuco texturizado.",
                 specsLight: "1x E26 LED 6W, 2700K", cable: "Cable blanco 1.5m",
                 dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm (pantalla)" },
@@ -599,30 +592,30 @@
                 peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM"
             },
             {
-                id: 29, name: "Espejo Doble Eclipse", category: "espejos", price: 26800, img: "espejo_17.png",
+                id: 29, name: "Espejo Doble Eclipse Trasero", category: "espejos", price: 26800, img: "espejo_17.png",
                 sku: "DM-ESP-029", desc: "Espejo monumental compuesto de dos círculos excéntricos de diferente tamaño, con sutil iluminación en la pieza posterior.",
                 specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro",
                 dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" },
                 peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable, marco de acero pavonado", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM"
             },
 
-            // LAS 20 LÁMPARAS Y CANDILES RESTANTES
+            // LAS LÁMPARAS Y CANDILES RESTANTES (Con los IDs actualizados y sin la "Suspensión Estriada Drop")
             {
-                id: 30, name: "Lámpara de Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_3.png",
+                id: 30, name: "Lámpara de Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png",
                 sku: "DM-MES-004", desc: "Lámpara de mesa minimalista con una base cónica de alabastro natural translúcido.",
                 specsLight: "1x E26 LED 8W, 3000K", cable: "Cable transparente 1.8m",
                 dims: { w: "30 cm", h: "50 cm", d: "30 cm", dia: "30 cm" },
                 peso: "4.5 kg", volt: "110-120V", mat: "Alabastro pulido y lino", fin: "Blanco veteado natural", time: "3 semanas", cert: "NOM"
             },
             {
-                id: 31, name: "Lámpara Mesa Mármol Blanco", category: "mesa", price: 5800, img: "lampara_de_mesa_4.png",
+                id: 31, name: "Lámpara Mesa Mármol Blanco", category: "mesa", price: 5800, img: "lampara_de_mesa_3.png",
                 sku: "DM-MES-005", desc: "Elegante lámpara de mesa con base sólida de mármol blanco de Carrara y detalles en latón.",
                 specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro textil 1.8m",
                 dims: { w: "25 cm", h: "55 cm", d: "25 cm", dia: "25 cm" },
                 peso: "6 kg", volt: "110-120V", mat: "Mármol Carrara y latón", fin: "Blanco pulido, acentos dorados", time: "3 a 4 semanas", cert: "NOM"
             },
             {
-                id: 32, name: "Lámpara de Mesa Varillas", category: "mesa", price: 4700, img: "lampara_de_mesa_5.png",
+                id: 32, name: "Lámpara de Mesa Varillas", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png",
                 sku: "DM-MES-006", desc: "Lámpara arquitectónica compuesta por varillas metálicas esbeltas y una base de madera noble.",
                 specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro con interruptor",
                 dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "30 cm" },
@@ -727,7 +720,7 @@
                 peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM"
             },
             {
-                id: 47, name: "Lámpara de Mesa Cónica", category: "mesa", price: 4200, img: "lampara_de_mesa_6.png",
+                id: 47, name: "Lámpara de Mesa Cónica", category: "mesa", price: 4200, img: "lampara_de_mesa_5.png",
                 sku: "DM-MES-007", desc: "Lámpara de mesa moderna con una base cónica de cerámica texturizada y pantalla oscura.",
                 specsLight: "1x E26 LED 8W, 3000K", cable: "Cable negro 1.5m",
                 dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm" },
@@ -777,7 +770,7 @@
             });
         }
 
-        // LÓGICA DE MENÚ ESTABLE EN IPHONE
+        // LÓGICA DE MENÚ ESTABLE
         function toggleCategories(e) {
             if(e) {
                 e.preventDefault();
