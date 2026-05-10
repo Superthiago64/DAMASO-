@@ -3,6 +3,7 @@
 <html lang="es" class="scroll-smooth" style="scroll-padding-top: 140px;">
 <head>
     <meta charset="UTF-8">
+    <!-- Bloqueo estricto de zoom en la interfaz principal. user-scalable=0 evita el zoom pero permite el scroll en Android -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>DAMASO | Alta Iluminación Editorial</title>
     
@@ -34,6 +35,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
+        /* Estilos base limpios sin bloqueos de touch-action que afecten el scroll en Android */
         html, body { 
             background-color: #030303; color: #f2f2f2; max-width: 100vw; overflow-x: hidden; width: 100%; position: relative; margin: 0; padding: 0; 
         }
@@ -50,6 +52,7 @@
         #pdf-render-container { position: absolute; top: 0; left: -9999px; z-index: -9999; opacity: 0; pointer-events: none; width: 800px; overflow: hidden; }
         input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { display: none; }
 
+        /* Marquesina de Clientes */
         .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; display: flex; background-color: #111; padding: 25px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; }
         .marquee-content { display: flex; animation: marquee 40s linear infinite; }
         .marquee-content:hover { animation-play-state: paused; }
@@ -66,12 +69,12 @@
 </head>
 <body class="font-sans antialiased selection:bg-white selection:text-black">
 
-    <!-- Navegación Superior -->
+    <!-- Navegación Superior Fija -->
     <nav class="fixed w-full z-40 bg-brand-bg/95 backdrop-blur-xl border-b border-brand-border transition-all duration-500 flex flex-col" id="navbar">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- Botón Menú -->
+                <!-- Botón de Menú con área negra clickeable total -->
                 <button id="btn-menu" onclick="toggleCategories(event)" class="relative z-[999] w-12 h-12 flex-shrink-0 bg-black border border-brand-muted rounded-full text-white hover:bg-brand-surface transition-colors focus:outline-none cursor-pointer flex items-center justify-center">
                     <svg class="pointer-events-none w-6 h-6" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 </button>
@@ -90,6 +93,7 @@
                 <a href="#coleccion" onclick="filterCatalog('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Lámparas de exterior</a>
                 <a href="#coleccion" onclick="filterCatalog('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Proyectos especiales</a>
                 <a href="#coleccion" onclick="filterCatalog('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:text-white hover:bg-white/10 uppercase transition-all">Espejos</a>
+                
                 <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
                     <a href="#clientes" onclick="toggleCategories(event)" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">Clientes</a>
                     <a href="#disenador" onclick="toggleCategories(event)" class="block px-6 py-3 text-[10px] tracking-widest text-white uppercase transition-all">El Diseñador</a>
@@ -120,7 +124,7 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-brand-border transform -translate-x-full transition-transform duration-500 flex flex-col shadow-2xl">
         <div class="p-6 border-b border-brand-border flex justify-between items-center bg-black">
             <div class="flex items-center gap-3">
@@ -136,7 +140,7 @@
         <div class="flex-1 overflow-y-auto p-6 space-y-4 chat-scroll bg-[#0a0a0a]" id="chat-messages">
             <div class="flex flex-col items-start max-w-[85%]">
                 <div class="bg-brand-border text-white text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed">
-                    ¡Hola Thiago! Soy el asistente virtual de DAMASO Studio. Conozco a detalle nuestras **49 piezas exclusivas**. Puedo darte detalles sobre el catálogo o ayudarte a hacer cálculos matemáticos. ¿En qué te ayudo?
+                    ¡Hola Thiago! Soy el asistente virtual de DAMASO Studio. Conozco a detalle nuestras **41 piezas exclusivas**. Puedo darte detalles sobre el catálogo o ayudarte a hacer cálculos matemáticos. ¿En qué te ayudo?
                 </div>
             </div>
             <div class="flex flex-wrap gap-2 mt-2" id="chat-suggestions">
@@ -154,7 +158,7 @@
     </div>
     <div id="chat-overlay" onclick="toggleChatbot()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- MODAL DE ESPECIFICACIONES CON ZOOM -->
+    <!-- MODAL DE ESPECIFICACIONES CON ZOOM AL HACER CLIC EN LA FOTO -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-4 sm:p-8">
         
         <button onclick="closeSpecModal()" class="fixed top-6 left-6 md:top-8 md:left-8 z-[100] bg-white text-black p-3 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto border border-gray-300">
@@ -329,7 +333,7 @@
         </div>
     </footer>
 
-    <!-- Botón WhatsApp Flotante Oficial (Logotipo Completo) -->
+    <!-- Botón WhatsApp Flotante Oficial -->
     <a href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 z-[99999] flex items-center justify-center" aria-label="Contacto WhatsApp">
         <svg class="w-8 h-8 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="currentColor">
             <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 448l84.5-22.1c32.7 18.1 69.6 27.7 107.5 27.7 122.4 0 222-99.6 222-222 0-59.3-23.1-115.1-65.1-157.1zm-157 298.9c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 316.5l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-103.5 84.3-187.8 187.8-187.8 55.3 0 107.3 21.5 146.3 60.6 39.1 39.1 60.6 91.1 60.6 146.4-.1 103.4-84.4 187.7-187.9 187.7zm102.9-140c-5.6-2.8-33.5-16.5-38.7-18.4-5.2-1.9-9-2.8-12.8 2.8-3.8 5.6-14.6 18.4-17.9 22.2-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.9-8.8-45.5-25.2-16.8-12.8-28.1-28.7-31.4-34.3-3.3-5.6-.4-8.7 2.4-11.5 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.8-17.5-42.2-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47.1 0 27.8 20.3 54.7 23.1 58.5 2.8 3.8 39.9 60.1 96.6 84.4 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.5-13.7 38.2-26.9 4.7-13.2 4.7-24.5 3.3-26.9-1.3-2.5-5.1-4-10.8-6.8z"/>
@@ -338,7 +342,7 @@
 
     <!-- SCRIPT PRINCIPAL DE LA PÁGINA (ESTABLE Y SEGURO) -->
     <script>
-        // EL CATÁLOGO OFICIAL Y DEFINITIVO DE 49 PIEZAS CON LAS RUTAS EXACTAS DE TUS ARCHIVOS PNG
+        // EL CATÁLOGO OFICIAL Y DEFINITIVO DE 41 PIEZAS EXACTAS CON RUTAS MÁS PRECISAS
         const dbProducts = [
             { 
                 id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", 
@@ -488,196 +492,140 @@
                 peso: "2.2 kg", volt: "110-120V", mat: "Pasta de estuco y pantalla de lino", fin: "Crema texturizado poroso", time: "2 a 3 semanas", cert: "NOM"
             },
             {
-                id: 22, name: "Espejo Medio Óvalo Trasluz", category: "espejos", price: 14200, img: "espejo_10.png",
-                sku: "DM-ESP-020", desc: "Espejo vanguardista con forma de medio óvalo y canto pulido, incorpora luz perimetral para un sutil efecto flotante.",
-                specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a registro",
-                dims: { w: "50 cm", h: "120 cm", d: "4 cm", dia: "N/A" },
-                peso: "12 kg", volt: "110-120V", mat: "Cristal plata inastillable, herraje de aluminio", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM"
-            },
-            {
-                id: 23, name: "Espejo Piso Vintage", category: "espejos", price: 23500, img: "espejo.png",
-                sku: "DM-ESP-021", desc: "Espejo de cuerpo entero extra largo con cristal tratado artesanalmente para un acabado avejentado y un marco negro muy fino.",
-                specsLight: "N/A", cable: "N/A",
-                dims: { w: "80 cm", h: "210 cm", d: "3 cm", dia: "N/A" },
-                peso: "38 kg", volt: "N/A", mat: "Cristal envejecido, acero al carbón", fin: "Negro mate", time: "4 a 5 semanas", cert: "N/A"
-            },
-            {
-                id: 24, name: "Espejo Rectangular Roble", category: "espejos", price: 15400, img: "IMG_2005.png",
-                sku: "DM-ESP-022", desc: "Espejo rectangular clásico con un marco prominente de madera maciza de roble y cristal interior biselado.",
-                specsLight: "N/A", cable: "N/A",
-                dims: { w: "90 cm", h: "130 cm", d: "5 cm", dia: "N/A" },
-                peso: "16 kg", volt: "N/A", mat: "Madera de roble, cristal plata", fin: "Roble natural mate", time: "3 a 4 semanas", cert: "N/A"
-            },
-            {
-                id: 25, name: "Espejo Piso Orgánico", category: "espejos", price: 17800, img: "IMG_2006.png",
+                id: 22, name: "Espejo Piso Orgánico", category: "espejos", price: 17800, img: "IMG_2006.png",
                 sku: "DM-ESP-023", desc: "Imponente espejo de piso en forma de gota alargada, enmarcado en madera noble que aporta calidez a cualquier rincón.",
                 specsLight: "N/A", cable: "N/A",
                 dims: { w: "70 cm", h: "190 cm", d: "4 cm", dia: "N/A" },
                 peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A"
             },
             {
-                id: 26, name: "Espejo Redondo Geométrico", category: "espejos", price: 18500, img: "IMG_2007.png",
+                id: 23, name: "Espejo Redondo Geométrico", category: "espejos", price: 18500, img: "IMG_2007.png",
                 sku: "DM-ESP-024", desc: "Espejo decorativo circular con un intrincado patrón de varillas de acero formando rombos sobre el cristal.",
                 specsLight: "N/A", cable: "N/A",
                 dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "115 cm" },
                 peso: "18 kg", volt: "N/A", mat: "Acero y cristal plata", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "N/A"
             },
             {
-                id: 27, name: "Espejo Rectangular Oro Viejo", category: "espejos", price: 16800, img: "IMG_2008.png",
+                id: 24, name: "Espejo Rectangular Oro Viejo", category: "espejos", price: 16800, img: "IMG_2008.png",
                 sku: "DM-ESP-025", desc: "Espejo rectangular con cristal oxidado artesanal y un sofisticado marco color oro viejo con ligeros relieves.",
                 specsLight: "N/A", cable: "N/A",
                 dims: { w: "75 cm", h: "135 cm", d: "4 cm", dia: "N/A" },
                 peso: "16 kg", volt: "N/A", mat: "Latón y cristal avejentado", fin: "Oro viejo texturizado", time: "4 semanas", cert: "N/A"
             },
             {
-                id: 28, name: "Espejo Circular Flotante", category: "espejos", price: 18900, img: "IMG_2009.png",
+                id: 25, name: "Espejo Circular Flotante", category: "espejos", price: 18900, img: "IMG_2009.png",
                 sku: "DM-ESP-026", desc: "Espejo redondo minimalista que parece flotar sobre el muro, gracias a un fino aro perimetral y su iluminación trasera oculta.",
                 specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro",
                 dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" },
                 peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM"
             },
             {
-                id: 29, name: "Espejo Doble Eclipse Trasero", category: "espejos", price: 26800, img: "IMG_2010.png",
+                id: 26, name: "Espejo Doble Eclipse Trasero", category: "espejos", price: 26800, img: "IMG_2010.png",
                 sku: "DM-ESP-029", desc: "Espejo monumental compuesto de dos círculos excéntricos de diferente tamaño, con sutil iluminación en la pieza posterior.",
                 specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro",
                 dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" },
                 peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable, marco de acero pavonado", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM"
             },
             {
-                id: 30, name: "Lámpara Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_1.png",
-                sku: "DM-MES-004", desc: "Lámpara de mesa minimalista con una base cónica de alabastro natural translúcido.",
-                specsLight: "1x E26 LED 8W, 3000K", cable: "Cable transparente 1.8m",
-                dims: { w: "30 cm", h: "50 cm", d: "30 cm", dia: "30 cm" },
-                peso: "4.5 kg", volt: "110-120V", mat: "Alabastro pulido y lino", fin: "Blanco veteado natural", time: "3 semanas", cert: "NOM"
-            },
-            {
-                id: 31, name: "Lámpara Mesa Mármol Blanco", category: "mesa", price: 5800, img: "lampara_de_mesa_2.png",
+                id: 27, name: "Lámpara Mesa Mármol Blanco", category: "mesa", price: 5800, img: "lampara_de_mesa_2.png",
                 sku: "DM-MES-005", desc: "Elegante lámpara de mesa con base sólida de mármol blanco de Carrara y detalles en latón.",
                 specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro textil 1.8m",
                 dims: { w: "25 cm", h: "55 cm", d: "25 cm", dia: "25 cm" },
                 peso: "6 kg", volt: "110-120V", mat: "Mármol Carrara y latón", fin: "Blanco pulido, acentos dorados", time: "3 a 4 semanas", cert: "NOM"
             },
             {
-                id: 32, name: "Lámpara de Mesa Varillas", category: "mesa", price: 4700, img: "lampara_de_mesa_3.png",
+                id: 28, name: "Lámpara de Mesa Varillas", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png",
                 sku: "DM-MES-006", desc: "Lámpara arquitectónica compuesta por varillas metálicas esbeltas y una base de madera noble.",
                 specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro con interruptor",
                 dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "30 cm" },
                 peso: "3 kg", volt: "110-120V", mat: "Acero, madera y lino crudo", fin: "Metal plateado y madera natural", time: "3 semanas", cert: "NOM"
             },
             {
-                id: 33, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "candil_1.png",
+                id: 29, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "candil_1.png",
                 sku: "DM-CAN-009", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto moldeadas en latón.",
                 specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero",
                 dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" },
                 peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM"
             },
             {
-                id: 34, name: "Instalación Globos Vidrio", category: "proyectos", price: 85000, img: "candil_2.png",
+                id: 30, name: "Instalación Globos Vidrio", category: "proyectos", price: 85000, img: "candil_2.png",
                 sku: "DM-PRO-003", desc: "Instalación artística de techo compuesta por decenas de esferas de vidrio soplado de colores flotantes.",
                 specsLight: "Módulos LED 3W internos x 15", cable: "Instalación a plafón oculto",
                 dims: { w: "200 cm", h: "100 cm", d: "200 cm", dia: "N/A" },
                 peso: "45 kg", volt: "110-240V", mat: "Vidrio soplado artesanal", fin: "Colores translúcidos variados", time: "8 a 10 semanas", cert: "NOM"
             },
             {
-                id: 35, name: "Candil Tubos Dorados", category: "candiles", price: 34000, img: "candil_3.png",
+                id: 31, name: "Candil Tubos Dorados", category: "candiles", price: 34000, img: "candil_3.png",
                 sku: "DM-CAN-010", desc: "Impresionante candil de techo compuesto por una lluvia de finos cilindros de latón con luz focalizada.",
                 specsLight: "15x GU10 LED 3W cálida", cable: "Cables individuales de suspensión negra",
                 dims: { w: "80 cm", h: "400 cm", d: "80 cm", dia: "N/A" },
                 peso: "22 kg", volt: "110-240V", mat: "Cilindros de latón sólido", fin: "Dorado pulido brillante", time: "6 a 8 semanas", cert: "NOM"
             },
             {
-                id: 36, name: "Candil Rectangular Vidrio", category: "candiles", price: 21000, img: "IMG_2011.png",
+                id: 32, name: "Candil Rectangular Vidrio", category: "candiles", price: 21000, img: "IMG_2011.png",
                 sku: "DM-CAN-011", desc: "Candil alargado ideal para mesas de comedor, con cilindros de vidrio transparente que encierran focos estilo Edison.",
                 specsLight: "8x E12 LED 4W cálida", cable: "Tensores de acero y cable transparente",
                 dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" },
                 peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM"
             },
             {
-                id: 37, name: "Suspensión Rattan Bar", category: "techo", price: 12400, img: "lampara_de_techo_1.png",
-                sku: "DM-TEC-011", desc: "Serie de luminarias colgantes tejidas a mano en rattan natural, ideales para barras de restaurantes o terrazas.",
-                specsLight: "1x E26 LED Edison 6W", cable: "Cable textil negro 2m",
-                dims: { w: "35 cm", h: "45 cm", d: "35 cm", dia: "35 cm" },
-                peso: "1.5 kg", volt: "110-240V", mat: "Rattan natural y herraje de acero", fin: "Fibra natural mate", time: "4 semanas", cert: "NOM"
-            },
-            {
-                id: 38, name: "Colgante Nido Mimbre", category: "techo", price: 4200, img: "lampara_de_techo_2.png",
+                id: 33, name: "Colgante Nido Mimbre", category: "techo", price: 4200, img: "lampara_de_techo_2.png",
                 sku: "DM-TEC-012", desc: "Luminaria de techo tejida en mimbre natural formando una estructura semiabierta que tamiza la luz.",
                 specsLight: "1x E26 LED Edison 8W", cable: "Cable textil café 1.5m",
                 dims: { w: "50 cm", h: "40 cm", d: "50 cm", dia: "50 cm" },
                 peso: "1.8 kg", volt: "110-120V", mat: "Mimbre y herraje de acero", fin: "Mimbre natural tostado", time: "3 semanas", cert: "NOM"
             },
             {
-                id: 39, name: "Lámpara de Techo Ondulada", category: "techo", price: 5600, img: "colgante.png",
-                sku: "DM-TEC-013", desc: "Luminaria colgante de lona rígida con bordes ondulados, aportando un dinamismo arquitectónico.",
-                specsLight: "1x E26 LED 10W", cable: "Cable transparente con alma de acero",
-                dims: { w: "60 cm", h: "40 cm", d: "60 cm", dia: "60 cm" },
-                peso: "3 kg", volt: "110-240V", mat: "Tela tratada rígida y aluminio", fin: "Beige crudo", time: "3 a 4 semanas", cert: "NOM"
-            },
-            {
-                id: 40, name: "Lámpara Colgante Jaula", category: "techo", price: 4100, img: "IMG_2012.png",
+                id: 34, name: "Lámpara Colgante Jaula", category: "techo", price: 4100, img: "IMG_2012.png",
                 sku: "DM-TEC-014", desc: "Lámpara estilo jaula abierta en color blanco, perfecta para iluminar barras o islas de cocina.",
                 specsLight: "1x E26 LED 8W cálida", cable: "Cable textil blanco 1.5m",
                 dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm" },
                 peso: "1.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM"
             },
             {
-                id: 41, name: "Lámpara Colgante Cuerda", category: "techo", price: 3800, img: "IMG_2013.png",
+                id: 35, name: "Lámpara Colgante Cuerda", category: "techo", price: 3800, img: "IMG_2013.png",
                 sku: "DM-TEC-015", desc: "Luminaria colgante con foco vintage Edison envuelto en una cuerda naval rústica.",
                 specsLight: "1x E26 LED Edison 6W", cable: "Cuerda de henequén natural 2m",
                 dims: { w: "15 cm", h: "15 cm", d: "15 cm", dia: "15 cm" },
                 peso: "1.2 kg", volt: "110-120V", mat: "Cuerda naval y herraje metálico", fin: "Cuerda natural", time: "2 semanas", cert: "NOM"
             },
             {
-                id: 42, name: "Arbotante Globo Ámbar", category: "arbotantes", price: 5800, img: "IMG_2014.png",
-                sku: "DM-ARB-006", desc: "Luminaria de pared con pantalla esférica de cristal color ámbar y elegante soporte de latón.",
-                specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro",
-                dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" },
-                peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM"
-            },
-            {
-                id: 43, name: "Arbotante Esferas Cruz", category: "arbotantes", price: 7400, img: "IMG_2015.png",
-                sku: "DM-ARB-007", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.",
-                specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico",
-                dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" },
-                peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM"
-            },
-            {
-                id: 44, name: "Poste Exterior Botánico", category: "exterior", price: 18500, img: "lampara_de_exterior_1.png",
-                sku: "DM-EXT-001", desc: "Poste de luz para exteriores con diseño inspirado en la botánica, estructura metálica en forma de tallo y hojas.",
-                specsLight: "Módulo LED 15W 3000K Exterior", cable: "Conexión subterránea",
-                dims: { w: "80 cm", h: "280 cm", d: "40 cm", dia: "N/A" },
-                peso: "35 kg", volt: "110-240V", mat: "Acero galvanizado", fin: "Verde óxido electrostático", time: "6 semanas", cert: "NOM, IP65"
-            },
-            {
-                id: 45, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2016.png",
+                id: 36, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2016.png",
                 sku: "DM-EXT-002", desc: "Farol de piso o mesa para terrazas exteriores, fabricado en acero con cristales transparentes.",
                 specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m",
                 dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" },
                 peso: "3.5 kg", volt: "110-120V", mat: "Acero tratado y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65"
             },
             {
-                id: 46, name: "Lámpara de Pie Minimalista", category: "pie", price: 8500, img: "lampara_de_piso_1.png",
+                id: 37, name: "Lámpara de Pie Minimalista", category: "pie", price: 8500, img: "lampara_de_piso_1.png",
                 sku: "DM-PIE-003", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.",
                 specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal",
                 dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" },
                 peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM"
             },
             {
-                id: 47, name: "Lámpara de Mesa Cónica", category: "mesa", price: 4200, img: "lampara_de_mesa_4.png",
+                id: 38, name: "Lámpara de Mesa Cónica", category: "mesa", price: 4200, img: "lampara_de_mesa_5.png",
                 sku: "DM-MES-007", desc: "Lámpara de mesa moderna con una base cónica de cerámica texturizada y pantalla oscura.",
                 specsLight: "1x E26 LED 8W, 3000K", cable: "Cable negro 1.5m",
                 dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm" },
                 peso: "2.5 kg", volt: "110-120V", mat: "Cerámica esmaltada y lino", fin: "Negro brillante", time: "2 semanas", cert: "NOM"
             },
             {
-                id: 48, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2017.png",
+                id: 39, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2017.png",
                 sku: "DM-PRO-004", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.",
                 specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta",
                 dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" },
                 peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM"
             },
             {
-                id: 49, name: "Lámpara Nueva Colección", category: "mesa", price: 6500, img: "IMG_2018.png",
+                id: 40, name: "Arbotante Cilíndrico", category: "arbotantes", price: 3600, img: "arbotante_3.png",
+                sku: "DM-ARB-009", desc: "Luminaria de pared cilíndrica y delgada para iluminación rasante en pasillos.",
+                specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro",
+                dims: { w: "8 cm", h: "30 cm", d: "10 cm", dia: "N/A" },
+                peso: "1.2 kg", volt: "110-240V", mat: "Aluminio inyectado", fin: "Negro texturizado", time: "2 semanas", cert: "NOM"
+            },
+            {
+                id: 41, name: "Lámpara Nueva Colección", category: "mesa", price: 6500, img: "IMG_2018.png",
                 sku: "DM-MES-010", desc: "Elegante luminaria de diseño contemporáneo, ideal para acentos decorativos en recámaras o salas de estar.",
                 specsLight: "1x E26 LED 8W cálida", cable: "Cable textil premium 1.8m",
                 dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm" },
@@ -697,7 +645,7 @@
                 grid.innerHTML += `
                     <div class="group">
                         <div class="relative overflow-hidden bg-[#050505] aspect-square border border-brand-border flex items-center justify-center p-2">
-                            <!-- Imágenes se muestran completas sin recortar en la pantalla principal -->
+                            <!-- Imágenes se muestran completas sin recortar -->
                             <img src="${p.img}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'400\\'><rect width=\\'400\\' height=\\'400\\' fill=\\'%23111\\'/><text x=\\'50%\\' y=\\'50%\\' fill=\\'%23555\\' font-family=\\'sans-serif\\' font-size=\\'14\\' text-anchor=\\'middle\\'>FOTO NO ENCONTRADA</text></svg>';" class="img-catalog w-full h-full object-contain" onclick="openSpecModal(${p.id})">
                             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 pointer-events-none">
                                 <button class="bg-transparent border border-white text-white text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-2 hover:bg-white hover:text-black transition-all pointer-events-auto" onclick="openSpecModal(${p.id})">Ver Specs</button>
@@ -713,7 +661,7 @@
             });
         }
 
-        // LÓGICA DE MENÚ ESTABLE EN IPHONE
+        // LÓGICA DE MENÚ ESTABLE
         function toggleCategories(e) {
             if(e) {
                 e.preventDefault();
@@ -907,7 +855,7 @@
                     } else if (text.includes("porfa") || text.includes("por favor") || text.includes("pls")) {
                         response = "¡Claro que sí, con mucho gusto! Dime exactamente en qué te ayudo y lo resolvemos de inmediato.";
                     } else if (text.includes("hola") || text.includes("buenas") || text.includes("buenos días") || text.includes("buenas tardes")) {
-                        response = "¡Hola! Qué gusto saludarte. Soy el asistente inteligente de DAMASO Studio. Conozco a detalle nuestras 49 piezas exclusivas. Pregúntame sobre cualquier lámpara o espejo del catálogo, o si gustas, úsame como calculadora matemática escribiendo las cantidades.";
+                        response = "¡Hola! Qué gusto saludarte. Soy el asistente inteligente de DAMASO Studio. Conozco a detalle nuestras 41 piezas exclusivas. Pregúntame sobre cualquier lámpara o espejo del catálogo, o si gustas, úsame como calculadora matemática escribiendo las cantidades.";
                     } else if (foundProduct) {
                         if (text.includes("tiempo") || text.includes("entrega") || text.includes("tarda")) {
                             response = `El tiempo de entrega estimado para la pieza **${foundProduct.name}** es de ${foundProduct.time}.`;
@@ -956,7 +904,7 @@
             const originalText = btn.innerHTML;
             btn.innerHTML = `<svg class="animate-spin mr-2 inline-block" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
             
-            // Forzar vista a top (0,0) momentáneamente para anular cualquier error en el render del PDF
+            // Forzamos temporalmente a la página a ir a la esquina superior (coordenada 0,0) para anular el error del scroll
             const currentScrollY = window.scrollY;
             const currentScrollX = window.scrollX;
             window.scrollTo(0, 0);
@@ -1056,7 +1004,7 @@
                     doc.setTextColor(0, 0, 0);
                     doc.text("- No se aceptan anticipos.", 15, finalY + 16);
 
-                    // Descargar el archivo nativo
+                    // Descargar el archivo
                     doc.save(`Cotizacion_Damaso_${folio}.pdf`);
 
                 } catch (e) {
