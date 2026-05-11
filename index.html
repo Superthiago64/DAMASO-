@@ -1,4 +1,4 @@
----LA PAGINA ESTA EN CONSTRUCCION POR LO QUE LA INFO PODRIA NO SER CORRECTA---
+---ESTA PAGINA ESTA EN CONSTRUCCION POR LO QUE LA INFO PODRIA NO SER CORRECTA---
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -72,7 +72,7 @@
             white-space: normal;
         }
 
-        /* Permite que el Modal de especificaciones se deslice naturalmente en móviles */
+        /* Modal Layout Mobile Ajustado para no solapar texto */
         .modal-scroll-container {
             max-height: 90vh;
             overflow-y: auto;
@@ -82,7 +82,13 @@
 </head>
 <body class="font-sans antialiased selection:bg-white selection:text-black overflow-hidden" id="main-body">
 
-    <!-- ANIMACIÓN DE ENTRADA (DAMASO GLOW) - Ahora ocurre PRIMERO -->
+    <!-- REPRODUCTOR DE AUDIO INVISIBLE (Loop activado) -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="yellow_umbrellas.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <!-- ANIMACIÓN DE ENTRADA (DAMASO GLOW) -->
     <div id="entry-animation" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-opacity duration-1000 pointer-events-none opacity-100">
         <div id="entry-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
@@ -92,11 +98,10 @@
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">S</span>
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">O</span>
         </div>
-        <!-- Studio ahora es más pequeño que DAMASO -->
         <span id="entry-studio" class="opacity-0 transition-opacity duration-1000 font-editorial italic text-3xl sm:text-4xl md:text-5xl text-brand-muted drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] mt-4">Studio</span>
     </div>
 
-    <!-- MODAL DE COOKIES FLOTANTE - Aparece DESPUÉS de la animación -->
+    <!-- MODAL DE COOKIES FLOTANTE -->
     <div id="cookie-modal" class="fixed inset-0 z-[9999998] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-700 bg-black/40 backdrop-blur-sm hidden">
         <div class="bg-brand-surface border border-brand-border p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl relative rounded-sm">
             <h2 class="font-editorial text-2xl text-white mb-3 uppercase tracking-widest">Aviso de Privacidad</h2>
@@ -208,7 +213,7 @@
         <div class="flex-1 overflow-y-auto p-6 space-y-4 chat-scroll bg-[#0a0a0a]" id="chat-messages">
             <div class="flex flex-col items-start max-w-[85%]">
                 <div class="bg-brand-border text-white text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed">
-                    ¡Hola! Soy DAMASO AI, el asistente inteligente del estudio. Conozco a detalle todas nuestras piezas exclusivas. Puedo darte detalles técnicos, consultar disponibilidad o ayudarte a hacer cálculos matemáticos fluidamente. ¿En qué te puedo asistir hoy?
+                    ¡Hola! Soy DAMASO AI, el asistente inteligente del estudio. Conozco a detalle todas nuestras piezas exclusivas. Puedo darte especificaciones técnicas, consultar disponibilidad o ayudarte a hacer cálculos matemáticos fluidamente. ¿En qué te puedo asistir hoy?
                 </div>
             </div>
             <div class="flex flex-wrap gap-2 mt-2" id="chat-suggestions">
@@ -226,24 +231,22 @@
     </div>
     <div id="chat-overlay" onclick="toggleChatbot()" class="fixed inset-0 z-[55] bg-black/70 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- MODAL DE ESPECIFICACIONES - DISEÑO FLEXIBLE PARA MÓVILES -->
+    <!-- MODAL DE ESPECIFICACIONES - Ajustado para móviles con diseño fluido -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-2 sm:p-8">
         <button onclick="closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[100] bg-white text-black p-3 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto border border-gray-300">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
 
-        <!-- El contenedor ahora permite deslizarse por completo en teléfonos -->
         <div class="bg-brand-surface border border-brand-border w-full max-w-6xl modal-scroll-container flex flex-col md:flex-row relative mt-16 md:mt-0 shadow-2xl rounded-lg bg-[#050505]">
             
-            <!-- CONTENEDOR DE LA IMAGEN: Fluye naturalmente con el tamaño de la foto -->
+            <!-- CONTENEDOR DE LA IMAGEN: Fluye naturalmente con la foto -->
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0">
                 <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in">
-                    <!-- H-auto permite que la imagen defina la altura, el texto empiece después -->
                     <img id="modal-img-element" src="" class="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105" alt="Especificaciones">
                 </a>
             </div>
 
-            <!-- CONTENEDOR DE LA INFORMACIÓN: Aparece justo debajo de la imagen -->
+            <!-- CONTENEDOR DE LA INFORMACIÓN: Aparece justo debajo de la imagen en celular -->
             <div class="w-full md:w-1/2 p-6 sm:p-12 text-sm font-light flex flex-col bg-brand-surface md:overflow-y-auto">
                 <h2 id="modal-title" class="font-editorial text-3xl sm:text-4xl text-white mb-2 uppercase break-words-custom leading-tight"></h2>
                 <p id="modal-desc" class="text-brand-muted mb-8 italic"></p>
@@ -406,47 +409,7 @@
 
     <!-- SCRIPT PRINCIPAL DE LA PÁGINA -->
     <script>
-        // MOTORES DE AUDIO WEB API (Efectos de sonido futuristas)
-        let audioCtx;
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-        }
-
-        function playGlowSound() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 1.5);
-            gain.gain.setValueAtTime(0, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.5);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2.0);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 2.0);
-        }
-
-        function playClickSound() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
-        }
-
-        // LÓGICA DE COOKIES Y ANIMACIÓN DE ENTRADA
+        // LÓGICA DE COOKIES, ANIMACIÓN Y AUDIO
         function toggleCookieDetails() {
             const details = document.getElementById('cookie-details');
             details.classList.toggle('hidden');
@@ -478,19 +441,22 @@
         }
 
         function acceptCookiesAndEnter() {
-            // Inicializar Audio
-            initAudio();
-
             const cookieModal = document.getElementById('cookie-modal');
             cookieModal.classList.add('opacity-0', 'pointer-events-none');
             
-            // Liberamos el scroll
+            // Liberamos el scroll de la página principal
             document.getElementById('main-body').classList.remove('overflow-hidden');
+            
+            // INICIAR LA CANCIÓN AL HACER CLIC
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic) {
+                bgMusic.play().catch(e => console.log("Audio play failed:", e));
+            }
             
             setTimeout(() => { cookieModal.style.display = 'none'; }, 700);
         }
 
-        // MOSTRAR ANIMACIÓN PRIMERO, LUEGO LAS COOKIES
+        // MOSTRAR ANIMACIÓN INICIAL Y LUEGO EL AVISO DE COOKIES
         window.onload = function() {
             const entryOverlay = document.getElementById('entry-animation');
             const letters = document.querySelectorAll('.entry-letter');
@@ -503,7 +469,7 @@
                 entryOverlay.classList.remove('opacity-0');
                 entryOverlay.classList.add('opacity-100');
                 
-                // Las letras se iluminan secuencialmente
+                // Letras se iluminan
                 setTimeout(() => {
                     letters.forEach((letter, index) => {
                         setTimeout(() => {
@@ -512,12 +478,12 @@
                         }, index * 200); 
                     });
 
-                    // La palabra Studio aparece
+                    // Studio aparece (más chico que DAMASO)
                     setTimeout(() => {
                         studio.classList.remove('opacity-0');
                         studio.classList.add('opacity-100');
                         
-                        // Termina la animación principal y muestra el recuadro de cookies
+                        // Todo se desvanece y aparece el modal de cookies (transparente)
                         setTimeout(() => {
                             entryOverlay.classList.remove('opacity-100');
                             entryOverlay.classList.add('opacity-0');
@@ -535,50 +501,50 @@
             }, 100);
         };
 
-        // EL CATÁLOGO OFICIAL Y DEFINITIVO DE 49 PIEZAS, MAPEADO A TUS FOTOS
+        // EL CATÁLOGO OFICIAL Y DEFINITIVO DE 49 PIEZAS
         const dbProducts = [
-            // CANDILES
+            // ----- CANDILES -----
             { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-002", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
             { id: 2, name: "Candil Media Luna Latón", category: "candiles", price: 14500, img: "lampara_luna.png", sku: "DM-CAN-008", desc: "Elegante candil suspendido en forma de cuarto de luna asimétrico, construido en latón sólido cepillado a mano.", specsLight: "3x G9 LED 5W, 2700K cálida (Focos incluidos)", cable: "Cable transparente y tensores de acero ajustables (2m)", dims: { w: "85 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-120V", mat: "Lámina de latón sólido, difusor de cristal opalino", fin: "Latón natural cepillado, interior claro", time: "4 a 5 semanas", cert: "NOM" },
             { id: 3, name: "Candil Tubos Dorados", category: "candiles", price: 34000, img: "candil_3.png", sku: "DM-CAN-010", desc: "Impresionante candil de techo compuesto por una lluvia de finos cilindros de latón con luz focalizada.", specsLight: "15x GU10 LED 3W cálida", cable: "Cables individuales de suspensión negra", dims: { w: "80 cm", h: "400 cm", d: "80 cm", dia: "N/A" }, peso: "22 kg", volt: "110-240V", mat: "Cilindros de latón sólido", fin: "Dorado pulido brillante", time: "6 a 8 semanas", cert: "NOM" },
 
-            // ARBOTANTES
+            // ----- ARBOTANTES -----
             { id: 4, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-005", desc: "Arbotante decorativo que fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro eléctrico en muro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm (esfera)" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino soplado, pasta de concreto ligero, herraje cromado", fin: "Blanco mate, gris texturizado, acentos cromo", time: "3 a 4 semanas", cert: "NOM, CE" },
             { id: 5, name: "Espejo Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ESP-026", desc: "Espejo redondo minimalista que parece flotar sobre el muro, gracias a un fino aro perimetral y su iluminación trasera oculta.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" }, peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
             { id: 6, name: "Instalación Globos Vidrio", category: "arbotantes", price: 85000, img: "candil_2.png", sku: "DM-PRO-003", desc: "Instalación artística de techo compuesta por decenas de esferas de vidrio soplado de colores flotantes.", specsLight: "Módulos LED 3W internos x 15", cable: "Instalación a plafón oculto", dims: { w: "200 cm", h: "100 cm", d: "200 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Vidrio soplado artesanal", fin: "Colores translúcidos variados", time: "8 a 10 semanas", cert: "NOM" },
-            { id: 7, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-015", desc: "Arbotante elegante con cilindros de vidrio transparente que encierran focos estilo Edison.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
 
-            // ESPEJOS
-            { id: 8, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-006", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta para crear un efecto flotante en el muro.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 9, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-007", desc: "Espejo rectangular de piso o muro de gran formato con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 10, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-008", desc: "Espejo rectangular elegante con un grueso marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata, madera de roble estufado", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 11, name: "Espejo Píldora Nogal", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-009", desc: "Espejo de cuerpo entero en forma ovalada alargada, enmarcado en fina madera curva.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "180 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata, marco en chapa de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
-            { id: 12, name: "Espejo Geometría Circular", category: "espejos", price: 19500, img: "espejo_5.png", sku: "DM-ESP-010", desc: "Espejo redondo decorativo atravesado por una red de acero geométrico, evocando un diamante facetado.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "120 cm" }, peso: "19 kg", volt: "N/A", mat: "Cristal plata, varilla de acero frontal", fin: "Acero en negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 13, name: "Espejo Óvalo Lisse", category: "espejos", price: 13500, img: "espejo_6.png", sku: "DM-ESP-011", desc: "Espejo ovalado de diseño escandinavo con marco de encino natural, ideal para aportar calidez.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "14 kg", volt: "N/A", mat: "Cristal plata, madera encino", fin: "Madera mate", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 14, name: "Espejo Óvalo Contour", category: "espejos", price: 15200, img: "espejo_7.png", sku: "DM-ESP-012", desc: "Elegante espejo ovalado con perfil ultra delgado de latón cobrizado.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "160 cm", d: "2.5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata, herraje de latón macizo", fin: "Latón cobrizado avejentado", time: "4 semanas", cert: "N/A" },
-            { id: 15, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_8.png", sku: "DM-ESP-013", desc: "Espejo rectangular de gran formato con marco de latón y cristal envejecido químicamente.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal envejecido, latón", fin: "Latón mate", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 16, name: "Espejo Medio Óvalo Trasluz", category: "espejos", price: 14200, img: "espejo_9.png", sku: "DM-ESP-020", desc: "Espejo vanguardista con forma de medio óvalo y canto pulido, incorpora luz perimetral flotante.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "50 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "12 kg", volt: "110-120V", mat: "Cristal plata inastillable", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 17, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_1.png", sku: "DM-ESP-014", desc: "Espejo circular de gran formato con un marco perimetral cóncavo en acabado de latón oscurecido.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "130 cm" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de placa de acero", fin: "Latón oscurecido y bronce", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 18, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_2.png", sku: "DM-ESP-015", desc: "Espejo monumental cuadrado enmarcado en maderas nobles, ideal para rematar pasillos.", specsLight: "N/A", cable: "N/A", dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "24 kg", volt: "N/A", mat: "Cristal plata inastillable, marco de nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A" },
-            { id: 19, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_3.png", sku: "DM-ESP-016", desc: "Espejo circular perfecto con iluminación indirecta de halo perimetral cálido que baña el muro.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a muro (Driver interno)", dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "110 cm" }, peso: "19 kg", volt: "110-120V", mat: "Cristal plata, bastidor metálico", fin: "Luz cálida", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 20, name: "Espejo Óvalo Halo", category: "espejos", price: 21500, img: "nuevo_espejo_4.png", sku: "DM-ESP-017", desc: "Imponente espejo en forma de óvalo asimétrico con marco metálico delgado e iluminación integrada.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "170 cm", d: "5 cm", dia: "N/A" }, peso: "22 kg", volt: "110-120V", mat: "Cristal plata, herraje de latón", fin: "Latón avejentado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 21, name: "Espejo Redondo Geométrico", category: "espejos", price: 18500, img: "IMG_2007.png", sku: "DM-ESP-024", desc: "Espejo decorativo circular con un intrincado patrón de varillas de acero formando rombos sobre el cristal.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "115 cm" }, peso: "18 kg", volt: "N/A", mat: "Acero y cristal plata", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 22, name: "Espejo Sol Madera", category: "espejos", price: 16500, img: "IMG_2056.png", sku: "DM-ESP-031", desc: "Espejo redondo con marco de madera tallado imitando los rayos del sol.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "100 cm", d: "4 cm", dia: "100 cm" }, peso: "12 kg", volt: "N/A", mat: "Madera tallada y cristal plata", fin: "Madera natural cálida", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 23, name: "Espejo Hexagonal Trasluz", category: "espejos", price: 19500, img: "IMG_2069.png", sku: "DM-ESP-032", desc: "Espejo de baño iluminado por detrás con forma irregular hexagonal, ideal para lavabos modernos.", specsLight: "Tira LED 12V 4000K", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "110 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "110-120V", mat: "Cristal inastillable", fin: "Luz neutra", time: "4 a 5 semanas", cert: "NOM" },
+            // ----- ESPEJOS -----
+            { id: 7, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-006", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta para crear un efecto flotante en el muro.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 8, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-007", desc: "Espejo rectangular de piso o muro de gran formato con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 9, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-008", desc: "Espejo rectangular elegante con un grueso marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata, madera de roble estufado", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 10, name: "Espejo Píldora Nogal", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-009", desc: "Espejo de cuerpo entero en forma ovalada alargada, enmarcado en fina madera curva.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "180 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata, marco en chapa de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
+            { id: 11, name: "Espejo Geometría Circular", category: "espejos", price: 19500, img: "espejo_5.png", sku: "DM-ESP-010", desc: "Espejo redondo decorativo atravesado por una red de acero geométrico, evocando un diamante facetado.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "120 cm" }, peso: "19 kg", volt: "N/A", mat: "Cristal plata, varilla de acero frontal", fin: "Acero en negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 12, name: "Espejo Óvalo Lisse", category: "espejos", price: 13500, img: "espejo_6.png", sku: "DM-ESP-011", desc: "Espejo ovalado de diseño escandinavo con marco de encino natural, ideal para aportar calidez.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "14 kg", volt: "N/A", mat: "Cristal plata, madera encino", fin: "Madera mate", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 13, name: "Espejo Óvalo Contour", category: "espejos", price: 15200, img: "espejo_7.png", sku: "DM-ESP-012", desc: "Elegante espejo ovalado con perfil ultra delgado de latón cobrizado.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "160 cm", d: "2.5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata, herraje de latón macizo", fin: "Latón cobrizado avejentado", time: "4 semanas", cert: "N/A" },
+            { id: 14, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_8.png", sku: "DM-ESP-013", desc: "Espejo rectangular de gran formato con marco de latón y cristal envejecido químicamente.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal envejecido, latón", fin: "Latón mate", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 15, name: "Espejo Medio Óvalo Trasluz", category: "espejos", price: 14200, img: "espejo_9.png", sku: "DM-ESP-020", desc: "Espejo vanguardista con forma de medio óvalo y canto pulido, incorpora luz perimetral flotante.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "50 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "12 kg", volt: "110-120V", mat: "Cristal plata inastillable", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 16, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_1.png", sku: "DM-ESP-014", desc: "Espejo circular de gran formato con un marco perimetral cóncavo en acabado de latón oscurecido.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "130 cm" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de placa de acero", fin: "Latón oscurecido y bronce", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 17, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_2.png", sku: "DM-ESP-015", desc: "Espejo monumental cuadrado enmarcado en maderas nobles, ideal para rematar pasillos.", specsLight: "N/A", cable: "N/A", dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "24 kg", volt: "N/A", mat: "Cristal plata, nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A" },
+            { id: 18, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_3.png", sku: "DM-ESP-016", desc: "Espejo circular perfecto con iluminación indirecta de halo perimetral cálido que baña el muro.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a muro (Driver interno)", dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "110 cm" }, peso: "19 kg", volt: "110-120V", mat: "Cristal plata, bastidor metálico", fin: "Luz cálida", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 19, name: "Espejo Óvalo Halo", category: "espejos", price: 21500, img: "nuevo_espejo_4.png", sku: "DM-ESP-017", desc: "Imponente espejo en forma de óvalo asimétrico con marco metálico delgado e iluminación integrada.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "170 cm", d: "5 cm", dia: "N/A" }, peso: "22 kg", volt: "110-120V", mat: "Cristal plata, herraje de latón", fin: "Latón avejentado", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 20, name: "Espejo Redondo Geométrico", category: "espejos", price: 18500, img: "IMG_2007.png", sku: "DM-ESP-024", desc: "Espejo decorativo circular con un intrincado patrón de varillas de acero formando rombos sobre el cristal.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "115 cm" }, peso: "18 kg", volt: "N/A", mat: "Acero y cristal plata", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 21, name: "Espejo Sol Madera", category: "espejos", price: 16500, img: "IMG_2056.png", sku: "DM-ESP-031", desc: "Espejo redondo con marco de madera tallado imitando los rayos del sol.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "100 cm", d: "4 cm", dia: "100 cm" }, peso: "12 kg", volt: "N/A", mat: "Madera tallada y cristal plata", fin: "Madera natural cálida", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 22, name: "Espejo Hexagonal Trasluz", category: "espejos", price: 19500, img: "IMG_2069.png", sku: "DM-ESP-032", desc: "Espejo de baño iluminado por detrás con forma irregular hexagonal, ideal para lavabos modernos.", specsLight: "Tira LED 12V 4000K", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "110 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "110-120V", mat: "Cristal inastillable", fin: "Luz neutra", time: "4 a 5 semanas", cert: "NOM" },
 
-            // LÁMPARAS DE MESA
-            { id: 24, name: "Lámpara Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", sku: "DM-MES-001", desc: "Lámpara de mesa minimalista con una base cónica de alabastro natural translúcido.", specsLight: "1x E26 LED 8W, 3000K", cable: "Cable transparente 1.8m", dims: { w: "30 cm", h: "50 cm", d: "30 cm", dia: "30 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Alabastro pulido y lino", fin: "Blanco veteado natural", time: "3 semanas", cert: "NOM" },
-            { id: 25, name: "Lámpara de Mesa Varillas", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png", sku: "DM-MES-003", desc: "Lámpara arquitectónica compuesta por varillas metálicas esbeltas y una base de madera noble.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro con interruptor", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "30 cm" }, peso: "3 kg", volt: "110-120V", mat: "Acero, madera y lino", fin: "Metal plateado", time: "3 semanas", cert: "NOM" },
-            { id: 26, name: "Lámpara Mesa Madera Tallada", category: "mesa", price: 5400, img: "IMG_2057.png", sku: "DM-MES-004", desc: "Lámpara de mesa con base de madera oscura texturizada y pantalla de lino claro.", specsLight: "1x E26 LED 8W", cable: "Cable transparente 1.5m", dims: { w: "28 cm", h: "50 cm", d: "28 cm", dia: "28 cm" }, peso: "3 kg", volt: "110-120V", mat: "Madera oscura tallada", fin: "Texturizada", time: "3 semanas", cert: "NOM" },
-            { id: 27, name: "Lámpara Mesa Cono Madera", category: "mesa", price: 5100, img: "IMG_2061.png", sku: "DM-MES-005", desc: "Lámpara de mesa con una sólida base cónica de madera lisa que resalta la veta natural.", specsLight: "1x E26 LED 8W", cable: "Cable negro 1.5m", dims: { w: "32 cm", h: "55 cm", d: "32 cm", dia: "32 cm" }, peso: "2.8 kg", volt: "110-120V", mat: "Madera sólida y lino", fin: "Madera natural pulida", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 28, name: "Lámpara de Mesa Cerámica", category: "mesa", price: 4800, img: "nueva_foto_4.png", sku: "DM-MES-006", desc: "Lámpara de mesa con base de cerámica artesanal en forma de gota texturizada.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable transparente 1.8m", dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm (pantalla)" }, peso: "3 kg", volt: "110-120V", mat: "Cerámica y lino", fin: "Beige crudo", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 29, name: "Lámpara de Buró Texturizada", category: "mesa", price: 4200, img: "nueva_foto_6.png", sku: "DM-MES-007", desc: "Lámpara compacta de buró con base de forma de gota en acabado estuco texturizado.", specsLight: "1x E26 LED 6W, 2700K", cable: "Cable blanco 1.5m", dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm (pantalla)" }, peso: "2.2 kg", volt: "110-120V", mat: "Pasta de estuco y lino", fin: "Crema texturizado poroso", time: "2 a 3 semanas", cert: "NOM" },
+            // ----- LÁMPARAS DE MESA -----
+            { id: 23, name: "Lámpara Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", sku: "DM-MES-001", desc: "Lámpara de mesa minimalista con una base cónica de alabastro natural translúcido.", specsLight: "1x E26 LED 8W, 3000K", cable: "Cable transparente 1.8m", dims: { w: "30 cm", h: "50 cm", d: "30 cm", dia: "30 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Alabastro pulido y lino", fin: "Blanco veteado natural", time: "3 semanas", cert: "NOM" },
+            { id: 24, name: "Lámpara de Mesa Varillas", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png", sku: "DM-MES-003", desc: "Lámpara arquitectónica compuesta por varillas metálicas esbeltas y una base de madera noble.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro con interruptor", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "30 cm" }, peso: "3 kg", volt: "110-120V", mat: "Acero, madera y lino", fin: "Metal plateado", time: "3 semanas", cert: "NOM" },
+            { id: 25, name: "Lámpara Mesa Madera Tallada", category: "mesa", price: 5400, img: "IMG_2057.png", sku: "DM-MES-004", desc: "Lámpara de mesa con base de madera oscura texturizada y pantalla de lino claro.", specsLight: "1x E26 LED 8W", cable: "Cable transparente 1.5m", dims: { w: "28 cm", h: "50 cm", d: "28 cm", dia: "28 cm" }, peso: "3 kg", volt: "110-120V", mat: "Madera oscura tallada", fin: "Texturizada", time: "3 semanas", cert: "NOM" },
+            { id: 26, name: "Lámpara Mesa Cono Madera", category: "mesa", price: 5100, img: "IMG_2061.png", sku: "DM-MES-005", desc: "Lámpara de mesa con una sólida base cónica de madera lisa que resalta la veta natural.", specsLight: "1x E26 LED 8W", cable: "Cable negro 1.5m", dims: { w: "32 cm", h: "55 cm", d: "32 cm", dia: "32 cm" }, peso: "2.8 kg", volt: "110-120V", mat: "Madera sólida y lino", fin: "Madera natural pulida", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 27, name: "Lámpara de Mesa Cerámica", category: "mesa", price: 4800, img: "nueva_foto_4.png", sku: "DM-MES-006", desc: "Lámpara de mesa con base de cerámica artesanal en forma de gota texturizada.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable transparente 1.8m", dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm (pantalla)" }, peso: "3 kg", volt: "110-120V", mat: "Cerámica y lino", fin: "Beige crudo", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 28, name: "Lámpara de Buró Texturizada", category: "mesa", price: 4200, img: "nueva_foto_6.png", sku: "DM-MES-007", desc: "Lámpara compacta de buró con base de forma de gota en acabado estuco texturizado.", specsLight: "1x E26 LED 6W, 2700K", cable: "Cable blanco 1.5m", dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm (pantalla)" }, peso: "2.2 kg", volt: "110-120V", mat: "Pasta de estuco y lino", fin: "Crema texturizado poroso", time: "2 a 3 semanas", cert: "NOM" },
 
-            // PIE
-            { id: 30, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "nueva_foto_1.png", sku: "DM-PIE-002", desc: "Lámpara de pie escultural con un mástil compuesto por esferas de madera de nogal torneadas a mano.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil negro 2.5m con interruptor", dims: { w: "40 cm", h: "160 cm", d: "40 cm", dia: "40 cm (pantalla)" }, peso: "5 kg", volt: "110-120V", mat: "Nogal sólido y lino", fin: "Nogal mate", time: "3 a 4 semanas", cert: "NOM" },
+            // ----- PIE -----
+            { id: 29, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "nueva_foto_1.png", sku: "DM-PIE-002", desc: "Lámpara de pie escultural con un mástil compuesto por esferas de madera de nogal torneadas a mano.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil negro 2.5m con interruptor", dims: { w: "40 cm", h: "160 cm", d: "40 cm", dia: "40 cm (pantalla)" }, peso: "5 kg", volt: "110-120V", mat: "Nogal sólido y lino", fin: "Nogal mate", time: "3 a 4 semanas", cert: "NOM" },
 
-            // TECHO
-            { id: 31, name: "Candil Loto Latón", category: "techo", price: 28500, img: "candil_1.png", sku: "DM-CAN-009", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto moldeadas en latón.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
+            // ----- TECHO -----
+            { id: 30, name: "Candil Loto Latón", category: "techo", price: 28500, img: "candil_1.png", sku: "DM-CAN-009", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto moldeadas en latón.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
+            { id: 31, name: "Candil Rectangular Vidrio", category: "techo", price: 21000, img: "IMG_2011.png", sku: "DM-CAN-011", desc: "Candil alargado ideal para mesas de comedor, con cilindros de vidrio transparente que encierran focos estilo Edison.", specsLight: "8x E12 LED 4W cálida", cable: "Tensores de acero y cable transparente", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 32, name: "Espejo Piso Orgánico", category: "techo", price: 17800, img: "IMG_2006.png", sku: "DM-ESP-023", desc: "Imponente espejo de piso en forma de gota alargada, enmarcado en madera noble.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "190 cm", d: "4 cm", dia: "N/A" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata, nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
             { id: 33, name: "Espejo Rectangular Oro Viejo", category: "techo", price: 16800, img: "IMG_2008.png", sku: "DM-ESP-025", desc: "Espejo rectangular con cristal oxidado artesanal y un sofisticado marco color oro viejo con ligeros relieves.", specsLight: "N/A", cable: "N/A", dims: { w: "75 cm", h: "135 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Latón y cristal avejentado", fin: "Oro viejo texturizado", time: "4 semanas", cert: "N/A" },
             { id: 34, name: "Espejo Doble Eclipse Trasero", category: "techo", price: 26800, img: "IMG_2010.png", sku: "DM-ESP-029", desc: "Espejo monumental compuesto de dos círculos excéntricos de diferente tamaño, con sutil iluminación en la pieza posterior.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable, marco de acero pavonado", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
@@ -587,14 +553,14 @@
             { id: 37, name: "Plafón Radial Negro", category: "techo", price: 8900, img: "IMG_2068.png", sku: "DM-TEC-017", desc: "Lámpara de techo negra con varillas que se abren como un paraguas, ideal para centros de mesa.", specsLight: "1x E26 LED Edison 12W", cable: "Instalación a plafón", dims: { w: "100 cm", h: "40 cm", d: "100 cm", dia: "100 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Negro electrostático", time: "4 semanas", cert: "NOM" },
             { id: 38, name: "Colgante Campana Amarilla", category: "techo", price: 3400, img: "IMG_2070.png", sku: "DM-TEC-018", desc: "Colgante en forma de campana color amarillo brillante, ideal para toques de color en cocinas.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Amarillo brillante", time: "2 a 3 semanas", cert: "NOM" },
             { id: 39, name: "Colgante Campana Verde", category: "techo", price: 3400, img: "IMG_2071.png", sku: "DM-TEC-019", desc: "Colgante en forma de campana color verde bosque, ideal para dar un toque natural y vibrante.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Verde brillante", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 40, name: "Colgante Plisado Blanco", category: "techo", price: 5400, img: "nueva_foto_5.png", sku: "DM-TEC-009", desc: "Luminaria suspendida con una pantalla acampanada de cerámica estriada que proyecta luz directa.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil blanco 1.5m", dims: { w: "45 cm", h: "35 cm", d: "45 cm", dia: "45 cm" }, peso: "2.8 kg", volt: "110-240V", mat: "Cerámica moldeada y herraje de latón", fin: "Blanco mate estriado", time: "2 a 3 semanas", cert: "NOM" },
+            { id: 40, name: "Colgante Plisado Blanco", category: "techo", price: 5400, img: "nueva_foto_5.png", sku: "DM-TEC-009", desc: "Luminaria suspendida con una pantalla acampanada de cerámica estriada que proyecta luz directa sobre comedores o cocinas.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil blanco 1.5m", dims: { w: "45 cm", h: "35 cm", d: "45 cm", dia: "45 cm" }, peso: "2.8 kg", volt: "110-240V", mat: "Cerámica moldeada y herraje de latón", fin: "Blanco mate estriado", time: "2 a 3 semanas", cert: "NOM" },
             { id: 41, name: "Farol Exterior Negro", category: "techo", price: 5200, img: "IMG_2016.png", sku: "DM-EXT-002", desc: "Farol de piso o mesa para terrazas exteriores, fabricado en acero con cristales transparentes.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero tratado y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
 
-            // EXTERIOR
+            // ----- EXTERIOR -----
             { id: 42, name: "Arbotante Rústico Cuerda", category: "exterior", price: 3600, img: "IMG_2020.png", sku: "DM-ARB-009", desc: "Luminaria de pared con diseño de cuerda natural, ideal para iluminación rasante en pasillos rústicos.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
             { id: 43, name: "Lámpara Colgante Jaula", category: "exterior", price: 4100, img: "IMG_2012.png", sku: "DM-TEC-014", desc: "Lámpara estilo jaula abierta en color blanco, perfecta para iluminar barras o islas de cocina.", specsLight: "1x E26 LED 8W cálida", cable: "Cable textil blanco 1.5m", dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
 
-            // PROYECTOS ESPECIALES
+            // ----- PROYECTOS ESPECIALES -----
             { id: 44, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-ARB-007", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
             { id: 45, name: "Lámpara Mesa Mármol Blanco", category: "proyectos", price: 5800, img: "lampara_de_mesa_3.png", sku: "DM-MES-005", desc: "Elegante lámpara de mesa con base sólida de mármol blanco de Carrara y detalles en latón.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro textil 1.8m", dims: { w: "25 cm", h: "55 cm", d: "25 cm", dia: "25 cm" }, peso: "6 kg", volt: "110-120V", mat: "Mármol Carrara y latón", fin: "Blanco pulido, acentos dorados", time: "3 a 4 semanas", cert: "NOM" },
             { id: 46, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PIE-003", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
@@ -637,9 +603,9 @@
                     catProducts.forEach(p => {
                         html += `
                             <div class="group">
-                                <!-- La imagen carga directamente, no hay recuadros negros si demora -->
                                 <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer">
-                                    <img src="${p.img}" class="img-catalog w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" onclick="openSpecModal(${p.id})">
+                                    <!-- Las imágenes cargan sin borde negro en caso de fallo -->
+                                    <img src="${p.img}" class="img-catalog w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" onclick="openSpecModal(${p.id})" alt="">
                                     <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 pointer-events-none">
                                         <button class="bg-transparent border border-white text-white text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-2 hover:bg-white hover:text-black transition-all pointer-events-auto" onclick="openSpecModal(${p.id})">Ver Specs</button>
                                         <button onclick="addToCart(${p.id})" class="bg-white text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-brand-muted transition-all pointer-events-auto">Agregar Cotización</button>
@@ -688,8 +654,6 @@
             
             overlay.classList.remove('opacity-0', 'pointer-events-none');
             overlay.classList.add('opacity-100', 'pointer-events-auto');
-
-            playGlowSound(); // Efecto de sonido de transición
 
             letters.forEach(l => { l.classList.remove('opacity-100'); l.classList.add('opacity-0'); });
             if(categoryText) { categoryText.classList.remove('opacity-100'); categoryText.classList.add('opacity-0'); }
@@ -758,9 +722,8 @@
             });
         });
 
+        // MODAL DE ESPECIFICACIONES MÓVIL
         function openSpecModal(id) {
-            playClickSound(); // Sonido al abrir pieza
-            
             const p = dbProducts.find(x => x.id === parseInt(id));
             if(!p) return;
             
@@ -798,7 +761,6 @@
         }
 
         function addToCart(id) {
-            playClickSound();
             const product = dbProducts.find(p => p.id === parseInt(id));
             const exist = cart.find(i => i.id === parseInt(id));
             if(exist) exist.qty += 1; else cart.push({...product, qty: 1});
@@ -832,7 +794,7 @@
                 total += itemTotal;
                 itemsCont.innerHTML += `
                     <div class="flex items-center gap-4 border-b border-brand-border pb-4">
-                        <img src="${item.img}" class="w-16 h-16 object-cover grayscale">
+                        <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
                         <div class="flex-1">
                             <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
                             <p class="text-[10px] text-brand-muted uppercase tracking-widest mt-1">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
@@ -866,7 +828,7 @@
             sendChatMessage();
         }
 
-        // LÓGICA DAMASO AI - Asistente Avanzado
+        // LÓGICA DAMASO AI - Avanzada
         function sendChatMessage() {
             const input = document.getElementById('chat-input');
             const rawText = input.value.trim();
@@ -967,7 +929,7 @@
                     } else if (text.includes("cotiz") || text.includes("compr") || text.includes("pdf")) {
                         response = "Para iniciar una cotización, presiona 'Agregar a Cotización' en la ficha de cualquier pieza. Posteriormente, abre el icono del bolso (arriba a la derecha) para generar un PDF formal o enviarnos tu lista por WhatsApp.";
                     } else {
-                        response = "No logré asociar tu consulta con una pieza específica. Intenta mencionar el nombre de la pieza (ej. 'Candil Cascada', 'Espejo Lunar'). O bien, puedes pedirme que calcule operaciones numéricas.";
+                        response = "No logré asociar tu consulta con una pieza específica. Intenta mencionar el nombre (ej. 'Candil Cascada', 'Espejo Lunar'). O bien, puedes pedirme que calcule operaciones numéricas.";
                     }
                 }
                 
@@ -1078,7 +1040,6 @@
                     doc.text(`$${total.toLocaleString()} MXN`, 200, finalY, { align: "right" });
                     
                     finalY += 8;
-                    // Se quitó "(10%)"
                     doc.text("GASTOS DE ENVÍO", 120, finalY);
                     doc.text(`$${envio.toLocaleString()} MXN`, 200, finalY, { align: "right" });
 
@@ -1141,7 +1102,6 @@
             link.click();
             document.body.removeChild(link);
         }
-
     </script>
 </body>
 </html>
