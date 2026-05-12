@@ -1,4 +1,5 @@
----PAGINA EN CONSTRUCCION POR LO QUE LA INFO PODRIA NO SER CORRECTA---
+---ESTA PAGINA ESTA EN CONSTRUCCION POR LO QUE LA INFO PODRIA NO SER CORRECTA---
+
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -9,11 +10,11 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Generador de PDF Nativo (Carga diferida para no bloquear la pantalla) -->
+    <!-- Generador de PDF Nativo (Carga diferida) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
-    <!-- Firebase Compat (Carga diferida) -->
+    <!-- Firebase Compat (Carga diferida segura para cualquier entorno) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 
@@ -85,13 +86,13 @@
 </head>
 <body class="font-sans antialiased selection:bg-white selection:text-black overflow-hidden" id="main-body">
 
-    <!-- REPRODUCTOR DE AUDIO (preload="none" evita bloquear la página) -->
+    <!-- REPRODUCTOR DE AUDIO INVISIBLE -->
     <audio id="bg-music" loop preload="none">
         <source src="yellow_umbrellas.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- ANIMACIÓN DE ENTRADA -->
-    <div id="entry-animation" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-opacity duration-1000 pointer-events-auto opacity-100 hidden">
+    <!-- ANIMACIÓN DE ENTRADA INMEDIATA -->
+    <div id="entry-animation" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-opacity duration-1000 pointer-events-auto opacity-100">
         <div id="entry-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
@@ -120,6 +121,7 @@
                 <div id="cookie-checkbox-box" class="relative w-4 h-4 border border-brand-muted bg-black flex items-center justify-center flex-shrink-0 transition-colors group-hover:border-white">
                     <svg id="cookie-check" class="w-3 h-3 text-black opacity-0 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </div>
+                <!-- Binding correcto y directo -->
                 <input type="checkbox" id="cookie-checkbox" class="hidden" onchange="window.toggleCookieCheck()">
                 <span class="text-white text-[10px] tracking-widest uppercase">Estoy de acuerdo</span>
             </label>
@@ -400,207 +402,328 @@
         </div>
     </footer>
 
-    <!-- Botón WhatsApp Flotante Oficial (Con ID y Transiciones para ocultarse) -->
+    <!-- Botón WhatsApp Flotante Oficial -->
     <a id="whatsapp-float" href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 z-[999] flex items-center justify-center opacity-100 scale-100" aria-label="Contacto WhatsApp">
         <svg class="w-8 h-8 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="currentColor">
             <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 448l84.5-22.1c32.7 18.1 69.6 27.7 107.5 27.7 122.4 0 222-99.6 222-222 0-59.3-23.1-115.1-65.1-157.1zm-157 298.9c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 316.5l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-103.5 84.3-187.8 187.8-187.8 55.3 0 107.3 21.5 146.3 60.6 39.1 39.1 60.6 91.1 60.6 146.4-.1 103.4-84.4 187.7-187.9 187.7zm102.9-140c-5.6-2.8-33.5-16.5-38.7-18.4-5.2-1.9-9-2.8-12.8 2.8-3.8 5.6-14.6 18.4-17.9 22.2-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.9-8.8-45.5-25.2-16.8-12.8-28.1-28.7-31.4-34.3-3.3-5.6-.4-8.7 2.4-11.5 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.8-17.5-42.2-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47.1 0 27.8 20.3 54.7 23.1 58.5 2.8 3.8 39.9 60.1 96.6 84.4 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.5-13.7 38.2-26.9 4.7-13.2 4.7-24.5 3.3-26.9-1.3-2.5-5.1-4-10.8-6.8z"/>
         </svg>
     </a>
 
-    <!-- SCRIPT DE LÓGICA PRINCIPAL (TODO EN GLOBAL WINDOW) -->
+    <!-- SCRIPT DE LÓGICA PRINCIPAL ÚNICO Y PROTEGIDO -->
     <script>
-        // VARIABLES GLOBALES
-        window.cart = [];
-        window.dbProducts = [
-            // CANDILES (3)
-            { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
-            { id: 2, name: "Candil Media Luna Latón", category: "candiles", price: 14500, img: "lampara_luna.png", sku: "DM-CAN-002", desc: "Elegante candil suspendido en forma de cuarto de luna asimétrico, construido en latón sólido cepillado a mano.", specsLight: "3x G9 LED 5W, 2700K cálida", cable: "Cable transparente y tensores (2m)", dims: { w: "85 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido, difusor de cristal", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 3, name: "Candil Tubos Dorados", category: "candiles", price: 34000, img: "candil_3.png", sku: "DM-CAN-003", desc: "Impresionante candil de techo compuesto por una lluvia de finos cilindros de latón con luz focalizada.", specsLight: "15x GU10 LED 3W cálida", cable: "Cables individuales de suspensión negra", dims: { w: "80 cm", h: "400 cm", d: "80 cm", dia: "N/A" }, peso: "22 kg", volt: "110-240V", mat: "Cilindros de latón sólido", fin: "Dorado pulido brillante", time: "6 a 8 semanas", cert: "NOM" },
-            { id: 4, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "candil_1.png", sku: "DM-CAN-004", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto moldeadas en latón.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
-
-            // ARBOTANTES (4)
-            { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Arbotante decorativo que fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino y concreto", fin: "Blanco y gris", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 6, name: "Arbotante Globo Ámbar", category: "arbotantes", price: 5800, img: "IMG_2016.png", sku: "DM-ARB-002", desc: "Luminaria de pared con pantalla esférica de cristal color ámbar y elegante soporte de latón.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
-            { id: 7, name: "Arbotante Esferas Cruz", category: "arbotantes", price: 7400, img: "IMG_2018.png", sku: "DM-ARB-003", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
-            { id: 8, name: "Arbotante Cilíndrico", category: "arbotantes", price: 3600, img: "nueva_foto_6.png", sku: "DM-ARB-004", desc: "Luminaria de pared cilíndrica y delgada para iluminación rasante en pasillos.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "8 cm", h: "30 cm", d: "10 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Aluminio inyectado", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
-            { id: 9, name: "Arbotante Rústico Cuerda", category: "arbotantes", price: 3600, img: "IMG_2020.png", sku: "DM-ARB-005", desc: "Luminaria de pared con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
-            { id: 10, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-006", desc: "Arbotante elegante con cilindros de vidrio transparente que encierran focos estilo Edison.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 11, name: "Arbotante Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-007", desc: "Arbotante de muro con espejo circular minimalista y aro perimetral luminoso trasero.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" }, peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
-
-            // ESPEJOS (17)
-            { id: 12, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-001", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta para crear un efecto flotante en el muro.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 13, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-002", desc: "Espejo rectangular de piso o muro de gran formato con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 14, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-003", desc: "Espejo rectangular elegante con un grueso marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata de alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 15, name: "Espejo Píldora Nogal", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-004", desc: "Espejo de cuerpo entero en forma ovalada alargada, enmarcado en fina madera curva.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "180 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata 6mm, marco en chapa de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
-            { id: 16, name: "Espejo Geometría Circular", category: "espejos", price: 19500, img: "espejo_5.png", sku: "DM-ESP-005", desc: "Espejo redondo decorativo atravesado por una red de acero geométrico, evocando un diamante facetado.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "120 cm" }, peso: "19 kg", volt: "N/A", mat: "Cristal plata, varilla de acero frontal", fin: "Acero en negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 17, name: "Espejo Óvalo Lisse", category: "espejos", price: 13500, img: "espejo_6.png", sku: "DM-ESP-006", desc: "Espejo ovalado de diseño escandinavo con marco de encino natural, ideal para aportar calidez.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "14 kg", volt: "N/A", mat: "Cristal plata, madera encino", fin: "Madera mate", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 18, name: "Espejo Óvalo Contour", category: "espejos", price: 15200, img: "espejo_7.png", sku: "DM-ESP-007", desc: "Elegante espejo ovalado con perfil ultra delgado de latón cobrizado.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "160 cm", d: "2.5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata, herraje de latón macizo", fin: "Latón cobrizado", time: "4 semanas", cert: "N/A" },
-            { id: 19, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_8.png", sku: "DM-ESP-008", desc: "Espejo rectangular de gran formato con marco de latón y cristal envejecido químicamente.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal envejecido, latón", fin: "Latón mate", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 20, name: "Espejo Medio Óvalo Trasluz", category: "espejos", price: 14200, img: "espejo_9.png", sku: "DM-ESP-009", desc: "Espejo vanguardista con forma de medio óvalo y canto pulido, incorpora luz perimetral flotante.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "50 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "12 kg", volt: "110-120V", mat: "Cristal plata inastillable", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 21, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_1.png", sku: "DM-ESP-010", desc: "Espejo circular de gran formato con un marco perimetral cóncavo en acabado de latón oscurecido.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "130 cm" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de placa de acero", fin: "Latón oscurecido y bronce", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 22, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_2.png", sku: "DM-ESP-011", desc: "Espejo monumental cuadrado enmarcado en maderas nobles, ideal para rematar pasillos.", specsLight: "N/A", cable: "N/A", dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "24 kg", volt: "N/A", mat: "Cristal plata inastillable, marco de nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A" },
-            { id: 23, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_3.png", sku: "DM-ESP-012", desc: "Espejo circular perfecto con iluminación indirecta de halo perimetral cálido que baña el muro.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a muro (Driver interno)", dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "110 cm" }, peso: "19 kg", volt: "110-120V", mat: "Cristal plata, bastidor metálico", fin: "Luz cálida", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 24, name: "Espejo Óvalo Halo", category: "espejos", price: 21500, img: "nuevo_espejo_4.png", sku: "DM-ESP-013", desc: "Imponente espejo en forma de óvalo asimétrico con marco metálico delgado e iluminación integrada.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "170 cm", d: "5 cm", dia: "N/A" }, peso: "22 kg", volt: "110-120V", mat: "Cristal plata, herraje de latón", fin: "Latón avejentado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 25, name: "Espejo Redondo Geométrico", category: "espejos", price: 18500, img: "IMG_2007.png", sku: "DM-ESP-014", desc: "Espejo decorativo circular con un intrincado patrón de varillas de acero formando rombos.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "115 cm" }, peso: "18 kg", volt: "N/A", mat: "Acero y cristal plata", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 26, name: "Espejo Sol Madera", category: "espejos", price: 16500, img: "IMG_2056.png", sku: "DM-ESP-015", desc: "Espejo redondo con marco de madera tallado imitando los rayos del sol.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "100 cm", d: "4 cm", dia: "100 cm" }, peso: "12 kg", volt: "N/A", mat: "Madera tallada y cristal plata", fin: "Madera natural cálida", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 27, name: "Espejo Hexagonal Trasluz", category: "espejos", price: 19500, img: "IMG_2069.png", sku: "DM-ESP-016", desc: "Espejo iluminado por detrás con forma irregular hexagonal.", specsLight: "Tira LED 12V 4000K", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "110 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "110-120V", mat: "Cristal inastillable", fin: "Luz neutra", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 28, name: "Espejo Piso Orgánico", category: "espejos", price: 17800, img: "IMG_2006.png", sku: "DM-ESP-017", desc: "Imponente espejo de piso en forma de gota alargada, enmarcado en madera noble.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "190 cm", d: "4 cm", dia: "N/A" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata, nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
-            { id: 29, name: "Espejo Rectangular Oro Viejo", category: "espejos", price: 16800, img: "IMG_2008.png", sku: "DM-ESP-018", desc: "Espejo rectangular con cristal oxidado artesanal y un sofisticado marco color oro viejo.", specsLight: "N/A", cable: "N/A", dims: { w: "75 cm", h: "135 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Latón y cristal avejentado", fin: "Oro viejo texturizado", time: "4 semanas", cert: "N/A" },
-            { id: 30, name: "Espejo Doble Eclipse Trasero", category: "espejos", price: 26800, img: "IMG_2010.png", sku: "DM-ESP-019", desc: "Espejo monumental compuesto de dos círculos excéntricos de diferente tamaño.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
-
-            // LÁMPARAS DE MESA (6)
-            { id: 31, name: "Lámpara Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", sku: "DM-MES-001", desc: "Lámpara de mesa minimalista con una base cónica de alabastro natural translúcido.", specsLight: "1x E26 LED 8W, 3000K", cable: "Cable transparente 1.8m", dims: { w: "30 cm", h: "50 cm", d: "30 cm", dia: "30 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Alabastro pulido y lino", fin: "Blanco veteado natural", time: "3 semanas", cert: "NOM" },
-            { id: 32, name: "Lámpara de Mesa Varillas", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png", sku: "DM-MES-002", desc: "Lámpara arquitectónica compuesta por varillas metálicas esbeltas y una base de madera noble.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro con interruptor", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "30 cm" }, peso: "3 kg", volt: "110-120V", mat: "Acero, madera y lino", fin: "Metal plateado", time: "3 semanas", cert: "NOM" },
-            { id: 33, name: "Lámpara Mesa Madera Tallada", category: "mesa", price: 5400, img: "IMG_2057.png", sku: "DM-MES-003", desc: "Lámpara de mesa con base de madera oscura texturizada y pantalla de lino claro.", specsLight: "1x E26 LED 8W", cable: "Cable transparente 1.5m", dims: { w: "28 cm", h: "50 cm", d: "28 cm", dia: "28 cm" }, peso: "3 kg", volt: "110-120V", mat: "Madera oscura tallada", fin: "Texturizada", time: "3 semanas", cert: "NOM" },
-            { id: 34, name: "Lámpara Mesa Cono Madera", category: "mesa", price: 5100, img: "IMG_2061.png", sku: "DM-MES-004", desc: "Lámpara de mesa con una sólida base cónica de madera lisa que resalta la veta natural.", specsLight: "1x E26 LED 8W", cable: "Cable negro 1.5m", dims: { w: "32 cm", h: "55 cm", d: "32 cm", dia: "32 cm" }, peso: "2.8 kg", volt: "110-120V", mat: "Madera sólida y lino", fin: "Madera natural pulida", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 35, name: "Lámpara de Mesa Cerámica", category: "mesa", price: 4800, img: "nueva_foto_4.png", sku: "DM-MES-005", desc: "Lámpara de mesa con base de cerámica artesanal en forma de gota texturizada.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable transparente 1.8m", dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm (pantalla)" }, peso: "3 kg", volt: "110-120V", mat: "Cerámica y lino", fin: "Beige crudo", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 36, name: "Lámpara de Buró Texturizada", category: "mesa", price: 4200, img: "nueva_foto_6.png", sku: "DM-MES-006", desc: "Lámpara compacta de buró con base de forma de gota en acabado estuco texturizado.", specsLight: "1x E26 LED 6W, 2700K", cable: "Cable blanco 1.5m", dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm (pantalla)" }, peso: "2.2 kg", volt: "110-120V", mat: "Pasta de estuco y lino", fin: "Crema texturizado", time: "2 a 3 semanas", cert: "NOM" },
-
-            // LÁMPARAS DE PIE (1)
-            { id: 37, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "nueva_foto_1.png", sku: "DM-PIE-001", desc: "Lámpara de pie escultural con un mástil compuesto por esferas de madera de nogal torneadas a mano.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil negro 2.5m con interruptor", dims: { w: "40 cm", h: "160 cm", d: "40 cm", dia: "40 cm (pantalla)" }, peso: "5 kg", volt: "110-120V", mat: "Nogal sólido y lino", fin: "Nogal mate", time: "3 a 4 semanas", cert: "NOM" },
-
-            // LÁMPARAS DE TECHO (11)
-            { id: 38, name: "Colgante Nido Mimbre", category: "techo", price: 4200, img: "lampara_de_techo_2.png", sku: "DM-TEC-001", desc: "Luminaria de techo tejida en mimbre natural formando una estructura semiabierta que tamiza la luz.", specsLight: "1x E26 LED Edison 8W", cable: "Cable textil café 1.5m", dims: { w: "50 cm", h: "40 cm", d: "50 cm", dia: "50 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Mimbre y herraje de acero", fin: "Mimbre natural tostado", time: "3 semanas", cert: "NOM" },
-            { id: 39, name: "Colgante Jaula Blanca", category: "techo", price: 4100, img: "IMG_2012.png", sku: "DM-TEC-002", desc: "Lámpara estilo jaula abierta en color blanco, perfecta para iluminar barras o islas de cocina.", specsLight: "1x E26 LED 8W cálida", cable: "Cable textil blanco 1.5m", dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 40, name: "Colgante Cuerda Vintage", category: "techo", price: 3800, img: "IMG_2013.png", sku: "DM-TEC-003", desc: "Luminaria colgante con foco vintage Edison envuelto en una cuerda naval rústica.", specsLight: "1x E26 LED Edison 6W", cable: "Cuerda de henequén natural 2m", dims: { w: "15 cm", h: "15 cm", d: "15 cm", dia: "15 cm" }, peso: "1.2 kg", volt: "110-120V", mat: "Cuerda naval y herraje metálico", fin: "Cuerda natural", time: "2 semanas", cert: "NOM" },
-            { id: 41, name: "Suspensión Óvalos Negros", category: "techo", price: 9200, img: "IMG_2060.png", sku: "DM-TEC-004", desc: "Lámparas colgantes en forma de óvalo de acero negro, de diseño muy contemporáneo.", specsLight: "2x Módulo LED Integrado 5W", cable: "Cable y cadena negra", dims: { w: "20 cm", h: "60 cm", d: "20 cm", dia: "N/A" }, peso: "3 kg", volt: "110-240V", mat: "Acero y cristal difusor", fin: "Negro mate", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 42, name: "Plafón Radial Negro", category: "techo", price: 8900, img: "IMG_2068.png", sku: "DM-TEC-005", desc: "Lámpara de techo negra con varillas que se abren como un paraguas, ideal para centros de mesa.", specsLight: "1x E26 LED Edison 12W", cable: "Instalación a plafón", dims: { w: "100 cm", h: "40 cm", d: "100 cm", dia: "100 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Negro electrostático", time: "4 semanas", cert: "NOM" },
-            { id: 43, name: "Colgante Campana Amarilla", category: "techo", price: 3400, img: "IMG_2070.png", sku: "DM-TEC-006", desc: "Colgante en forma de campana color amarillo brillante, ideal para toques de color en cocinas.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Amarillo brillante", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 44, name: "Colgante Campana Verde", category: "techo", price: 3400, img: "IMG_2071.png", sku: "DM-TEC-007", desc: "Colgante en forma de campana color verde bosque, ideal para dar un toque natural y vibrante.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Verde brillante", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 45, name: "Colgante Plisado Blanco", category: "techo", price: 5400, img: "nueva_foto_5.png", sku: "DM-TEC-008", desc: "Luminaria suspendida con una pantalla acampanada de cerámica estriada que proyecta luz directa sobre comedores o cocinas.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil blanco 1.5m", dims: { w: "45 cm", h: "35 cm", d: "45 cm", dia: "45 cm" }, peso: "2.8 kg", volt: "110-240V", mat: "Cerámica moldeada y herraje de latón", fin: "Blanco mate estriado", time: "2 a 3 semanas", cert: "NOM" },
-
-            // EXTERIOR
-            { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2016.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores, fabricado en acero con cristales transparentes.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero tratado y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
-
-            // PROYECTOS ESPECIALES
-            { id: 47, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-ARB-007", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
-            { id: 48, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PIE-003", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
-            { id: 49, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.png", sku: "DM-PRO-001", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
-            { id: 50, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2017.png", sku: "DM-PRO-002", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" }
-        ];
-
-        const catMap = {
-            candiles: "Candiles",
-            arbotantes: "Arbotantes",
-            espejos: "Espejos",
-            mesa: "Lámparas de Mesa",
-            pie: "Lámparas de Pie",
-            techo: "Lámparas de Techo",
-            exterior: "Lámparas de Exterior",
-            proyectos: "Proyectos Especiales"
-        };
-
-        // LÓGICA DE AUDIO
-        let audioCtx;
-        window.initAudio = function() {
-            if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-        };
-
-        window.playGlowSound = function() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 1.5);
-            gain.gain.setValueAtTime(0, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.5);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2.0);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 2.0);
-        };
-
-        window.playClickSound = function() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
-        };
-
-        // LÓGICA DE WA FLOTANTE
-        window.updateWhatsAppVisibility = function() {
-            const waBtn = document.getElementById('whatsapp-float');
-            if(!waBtn) return;
+        (function() {
+            window.cart = [];
             
-            const cartClosed = document.getElementById('cart-drawer').classList.contains('translate-x-full');
-            const botClosed = document.getElementById('chatbot-drawer').classList.contains('-translate-x-full');
-            const specModalClosed = document.getElementById('spec-modal').classList.contains('opacity-0');
-            
-            if (cartClosed && botClosed && specModalClosed) {
-                waBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-50');
-                waBtn.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
-            } else {
-                waBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-50');
-                waBtn.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
-            }
-        };
+            window.dbProducts = [
+                // CANDILES (3)
+                { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
+                { id: 2, name: "Candil Media Luna Latón", category: "candiles", price: 14500, img: "lampara_luna.png", sku: "DM-CAN-002", desc: "Elegante candil suspendido en forma de cuarto de luna asimétrico, construido en latón sólido cepillado a mano.", specsLight: "3x G9 LED 5W, 2700K cálida", cable: "Cable transparente y tensores (2m)", dims: { w: "85 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido, difusor de cristal", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
+                { id: 3, name: "Candil Tubos Dorados", category: "candiles", price: 34000, img: "candil_3.png", sku: "DM-CAN-003", desc: "Impresionante candil de techo compuesto por una lluvia de finos cilindros de latón con luz focalizada.", specsLight: "15x GU10 LED 3W cálida", cable: "Cables individuales de suspensión negra", dims: { w: "80 cm", h: "400 cm", d: "80 cm", dia: "N/A" }, peso: "22 kg", volt: "110-240V", mat: "Cilindros de latón sólido", fin: "Dorado pulido brillante", time: "6 a 8 semanas", cert: "NOM" },
+                { id: 4, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "candil_1.png", sku: "DM-CAN-004", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto moldeadas en latón.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
 
-        // LÓGICA DE COOKIES Y ANIMACIÓN
-        window.toggleCookieDetails = function() {
-            const details = document.getElementById('cookie-details');
-            details.classList.toggle('hidden');
-        };
+                // ARBOTANTES (4)
+                { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Arbotante decorativo que fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino y concreto", fin: "Blanco y gris", time: "3 a 4 semanas", cert: "NOM" },
+                { id: 6, name: "Arbotante Globo Ámbar", category: "arbotantes", price: 5800, img: "IMG_2016.png", sku: "DM-ARB-002", desc: "Luminaria de pared con pantalla esférica de cristal color ámbar y elegante soporte de latón.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
+                { id: 7, name: "Arbotante Esferas Cruz", category: "arbotantes", price: 7400, img: "IMG_2018.png", sku: "DM-ARB-003", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
+                { id: 8, name: "Arbotante Cilíndrico", category: "arbotantes", price: 3600, img: "nueva_foto_6.png", sku: "DM-ARB-004", desc: "Luminaria de pared cilíndrica y delgada para iluminación rasante en pasillos.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "8 cm", h: "30 cm", d: "10 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Aluminio inyectado", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
+                { id: 9, name: "Arbotante Rústico Cuerda", category: "arbotantes", price: 3600, img: "IMG_2020.png", sku: "DM-ARB-005", desc: "Luminaria de pared con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
+                { id: 10, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-006", desc: "Arbotante elegante con cilindros de vidrio transparente que encierran focos estilo Edison.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
+                { id: 11, name: "Arbotante Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-007", desc: "Arbotante de muro con espejo circular minimalista y aro perimetral luminoso trasero.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" }, peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
 
-        window.toggleCookieCheck = function() {
-            const checkbox = document.getElementById('cookie-checkbox');
-            const checkIcon = document.getElementById('cookie-check');
-            const btn = document.getElementById('btn-accept-cookies');
-            const box = document.getElementById('cookie-checkbox-box');
-            
-            if (checkbox.checked) {
-                checkIcon.classList.remove('opacity-0');
-                btn.disabled = false;
-                btn.classList.remove('opacity-30', 'cursor-not-allowed');
-                btn.classList.add('hover:bg-brand-muted');
-                box.classList.add('border-white', 'bg-white');
-                checkIcon.classList.remove('text-white');
-                checkIcon.classList.add('text-black');
-            } else {
-                checkIcon.classList.add('opacity-0');
-                btn.disabled = true;
-                btn.classList.add('opacity-30', 'cursor-not-allowed');
-                btn.classList.remove('hover:bg-brand-muted');
-                box.classList.remove('border-white', 'bg-white');
-                checkIcon.classList.remove('text-black');
-                checkIcon.classList.add('text-white');
-            }
-        };
+                // ESPEJOS (17)
+                { id: 12, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-001", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta para crear un efecto flotante en el muro.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
+                { id: 13, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-002", desc: "Espejo rectangular de piso o muro de gran formato con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
+                { id: 14, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-003", desc: "Espejo rectangular elegante con un grueso marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata de alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
+                { id: 15, name: "Espejo Píldora Nogal", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-004", desc: "Espejo de cuerpo entero en forma ovalada alargada, enmarcado en fina madera curva.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "180 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata 6mm, marco en chapa de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
+                { id: 16, name: "Espejo Geometría Circular", category: "espejos", price: 19500, img: "espejo_5.png", sku: "DM-ESP-005", desc: "Espejo redondo decorativo atravesado por una red de acero geométrico, evocando un diamante facetado.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "120 cm" }, peso: "19 kg", volt: "N/A", mat: "Cristal plata, varilla de acero frontal", fin: "Acero en negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
+                { id: 17, name: "Espejo Óvalo Lisse", category: "espejos", price: 13500, img: "espejo_6.png", sku: "DM-ESP-006", desc: "Espejo ovalado de diseño escandinavo con marco de encino natural, ideal para aportar calidez.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "14 kg", volt: "N/A", mat: "Cristal plata, madera encino", fin: "Madera mate", time: "3 a 4 semanas", cert: "N/A" },
+                { id: 18, name: "Espejo Óvalo Contour", category: "espejos", price: 15200, img: "espejo_7.png", sku: "DM-ESP-007", desc: "Elegante espejo ovalado con perfil ultra delgado de latón cobrizado.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "160 cm", d: "2.5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata, herraje de latón macizo", fin: "Latón cobrizado", time: "4 semanas", cert: "N/A" },
+                { id: 19, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_8.png", sku: "DM-ESP-008", desc: "Espejo rectangular de gran formato con marco de latón y cristal envejecido químicamente.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal envejecido, latón", fin: "Latón mate", time: "4 a 5 semanas", cert: "N/A" },
+                { id: 20, name: "Espejo Medio Óvalo Trasluz", category: "espejos", price: 14200, img: "espejo_9.png", sku: "DM-ESP-009", desc: "Espejo vanguardista con forma de medio óvalo y canto pulido, incorpora luz perimetral flotante.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "50 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "12 kg", volt: "110-120V", mat: "Cristal plata inastillable", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM" },
+                { id: 21, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_1.png", sku: "DM-ESP-010", desc: "Espejo circular de gran formato con un marco perimetral cóncavo en acabado de latón oscurecido.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "130 cm" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de placa de acero", fin: "Latón oscurecido y bronce", time: "3 a 4 semanas", cert: "N/A" },
+                { id: 22, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_2.png", sku: "DM-ESP-011", desc: "Espejo monumental cuadrado enmarcado en maderas nobles, ideal para rematar pasillos.", specsLight: "N/A", cable: "N/A", dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "24 kg", volt: "N/A", mat: "Cristal plata inastillable, marco de nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A" },
+                { id: 23, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_3.png", sku: "DM-ESP-012", desc: "Espejo circular perfecto con iluminación indirecta de halo perimetral cálido que baña el muro.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a muro (Driver interno)", dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "110 cm" }, peso: "19 kg", volt: "110-120V", mat: "Cristal plata, bastidor metálico", fin: "Luz cálida", time: "3 a 4 semanas", cert: "NOM" },
+                { id: 24, name: "Espejo Óvalo Halo", category: "espejos", price: 21500, img: "nuevo_espejo_4.png", sku: "DM-ESP-013", desc: "Imponente espejo en forma de óvalo asimétrico con marco metálico delgado e iluminación integrada.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "170 cm", d: "5 cm", dia: "N/A" }, peso: "22 kg", volt: "110-120V", mat: "Cristal plata, herraje de latón", fin: "Latón avejentado", time: "4 a 5 semanas", cert: "NOM" },
+                { id: 25, name: "Espejo Redondo Geométrico", category: "espejos", price: 18500, img: "IMG_2007.png", sku: "DM-ESP-014", desc: "Espejo decorativo circular con un intrincado patrón de varillas de acero formando rombos.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "115 cm" }, peso: "18 kg", volt: "N/A", mat: "Acero y cristal plata", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
+                { id: 26, name: "Espejo Sol Madera", category: "espejos", price: 16500, img: "IMG_2056.png", sku: "DM-ESP-015", desc: "Espejo redondo con marco de madera tallado imitando los rayos del sol.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "100 cm", d: "4 cm", dia: "100 cm" }, peso: "12 kg", volt: "N/A", mat: "Madera tallada y cristal plata", fin: "Madera natural cálida", time: "3 a 4 semanas", cert: "N/A" },
+                { id: 27, name: "Espejo Hexagonal Trasluz", category: "espejos", price: 19500, img: "IMG_2069.png", sku: "DM-ESP-016", desc: "Espejo iluminado por detrás con forma irregular hexagonal.", specsLight: "Tira LED 12V 4000K", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "110 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "110-120V", mat: "Cristal inastillable", fin: "Luz neutra", time: "4 a 5 semanas", cert: "NOM" },
+                { id: 28, name: "Espejo Piso Orgánico", category: "espejos", price: 17800, img: "IMG_2006.png", sku: "DM-ESP-017", desc: "Imponente espejo de piso en forma de gota alargada, enmarcado en madera noble.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "190 cm", d: "4 cm", dia: "N/A" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata, nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
+                { id: 29, name: "Espejo Rectangular Oro Viejo", category: "espejos", price: 16800, img: "IMG_2008.png", sku: "DM-ESP-018", desc: "Espejo rectangular con cristal oxidado artesanal y un sofisticado marco color oro viejo.", specsLight: "N/A", cable: "N/A", dims: { w: "75 cm", h: "135 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Latón y cristal avejentado", fin: "Oro viejo texturizado", time: "4 semanas", cert: "N/A" },
+                { id: 30, name: "Espejo Doble Eclipse Trasero", category: "espejos", price: 26800, img: "IMG_2010.png", sku: "DM-ESP-019", desc: "Espejo monumental compuesto de dos círculos excéntricos de diferente tamaño.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
 
-        window.acceptCookiesAndEnter = function() {
-            window.initAudio();
-            const cookieModal = document.getElementById('cookie-modal');
-            cookieModal.classList.add('opacity-0', 'pointer-events-none');
-            document.getElementById('main-body').classList.remove('overflow-hidden');
-            
-            const bgMusic = document.getElementById('bg-music');
-            if (bgMusic) { bgMusic.play().catch(e => console.log("Audio play blocked by browser:", e)); }
-            
-            setTimeout(() => { cookieModal.style.display = 'none'; }, 700);
-        };
+                // LÁMPARAS DE MESA (6)
+                { id: 31, name: "Lámpara Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", sku: "DM-MES-001", desc: "Lámpara de mesa minimalista con una base cónica de alabastro natural translúcido.", specsLight: "1x E26 LED 8W, 3000K", cable: "Cable transparente 1.8m", dims: { w: "30 cm", h: "50 cm", d: "30 cm", dia: "30 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Alabastro pulido y lino", fin: "Blanco veteado natural", time: "3 semanas", cert: "NOM" },
+                { id: 32, name: "Lámpara de Mesa Varillas", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png", sku: "DM-MES-002", desc: "Lámpara arquitectónica compuesta por varillas metálicas esbeltas y una base de madera noble.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro con interruptor", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "30 cm" }, peso: "3 kg", volt: "110-120V", mat: "Acero, madera y lino", fin: "Metal plateado", time: "3 semanas", cert: "NOM" },
+                { id: 33, name: "Lámpara Mesa Madera Tallada", category: "mesa", price: 5400, img: "IMG_2057.png", sku: "DM-MES-003", desc: "Lámpara de mesa con base de madera oscura texturizada y pantalla de lino claro.", specsLight: "1x E26 LED 8W", cable: "Cable transparente 1.5m", dims: { w: "28 cm", h: "50 cm", d: "28 cm", dia: "28 cm" }, peso: "3 kg", volt: "110-120V", mat: "Madera oscura tallada", fin: "Texturizada", time: "3 semanas", cert: "NOM" },
+                { id: 34, name: "Lámpara Mesa Cono Madera", category: "mesa", price: 5100, img: "IMG_2061.png", sku: "DM-MES-004", desc: "Lámpara de mesa con una sólida base cónica de madera lisa que resalta la veta natural.", specsLight: "1x E26 LED 8W", cable: "Cable negro 1.5m", dims: { w: "32 cm", h: "55 cm", d: "32 cm", dia: "32 cm" }, peso: "2.8 kg", volt: "110-120V", mat: "Madera sólida y lino", fin: "Madera natural pulida", time: "3 a 4 semanas", cert: "NOM" },
+                { id: 35, name: "Lámpara de Mesa Cerámica", category: "mesa", price: 4800, img: "nueva_foto_4.png", sku: "DM-MES-005", desc: "Lámpara de mesa con base de cerámica artesanal en forma de gota texturizada.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable transparente 1.8m", dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm (pantalla)" }, peso: "3 kg", volt: "110-120V", mat: "Cerámica y lino", fin: "Beige crudo", time: "3 a 4 semanas", cert: "NOM" },
+                { id: 36, name: "Lámpara de Buró Texturizada", category: "mesa", price: 4200, img: "nueva_foto_6.png", sku: "DM-MES-006", desc: "Lámpara compacta de buró con base de forma de gota en acabado estuco texturizado.", specsLight: "1x E26 LED 6W, 2700K", cable: "Cable blanco 1.5m", dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm (pantalla)" }, peso: "2.2 kg", volt: "110-120V", mat: "Pasta de estuco y lino", fin: "Crema texturizado", time: "2 a 3 semanas", cert: "NOM" },
 
-        window.startAppAnimation = function() {
-            const entryOverlay = document.getElementById('entry-animation');
-            const letters = document.querySelectorAll('.entry-letter');
-            const studio = document.getElementById('entry-studio');
-            const cookieModal = document.getElementById('cookie-modal');
-            
-            entryOverlay.classList.remove('hidden');
-            
-            setTimeout(() => {
-                entryOverlay.classList.remove('opacity-0');
-                entryOverlay.classList.add('opacity-100');
+                // LÁMPARAS DE PIE (1)
+                { id: 37, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "nueva_foto_1.png", sku: "DM-PIE-001", desc: "Lámpara de pie escultural con un mástil compuesto por esferas de madera de nogal torneadas a mano.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil negro 2.5m con interruptor", dims: { w: "40 cm", h: "160 cm", d: "40 cm", dia: "40 cm (pantalla)" }, peso: "5 kg", volt: "110-120V", mat: "Nogal sólido y lino", fin: "Nogal mate", time: "3 a 4 semanas", cert: "NOM" },
+
+                // LÁMPARAS DE TECHO (11)
+                { id: 38, name: "Colgante Nido Mimbre", category: "techo", price: 4200, img: "lampara_de_techo_2.png", sku: "DM-TEC-001", desc: "Luminaria de techo tejida en mimbre natural formando una estructura semiabierta que tamiza la luz.", specsLight: "1x E26 LED Edison 8W", cable: "Cable textil café 1.5m", dims: { w: "50 cm", h: "40 cm", d: "50 cm", dia: "50 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Mimbre y herraje de acero", fin: "Mimbre natural tostado", time: "3 semanas", cert: "NOM" },
+                { id: 39, name: "Colgante Jaula Blanca", category: "techo", price: 4100, img: "IMG_2012.png", sku: "DM-TEC-002", desc: "Lámpara estilo jaula abierta en color blanco, perfecta para iluminar barras o islas de cocina.", specsLight: "1x E26 LED 8W cálida", cable: "Cable textil blanco 1.5m", dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 weeks", cert: "NOM" },
+                { id: 40, name: "Colgante Cuerda Vintage", category: "techo", price: 3800, img: "IMG_2013.png", sku: "DM-TEC-003", desc: "Luminaria colgante con foco vintage Edison envuelto en una cuerda naval rústica.", specsLight: "1x E26 LED Edison 6W", cable: "Cuerda de henequén natural 2m", dims: { w: "15 cm", h: "15 cm", d: "15 cm", dia: "15 cm" }, peso: "1.2 kg", volt: "110-120V", mat: "Cuerda naval y herraje metálico", fin: "Cuerda natural", time: "2 semanas", cert: "NOM" },
+                { id: 41, name: "Suspensión Óvalos Negros", category: "techo", price: 9200, img: "IMG_2060.png", sku: "DM-TEC-004", desc: "Lámparas colgantes en forma de óvalo de acero negro, de diseño muy contemporáneo.", specsLight: "2x Módulo LED Integrado 5W", cable: "Cable y cadena negra", dims: { w: "20 cm", h: "60 cm", d: "20 cm", dia: "N/A" }, peso: "3 kg", volt: "110-240V", mat: "Acero y cristal difusor", fin: "Negro mate", time: "4 a 5 semanas", cert: "NOM" },
+                { id: 42, name: "Plafón Radial Negro", category: "techo", price: 8900, img: "IMG_2068.png", sku: "DM-TEC-005", desc: "Lámpara de techo negra con varillas que se abren como un paraguas, ideal para centros de mesa.", specsLight: "1x E26 LED Edison 12W", cable: "Instalación a plafón", dims: { w: "100 cm", h: "40 cm", d: "100 cm", dia: "100 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Negro electrostático", time: "4 semanas", cert: "NOM" },
+                { id: 43, name: "Colgante Campana Amarilla", category: "techo", price: 3400, img: "IMG_2070.png", sku: "DM-TEC-006", desc: "Colgante en forma de campana color amarillo brillante, ideal para toques de color en cocinas.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Amarillo brillante", time: "2 a 3 semanas", cert: "NOM" },
+                { id: 44, name: "Colgante Campana Verde", category: "techo", price: 3400, img: "IMG_2071.png", sku: "DM-TEC-007", desc: "Colgante en forma de campana color verde bosque, ideal para dar un toque natural y vibrante.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Verde brillante", time: "2 a 3 semanas", cert: "NOM" },
+                { id: 45, name: "Colgante Plisado Blanco", category: "techo", price: 5400, img: "nueva_foto_5.png", sku: "DM-TEC-008", desc: "Luminaria suspendida con una pantalla acampanada de cerámica estriada que proyecta luz directa sobre comedores o cocinas.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil blanco 1.5m", dims: { w: "45 cm", h: "35 cm", d: "45 cm", dia: "45 cm" }, peso: "2.8 kg", volt: "110-240V", mat: "Cerámica moldeada y herraje de latón", fin: "Blanco mate estriado", time: "2 a 3 semanas", cert: "NOM" },
+
+                // EXTERIOR
+                { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2016.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores, fabricado en acero con cristales transparentes.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero tratado y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
+
+                // PROYECTOS ESPECIALES
+                { id: 47, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-ARB-007", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
+                { id: 48, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PIE-003", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
+                { id: 49, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.png", sku: "DM-PRO-001", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
+                { id: 50, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2017.png", sku: "DM-PRO-002", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" }
+            ];
+
+            window.catMap = {
+                candiles: "Candiles",
+                arbotantes: "Arbotantes",
+                espejos: "Espejos",
+                mesa: "Lámparas de Mesa",
+                pie: "Lámparas de Pie",
+                techo: "Lámparas de Techo",
+                exterior: "Lámparas de Exterior",
+                proyectos: "Proyectos Especiales"
+            };
+
+            // LÓGICA DE AUDIO
+            window.audioCtx = null;
+            window.initAudio = function() {
+                try {
+                    if (!window.audioCtx) { window.audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+                    if(window.audioCtx.state === 'suspended') window.audioCtx.resume();
+                } catch(e) { console.warn("Audio blocked", e); }
+            };
+
+            window.playGlowSound = function() {
+                try {
+                    if (!window.audioCtx) return;
+                    const osc = window.audioCtx.createOscillator();
+                    const gain = window.audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(150, window.audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(600, window.audioCtx.currentTime + 1.5);
+                    gain.gain.setValueAtTime(0, window.audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.2, window.audioCtx.currentTime + 0.5);
+                    gain.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 2.0);
+                    osc.connect(gain);
+                    gain.connect(window.audioCtx.destination);
+                    osc.start();
+                    osc.stop(window.audioCtx.currentTime + 2.0);
+                } catch(e) {}
+            };
+
+            window.playClickSound = function() {
+                try {
+                    if (!window.audioCtx) return;
+                    const osc = window.audioCtx.createOscillator();
+                    const gain = window.audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(600, window.audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1200, window.audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.05, window.audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.1);
+                    osc.connect(gain);
+                    gain.connect(window.audioCtx.destination);
+                    osc.start();
+                    osc.stop(window.audioCtx.currentTime + 0.1);
+                } catch(e) {}
+            };
+
+            // LÓGICA DE WA FLOTANTE
+            window.updateWhatsAppVisibility = function() {
+                const waBtn = document.getElementById('whatsapp-float');
+                if(!waBtn) return;
                 
+                const cartClosed = document.getElementById('cart-drawer').classList.contains('translate-x-full');
+                const botClosed = document.getElementById('chatbot-drawer').classList.contains('-translate-x-full');
+                const specModalClosed = document.getElementById('spec-modal').classList.contains('opacity-0');
+                
+                if (cartClosed && botClosed && specModalClosed) {
+                    waBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-50');
+                    waBtn.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
+                } else {
+                    waBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-50');
+                    waBtn.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+                }
+            };
+
+            // LÓGICA DE COOKIES Y ANIMACIÓN
+            window.toggleCookieDetails = function() {
+                const details = document.getElementById('cookie-details');
+                if (details) details.classList.toggle('hidden');
+            };
+
+            window.toggleCookieCheck = function() {
+                const checkbox = document.getElementById('cookie-checkbox');
+                const checkIcon = document.getElementById('cookie-check');
+                const btn = document.getElementById('btn-accept-cookies');
+                const box = document.getElementById('cookie-checkbox-box');
+                
+                if (checkbox && checkbox.checked) {
+                    checkIcon.classList.remove('opacity-0');
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-30', 'cursor-not-allowed');
+                    btn.classList.add('hover:bg-brand-muted');
+                    box.classList.add('border-white', 'bg-white');
+                    checkIcon.classList.remove('text-white');
+                    checkIcon.classList.add('text-black');
+                } else if (checkbox) {
+                    checkIcon.classList.add('opacity-0');
+                    btn.disabled = true;
+                    btn.classList.add('opacity-30', 'cursor-not-allowed');
+                    btn.classList.remove('hover:bg-brand-muted');
+                    box.classList.remove('border-white', 'bg-white');
+                    checkIcon.classList.remove('text-black');
+                    checkIcon.classList.add('text-white');
+                }
+            };
+
+            window.acceptCookiesAndEnter = function() {
+                window.initAudio();
+                const cookieModal = document.getElementById('cookie-modal');
+                if (cookieModal) cookieModal.classList.add('opacity-0', 'pointer-events-none');
+                
+                const mainBody = document.getElementById('main-body');
+                if (mainBody) mainBody.classList.remove('overflow-hidden');
+                
+                const bgMusic = document.getElementById('bg-music');
+                if (bgMusic) { bgMusic.play().catch(e => console.log("Audio play blocked by browser:", e)); }
+                
+                setTimeout(() => { if (cookieModal) cookieModal.classList.add('hidden'); }, 700);
+            };
+
+            window.startAppAnimation = function() {
+                const entryOverlay = document.getElementById('entry-animation');
+                const letters = document.querySelectorAll('.entry-letter');
+                const studio = document.getElementById('entry-studio');
+                const cookieModal = document.getElementById('cookie-modal');
+                
+                if (entryOverlay) entryOverlay.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    if (letters.length > 0) {
+                        letters.forEach((letter, index) => {
+                            setTimeout(() => {
+                                letter.classList.remove('opacity-0');
+                                letter.classList.add('opacity-100');
+                            }, index * 150); 
+                        });
+                    }
+
+                    setTimeout(() => {
+                        if (studio) {
+                            studio.classList.remove('opacity-0');
+                            studio.classList.add('opacity-100');
+                        }
+                        
+                        setTimeout(() => {
+                            if (entryOverlay) {
+                                entryOverlay.classList.remove('opacity-100');
+                                entryOverlay.classList.add('opacity-0');
+                            }
+                            setTimeout(() => {
+                                if (entryOverlay) entryOverlay.style.display = 'none';
+                                if (cookieModal) {
+                                    cookieModal.classList.remove('hidden');
+                                    setTimeout(() => {
+                                        cookieModal.classList.remove('opacity-0', 'pointer-events-none');
+                                    }, 50);
+                                }
+                            }, 800);
+                        }, 1500);
+                    }, (letters.length * 150) + 300);
+
+                }, 50);
+            };
+
+            window.renderCatalog = function(products) {
+                const grid = document.getElementById('catalog-grid');
+                if(!grid || !products) return;
+                grid.innerHTML = '';
+                
+                if(products.length === 0) {
+                    grid.innerHTML = '<p class="text-brand-muted col-span-full">No se encontraron piezas.</p>'; 
+                    return;
+                }
+
+                let html = '';
+                for (const [catKey, catTitle] of Object.entries(window.catMap)) {
+                    const catProducts = products.filter(p => p.category === catKey);
+                    if (catProducts.length > 0) {
+                        html += `
+                            <div class="col-span-full mt-16 mb-4 border-b border-brand-border pb-4">
+                                <h3 class="font-editorial text-4xl text-white uppercase">${catTitle}</h3>
+                            </div>
+                        `;
+                        catProducts.forEach(p => {
+                            html += `
+                                <div class="group">
+                                    <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer">
+                                        <img src="${p.img}" loading="lazy" class="img-catalog w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" onclick="window.openSpecModal(${p.id})" alt="">
+                                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 pointer-events-none">
+                                            <button class="bg-transparent border border-white text-white text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-2 hover:bg-white hover:text-black transition-all pointer-events-auto" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
+                                            <button onclick="window.addToCart(${p.id})" class="bg-white text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-brand-muted transition-all pointer-events-auto">Agregar Cotización</button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 flex justify-between items-start">
+                                        <div class="flex-1 pr-4">
+                                            <h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-muted leading-tight break-words-custom" onclick="window.openSpecModal(${p.id})">${p.name}</h3>
+                                            <p class="text-[10px] tracking-[0.2em] text-brand-muted uppercase mt-2">${catTitle}</p>
+                                        </div>
+                                        <p class="font-editorial text-lg text-white whitespace-nowrap ml-2">$${Number(p.price).toLocaleString()}</p>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                }
+                grid.innerHTML = html;
+            };
+
+            window.toggleCategories = function(e) {
+                if(e) { e.preventDefault(); e.stopPropagation(); }
+                const menu = document.getElementById('dropdown-menu');
+                if(menu) {
+                    menu.classList.toggle('opacity-0');
+                    menu.classList.toggle('pointer-events-none');
+                    menu.classList.toggle('-translate-y-2');
+                    menu.classList.toggle('translate-y-0');
+                    menu.classList.toggle('opacity-100');
+                }
+            };
+
+            window.filterCatalogWithAnimation = function(cat) {
+                const menu = document.getElementById('dropdown-menu');
+                if(menu) {
+                    menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                    menu.classList.remove('translate-y-0', 'opacity-100');
+                }
+
+                const overlay = document.getElementById('category-transition-overlay');
+                const letters = document.querySelectorAll('.menu-letter');
+                const categoryText = document.getElementById('menu-category-text');
+                
+                const displayName = cat === 'all' ? 'Colección Completa' : window.catMap[cat];
+                if(categoryText) categoryText.innerText = displayName;
+                
+                if (overlay) {
+                    overlay.classList.remove('opacity-0', 'pointer-events-none');
+                    overlay.classList.add('opacity-100', 'pointer-events-auto');
+                }
+
+                window.playGlowSound(); 
+
+                letters.forEach(l => { l.classList.remove('opacity-100'); l.classList.add('opacity-0'); });
+                if(categoryText) { categoryText.classList.remove('opacity-100'); categoryText.classList.add('opacity-0'); }
+
                 setTimeout(() => {
                     letters.forEach((letter, index) => {
                         setTimeout(() => {
@@ -608,620 +731,550 @@
                             letter.classList.add('opacity-100');
                         }, index * 150); 
                     });
-
-                    setTimeout(() => {
-                        studio.classList.remove('opacity-0');
-                        studio.classList.add('opacity-100');
-                        
+                    
+                    if(categoryText) {
                         setTimeout(() => {
-                            entryOverlay.classList.remove('opacity-100');
-                            entryOverlay.classList.add('opacity-0');
-                            setTimeout(() => {
-                                entryOverlay.style.display = 'none';
-                                cookieModal.classList.remove('hidden');
-                                setTimeout(() => {
-                                    cookieModal.classList.remove('opacity-0', 'pointer-events-none');
-                                }, 50);
-                            }, 800);
-                        }, 1500);
-                    }, letters.length * 150 + 300);
-
-                }, 300);
-            }, 50);
-        };
-
-        window.renderCatalog = function(products) {
-            const grid = document.getElementById('catalog-grid');
-            if(!grid) return;
-            grid.innerHTML = '';
-            
-            if(products.length === 0) {
-                grid.innerHTML = '<p class="text-brand-muted col-span-full">No se encontraron piezas.</p>'; 
-                return;
-            }
-
-            let html = '';
-            for (const [catKey, catTitle] of Object.entries(catMap)) {
-                const catProducts = products.filter(p => p.category === catKey);
-                if (catProducts.length > 0) {
-                    html += `
-                        <div class="col-span-full mt-16 mb-4 border-b border-brand-border pb-4">
-                            <h3 class="font-editorial text-4xl text-white uppercase">${catTitle}</h3>
-                        </div>
-                    `;
-                    catProducts.forEach(p => {
-                        html += `
-                            <div class="group">
-                                <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer">
-                                    <img src="${p.img}" loading="lazy" class="img-catalog w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" onclick="window.openSpecModal(${p.id})" alt="">
-                                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 pointer-events-none">
-                                        <button class="bg-transparent border border-white text-white text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-2 hover:bg-white hover:text-black transition-all pointer-events-auto" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
-                                        <button onclick="window.addToCart(${p.id})" class="bg-white text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-brand-muted transition-all pointer-events-auto">Agregar Cotización</button>
-                                    </div>
-                                </div>
-                                <div class="mt-6 flex justify-between items-start">
-                                    <div class="flex-1 pr-4">
-                                        <h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-muted leading-tight break-words-custom" onclick="window.openSpecModal(${p.id})">${p.name}</h3>
-                                        <p class="text-[10px] tracking-[0.2em] text-brand-muted uppercase mt-2">${catTitle}</p>
-                                    </div>
-                                    <p class="font-editorial text-lg text-white whitespace-nowrap ml-2">$${Number(p.price).toLocaleString()}</p>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-            }
-            grid.innerHTML = html;
-        };
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                window.renderCatalog(window.dbProducts);
-                window.startAppAnimation();
-            });
-        } else {
-            window.renderCatalog(window.dbProducts);
-            window.startAppAnimation();
-        }
-
-        // BÚSQUEDA Y NAVEGACIÓN
-        document.addEventListener('DOMContentLoaded', () => {
-            const liveSearchInput = document.getElementById('live-search');
-            if (liveSearchInput) {
-                liveSearchInput.addEventListener('input', (e) => {
-                    const q = e.target.value.toLowerCase();
-                    if(q.length === 0) { 
-                        window.renderCatalog(window.dbProducts); 
-                        document.getElementById('catalog-title').innerText = "Catálogo Completo";
-                        document.getElementById('catalog-subtitle').innerText = "Colección 2026"; return; 
+                            categoryText.classList.remove('opacity-0');
+                            categoryText.classList.add('opacity-100');
+                        }, letters.length * 150 + 200);
                     }
-                    const results = window.dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
-                    window.renderCatalog(results);
-                    document.getElementById('catalog-title').innerText = "Resultados";
-                    document.getElementById('catalog-subtitle').innerText = `Búsqueda: "${q}"`;
-                });
-            }
-
-            document.addEventListener('click', function(event) {
-                const menu = document.getElementById('dropdown-menu');
-                const btn = document.getElementById('btn-menu');
-                if (menu && btn && !menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) {
-                    menu.classList.add('opacity-0');
-                    menu.classList.add('pointer-events-none');
-                    menu.classList.add('-translate-y-2');
-                    menu.classList.remove('translate-y-0');
-                    menu.classList.remove('opacity-100');
-                }
-            });
-        });
-
-        window.toggleCategories = function(e) {
-            if(e) { e.preventDefault(); e.stopPropagation(); }
-            const menu = document.getElementById('dropdown-menu');
-            if(menu) {
-                menu.classList.toggle('opacity-0');
-                menu.classList.toggle('pointer-events-none');
-                menu.classList.toggle('-translate-y-2');
-                menu.classList.toggle('translate-y-0');
-                menu.classList.toggle('opacity-100');
-            }
-        };
-
-        window.filterCatalogWithAnimation = function(cat) {
-            const menu = document.getElementById('dropdown-menu');
-            if(menu) {
-                menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-                menu.classList.remove('translate-y-0', 'opacity-100');
-            }
-
-            const overlay = document.getElementById('category-transition-overlay');
-            const letters = document.querySelectorAll('.menu-letter');
-            const categoryText = document.getElementById('menu-category-text');
-            
-            const displayName = cat === 'all' ? 'Colección Completa' : catMap[cat];
-            if(categoryText) categoryText.innerText = displayName;
-            
-            overlay.classList.remove('opacity-0', 'pointer-events-none');
-            overlay.classList.add('opacity-100', 'pointer-events-auto');
-
-            window.playGlowSound(); 
-
-            letters.forEach(l => { l.classList.remove('opacity-100'); l.classList.add('opacity-0'); });
-            if(categoryText) { categoryText.classList.remove('opacity-100'); categoryText.classList.add('opacity-0'); }
-
-            setTimeout(() => {
-                letters.forEach((letter, index) => {
-                    setTimeout(() => {
-                        letter.classList.remove('opacity-0');
-                        letter.classList.add('opacity-100');
-                    }, index * 150); 
-                });
-                
-                if(categoryText) {
-                    setTimeout(() => {
-                        categoryText.classList.remove('opacity-0');
-                        categoryText.classList.add('opacity-100');
-                    }, letters.length * 150 + 200);
-                }
-            }, 300);
-
-            setTimeout(() => {
-                document.getElementById('live-search').value = '';
-                const filtered = cat === 'all' ? window.dbProducts : window.dbProducts.filter(p => p.category === cat);
-                window.renderCatalog(filtered);
-                document.getElementById('catalog-title').innerText = cat === 'all' ? "Catálogo Completo" : catMap[cat];
-                document.getElementById('catalog-subtitle').innerText = "Colección 2026";
-                
-                document.getElementById('coleccion').scrollIntoView({ behavior: 'smooth' });
+                }, 300);
 
                 setTimeout(() => {
-                    overlay.classList.remove('opacity-100', 'pointer-events-auto');
-                    overlay.classList.add('opacity-0', 'pointer-events-none');
-                }, 800);
-            }, 1800); 
-        };
+                    const searchInput = document.getElementById('live-search');
+                    if (searchInput) searchInput.value = '';
+                    
+                    const filtered = cat === 'all' ? window.dbProducts : window.dbProducts.filter(p => p.category === cat);
+                    window.renderCatalog(filtered);
+                    
+                    const title = document.getElementById('catalog-title');
+                    const subtitle = document.getElementById('catalog-subtitle');
+                    if (title) title.innerText = cat === 'all' ? "Catálogo Completo" : window.catMap[cat];
+                    if (subtitle) subtitle.innerText = "Colección 2026";
+                    
+                    const coleccionSection = document.getElementById('coleccion');
+                    if (coleccionSection) coleccionSection.scrollIntoView({ behavior: 'smooth' });
 
-        // MODAL DE DETALLES Y CARRITO
-        window.openSpecModal = function(id) {
-            window.playClickSound(); 
-            
-            const p = window.dbProducts.find(x => x.id === parseInt(id));
-            if(!p) return;
-            
-            document.getElementById('modal-img-link').href = p.img;
-            document.getElementById('modal-img-element').src = p.img;
-            
-            document.getElementById('modal-title').innerText = p.name;
-            document.getElementById('modal-desc').innerText = p.desc;
-            document.getElementById('modal-sku').innerText = p.sku;
-            document.getElementById('modal-luz').innerText = p.specsLight;
-            document.getElementById('modal-volt').innerText = p.volt;
-            document.getElementById('modal-cable').innerText = p.cable;
-            document.getElementById('modal-w').innerText = p.dims.w;
-            document.getElementById('modal-h').innerText = p.dims.h;
-            document.getElementById('modal-d').innerText = p.dims.d;
-            document.getElementById('modal-dia').innerText = p.dims.dia;
-            document.getElementById('modal-peso').innerText = p.peso;
-            document.getElementById('modal-mat').innerText = p.mat;
-            document.getElementById('modal-fin').innerText = p.fin;
-            document.getElementById('modal-time').innerText = p.time;
-            document.getElementById('modal-cert').innerText = p.cert;
-            document.getElementById('modal-price').innerText = "$" + Number(p.price).toLocaleString() + " MXN";
-            
-            const btn = document.getElementById('modal-add-btn');
-            btn.onclick = () => { window.addToCart(p.id); window.closeSpecModal(); };
-
-            const modal = document.getElementById('spec-modal');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            document.body.style.overflow = 'hidden'; 
-            window.updateWhatsAppVisibility(); 
-        };
-
-        window.closeSpecModal = function() {
-            document.getElementById('spec-modal').classList.add('opacity-0', 'pointer-events-none');
-            document.body.style.overflow = 'auto'; 
-            window.updateWhatsAppVisibility(); 
-        };
-
-        window.addToCart = function(id) {
-            window.playClickSound();
-            const product = window.dbProducts.find(p => p.id === parseInt(id));
-            const exist = window.cart.find(i => i.id === parseInt(id));
-            if(exist) exist.qty += 1; else window.cart.push({...product, qty: 1});
-            window.updateCartUI();
-            
-            if(document.getElementById('cart-drawer').classList.contains('translate-x-full')) {
-                window.toggleCart();
-            }
-        };
-
-        window.removeFromCart = function(id) {
-            window.cart = window.cart.filter(i => i.id !== parseInt(id));
-            window.updateCartUI();
-        };
-
-        window.updateCartUI = function() {
-            const itemsCont = document.getElementById('cart-items');
-            const totalCont = document.getElementById('cart-total');
-            const countCont = document.getElementById('cart-count');
-            
-            const totalItems = window.cart.reduce((s, i) => s + i.qty, 0);
-            countCont.innerText = totalItems;
-            countCont.style.opacity = totalItems > 0 ? "1" : "0";
-            
-            if(window.cart.length === 0) { 
-                itemsCont.innerHTML = '<p class="text-brand-muted text-sm text-center mt-10 uppercase tracking-widest">Tu selección está vacía</p>'; 
-                totalCont.innerText = "$0 MXN"; return; 
-            }
-            
-            itemsCont.innerHTML = '';
-            let total = 0;
-            window.cart.forEach((item) => {
-                const itemTotal = Number(item.price) * item.qty;
-                total += itemTotal;
-                itemsCont.innerHTML += `
-                    <div class="flex items-center gap-4 border-b border-brand-border pb-4">
-                        <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
-                        <div class="flex-1">
-                            <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
-                            <p class="text-[10px] text-brand-muted uppercase tracking-widest mt-1">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
-                        </div>
-                        <button onclick="window.removeFromCart(${item.id})" class="text-brand-muted hover:text-white">
-                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                        </button>
-                    </div>
-                `;
-            });
-            
-            totalCont.innerText = `$${total.toLocaleString()} MXN`;
-        };
-
-        window.toggleCart = function() {
-            const drawer = document.getElementById('cart-drawer');
-            const overlay = document.getElementById('cart-overlay');
-            drawer.classList.toggle('translate-x-full');
-            overlay.classList.toggle('opacity-0');
-            overlay.classList.toggle('pointer-events-none');
-            setTimeout(window.updateWhatsAppVisibility, 50); 
-        };
-
-        window.toggleChatbot = function() {
-            const drawer = document.getElementById('chatbot-drawer');
-            const overlay = document.getElementById('chat-overlay');
-            drawer.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('opacity-0');
-            overlay.classList.toggle('pointer-events-none');
-            setTimeout(window.updateWhatsAppVisibility, 50);
-        };
-
-        window.sendPredefinedMessage = function(text) {
-            document.getElementById('chat-input').value = text;
-            window.sendChatMessage(); 
-        };
-
-        // CEREBRO DE DAMASO AI
-        window.sendChatMessage = async function() {
-            const input = document.getElementById('chat-input');
-            const rawText = input.value.trim();
-            if(!rawText) return;
-            
-            const chatBox = document.getElementById('chat-messages');
-            
-            chatBox.innerHTML += `
-                <div class="flex flex-col items-end w-full mt-4">
-                    <div class="bg-white text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%]">${rawText}</div>
-                </div>
-            `;
-            input.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            const loadingId = 'loading-' + Date.now();
-            chatBox.innerHTML += `
-                <div id="${loadingId}" class="flex flex-col items-start max-w-[85%] mt-4">
-                    <div class="bg-brand-border text-brand-muted text-sm p-4 rounded-r-xl rounded-bl-xl font-light italic">Pensando...</div>
-                </div>
-            `;
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            const removeLoading = () => {
-                const el = document.getElementById(loadingId);
-                if (el) el.remove();
+                    setTimeout(() => {
+                        if (overlay) {
+                            overlay.classList.remove('opacity-100', 'pointer-events-auto');
+                            overlay.classList.add('opacity-0', 'pointer-events-none');
+                        }
+                    }, 800);
+                }, 1800); 
             };
 
-            try {
-                // TU CLAVE MAESTRA GEMINI
-                const apiKey = "AIzaSyBQHy0yxF5L7wjYGYJHArL57mcTpNEkxzg"; 
+            window.openSpecModal = function(id) {
+                window.playClickSound(); 
                 
-                // Procesamiento Nativo con Gemini
-                if(apiKey && !apiKey.includes("TU_API_KEY")) {
-                    const catalogInfo = window.dbProducts.map(p => `- ${p.name} (${p.category}): $${p.price} MXN. Entrega: ${p.time}. Materiales: ${p.mat}.`).join('\n');
-                    
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            systemInstruction: {
-                                parts: [{ text: `Eres DAMASO AI, un asistente virtual experto, elegante y muy servicial para DAMASO Studio, una marca de iluminación de lujo en Guadalajara, México. El creador y jefe de diseño de esta marca se llama Thiago y él es tu jefe, siempre háblale por su nombre de manera respetuosa. Aquí está el catálogo completo:\n\n${catalogInfo}\n\nResponde de manera precisa, elegante y servicial. Haz cálculos matemáticos y cotizaciones exactas si te lo piden.` }]
-                            },
-                            contents: [{ parts: [{ text: rawText }] }]
-                        })
-                    });
-
-                    const data = await response.json();
-                    
-                    if(data.candidates && data.candidates[0].content.parts[0].text) {
-                        removeLoading();
-                        let aiText = data.candidates[0].content.parts[0].text;
-                        aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
-                        aiText = aiText.replace(/\n/g, '<br>');
-                        window.showBotMessage(aiText);
-                        return;
-                    }
-                }
-
-                // CEREBRO LOCAL (FALLBACK SI GEMINI FALLA)
-                removeLoading();
-                const text = rawText.toLowerCase();
-                let response = "";
-                let foundProduct = null;
-
-                let mathString = text.replace(/uno/g, '1').replace(/dos/g, '2').replace(/tres/g, '3').replace(/cuatro/g, '4')
-                                     .replace(/cinco/g, '5').replace(/seis/g, '6').replace(/siete/g, '7').replace(/ocho/g, '8')
-                                     .replace(/nueve/g, '9').replace(/diez/g, '10').replace(/mas/g, '+').replace(/más/g, '+')
-                                     .replace(/menos/g, '-').replace(/por/g, '*').replace(/entre/g, '/');
-
-                const mathRegex = /^[\d\s\+\-\*\/\(\)\.]+$/;
+                const p = window.dbProducts.find(x => x.id === parseInt(id));
+                if(!p) return;
                 
-                if (text.includes("calcula el") && text.includes("de")) {
-                    const parts = text.match(/(\d+)\s*%\s*de\s*(\d+)/);
-                    if (parts && parts.length === 3) {
-                        const porcentaje = parseFloat(parts[1]);
-                        const cantidad = parseFloat(parts[2]);
-                        const res = (porcentaje / 100) * cantidad;
-                        response = `El ${porcentaje}% de ${cantidad} es: <strong class="text-white">${res.toLocaleString()}</strong>.`;
-                    } else {
-                        response = "Entiendo que quieres calcular un porcentaje. Intenta escribiendo: 'Calcula el 15% de 2000'.";
-                    }
-                } else if (mathRegex.test(mathString) && mathString.match(/\d/)) {
-                    try {
-                        const result = eval(mathString);
-                        response = `El resultado exacto del cálculo es: <strong class="text-white">${result.toLocaleString()}</strong>`;
-                    } catch(e) {
-                        response = "Parece una operación matemática, pero le falta algún dato. ¿Podrías escribirla de nuevo?";
-                    }
-                } else {
-                    for(let p of window.dbProducts) {
-                        let words = p.name.toLowerCase().split(" ");
-                        let match = words.some(w => w.length >= 3 && text.includes(w)) || text.includes(p.sku.toLowerCase()) || text.includes(p.category.toLowerCase());
-                        if(match) { foundProduct = p; break; }
-                    }
+                document.getElementById('modal-img-link').href = p.img;
+                document.getElementById('modal-img-element').src = p.img;
+                document.getElementById('modal-title').innerText = p.name;
+                document.getElementById('modal-desc').innerText = p.desc;
+                document.getElementById('modal-sku').innerText = p.sku;
+                document.getElementById('modal-luz').innerText = p.specsLight;
+                document.getElementById('modal-volt').innerText = p.volt;
+                document.getElementById('modal-cable').innerText = p.cable;
+                document.getElementById('modal-w').innerText = p.dims.w;
+                document.getElementById('modal-h').innerText = p.dims.h;
+                document.getElementById('modal-d').innerText = p.dims.d;
+                document.getElementById('modal-dia').innerText = p.dims.dia;
+                document.getElementById('modal-peso').innerText = p.peso;
+                document.getElementById('modal-mat').innerText = p.mat;
+                document.getElementById('modal-fin').innerText = p.fin;
+                document.getElementById('modal-time').innerText = p.time;
+                document.getElementById('modal-cert').innerText = p.cert;
+                document.getElementById('modal-price').innerText = "$" + Number(p.price).toLocaleString() + " MXN";
+                
+                const btn = document.getElementById('modal-add-btn');
+                if (btn) btn.onclick = () => { window.addToCart(p.id); window.closeSpecModal(); };
 
-                    if (text.includes("gracias") || text.includes("agradezco") || text.includes("perfecto")) {
-                        response = "¡Ha sido un placer, Thiago! Estoy aquí 24/7 para asistirte. ¿Deseas consultar sobre los materiales o dimensiones de alguna otra pieza?";
-                    } else if (text.includes("quien eres") || text.includes("quién eres") || text.includes("que eres")) {
-                        response = "Soy DAMASO AI, la inteligencia artificial exclusiva de DAMASO Studio. Fui programado por mi jefe Thiago para conocer cada detalle técnico de nuestras colecciones y asistirte en tu proyecto de interiorismo.";
-                    } else if (text.includes("porfa") || text.includes("por favor") || text.includes("pls")) {
-                        response = "¡Por supuesto, Thiago! Dime exactamente qué necesitas y lo resolvemos de inmediato.";
-                    } else if (text.includes("hola") || text.includes("buenas") || text.includes("buenos días") || text.includes("buenas tardes")) {
-                        response = "¡Hola! Bienvenido a DAMASO Studio. Soy la IA de asistencia. Conozco a detalle nuestras colecciones exclusivas. Puedes preguntarme sobre materiales, disponibilidad, o pedirme que calcule costos.";
-                    } else if (foundProduct) {
-                        if (text.includes("tiempo") || text.includes("entrega") || text.includes("tarda")) {
-                            response = `El tiempo de manufactura y entrega para <strong class="text-white">${foundProduct.name}</strong> es de ${foundProduct.time}.`;
-                        } else if (text.includes("precio") || text.includes("costo") || text.includes("cuesta") || text.includes("vale")) {
-                            response = `El precio de catálogo para <strong class="text-white">${foundProduct.name}</strong> es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
-                        } else if (text.includes("material") || text.includes("acabado") || text.includes("hech")) {
-                            response = `La pieza <strong class="text-white">${foundProduct.name}</strong> se construye con: ${foundProduct.mat}. Su acabado final es ${foundProduct.fin}.`;
-                        } else if (text.includes("medida") || text.includes("tamaño") || text.includes("dimension")) {
-                            response = `Las proporciones arquitectónicas de <strong class="text-white">${foundProduct.name}</strong> son:<br>Ancho: ${foundProduct.dims.w}<br>Alto: ${foundProduct.dims.h}<br>Fondo: ${foundProduct.dims.d}<br>Diámetro: ${foundProduct.dims.dia}<br>Peso: ${foundProduct.peso}.`;
-                        } else if (text.includes("ilumina") || text.includes("luz") || text.includes("foco") || text.includes("voltaje") || text.includes("cable")) {
-                            if(foundProduct.specsLight === "N/A" || !foundProduct.specsLight) {
-                                response = `La pieza <strong class="text-white">${foundProduct.name}</strong> no cuenta con sistema eléctrico integrado ni luces LED. Es puramente escultural.`;
-                            } else {
-                                response = `Especificaciones lumínicas de <strong class="text-white">${foundProduct.name}</strong>:<br>Luminaria: ${foundProduct.specsLight}<br>Voltaje: ${foundProduct.volt}<br>Cableado: ${foundProduct.cable}.`;
-                            }
-                        } else if (text.includes("info") || text.includes("todo") || text.includes("detalles") || text.includes("masiva")) {
-                            response = `<strong class="text-white">Ficha Técnica: ${foundProduct.name}</strong><br><br>SKU: ${foundProduct.sku}<br>Precio: $${Number(foundProduct.price).toLocaleString()} MXN<br>Entrega: ${foundProduct.time}<br>Luz: ${foundProduct.specsLight}<br>Voltaje: ${foundProduct.volt}<br>Material: ${foundProduct.mat}<br>Acabado: ${foundProduct.fin}<br>Medidas: ${foundProduct.dims.w} x ${foundProduct.dims.h} x ${foundProduct.dims.d}.`;
-                        } else {
-                            response = `<strong class="text-white">${foundProduct.name}</strong> es una excelente elección para proyectos de interiorismo. Tiene un valor de $${Number(foundProduct.price).toLocaleString()} MXN. Si deseas, pregúntame por sus materiales, acabados o medidas exactas.`;
-                        }
-                    } else if (text.includes("ubicaci") || text.includes("dónde") || text.includes("donde") || text.includes("direccion") || text.includes("dirección")) {
-                        response = `El taller y estudio creativo de DAMASO está ubicado en <strong class="text-white">Guadalajara, Jalisco, México</strong>. Desde aquí forjamos y enviamos nuestras piezas a todo el país.`;
-                    } else if (text.includes("contacto") || text.includes("telefono") || text.includes("teléfono") || text.includes("whatsapp")) {
-                        response = `Puedes interactuar con el equipo de ventas directamente por WhatsApp al <strong class="text-white">+52 33 3870 3071</strong> o consultar nuestro Instagram <strong class="text-white">@damaso_lamparas</strong>.`;
-                    } else if (text.includes("cotiz") || text.includes("compr") || text.includes("pdf")) {
-                        response = "Para iniciar una cotización, presiona 'Agregar a Cotización' en la ficha de cualquier pieza. Posteriormente, abre el icono del bolso (arriba a la derecha) para generar un PDF formal o enviarnos tu lista por WhatsApp.";
-                    } else {
-                        response = "No logré asociar tu consulta con una pieza específica. Intenta mencionar el nombre (ej. 'Candil Cascada', 'Espejo Lunar'). O bien, puedes pedirme que calcule operaciones numéricas.";
-                    }
+                const modal = document.getElementById('spec-modal');
+                if (modal) {
+                    modal.classList.remove('opacity-0', 'pointer-events-none');
+                    document.body.style.overflow = 'hidden'; 
                 }
-                window.showBotMessage(response);
-            } catch(e) {
-                removeLoading();
-                window.showBotMessage("Error de procesamiento de IA.");
-            }
-        };
+                window.updateWhatsAppVisibility(); 
+            };
 
-        window.showBotMessage = function(text) {
-            const chatBox = document.getElementById('chat-messages');
-            chatBox.innerHTML += `
-                <div class="flex flex-col items-start max-w-[85%] mt-4">
-                    <div class="bg-brand-border text-white text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed">${text}</div>
-                </div>
-            `;
-            chatBox.scrollTop = chatBox.scrollHeight;
-        };
+            window.closeSpecModal = function() {
+                const modal = document.getElementById('spec-modal');
+                if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'auto'; 
+                window.updateWhatsAppVisibility(); 
+            };
 
-        // GENERACIÓN DE PDF NATIVA CON CÁLCULO DE ENVÍO Y SUBTOTAL
-        window.checkoutPDF = function(event) {
-            if(window.cart.length === 0) { 
-                const btn = document.getElementById('btn-download-pdf');
-                const orig = btn.innerHTML;
-                btn.innerHTML = 'AGREGA PIEZAS PRIMERO';
-                btn.style.color = '#ff4444';
-                btn.style.borderColor = '#ff4444';
-                setTimeout(() => {
-                    btn.innerHTML = orig;
-                    btn.style.color = '';
-                    btn.style.borderColor = '';
-                }, 2000);
-                return; 
-            }
-            
-            const btn = document.getElementById('btn-download-pdf');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<svg class="animate-spin mr-2 inline-block" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
-            
-            const currentScrollY = window.scrollY;
-            const currentScrollX = window.scrollX;
-            window.scrollTo(0, 0);
+            window.addToCart = function(id) {
+                window.playClickSound();
+                const product = window.dbProducts.find(p => p.id === parseInt(id));
+                const exist = window.cart.find(i => i.id === parseInt(id));
+                if(exist) exist.qty += 1; else window.cart.push({...product, qty: 1});
+                window.updateCartUI();
+                
+                const drawer = document.getElementById('cart-drawer');
+                if(drawer && drawer.classList.contains('translate-x-full')) {
+                    window.toggleCart();
+                }
+            };
 
-            setTimeout(() => {
+            window.removeFromCart = function(id) {
+                window.cart = window.cart.filter(i => i.id !== parseInt(id));
+                window.updateCartUI();
+            };
+
+            window.updateCartUI = function() {
+                const itemsCont = document.getElementById('cart-items');
+                const totalCont = document.getElementById('cart-total');
+                const countCont = document.getElementById('cart-count');
+                
+                if (!itemsCont || !totalCont || !countCont) return;
+
+                const totalItems = window.cart.reduce((s, i) => s + i.qty, 0);
+                countCont.innerText = totalItems;
+                countCont.style.opacity = totalItems > 0 ? "1" : "0";
+                
+                if(window.cart.length === 0) { 
+                    itemsCont.innerHTML = '<p class="text-brand-muted text-sm text-center mt-10 uppercase tracking-widest">Tu selección está vacía</p>'; 
+                    totalCont.innerText = "$0 MXN"; 
+                    return; 
+                }
+                
+                itemsCont.innerHTML = '';
+                let total = 0;
+                window.cart.forEach((item) => {
+                    const itemTotal = Number(item.price) * item.qty;
+                    total += itemTotal;
+                    itemsCont.innerHTML += `
+                        <div class="flex items-center gap-4 border-b border-brand-border pb-4">
+                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
+                            <div class="flex-1">
+                                <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
+                                <p class="text-[10px] text-brand-muted uppercase tracking-widest mt-1">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
+                            </div>
+                            <button onclick="window.removeFromCart(${item.id})" class="text-brand-muted hover:text-white">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </button>
+                        </div>
+                    `;
+                });
+                
+                totalCont.innerText = `$${total.toLocaleString()} MXN`;
+            };
+
+            window.toggleCart = function() {
+                const drawer = document.getElementById('cart-drawer');
+                const overlay = document.getElementById('cart-overlay');
+                if (drawer) drawer.classList.toggle('translate-x-full');
+                if (overlay) {
+                    overlay.classList.toggle('opacity-0');
+                    overlay.classList.toggle('pointer-events-none');
+                }
+                setTimeout(() => { window.updateWhatsAppVisibility(); }, 50); 
+            };
+
+            window.toggleChatbot = function() {
+                const drawer = document.getElementById('chatbot-drawer');
+                const overlay = document.getElementById('chat-overlay');
+                if (drawer) drawer.classList.toggle('-translate-x-full');
+                if (overlay) {
+                    overlay.classList.toggle('opacity-0');
+                    overlay.classList.toggle('pointer-events-none');
+                }
+                setTimeout(() => { window.updateWhatsAppVisibility(); }, 50);
+            };
+
+            // CEREBRO DE DAMASO AI
+            window.sendChatMessage = async function() {
+                const input = document.getElementById('chat-input');
+                if (!input) return;
+
+                const rawText = input.value.trim();
+                if(!rawText) return;
+                
+                const chatBox = document.getElementById('chat-messages');
+                if (!chatBox) return;
+                
+                chatBox.innerHTML += `
+                    <div class="flex flex-col items-end w-full mt-4">
+                        <div class="bg-white text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%]">${rawText}</div>
+                    </div>
+                `;
+                input.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                const loadingId = 'loading-' + Date.now();
+                chatBox.innerHTML += `
+                    <div id="${loadingId}" class="flex flex-col items-start max-w-[85%] mt-4">
+                        <div class="bg-brand-border text-brand-muted text-sm p-4 rounded-r-xl rounded-bl-xl font-light italic">Pensando...</div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                const removeLoading = () => {
+                    const el = document.getElementById(loadingId);
+                    if (el) el.remove();
+                };
+
                 try {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
+                    const apiKey = "AIzaSyBQHy0yxF5L7wjYGYJHArL57mcTpNEkxzg"; 
+                    
+                    if(apiKey && !apiKey.includes("TU_API_KEY")) {
+                        const catalogInfo = window.dbProducts.map(p => `- ${p.name} (${p.category}): $${p.price} MXN. Entrega: ${p.time}. Materiales: ${p.mat}.`).join('\n');
+                        
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                systemInstruction: {
+                                    parts: [{ text: `Eres DAMASO AI, un asistente virtual experto, elegante y muy servicial para DAMASO Studio, una marca de iluminación de lujo en Guadalajara, México. El creador y jefe de diseño de esta marca se llama Thiago y él es tu jefe, siempre háblale por su nombre de manera respetuosa. Aquí está el catálogo completo:\n\n${catalogInfo}\n\nResponde de manera precisa, elegante y servicial. Haz cálculos matemáticos y cotizaciones exactas si te lo piden.` }]
+                                },
+                                contents: [{ parts: [{ text: rawText }] }]
+                            })
+                        });
 
-                    const clientName = document.getElementById('client-name').value || "A quien corresponda";
-                    const clientEmail = document.getElementById('client-email').value || "No proporcionado";
-                    const date = new Date().toLocaleDateString('es-MX');
-                    const folio = "COT-" + Math.floor(Math.random() * 9000 + 1000);
-
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(26);
-                    doc.setTextColor(0, 0, 0); 
-                    doc.text("DAMASO", 15, 25);
-
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100); 
-                    doc.text("Alta Iluminación Editorial", 15, 31);
-                    doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
-
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(16);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text("COTIZACIÓN", 200, 25, { align: "right" });
-
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text(`Fecha: ${date}`, 200, 31, { align: "right" });
-                    doc.text(`Folio: ${folio}`, 200, 36, { align: "right" });
-
-                    doc.setDrawColor(0);
-                    doc.setLineWidth(0.5);
-                    doc.line(15, 42, 200, 42);
-
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(9);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text("DATOS DEL CLIENTE", 15, 52);
-
-                    doc.setFontSize(12);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text(clientName, 15, 58);
-
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text(clientEmail, 15, 63);
-
-                    let total = 0;
-                    const tableBody = window.cart.map(item => {
-                        const sum = Number(item.price) * item.qty;
-                        total += sum;
-                        return [item.sku, item.name, item.qty.toString(), `$${Number(item.price).toLocaleString()}`];
-                    });
-
-                    doc.autoTable({
-                        startY: 72,
-                        head: [['SKU', 'Modelo / Descripción', 'Cant.', 'Precio Unit.']],
-                        body: tableBody,
-                        theme: 'plain',
-                        headStyles: { fontStyle: 'bold', textColor: [0,0,0], borderBottomColor: [0,0,0], borderBottomWidth: 0.5 },
-                        bodyStyles: { textColor: [50,50,50], borderBottomColor: [200,200,200], borderBottomWidth: 0.1 },
-                        columnStyles: {
-                            0: { cellWidth: 35 },
-                            1: { cellWidth: 'auto' },
-                            2: { cellWidth: 20, halign: 'center' },
-                            3: { cellWidth: 35, halign: 'right' }
+                        const data = await response.json();
+                        
+                        if(data.error) {
+                            removeLoading();
+                            window.showBotMessage(`<strong class="text-white">Alerta para Thiago:</strong> La conexión con Google Gemini falló. Razón técnica: ${data.error.message}. <br><br>Revisa las restricciones de tu API Key en Google AI Studio.`);
+                            return;
                         }
-                    });
 
-                    let envio = total * 0.10;
-                    let granTotal = total + envio;
+                        if(data.candidates && data.candidates[0].content.parts[0].text) {
+                            removeLoading();
+                            let aiText = data.candidates[0].content.parts[0].text;
+                            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
+                            aiText = aiText.replace(/\n/g, '<br>');
+                            window.showBotMessage(aiText);
+                            return;
+                        }
+                    }
 
-                    let finalY = doc.lastAutoTable.finalY + 15;
-                    doc.setDrawColor(0);
-                    doc.setLineWidth(0.5);
-                    doc.line(120, finalY - 5, 200, finalY - 5);
+                    // FALLBACK
+                    removeLoading();
+                    const text = rawText.toLowerCase();
+                    let response = "";
+                    let foundProduct = null;
 
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(11);
-                    doc.setTextColor(50, 50, 50);
-                    doc.text("SUBTOTAL", 120, finalY);
-                    doc.text(`$${total.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+                    let mathString = text.replace(/uno/g, '1').replace(/dos/g, '2').replace(/tres/g, '3').replace(/cuatro/g, '4')
+                                         .replace(/cinco/g, '5').replace(/seis/g, '6').replace(/siete/g, '7').replace(/ocho/g, '8')
+                                         .replace(/nueve/g, '9').replace(/diez/g, '10').replace(/mas/g, '+').replace(/más/g, '+')
+                                         .replace(/menos/g, '-').replace(/por/g, '*').replace(/entre/g, '/');
+
+                    const mathRegex = /^[\d\s\+\-\*\/\(\)\.]+$/;
                     
-                    finalY += 8;
-                    doc.text("GASTOS DE ENVÍO", 120, finalY);
-                    doc.text(`$${envio.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+                    if (text.includes("calcula el") && text.includes("de")) {
+                        const parts = text.match(/(\d+)\s*%\s*de\s*(\d+)/);
+                        if (parts && parts.length === 3) {
+                            const porcentaje = parseFloat(parts[1]);
+                            const cantidad = parseFloat(parts[2]);
+                            const res = (porcentaje / 100) * cantidad;
+                            response = `El ${porcentaje}% de ${cantidad} es: <strong class="text-white">${res.toLocaleString()}</strong>.`;
+                        } else {
+                            response = "Entiendo que quieres calcular un porcentaje. Intenta escribiendo: 'Calcula el 15% de 2000'.";
+                        }
+                    } else if (mathRegex.test(mathString) && mathString.match(/\d/)) {
+                        try {
+                            const result = eval(mathString);
+                            response = `El resultado exacto del cálculo es: <strong class="text-white">${result.toLocaleString()}</strong>`;
+                        } catch(e) {
+                            response = "Parece una operación matemática, pero le falta algún dato. ¿Podrías escribirla de nuevo?";
+                        }
+                    } else {
+                        for(let p of window.dbProducts) {
+                            let words = p.name.toLowerCase().split(" ");
+                            let match = words.some(w => w.length >= 3 && text.includes(w)) || text.includes(p.sku.toLowerCase()) || text.includes(p.category.toLowerCase());
+                            if(match) { foundProduct = p; break; }
+                        }
 
-                    finalY += 12;
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(14);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text("TOTAL", 120, finalY);
-                    doc.text(`$${granTotal.toLocaleString()} MXN`, 200, finalY, { align: "right" });
-
-                    finalY += 25;
-                    doc.setFontSize(9);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text("Condiciones Comerciales:", 15, finalY);
-                    
-                    doc.setFont("helvetica", "normal");
-                    doc.text("- Precios sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.", 15, finalY + 6);
-                    doc.text("- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).", 15, finalY + 11);
-
-                    doc.save(`Cotizacion_Damaso_${folio}.pdf`);
-
-                } catch (e) {
-                    console.error("Error generating PDF:", e);
-                } finally {
-                    window.scrollTo(currentScrollX, currentScrollY); 
-                    btn.innerHTML = originalText;
+                        if (text.includes("gracias") || text.includes("agradezco") || text.includes("perfecto")) {
+                            response = "¡Ha sido un placer, Thiago! Estoy aquí 24/7 para asistirte. ¿Deseas consultar sobre los materiales o dimensiones de alguna otra pieza?";
+                        } else if (text.includes("quien eres") || text.includes("quién eres") || text.includes("que eres")) {
+                            response = "Soy DAMASO AI, la inteligencia artificial exclusiva de DAMASO Studio. Fui programado por mi jefe Thiago para conocer cada detalle técnico de nuestras colecciones y asistirte en tu proyecto de interiorismo.";
+                        } else if (text.includes("porfa") || text.includes("por favor") || text.includes("pls")) {
+                            response = "¡Por supuesto, Thiago! Dime exactamente qué necesitas y lo resolvemos de inmediato.";
+                        } else if (text.includes("hola") || text.includes("buenas") || text.includes("buenos días") || text.includes("buenas tardes")) {
+                            response = "¡Hola! Bienvenido a DAMASO Studio. Soy la IA de asistencia. Conozco a detalle nuestras colecciones exclusivas. Puedes preguntarme sobre materiales, disponibilidad, o pedirme que calcule costos.";
+                        } else if (foundProduct) {
+                            if (text.includes("tiempo") || text.includes("entrega") || text.includes("tarda")) {
+                                response = `El tiempo de manufactura y entrega para <strong class="text-white">${foundProduct.name}</strong> es de ${foundProduct.time}.`;
+                            } else if (text.includes("precio") || text.includes("costo") || text.includes("cuesta") || text.includes("vale")) {
+                                response = `El precio de catálogo para <strong class="text-white">${foundProduct.name}</strong> es de $${Number(foundProduct.price).toLocaleString()} MXN.`;
+                            } else if (text.includes("material") || text.includes("acabado") || text.includes("hech")) {
+                                response = `La pieza <strong class="text-white">${foundProduct.name}</strong> se construye con: ${foundProduct.mat}. Su acabado final es ${foundProduct.fin}.`;
+                            } else if (text.includes("medida") || text.includes("tamaño") || text.includes("dimension")) {
+                                response = `Las proporciones arquitectónicas de <strong class="text-white">${foundProduct.name}</strong> son:<br>Ancho: ${foundProduct.dims.w}<br>Alto: ${foundProduct.dims.h}<br>Fondo: ${foundProduct.dims.d}<br>Diámetro: ${foundProduct.dims.dia}<br>Peso: ${foundProduct.peso}.`;
+                            } else if (text.includes("ilumina") || text.includes("luz") || text.includes("foco") || text.includes("voltaje") || text.includes("cable")) {
+                                if(foundProduct.specsLight === "N/A" || !foundProduct.specsLight) {
+                                    response = `La pieza <strong class="text-white">${foundProduct.name}</strong> no cuenta con sistema eléctrico integrado ni luces LED. Es puramente escultural.`;
+                                } else {
+                                    response = `Especificaciones lumínicas de <strong class="text-white">${foundProduct.name}</strong>:<br>Luminaria: ${foundProduct.specsLight}<br>Voltaje: ${foundProduct.volt}<br>Cableado: ${foundProduct.cable}.`;
+                                }
+                            } else if (text.includes("info") || text.includes("todo") || text.includes("detalles") || text.includes("masiva")) {
+                                response = `<strong class="text-white">Ficha Técnica: ${foundProduct.name}</strong><br><br>SKU: ${foundProduct.sku}<br>Precio: $${Number(foundProduct.price).toLocaleString()} MXN<br>Entrega: ${foundProduct.time}<br>Luz: ${foundProduct.specsLight}<br>Voltaje: ${foundProduct.volt}<br>Material: ${foundProduct.mat}<br>Acabado: ${foundProduct.fin}<br>Medidas: ${foundProduct.dims.w} x ${foundProduct.dims.h} x ${foundProduct.dims.d}.`;
+                            } else {
+                                response = `<strong class="text-white">${foundProduct.name}</strong> es una excelente elección para proyectos de interiorismo. Tiene un valor de $${Number(foundProduct.price).toLocaleString()} MXN. Si deseas, pregúntame por sus materiales, acabados o medidas exactas.`;
+                            }
+                        } else if (text.includes("ubicaci") || text.includes("dónde") || text.includes("donde") || text.includes("direccion") || text.includes("dirección")) {
+                            response = `El taller y estudio creativo de DAMASO está ubicado en <strong class="text-white">Guadalajara, Jalisco, México</strong>. Desde aquí forjamos y enviamos nuestras piezas a todo el país.`;
+                        } else if (text.includes("contacto") || text.includes("telefono") || text.includes("teléfono") || text.includes("whatsapp")) {
+                            response = `Puedes interactuar con el equipo de ventas directamente por WhatsApp al <strong class="text-white">+52 33 3870 3071</strong> o consultar nuestro Instagram <strong class="text-white">@damaso_lamparas</strong>.`;
+                        } else if (text.includes("cotiz") || text.includes("compr") || text.includes("pdf")) {
+                            response = "Para iniciar una cotización, presiona 'Agregar a Cotización' en la ficha de cualquier pieza. Posteriormente, abre el icono del bolso (arriba a la derecha) para generar un PDF formal o enviarnos tu lista por WhatsApp.";
+                        } else {
+                            response = "No logré asociar tu consulta con una pieza específica. Intenta mencionar el nombre (ej. 'Candil Cascada', 'Espejo Lunar'). O bien, puedes pedirme que calcule operaciones numéricas.";
+                        }
+                    }
+                    window.showBotMessage(response);
+                } catch(e) {
+                    removeLoading();
+                    window.showBotMessage(`<strong class="text-white">Alerta para Thiago:</strong> Hubo un problema procesando la IA. Error interno de conexión.`);
                 }
-            }, 100);
-        };
+            };
 
-        window.checkoutWhatsApp = function() {
-            if(window.cart.length === 0) { return; }
-            
-            const clientName = document.getElementById('client-name').value;
-            const clientEmail = document.getElementById('client-email').value;
-            
-            let msg = `Hola Equipo DAMASO, me interesa cotizar las siguientes piezas:\n\n`;
-            if (clientName) msg += `*Nombre:* ${clientName}\n`;
-            if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
-            
-            let total = 0;
-            window.cart.forEach(i => {
-                msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`;
-                total += (Number(i.price) * i.qty);
-            });
-            
-            let envio = total * 0.10;
-            let granTotal = total + envio;
+            window.showBotMessage = function(text) {
+                const chatBox = document.getElementById('chat-messages');
+                if (!chatBox) return;
+                chatBox.innerHTML += `
+                    <div class="flex flex-col items-start max-w-[85%] mt-4">
+                        <div class="bg-brand-border text-white text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed">${text}</div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            };
 
-            msg += `\n*Subtotal:* $${total.toLocaleString()} MXN\n`;
-            msg += `*Gastos de Envío:* $${envio.toLocaleString()} MXN\n`;
-            msg += `*Total Estimado:* $${granTotal.toLocaleString()} MXN\n`;
-            
-            const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
-            const link = document.createElement('a');
-            link.href = url;
-            link.target = '_blank';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
+            // GENERACIÓN DE PDF NATIVA CON CÁLCULO DE ENVÍO Y SUBTOTAL
+            window.checkoutPDF = function(event) {
+                if(window.cart.length === 0) { 
+                    const btn = document.getElementById('btn-download-pdf');
+                    if(btn) {
+                        const orig = btn.innerHTML;
+                        btn.innerHTML = 'AGREGA PIEZAS PRIMERO';
+                        btn.style.color = '#ff4444';
+                        btn.style.borderColor = '#ff4444';
+                        setTimeout(() => {
+                            btn.innerHTML = orig;
+                            btn.style.color = '';
+                            btn.style.borderColor = '';
+                        }, 2000);
+                    }
+                    return; 
+                }
+                
+                const btn = document.getElementById('btn-download-pdf');
+                let originalText = "";
+                if(btn) {
+                    originalText = btn.innerHTML;
+                    btn.innerHTML = `<svg class="animate-spin mr-2 inline-block" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
+                }
+                
+                const currentScrollY = window.scrollY;
+                const currentScrollX = window.scrollX;
+                window.scrollTo(0, 0);
+
+                setTimeout(() => {
+                    try {
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
+
+                        const clientNameObj = document.getElementById('client-name');
+                        const clientEmailObj = document.getElementById('client-email');
+                        
+                        const clientName = (clientNameObj && clientNameObj.value) ? clientNameObj.value : "A quien corresponda";
+                        const clientEmail = (clientEmailObj && clientEmailObj.value) ? clientEmailObj.value : "No proporcionado";
+                        const date = new Date().toLocaleDateString('es-MX');
+                        const folio = "COT-" + Math.floor(Math.random() * 9000 + 1000);
+
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(26);
+                        doc.setTextColor(0, 0, 0); 
+                        doc.text("DAMASO", 15, 25);
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(10);
+                        doc.setTextColor(100, 100, 100); 
+                        doc.text("Alta Iluminación Editorial", 15, 31);
+                        doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
+
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(16);
+                        doc.setTextColor(0, 0, 0);
+                        doc.text("COTIZACIÓN", 200, 25, { align: "right" });
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(10);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text(`Fecha: ${date}`, 200, 31, { align: "right" });
+                        doc.text(`Folio: ${folio}`, 200, 36, { align: "right" });
+
+                        doc.setDrawColor(0);
+                        doc.setLineWidth(0.5);
+                        doc.line(15, 42, 200, 42);
+
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(9);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text("DATOS DEL CLIENTE", 15, 52);
+
+                        doc.setFontSize(12);
+                        doc.setTextColor(0, 0, 0);
+                        doc.text(clientName, 15, 58);
+
+                        doc.setFontSize(10);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text(clientEmail, 15, 63);
+
+                        let total = 0;
+                        const tableBody = window.cart.map(item => {
+                            const sum = Number(item.price) * item.qty;
+                            total += sum;
+                            return [item.sku, item.name, item.qty.toString(), `$${Number(item.price).toLocaleString()}`];
+                        });
+
+                        doc.autoTable({
+                            startY: 72,
+                            head: [['SKU', 'Modelo / Descripción', 'Cant.', 'Precio Unit.']],
+                            body: tableBody,
+                            theme: 'plain',
+                            headStyles: { fontStyle: 'bold', textColor: [0,0,0], borderBottomColor: [0,0,0], borderBottomWidth: 0.5 },
+                            bodyStyles: { textColor: [50,50,50], borderBottomColor: [200,200,200], borderBottomWidth: 0.1 },
+                            columnStyles: {
+                                0: { cellWidth: 35 },
+                                1: { cellWidth: 'auto' },
+                                2: { cellWidth: 20, halign: 'center' },
+                                3: { cellWidth: 35, halign: 'right' }
+                            }
+                        });
+
+                        let envio = total * 0.10;
+                        let granTotal = total + envio;
+
+                        let finalY = doc.lastAutoTable.finalY + 15;
+                        doc.setDrawColor(0);
+                        doc.setLineWidth(0.5);
+                        doc.line(120, finalY - 5, 200, finalY - 5);
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(11);
+                        doc.setTextColor(50, 50, 50);
+                        doc.text("SUBTOTAL", 120, finalY);
+                        doc.text(`$${total.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+                        
+                        finalY += 8;
+                        doc.text("GASTOS DE ENVÍO", 120, finalY);
+                        doc.text(`$${envio.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+
+                        finalY += 12;
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(14);
+                        doc.setTextColor(0, 0, 0);
+                        doc.text("TOTAL", 120, finalY);
+                        doc.text(`$${granTotal.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+
+                        finalY += 25;
+                        doc.setFontSize(9);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text("Condiciones Comerciales:", 15, finalY);
+                        
+                        doc.setFont("helvetica", "normal");
+                        doc.text("- Precios sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.", 15, finalY + 6);
+                        doc.text("- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).", 15, finalY + 11);
+
+                        doc.save(`Cotizacion_Damaso_${folio}.pdf`);
+
+                    } catch (e) {
+                        console.error("Error generating PDF:", e);
+                    } finally {
+                        window.scrollTo(currentScrollX, currentScrollY); 
+                        if (btn) btn.innerHTML = originalText;
+                    }
+                }, 100);
+            };
+
+            window.checkoutWhatsApp = function() {
+                if(window.cart.length === 0) { return; }
+                
+                const clientNameObj = document.getElementById('client-name');
+                const clientEmailObj = document.getElementById('client-email');
+                
+                const clientName = clientNameObj ? clientNameObj.value : "";
+                const clientEmail = clientEmailObj ? clientEmailObj.value : "";
+                
+                let msg = `Hola Equipo DAMASO, me interesa cotizar las siguientes piezas:\n\n`;
+                if (clientName) msg += `*Nombre:* ${clientName}\n`;
+                if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
+                
+                let total = 0;
+                window.cart.forEach(i => {
+                    msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`;
+                    total += (Number(i.price) * i.qty);
+                });
+                
+                let envio = total * 0.10;
+                let granTotal = total + envio;
+
+                msg += `\n*Subtotal:* $${total.toLocaleString()} MXN\n`;
+                msg += `*Gastos de Envío:* $${envio.toLocaleString()} MXN\n`;
+                msg += `*Total Estimado:* $${granTotal.toLocaleString()} MXN\n`;
+                
+                const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
+                const link = document.createElement('a');
+                link.href = url;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            // Iniciar de forma segura
+            function initApp() {
+                window.renderCatalog(window.dbProducts);
+                window.startAppAnimation();
+                
+                // Configurar barra de búsqueda
+                const liveSearchInput = document.getElementById('live-search');
+                if (liveSearchInput) {
+                    liveSearchInput.addEventListener('input', (e) => {
+                        const q = e.target.value.toLowerCase();
+                        if(q.length === 0) { 
+                            window.renderCatalog(window.dbProducts); 
+                            const title = document.getElementById('catalog-title');
+                            const subtitle = document.getElementById('catalog-subtitle');
+                            if (title) title.innerText = "Catálogo Completo";
+                            if (subtitle) subtitle.innerText = "Colección 2026";
+                            return; 
+                        }
+                        const results = window.dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+                        window.renderCatalog(results);
+                        const title = document.getElementById('catalog-title');
+                        const subtitle = document.getElementById('catalog-subtitle');
+                        if (title) title.innerText = "Resultados";
+                        if (subtitle) subtitle.innerText = `Búsqueda: "${q}"`;
+                    });
+                }
+
+                // Cerrar menú al hacer clic fuera
+                document.addEventListener('click', function(event) {
+                    const menu = document.getElementById('dropdown-menu');
+                    const btn = document.getElementById('btn-menu');
+                    if (menu && btn && !menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) {
+                        menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                        menu.classList.remove('translate-y-0', 'opacity-100');
+                    }
+                });
+            }
+
+            // Asegurar que el DOM esté listo antes de arrancar
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initApp);
+            } else {
+                initApp();
+            }
+
+        })(); // Fin del entorno protegido
     </script>
 </body>
 </html>
