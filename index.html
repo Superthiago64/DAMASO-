@@ -1,4 +1,4 @@
----ESTA PAGINA ESTA EN CONTRUCCION POR LO QUE LA INFO PODRIA NO SER CORRECTA---
+---ESTA PAGINA ESTA EN CONSTRUCCION POR LO QUE LA INFO PODRIA NO SER CORRECTA---
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -50,7 +50,7 @@
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #030303; }
-        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; } /* Scrollbar dorado */
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
 
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
@@ -76,7 +76,6 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 50px rgba(255, 255, 255, 0.3);
         }
 
-        /* EFECTO GLOW DORADO */
         .glow-gold {
             text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4), 0 0 30px rgba(212,175,55,0.2);
         }
@@ -112,7 +111,6 @@
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">S</span>
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">O</span>
         </div>
-        <!-- STUDIO EN DORADO GLOW -->
         <span id="entry-studio" class="opacity-0 transition-opacity duration-1000 font-editorial italic text-3xl sm:text-4xl md:text-5xl text-brand-gold mt-4 glow-gold">Studio</span>
     </div>
 
@@ -166,7 +164,6 @@
                 <button id="btn-menu" onclick="window.toggleCategories(event)" class="relative z-[999] bg-transparent border border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black transition-colors px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center shadow-[0_0_10px_rgba(212,175,55,0.2)]">
                     MENÚ
                 </button>
-                <!-- LOGOTIPO EN BLANCO CON GLOW DE LUZ (Como solicitaste) -->
                 <a href="#" onclick="window.scrollTo(0,0);" class="font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text uppercase font-bold ml-2">Damaso</a>
             </div>
 
@@ -213,8 +210,8 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE (SUPER BOT LOCAL) -->
-    <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-brand-gold transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[15px_0_30px_rgba(212,175,55,0.1)]">
+    <!-- CHATBOT ASISTENTE INTELIGENTE -->
+    <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-brand-gold transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[15px_0_30px_rgba(212,175,55,0.15)]">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black">
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-full bg-brand-gold shadow-[0_0_15px_rgba(212,175,55,0.8)] flex items-center justify-center text-black">
@@ -229,12 +226,12 @@
         <div class="flex-1 overflow-y-auto p-6 space-y-4 chat-scroll bg-[#0a0a0a]" id="chat-messages">
             <div class="flex flex-col items-start max-w-[85%]">
                 <div class="bg-brand-border text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)]">
-                    ¡Hola Thiago! Soy DAMASO AI, la inteligencia artificial del estudio. Fui programado por ti con un motor avanzado. Entiendo errores de ortografía, calculo cotizaciones y conozco todo el catálogo. ¿En qué te asisto hoy, Jefe?
+                    Bienvenido a DAMASO Studio. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?
                 </div>
             </div>
         </div>
         <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2">
-            <input type="text" id="chat-input" placeholder="Escribe tu pregunta (con o sin ortografía)..." class="flex-1 bg-transparent border border-brand-border rounded-full px-4 py-2 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors" onkeypress="if(event.key === 'Enter') window.sendChatMessage()">
+            <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-transparent border border-brand-border rounded-full px-4 py-2 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors" onkeypress="if(event.key === 'Enter') window.sendChatMessage()">
             <button onclick="window.sendChatMessage()" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)]">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
@@ -290,7 +287,7 @@
     </div>
 
     <!-- Carrito Lateral -->
-    <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-brand-gold transform translate-x-full transition-transform duration-500 flex flex-col shadow-[-15px_0_30px_rgba(212,175,55,0.1)]">
+    <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-brand-gold transform translate-x-full transition-transform duration-500 flex flex-col shadow-[-15px_0_30px_rgba(212,175,55,0.15)]">
         <div class="p-8 border-b border-brand-gold flex justify-between items-center">
             <h2 class="font-editorial text-2xl tracking-wider text-brand-gold glow-gold">Mi Selección</h2>
             <button onclick="window.toggleCart()" class="text-brand-gold hover:text-white">
@@ -414,13 +411,13 @@
     </footer>
 
     <!-- BOTÓN WHATSAPP FLOTANTE EN ORO PREMIUM -->
-    <a id="whatsapp-float" href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#0a0a0a] border-2 border-brand-gold text-brand-gold p-4 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)] hover:scale-110 hover:bg-brand-gold hover:text-black hover:shadow-[0_0_30px_rgba(212,175,55,0.9)] transition-all duration-300 z-[999] flex items-center justify-center opacity-100 scale-100" aria-label="Contacto WhatsApp">
-        <svg class="w-8 h-8 pointer-events-none drop-shadow-[0_0_5px_rgba(212,175,55,0.8)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="currentColor">
+    <a id="whatsapp-float" href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#0a0a0a] border border-brand-gold text-brand-gold p-4 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 hover:bg-brand-gold hover:text-black hover:shadow-[0_0_30px_rgba(212,175,55,0.8)] transition-all duration-300 z-[999] flex items-center justify-center opacity-100 scale-100" aria-label="Contacto WhatsApp">
+        <svg class="w-8 h-8 pointer-events-none drop-shadow-[0_0_5px_rgba(212,175,55,0.6)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="currentColor">
             <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 448l84.5-22.1c32.7 18.1 69.6 27.7 107.5 27.7 122.4 0 222-99.6 222-222 0-59.3-23.1-115.1-65.1-157.1zm-157 298.9c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 316.5l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-103.5 84.3-187.8 187.8-187.8 55.3 0 107.3 21.5 146.3 60.6 39.1 39.1 60.6 91.1 60.6 146.4-.1 103.4-84.4 187.7-187.9 187.7zm102.9-140c-5.6-2.8-33.5-16.5-38.7-18.4-5.2-1.9-9-2.8-12.8 2.8-3.8 5.6-14.6 18.4-17.9 22.2-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.9-8.8-45.5-25.2-16.8-12.8-28.1-28.7-31.4-34.3-3.3-5.6-.4-8.7 2.4-11.5 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.8-17.5-42.2-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47.1 0 27.8 20.3 54.7 23.1 58.5 2.8 3.8 39.9 60.1 96.6 84.4 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.5-13.7 38.2-26.9 4.7-13.2 4.7-24.5 3.3-26.9-1.3-2.5-5.1-4-10.8-6.8z"/>
         </svg>
     </a>
 
-    <!-- MOTOR LÓGICO Y CEREBRO DE INTELIGENCIA LOCAL -->
+    <!-- SCRIPT DE LÓGICA PRINCIPAL ÚNICO Y PROTEGIDO -->
     <script>
         (function() {
             window.cart = [];
@@ -441,7 +438,7 @@
                 { id: 10, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-006", desc: "Arbotante elegante con cilindros de vidrio transparente que encierran focos estilo Edison.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
                 { id: 11, name: "Arbotante Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-007", desc: "Arbotante de muro con espejo circular minimalista y aro perimetral luminoso trasero.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" }, peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
 
-                // ESPEJOS (19)
+                // ESPEJOS (21) -> INCLUYE LOS DOS NUEVOS
                 { id: 12, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-001", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta para crear un efecto flotante en el muro.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
                 { id: 13, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-002", desc: "Espejo rectangular de piso o muro de gran formato con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
                 { id: 14, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-003", desc: "Espejo rectangular elegante con un grueso marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata de alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
@@ -461,6 +458,8 @@
                 { id: 28, name: "Espejo Piso Orgánico", category: "espejos", price: 17800, img: "IMG_2006.png", sku: "DM-ESP-017", desc: "Imponente espejo de piso en forma de gota alargada, enmarcado en madera noble.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "190 cm", d: "4 cm", dia: "N/A" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata, nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
                 { id: 29, name: "Espejo Rectangular Oro Viejo", category: "espejos", price: 16800, img: "IMG_2008.png", sku: "DM-ESP-018", desc: "Espejo rectangular con cristal oxidado artesanal y un sofisticado marco color oro viejo.", specsLight: "N/A", cable: "N/A", dims: { w: "75 cm", h: "135 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Latón y cristal avejentado", fin: "Oro viejo texturizado", time: "4 semanas", cert: "N/A" },
                 { id: 30, name: "Espejo Doble Eclipse Trasero", category: "espejos", price: 26800, img: "IMG_2010.png", sku: "DM-ESP-019", desc: "Espejo monumental compuesto de dos círculos excéntricos de diferente tamaño.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
+                { id: 51, name: "Espejo Circular Panorama", category: "espejos", price: 15500, img: "IMG_2124.PNG", sku: "DM-ESP-020", desc: "Espejo circular de gran formato con un marco metálico ultra fino en tono bronce. Su pureza geométrica y amplitud visual lo hacen ideal para estudios y recibidores.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "2 cm", dia: "120 cm" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata, marco de acero ligero", fin: "Bronce sutil mate", time: "3 a 4 semanas", cert: "N/A" },
+                { id: 52, name: "Espejo Óvalo Arquitectónico", category: "espejos", price: 18900, img: "IMG_2126.PNG", sku: "DM-ESP-021", desc: "Espejo ovalado con un sofisticado diseño de doble marco flotante en latón avejentado. Una pieza escultural que aporta profundidad a cualquier espacio contemporáneo.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "130 cm", d: "5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata inastillable, marco doble de latón", fin: "Latón cobrizado oscuro", time: "4 semanas", cert: "N/A" },
 
                 // LÁMPARAS DE MESA (6)
                 { id: 31, name: "Lámpara Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", sku: "DM-MES-001", desc: "Lámpara de mesa minimalista con una base cónica de alabastro natural translúcido.", specsLight: "1x E26 LED 8W, 3000K", cable: "Cable transparente 1.8m", dims: { w: "30 cm", h: "50 cm", d: "30 cm", dia: "30 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Alabastro pulido y lino", fin: "Blanco veteado natural", time: "3 semanas", cert: "NOM" },
@@ -897,20 +896,19 @@
                 setTimeout(() => { window.updateWhatsAppVisibility(); }, 50);
             };
 
-            // ==========================================
-            // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT)
-            // ==========================================
-            // Funciones matemáticas de distancia para tolerar errores ortográficos
+            // =========================================================================
+            // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP)
+            // =========================================================================
+            
+            // 1. Matemáticas de distancia para tolerar errores ortográficos graves (Levenshtein)
             function getLevenshteinDistance(a, b) {
                 if(a.length === 0) return b.length;
                 if(b.length === 0) return a.length;
                 var matrix = [];
-                let i;
-                for(i = 0; i <= b.length; i++){ matrix[i] = [i]; }
-                let j;
-                for(j = 0; j <= a.length; j++){ matrix[0][j] = j; }
-                for(i = 1; i <= b.length; i++){
-                    for(j = 1; j <= a.length; j++){
+                for(let i = 0; i <= b.length; i++){ matrix[i] = [i]; }
+                for(let j = 0; j <= a.length; j++){ matrix[0][j] = j; }
+                for(let i = 1; i <= b.length; i++){
+                    for(let j = 1; j <= a.length; j++){
                         if(b.charAt(i-1) == a.charAt(j-1)){
                             matrix[i][j] = matrix[i-1][j-1];
                         } else {
@@ -921,11 +919,29 @@
                 return matrix[b.length][a.length];
             }
 
-            function removeAccents(str) {
-                return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            // 2. Limpieza de texto profunda (Quita acentos y pasa a minúsculas)
+            function cleanText(str) {
+                return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[¿?¡!.,;:]/g, "");
             }
 
-            window.botContext = { lastProduct: null };
+            // 3. Diccionarios de intenciones (Keywords y sinónimos)
+            const intents = {
+                saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches"],
+                despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "thiago", "bot", "robot", "ia"],
+                ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion"],
+                contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook"],
+                ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion"],
+                compra: ["comprar", "cotizar", "cotizacion", "pdf", "bolsa", "carrito", "pagar", "adquirir", "pedido"],
+                precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "$"],
+                tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega"],
+                material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton"],
+                medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide"],
+                luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica"]
+            };
+
+            // 4. Memoria del Bot (Contexto conversacional)
+            window.botContext = { lastProduct: null, lastIntent: null };
 
             window.sendChatMessage = async function() {
                 const input = document.getElementById('chat-input');
@@ -948,7 +964,7 @@
                 const loadingId = 'loading-' + Date.now();
                 chatBox.innerHTML += `
                     <div id="${loadingId}" class="flex flex-col items-start max-w-[85%] mt-4">
-                        <div class="bg-[#1a1a1a] text-brand-gold border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light italic glow-gold">Analizando...</div>
+                        <div class="bg-[#1a1a1a] text-brand-gold border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light italic glow-gold">Analizando consulta...</div>
                     </div>
                 `;
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -958,14 +974,54 @@
                     if (el) el.remove();
                 };
 
-                // Usamos un pequeño timeout para simular que está "escribiendo" y no sea instantáneo e irreal
+                // Si hay API key de Gemini, intentamos usarla primero. Si falla, el "Super Bot" local entra en acción.
+                try {
+                    const apiKey = "AIzaSyBQHy0yxF5L7wjYGYJHArL57mcTpNEkxzg"; 
+                    
+                    if(apiKey && !apiKey.includes("TU_API_KEY")) {
+                        const catalogInfo = window.dbProducts.map(p => `- ${p.name} (${p.category}): $${p.price} MXN. Entrega: ${p.time}. Materiales: ${p.mat}.`).join('\n');
+                        
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                systemInstruction: {
+                                    // REGLA ESTRICTA: El bot no debe llamar Thiago al cliente.
+                                    parts: [{ text: `Eres DAMASO AI, un asistente virtual experto y elegante para DAMASO Studio, una marca de iluminación en Guadalajara. Tu creador se llama Thiago, pero TÚ ESTÁS HABLANDO CON UN CLIENTE. NUNCA llames "Thiago" al usuario con el que hablas. Dirígete a él como "Estimado cliente" o de forma impersonal y elegante. Catálogo:\n\n${catalogInfo}` }]
+                                },
+                                contents: [{ parts: [{ text: rawText }] }]
+                            })
+                        });
+
+                        const data = await response.json();
+                        
+                        // Si Gemini responde bien, usamos su respuesta
+                        if(data.candidates && data.candidates[0].content.parts[0].text) {
+                            removeLoading();
+                            let aiText = data.candidates[0].content.parts[0].text;
+                            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
+                            aiText = aiText.replace(/\n/g, '<br>');
+                            window.showBotMessage(aiText);
+                            return;
+                        }
+                    }
+                } catch(e) {
+                    // Si Gemini falla (red, cors, bloqueo), ignoramos el error silenciosamente 
+                    // y dejamos que el SUPER BOT LOCAL tome el control de inmediato.
+                }
+
+                // ==========================================
+                // EJECUCIÓN DEL SUPER BOT LOCAL NLP
+                // ==========================================
                 setTimeout(() => {
                     removeLoading();
-                    const text = removeAccents(rawText);
+                    const text = cleanText(rawText);
+                    const words = text.split(/\s+/);
                     let response = "";
                     let foundProduct = null;
+                    let detectedIntents = [];
 
-                    // 1. Detección de Matemáticas (Cotizaciones y Porcentajes)
+                    // --- 1. DETECCIÓN MATEMÁTICA Y PORCENTAJES ---
                     let mathString = text.replace(/uno/g, '1').replace(/dos/g, '2').replace(/tres/g, '3').replace(/cuatro/g, '4')
                                          .replace(/cinco/g, '5').replace(/seis/g, '6').replace(/siete/g, '7').replace(/ocho/g, '8')
                                          .replace(/nueve/g, '9').replace(/diez/g, '10').replace(/mas/g, '+').replace(/más/g, '+')
@@ -973,113 +1029,121 @@
 
                     const mathRegex = /^[\d\s\+\-\*\/\(\)\.]+$/;
                     
-                    if (text.includes("calcula el") || text.includes("%") || text.includes("porciento") || text.includes("descuento")) {
+                    if (text.includes("calcula") || text.includes("%") || text.includes("porciento") || text.includes("descuento")) {
                         const parts = mathString.match(/(\d+)\s*(%|porciento|de)\s*(?:de\s*)?(\d+)/);
                         if (parts && parts.length >= 4) {
                             const porcentaje = parseFloat(parts[1]);
                             const cantidad = parseFloat(parts[3]);
                             const res = (porcentaje / 100) * cantidad;
-                            response = `Jefe Thiago, el ${porcentaje}% de ${cantidad.toLocaleString()} es: <strong class="text-brand-gold text-lg glow-gold">${res.toLocaleString()}</strong>.`;
-                        } else {
-                            response = "Thiago, detecto que quieres calcular un porcentaje. Prueba con este formato: 'Calcula el 15% de 45000'.";
+                            response = `Estimado cliente, el ${porcentaje}% de ${cantidad.toLocaleString()} equivale a: <strong class="text-brand-gold text-lg glow-gold">${res.toLocaleString()}</strong>.`;
                         }
                     } else if (mathRegex.test(mathString) && mathString.match(/\d/) && !text.includes("sku")) {
                         try {
                             const result = eval(mathString);
-                            response = `El resultado exacto es: <strong class="text-brand-gold text-lg glow-gold">${result.toLocaleString()}</strong>.`;
-                        } catch(e) {
-                            response = "La operación matemática está incompleta. Escríbela de nuevo, jefe.";
-                        }
+                            response = `El resultado matemático exacto de su consulta es: <strong class="text-brand-gold text-lg glow-gold">${result.toLocaleString()}</strong>.`;
+                        } catch(e) {}
                     } 
                     
                     if (!response) {
-                        // 2. Búsqueda de Productos con Tolerancia a Ortografía (Levenshtein)
-                        let words = text.split(/\s+/);
-                        
-                        // Revisamos SKU primero
+                        // --- 2. EXTRACCIÓN DE INTENCIONES (NLP BÁSICO) ---
+                        for (const [intentName, keywords] of Object.entries(intents)) {
+                            if (keywords.some(kw => text.includes(kw))) {
+                                detectedIntents.push(intentName);
+                            }
+                        }
+
+                        // --- 3. BÚSQUEDA DE PRODUCTO (ORTOGRAFÍA DIFUSA - LEVENSHTEIN) ---
+                        const stopWords = ["el", "la", "los", "las", "un", "una", "de", "del", "a", "ante", "con", "por", "para", "espejo", "candil", "lampara"];
+                        let searchWords = words.filter(w => !stopWords.includes(w) && w.length > 2);
+
+                        // A. Búsqueda exacta de SKU o substring directo
                         for (let p of window.dbProducts) {
-                            if (text.includes(p.sku.toLowerCase())) {
+                            if (text.includes(p.sku.toLowerCase()) || cleanText(p.name).includes(text)) {
                                 foundProduct = p; break;
                             }
                         }
 
-                        // Revisamos por coincidencia difusa (ortografía)
-                        if (!foundProduct) {
+                        // B. Búsqueda por tolerancia a errores ortográficos (Solo si no encontró exacto)
+                        if (!foundProduct && searchWords.length > 0) {
+                            let bestMatch = null;
+                            let lowestDistance = 999;
+
                             for (let p of window.dbProducts) {
-                                let pNameClean = removeAccents(p.name);
-                                // Coincidencia directa parcial
-                                if (pNameClean.includes(text)) {
-                                    foundProduct = p; break;
-                                }
-                                // Coincidencia difusa de palabras largas
-                                for (let w of words) {
-                                    if (w.length < 4) continue;
-                                    for (let pw of pNameClean.split(/\s+/)) {
-                                        if (pw.length >= 4 && getLevenshteinDistance(w, pw) <= 2) {
-                                            foundProduct = p; break;
+                                let pNameClean = cleanText(p.name);
+                                let pWords = pNameClean.split(/\s+/).filter(w => !stopWords.includes(w));
+                                
+                                for (let w of searchWords) {
+                                    for (let pw of pWords) {
+                                        // Si la palabra es mayor a 4 letras, toleramos hasta 2 errores de ortografía
+                                        let dist = getLevenshteinDistance(w, pw);
+                                        if (pw.length >= 4 && dist <= 2) {
+                                            if(dist < lowestDistance) {
+                                                lowestDistance = dist;
+                                                bestMatch = p;
+                                            }
                                         }
                                     }
-                                    if (foundProduct) break;
                                 }
-                                if (foundProduct) break;
                             }
+                            if(bestMatch) foundProduct = bestMatch;
                         }
 
-                        // Contexto de memoria: si no encontró producto, pero hay uno guardado y pregunta sobre él
+                        // C. Mantenimiento de Contexto (Memoria)
                         if (!foundProduct && window.botContext.lastProduct) {
-                            const intentWords = ["precio", "cuesta", "material", "medida", "tamaño", "ilumina", "foco", "tiempo", "tarda", "entrega"];
-                            if (intentWords.some(iw => text.includes(iw))) {
+                            // Si detecta intenciones sobre productos pero no se mencionó nombre, usa la memoria
+                            const productIntents = ["precio", "tiempo", "material", "medida", "luz"];
+                            if (detectedIntents.some(i => productIntents.includes(i))) {
                                 foundProduct = window.botContext.lastProduct;
                             }
                         }
 
-                        // 3. Sistema de Intenciones y Contexto
+                        // --- 4. GENERACIÓN DE RESPUESTAS DINÁMICAS ---
                         if (foundProduct) {
                             window.botContext.lastProduct = foundProduct; // Guardar en memoria
                             
-                            if (text.includes("tiempo") || text.includes("entrega") || text.includes("tarda") || text.includes("cuando")) {
-                                response = `Thiago, el tiempo de manufactura artesanal para <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}.`;
-                            } else if (text.includes("precio") || text.includes("costo") || text.includes("cuesta") || text.includes("vale") || text.includes("presio") || text.includes("cuanto")) {
-                                response = `El precio de lista de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>.`;
-                            } else if (text.includes("material") || text.includes("acabado") || text.includes("hech") || text.includes("color")) {
-                                response = `La pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> está forjada en: ${foundProduct.mat}. El acabado final es ${foundProduct.fin}.`;
-                            } else if (text.includes("medida") || text.includes("tamaño") || text.includes("dimension") || text.includes("alto") || text.includes("ancho")) {
-                                response = `Las dimensiones arquitectónicas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> son:<br>• Ancho: <span class="text-white">${foundProduct.dims.w}</span><br>• Alto: <span class="text-white">${foundProduct.dims.h}</span><br>• Fondo: <span class="text-white">${foundProduct.dims.d}</span><br>• Peso: <span class="text-white">${foundProduct.peso}</span>.`;
-                            } else if (text.includes("ilumina") || text.includes("luz") || text.includes("foco") || text.includes("voltaje") || text.includes("cable") || text.includes("focos")) {
+                            if (detectedIntents.includes("tiempo")) {
+                                response = `El tiempo de manufactura artesanal para el <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}. ¿Gusta que le cotice el envío?`;
+                            } else if (detectedIntents.includes("precio")) {
+                                response = `El precio de lista de la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>.`;
+                            } else if (detectedIntents.includes("material")) {
+                                response = `<strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> está forjado en: ${foundProduct.mat}. Su acabado final es ${foundProduct.fin}.`;
+                            } else if (detectedIntents.includes("medida")) {
+                                response = `Las dimensiones arquitectónicas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> son:<br>• Ancho: <span class="text-white">${foundProduct.dims.w}</span><br>• Alto: <span class="text-white">${foundProduct.dims.h}</span><br>• Fondo/Profundidad: <span class="text-white">${foundProduct.dims.d}</span><br>• Peso: <span class="text-white">${foundProduct.peso}</span>.`;
+                            } else if (detectedIntents.includes("luz")) {
                                 if(foundProduct.specsLight === "N/A" || !foundProduct.specsLight) {
-                                    response = `La pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> no cuenta con sistema eléctrico. Es una pieza puramente escultural/espejo.`;
+                                    response = `Le comento que <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> no cuenta con sistema eléctrico integrado. Es una pieza de diseño puramente escultural (espejo/ornamento).`;
                                 } else {
                                     response = `Specs lumínicas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje: <span class="text-white">${foundProduct.volt}</span><br>• Cableado: <span class="text-white">${foundProduct.cable}</span>.`;
                                 }
-                            } else if (text.includes("info") || text.includes("todo") || text.includes("detalles") || text.includes("resumen")) {
-                                response = `<strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: ${foundProduct.sku}<br>Precio: $${Number(foundProduct.price).toLocaleString()} MXN<br>Entrega: ${foundProduct.time}<br>Luz: ${foundProduct.specsLight}<br>Material: ${foundProduct.mat}<br>Medidas: ${foundProduct.dims.w} x ${foundProduct.dims.h}.`;
                             } else {
-                                response = `<strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es una pieza imponente. Tiene un valor de $${Number(foundProduct.price).toLocaleString()} MXN. ¿Qué dato específico necesitas, Jefe? (Ej. medidas, materiales, focos).`;
+                                // Ficha completa por defecto
+                                response = `<strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: ${foundProduct.sku}<br>Precio: $${Number(foundProduct.price).toLocaleString()} MXN<br>Entrega: ${foundProduct.time}<br>Luz: ${foundProduct.specsLight}<br>Material: ${foundProduct.mat}<br>Dimensiones: ${foundProduct.dims.w} x ${foundProduct.dims.h}.`;
                             }
                         } else {
-                            // 4. Intenciones Globales de Identidad y Servicio
-                            if (text.includes("gracias") || text.includes("agradezco") || text.includes("perfecto") || text.includes("bien")) {
-                                response = `¡A la orden, Thiago! Quedo a la espera de más instrucciones.`;
-                            } else if (text.includes("quien eres") || text.includes("quién eres") || text.includes("que eres") || text.includes("creo")) {
-                                response = `Soy DAMASO AI, la inteligencia artificial exclusiva de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Fui programado por ti, <strong class="text-white">Thiago</strong>, el creador y mente maestra detrás de esta marca, para asistirte en todo lo que necesites.`;
-                            } else if (text.includes("porfa") || text.includes("por favor") || text.includes("pls") || text.includes("ayuda")) {
-                                response = `¡Claro que sí, Jefe! Dime qué cálculo o ficha técnica necesitas.`;
-                            } else if (text.includes("hola") || text.includes("buenas") || text.includes("que tal") || text.includes("hey")) {
-                                response = `¡Hola Thiago! Sistemas en línea. Conozco el catálogo de 50 piezas a la perfección. Pídeme cotizaciones, materiales, medidas o cálculos matemáticos.`;
-                            } else if (text.includes("ubicaci") || text.includes("dónde") || text.includes("donde") || text.includes("direccion") || text.includes("estudio")) {
-                                response = `El taller y estudio creativo de DAMASO está ubicado en <strong class="text-brand-gold glow-gold">Guadalajara, Jalisco, México</strong>. Desde aquí enviamos a todo el país.`;
-                            } else if (text.includes("contacto") || text.includes("telefono") || text.includes("teléfono") || text.includes("whatsapp")) {
-                                response = `El contacto directo por WhatsApp de ventas es <strong class="text-brand-gold glow-gold">+52 33 3870 3071</strong> y el Instagram oficial es @damaso_lamparas.`;
-                            } else if (text.includes("cotiz") || text.includes("compr") || text.includes("pdf")) {
-                                response = `Para generar un PDF oficial, puedes agregar productos desde sus fichas técnicas y luego abrir el ícono dorado del carrito de compras en el menú superior.`;
+                            // RESPUESTAS GENERALES SIN PRODUCTO EN CONTEXTO
+                            if (detectedIntents.includes("saludo")) {
+                                response = "¡Bienvenido a DAMASO Studio! Soy la IA de asistencia. Conozco a detalle nuestras 50 piezas exclusivas. ¿Desea consultar sobre materiales, medidas o solicitar una cotización exacta?";
+                            } else if (detectedIntents.includes("despedida")) {
+                                response = "¡Ha sido un verdadero placer! Quedo a su entera disposición en línea 24/7 para cualquier futuro proyecto de interiorismo.";
+                            } else if (detectedIntents.includes("identidad")) {
+                                response = `Soy DAMASO AI, un agente inteligente avanzado exclusivo de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Fui desarrollado bajo la dirección de Thiago, creador de la marca, para asistir a nuestros clientes con precisión técnica.`;
+                            } else if (detectedIntents.includes("ubicacion")) {
+                                response = `Nuestro taller y estudio de manufactura se encuentra ubicado en <strong class="text-brand-gold glow-gold">Guadalajara, Jalisco, México</strong>. Desde aquí forjamos y enviamos nuestras piezas a proyectos en todo el mundo.`;
+                            } else if (detectedIntents.includes("contacto")) {
+                                response = `Puede comunicarse de forma directa con nuestro equipo comercial por WhatsApp al <strong class="text-brand-gold glow-gold">+52 33 3870 3071</strong>, o explorar nuestro portafolio en Instagram @damaso_lamparas.`;
+                            } else if (detectedIntents.includes("compra")) {
+                                response = "Para iniciar su orden, simplemente navegue por el catálogo, presione 'Agregar a Cotización' en las piezas deseadas y luego abra el ícono dorado del carrito en el menú superior para generar un PDF formal.";
+                            } else if (detectedIntents.includes("ayuda")) {
+                                response = "Por supuesto. Puede preguntarme sobre:<br>• Precios y envíos.<br>• Materiales (latón, ónice, etc.).<br>• Medidas exactas de cualquier pieza.<br>• O realizar cálculos matemáticos para presupuestos.";
                             } else {
-                                response = `Thiago, no detecté un producto exacto o un cálculo claro en tu frase. Prueba mencionar el nombre (ej. 'Candil Cascada', 'Espejo Lunar') o pedirme 'Calcula el 15% de 8500'.`;
+                                // Fallback total para chit-chat o errores
+                                response = "Esa es una perspectiva interesante. Sin embargo, mi programación principal está enfocada en la alta iluminación y el diseño de DAMASO Studio. Si gusta, mencione el nombre de una pieza (ej. 'Candil Cascada') para brindarle su ficha técnica o cotización.";
                             }
                         }
                     }
                     
                     window.showBotMessage(response);
-                }, 600); // Pequeño retraso de simulación
+                }, 600); // Pequeño retraso de simulación de "escribiendo"
             };
 
             window.showBotMessage = function(text) {
