@@ -1,4 +1,4 @@
----ESTA PAGINA ESTA EN CONSTRUCCION POR LO QUE LA INFO PODRIA NO SER CORRECTA---
+---ESTA PAGINA ESTA EN CONSTRUCCION (BETA) POR LO QUE LA INFO PUDIERA NO SER CORRECTA---
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -210,7 +210,7 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE CON GEMINI AI -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-brand-gold transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[15px_0_30px_rgba(212,175,55,0.15)]">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black">
             <div class="flex items-center gap-3">
@@ -219,7 +219,7 @@
                 </div>
                 <h2 class="font-editorial text-xl tracking-wider text-brand-gold glow-gold">DAMASO AI</h2>
             </div>
-            <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white">
+            <button onclick="window.toggleChatbot()" class="text-brand-muted hover:text-white">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
@@ -438,7 +438,7 @@
                 { id: 10, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-006", desc: "Arbotante elegante con cilindros de vidrio transparente que encierran focos estilo Edison.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
                 { id: 11, name: "Arbotante Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-007", desc: "Arbotante de muro con espejo circular minimalista y aro perimetral luminoso trasero.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" }, peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
 
-                // ESPEJOS (21) -> INCLUYE LOS DOS NUEVOS
+                // ESPEJOS (21)
                 { id: 12, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-001", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta para crear un efecto flotante en el muro.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
                 { id: 13, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-002", desc: "Espejo rectangular de piso o muro de gran formato con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
                 { id: 14, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-003", desc: "Espejo rectangular elegante con un grueso marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata de alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
@@ -900,7 +900,52 @@
             // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP)
             // =========================================================================
             
-            // 1. Matemáticas de distancia para tolerar errores ortográficos graves (Levenshtein)
+            // Base de conocimiento profunda sobre DAMASO
+            const knowledgeBase = {
+                brand: "DAMASO Studio es una firma de alta iluminación escultórica y editorial basada en Guadalajara, Jalisco. Nuestro enfoque fusiona el brutalismo con la fina artesanía mexicana.",
+                materials: "Nuestras piezas están forjadas en materiales nobles y puros: latón sólido, bronce, cristal soplado inastillable, mármol de Carrara y ónice natural.",
+                cleaning: "Para mantener la pureza de los materiales, recomendamos limpiar las piezas únicamente con un paño de microfibra seco. No utilice químicos abrasivos, especialmente en latón y espejos avejentados.",
+                shipping: "Nuestros tiempos de entrega varían entre 3 y 8 semanas dependiendo de la complejidad artesanal de la pieza. Realizamos envíos especializados a toda la república.",
+                warranty: "Todas las luminarias cuentan con componentes eléctricos certificados (NOM) y garantía directa de estudio por defectos de fabricación.",
+                design: "El diseñador principal y fundador es Iván Damaso, quien supervisa personalmente la experimentación de texturas, volúmenes y sombras proyectadas en cada pieza."
+            };
+
+            // Diccionarios de sinónimos y modismos comunes
+            const synonyms = {
+                "q": "que", "k": "que", "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola",
+                "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio",
+                "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde",
+                "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono",
+                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra",
+                "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo"
+            };
+
+            // Diccionarios de intenciones (Keywords)
+            const intents = {
+                saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello"],
+                despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia"],
+                ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame"],
+                contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook"],
+                ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados"],
+                compra: ["comprar", "cotizar", "cotizacion", "pdf", "bolsa", "carrito", "pagar", "adquirir", "pedido"],
+                precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "cotiza"],
+                tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega", "tardan"],
+                material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton", "bronce", "onice", "marmol", "limpieza", "limpiar", "cuidados"],
+                medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide", "dimensiones"],
+                luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica", "energia"],
+                marca: ["damaso", "estudio", "studio", "marca", "filosofia", "ivan", "diseñador"]
+            };
+
+            const chitchatResponses = [
+                "Como agente de diseño, me especializo en alta iluminación. ¿Puedo mostrarle alguna pieza en particular?",
+                "Interesante perspectiva. Sin embargo, mi enfoque principal es el catálogo de DAMASO Studio.",
+                "Ese tema escapa un poco a mis parámetros de diseño arquitectónico. ¿Gusta que le comparta los detalles de nuestras piezas?",
+                "Mi programación está orientada exclusivamente a la asistencia en proyectos de interiorismo y cotización de iluminación.",
+                "Entiendo. ¿Hay algún candil, espejo o luminaria específica de nuestro catálogo que le interese explorar?"
+            ];
+
+            // Matemáticas de distancia para tolerar errores ortográficos graves (Levenshtein)
             function getLevenshteinDistance(a, b) {
                 if(a.length === 0) return b.length;
                 if(b.length === 0) return a.length;
@@ -919,29 +964,17 @@
                 return matrix[b.length][a.length];
             }
 
-            // 2. Limpieza de texto profunda (Quita acentos y pasa a minúsculas)
+            // Limpieza profunda de texto
             function cleanText(str) {
-                return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[¿?¡!.,;:]/g, "");
+                let cleaned = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[¿?¡!.,;:]/g, "");
+                // Aplicar sinónimos rápidos
+                let words = cleaned.split(/\s+/);
+                let normalizedWords = words.map(w => synonyms[w] || w);
+                return normalizedWords.join(" ");
             }
 
-            // 3. Diccionarios de intenciones (Keywords y sinónimos)
-            const intents = {
-                saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches"],
-                despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "thiago", "bot", "robot", "ia"],
-                ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion"],
-                contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook"],
-                ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion"],
-                compra: ["comprar", "cotizar", "cotizacion", "pdf", "bolsa", "carrito", "pagar", "adquirir", "pedido"],
-                precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "$"],
-                tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega"],
-                material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton"],
-                medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide"],
-                luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica"]
-            };
-
-            // 4. Memoria del Bot (Contexto conversacional)
-            window.botContext = { lastProduct: null, lastIntent: null };
+            // Memoria del Bot (Contexto conversacional avanzado)
+            window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
 
             window.sendChatMessage = async function() {
                 const input = document.getElementById('chat-input');
@@ -952,6 +985,8 @@
                 
                 const chatBox = document.getElementById('chat-messages');
                 if (!chatBox) return;
+                
+                window.botContext.interactionCount++;
                 
                 chatBox.innerHTML += `
                     <div class="flex flex-col items-end w-full mt-4">
@@ -974,10 +1009,10 @@
                     if (el) el.remove();
                 };
 
-                // Si hay API key de Gemini, intentamos usarla primero. Si falla, el "Super Bot" local entra en acción.
+                // Siempre intentamos la API de Gemini primero si está configurada (por seguridad y poder).
+                // Pero si no hay internet, falla la cuota o hay error CORS, entra el SUPER BOT LOCAL instántaneamente.
                 try {
                     const apiKey = "AIzaSyBQHy0yxF5L7wjYGYJHArL57mcTpNEkxzg"; 
-                    
                     if(apiKey && !apiKey.includes("TU_API_KEY")) {
                         const catalogInfo = window.dbProducts.map(p => `- ${p.name} (${p.category}): $${p.price} MXN. Entrega: ${p.time}. Materiales: ${p.mat}.`).join('\n');
                         
@@ -986,7 +1021,6 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 systemInstruction: {
-                                    // REGLA ESTRICTA: El bot no debe llamar Thiago al cliente.
                                     parts: [{ text: `Eres DAMASO AI, un asistente virtual experto y elegante para DAMASO Studio, una marca de iluminación en Guadalajara. Tu creador se llama Thiago, pero TÚ ESTÁS HABLANDO CON UN CLIENTE. NUNCA llames "Thiago" al usuario con el que hablas. Dirígete a él como "Estimado cliente" o de forma impersonal y elegante. Catálogo:\n\n${catalogInfo}` }]
                                 },
                                 contents: [{ parts: [{ text: rawText }] }]
@@ -994,8 +1028,6 @@
                         });
 
                         const data = await response.json();
-                        
-                        // Si Gemini responde bien, usamos su respuesta
                         if(data.candidates && data.candidates[0].content.parts[0].text) {
                             removeLoading();
                             let aiText = data.candidates[0].content.parts[0].text;
@@ -1006,8 +1038,7 @@
                         }
                     }
                 } catch(e) {
-                    // Si Gemini falla (red, cors, bloqueo), ignoramos el error silenciosamente 
-                    // y dejamos que el SUPER BOT LOCAL tome el control de inmediato.
+                    // Bypass silencioso para que actúe el Super Bot Local
                 }
 
                 // ==========================================
@@ -1025,7 +1056,7 @@
                     let mathString = text.replace(/uno/g, '1').replace(/dos/g, '2').replace(/tres/g, '3').replace(/cuatro/g, '4')
                                          .replace(/cinco/g, '5').replace(/seis/g, '6').replace(/siete/g, '7').replace(/ocho/g, '8')
                                          .replace(/nueve/g, '9').replace(/diez/g, '10').replace(/mas/g, '+').replace(/más/g, '+')
-                                         .replace(/menos/g, '-').replace(/por/g, '*').replace(/entre/g, '/');
+                                         .replace(/menos/g, '-').replace(/por/g, '*').replace(/x/g, '*').replace(/entre/g, '/');
 
                     const mathRegex = /^[\d\s\+\-\*\/\(\)\.]+$/;
                     
@@ -1052,18 +1083,18 @@
                             }
                         }
 
-                        // --- 3. BÚSQUEDA DE PRODUCTO (ORTOGRAFÍA DIFUSA - LEVENSHTEIN) ---
-                        const stopWords = ["el", "la", "los", "las", "un", "una", "de", "del", "a", "ante", "con", "por", "para", "espejo", "candil", "lampara"];
+                        // --- 3. BÚSQUEDA DE PRODUCTO (ORTOGRAFÍA DIFUSA Y EXACTA) ---
+                        const stopWords = ["el", "la", "los", "las", "un", "una", "de", "del", "a", "ante", "con", "por", "para", "espejo", "candil", "lampara", "sobre", "cual", "cuanto", "como", "tiene"];
                         let searchWords = words.filter(w => !stopWords.includes(w) && w.length > 2);
 
-                        // A. Búsqueda exacta de SKU o substring directo
+                        // A. Búsqueda exacta de SKU o substring directo en nombre o categoría
                         for (let p of window.dbProducts) {
                             if (text.includes(p.sku.toLowerCase()) || cleanText(p.name).includes(text)) {
                                 foundProduct = p; break;
                             }
                         }
 
-                        // B. Búsqueda por tolerancia a errores ortográficos (Solo si no encontró exacto)
+                        // B. Búsqueda por coincidencia difusa cruzada (Soporta faltas de ortografía muy marcadas)
                         if (!foundProduct && searchWords.length > 0) {
                             let bestMatch = null;
                             let lowestDistance = 999;
@@ -1073,8 +1104,8 @@
                                 let pWords = pNameClean.split(/\s+/).filter(w => !stopWords.includes(w));
                                 
                                 for (let w of searchWords) {
+                                    // Búsqueda en nombre de producto
                                     for (let pw of pWords) {
-                                        // Si la palabra es mayor a 4 letras, toleramos hasta 2 errores de ortografía
                                         let dist = getLevenshteinDistance(w, pw);
                                         if (pw.length >= 4 && dist <= 2) {
                                             if(dist < lowestDistance) {
@@ -1083,67 +1114,79 @@
                                             }
                                         }
                                     }
+                                    // Búsqueda en categoría
+                                    let catDist = getLevenshteinDistance(w, p.category);
+                                    if(p.category.length >= 4 && catDist <= 1) {
+                                        foundProduct = p; // Devuelve el primer producto de la categoría
+                                        break;
+                                    }
                                 }
+                                if(foundProduct) break;
                             }
-                            if(bestMatch) foundProduct = bestMatch;
+                            if(!foundProduct && bestMatch) foundProduct = bestMatch;
                         }
 
-                        // C. Mantenimiento de Contexto (Memoria)
+                        // C. Mantenimiento de Contexto Interactivo (Memoria de estado)
                         if (!foundProduct && window.botContext.lastProduct) {
-                            // Si detecta intenciones sobre productos pero no se mencionó nombre, usa la memoria
-                            const productIntents = ["precio", "tiempo", "material", "medida", "luz"];
-                            if (detectedIntents.some(i => productIntents.includes(i))) {
-                                foundProduct = window.botContext.lastProduct;
+                            const productSpecificIntents = ["precio", "tiempo", "material", "medida", "luz"];
+                            if (detectedIntents.some(i => productSpecificIntents.includes(i))) {
+                                foundProduct = window.botContext.lastProduct; // Sabe de qué hablaban
                             }
                         }
 
-                        // --- 4. GENERACIÓN DE RESPUESTAS DINÁMICAS ---
+                        // --- 4. GENERACIÓN DE RESPUESTAS ESTRUCTURADAS (MOTOR DE LÓGICA) ---
                         if (foundProduct) {
-                            window.botContext.lastProduct = foundProduct; // Guardar en memoria
+                            window.botContext.lastProduct = foundProduct; 
+                            window.botContext.lastIntent = "producto";
                             
                             if (detectedIntents.includes("tiempo")) {
-                                response = `El tiempo de manufactura artesanal para el <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}. ¿Gusta que le cotice el envío?`;
+                                response = `El tiempo de manufactura artesanal para la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}. ¿Gusta que le asesoremos con los gastos de envío?`;
                             } else if (detectedIntents.includes("precio")) {
-                                response = `El precio de lista de la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>.`;
+                                response = `El precio oficial de catálogo para <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>. Este precio no incluye envío.`;
                             } else if (detectedIntents.includes("material")) {
-                                response = `<strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> está forjado en: ${foundProduct.mat}. Su acabado final es ${foundProduct.fin}.`;
+                                response = `Detalles de construcción de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br>Material principal: <span class="text-white">${foundProduct.mat}</span>.<br>Acabado artesanal: <span class="text-white">${foundProduct.fin}</span>.<br><br>💡 ${knowledgeBase.cleaning}`;
                             } else if (detectedIntents.includes("medida")) {
-                                response = `Las dimensiones arquitectónicas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> son:<br>• Ancho: <span class="text-white">${foundProduct.dims.w}</span><br>• Alto: <span class="text-white">${foundProduct.dims.h}</span><br>• Fondo/Profundidad: <span class="text-white">${foundProduct.dims.d}</span><br>• Peso: <span class="text-white">${foundProduct.peso}</span>.`;
+                                response = `Las dimensiones arquitectónicas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> son las siguientes:<br><br>• Ancho: <span class="text-white">${foundProduct.dims.w}</span><br>• Alto: <span class="text-white">${foundProduct.dims.h}</span><br>• Fondo/Profundidad: <span class="text-white">${foundProduct.dims.d}</span><br>• Diámetro: <span class="text-white">${foundProduct.dims.dia}</span><br>• Peso estimado: <span class="text-white">${foundProduct.peso}</span>.`;
                             } else if (detectedIntents.includes("luz")) {
                                 if(foundProduct.specsLight === "N/A" || !foundProduct.specsLight) {
-                                    response = `Le comento que <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> no cuenta con sistema eléctrico integrado. Es una pieza de diseño puramente escultural (espejo/ornamento).`;
+                                    response = `Le comento que <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> no cuenta con sistema eléctrico integrado. Es una pieza de diseño diseñada para la proyección de luz ambiental natural.`;
                                 } else {
-                                    response = `Specs lumínicas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje: <span class="text-white">${foundProduct.volt}</span><br>• Cableado: <span class="text-white">${foundProduct.cable}</span>.`;
+                                    response = `Especificaciones del sistema lumínico de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br><br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje soportado: <span class="text-white">${foundProduct.volt}</span><br>• Tipo de Cableado: <span class="text-white">${foundProduct.cable}</span><br>• Certificación: <span class="text-white">${foundProduct.cert}</span>.`;
                                 }
                             } else {
-                                // Ficha completa por defecto
-                                response = `<strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: ${foundProduct.sku}<br>Precio: $${Number(foundProduct.price).toLocaleString()} MXN<br>Entrega: ${foundProduct.time}<br>Luz: ${foundProduct.specsLight}<br>Material: ${foundProduct.mat}<br>Dimensiones: ${foundProduct.dims.w} x ${foundProduct.dims.h}.`;
+                                response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?`;
                             }
                         } else {
-                            // RESPUESTAS GENERALES SIN PRODUCTO EN CONTEXTO
+                            // RESPUESTAS GENERALES Y DE CONOCIMIENTO (Sin producto activo)
                             if (detectedIntents.includes("saludo")) {
-                                response = "¡Bienvenido a DAMASO Studio! Soy la IA de asistencia. Conozco a detalle nuestras 50 piezas exclusivas. ¿Desea consultar sobre materiales, medidas o solicitar una cotización exacta?";
+                                response = `¡Bienvenido a la experiencia <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>! Soy el asistente de inteligencia artificial encargado de asesorarle. Contamos con 50 piezas exclusivas en nuestro catálogo actual. ¿Desea consultar sobre materiales, medidas de alguna pieza o iniciar una cotización formal?`;
                             } else if (detectedIntents.includes("despedida")) {
-                                response = "¡Ha sido un verdadero placer! Quedo a su entera disposición en línea 24/7 para cualquier futuro proyecto de interiorismo.";
+                                response = `¡Ha sido un verdadero honor atenderle! En DAMASO Studio quedamos a su entera disposición en línea 24/7 para cristalizar sus futuros proyectos de interiorismo.`;
+                                window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 }; // Limpiar memoria
                             } else if (detectedIntents.includes("identidad")) {
-                                response = `Soy DAMASO AI, un agente inteligente avanzado exclusivo de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Fui desarrollado bajo la dirección de Thiago, creador de la marca, para asistir a nuestros clientes con precisión técnica.`;
+                                response = `Soy <strong class="text-brand-gold glow-gold">DAMASO AI</strong>, un motor conversacional algorítmico exclusivo de la firma. Fui desarrollado con arquitectura de software avanzada por nuestro director creativo, <strong class="text-white">Thiago</strong>, con la directiva de brindar servicio técnico y asistencia de diseño sin igual a nuestros clientes.`;
+                            } else if (detectedIntents.includes("marca")) {
+                                response = `${knowledgeBase.brand} ${knowledgeBase.design}`;
+                            } else if (detectedIntents.includes("material")) {
+                                response = `En DAMASO Studio, la pureza es clave. ${knowledgeBase.materials} ¿Le interesan recomendaciones de limpieza o piezas específicas de algún material?`;
                             } else if (detectedIntents.includes("ubicacion")) {
-                                response = `Nuestro taller y estudio de manufactura se encuentra ubicado en <strong class="text-brand-gold glow-gold">Guadalajara, Jalisco, México</strong>. Desde aquí forjamos y enviamos nuestras piezas a proyectos en todo el mundo.`;
+                                response = `La forja y el alma de nuestra marca residen en nuestro estudio creativo ubicado en <strong class="text-brand-gold glow-gold">Guadalajara, Jalisco, México</strong>. Realizamos logística de envíos altamente seguros a cualquier latitud de la República y proyectos internacionales.`;
                             } else if (detectedIntents.includes("contacto")) {
-                                response = `Puede comunicarse de forma directa con nuestro equipo comercial por WhatsApp al <strong class="text-brand-gold glow-gold">+52 33 3870 3071</strong>, o explorar nuestro portafolio en Instagram @damaso_lamparas.`;
+                                response = `Será un placer asistirle de forma personalizada. Puede entablar comunicación directa con nuestro equipo técnico y comercial vía WhatsApp al <strong class="text-brand-gold glow-gold">+52 33 3870 3071</strong>. También le invitamos a explorar nuestro trabajo editorial en Instagram: @damaso_lamparas.`;
                             } else if (detectedIntents.includes("compra")) {
-                                response = "Para iniciar su orden, simplemente navegue por el catálogo, presione 'Agregar a Cotización' en las piezas deseadas y luego abra el ícono dorado del carrito en el menú superior para generar un PDF formal.";
+                                response = `Para iniciar un protocolo de adquisición, le sugiero navegar por nuestro catálogo en el fondo, pulsar 'Agregar a Cotización' en las luminarias deseadas y posteriormente abrir el ícono dorado del carrito de compras ubicado en la barra superior. Allí podrá generar un documento PDF formal con el cálculo automatizado.`;
                             } else if (detectedIntents.includes("ayuda")) {
-                                response = "Por supuesto. Puede preguntarme sobre:<br>• Precios y envíos.<br>• Materiales (latón, ónice, etc.).<br>• Medidas exactas de cualquier pieza.<br>• O realizar cálculos matemáticos para presupuestos.";
+                                response = `Mi base de datos abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos (ej. "Calcula el 15% de 80,000").<br>• Dimensiones y pesos técnicos.<br>• Especificaciones eléctricas (LED, lúmenes, voltaje).<br>• Protocolos de limpieza y mantenimiento.`;
                             } else {
-                                // Fallback total para chit-chat o errores
-                                response = "Esa es una perspectiva interesante. Sin embargo, mi programación principal está enfocada en la alta iluminación y el diseño de DAMASO Studio. Si gusta, mencione el nombre de una pieza (ej. 'Candil Cascada') para brindarle su ficha técnica o cotización.";
+                                // RESPUESTAS DE CHIT-CHAT (Variedad aleatoria para simular humanidad)
+                                let chitChat = chitchatResponses[window.botContext.interactionCount % chitchatResponses.length];
+                                response = `Comprendo el planteamiento. Sin embargo, mi enfoque analítico está dirigido a la especificación de diseño arquitectónico. ${chitChat}`;
                             }
                         }
                     }
                     
                     window.showBotMessage(response);
-                }, 600); // Pequeño retraso de simulación de "escribiendo"
+                }, 800); // Simulador de pensamiento en milisegundos
             };
 
             window.showBotMessage = function(text) {
