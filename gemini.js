@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/generative-ai";
 
-// Tu clave real de Google AI Studio ya configurada
-const aiStudioKey = "AIzaSyBQHy0yxF5L7wjYGYJHArL57mcTpNEkxzg"; 
+// Reemplazamos la clave real por la variable segura
+const aiStudioKey = process.env.GEMINI_API_KEY; 
 
 const ai = new GoogleGenAI({ apiKey: aiStudioKey });
 
