@@ -96,6 +96,7 @@
     </audio>
 
     <!-- ANIMACIÓN DE ENTRADA CINETOGRÁFICA -->
+    <!-- Se removió la clase 'hidden' para asegurar que la cortina esté presente al inicio y pueda deslizarse hacia arriba -->
     <div id="entry-animation" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-auto">
         <div id="entry-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
@@ -206,11 +207,10 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE CON INDICADOR DE ESTADO EN TIEMPO REAL -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-brand-gold transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[15px_0_30px_rgba(212,175,55,0.15)]">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black">
             <div class="flex items-center gap-3">
-                <!-- Icono de AI elegante dentro del chat -->
                 <div class="w-10 h-10 rounded-full bg-brand-gold shadow-[0_0_15px_rgba(212,175,55,0.8)] flex items-center justify-center text-black font-editorial font-bold text-sm tracking-widest">
                     AI
                 </div>
@@ -248,7 +248,6 @@
         <div class="bg-brand-surface border border-brand-gold w-full max-w-6xl modal-scroll-container flex flex-col md:flex-row relative mt-16 md:mt-0 shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-lg bg-[#050505] overflow-hidden">
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0">
                 <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in">
-                    <!-- Marco y borde eliminados por completo -->
                     <img id="modal-img-element" src="" class="w-full h-auto max-h-[60vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
                 </a>
             </div>
@@ -374,24 +373,13 @@
                 Diseñador radicado en Guadalajara, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo. Cada pieza nace de la experimentación de texturas, volúmenes y sombras proyectadas.
             </p>
             
-            <!-- INSTALACIÓN INTERACTIVA (APAGADA/ENCENDIDA) - SIN ZOOM NI SPECS -->
-            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] transition-opacity duration-700" onclick="this.classList.toggle('active')">
+            <!-- DECORACIÓN INTERACTIVA (APAGADA/ENCENDIDA) -->
+            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)]" onclick="this.classList.toggle('active')">
                 <!-- Imagen Apagada (Base) -->
-                <img src="imagen_damaso_apagada.jpg" alt="Instalación DAMASO Apagada" class="w-full h-full object-cover block">
+                <img src="imagen_damaso_apagada.png" alt="Decoración DAMASO Apagada" class="w-full h-full object-cover block">
                 
-                <!-- Imagen Encendida (Aparece suavemente al pasar el cursor o hacer click) -->
-                <img src="imagen_damaso_encendida.jpg" alt="Instalación DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
-                
-                <!-- Nombre de la instalación dinámico (Añadido) -->
-                <div class="absolute bottom-6 left-6 text-left pointer-events-none z-10 transition-transform duration-500 group-hover:translate-y-[-2px]">
-                    <h3 class="font-editorial text-2xl md:text-3xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">Instalación ITM</h3>
-                    
-                    <!-- Texto cuando está apagada -->
-                    <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mt-2 glow-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] transition-opacity duration-500 group-hover:opacity-0 group-[.active]:opacity-0">Toca para encender</p>
-                    
-                    <!-- Texto cuando se enciende -->
-                    <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mt-2 glow-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] absolute top-8 md:top-10 left-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-[.active]:opacity-100 whitespace-nowrap">Luz de Atmósfera (2700K)</p>
-                </div>
+                <!-- Imagen Encendida (Aparece suavemente al interactuar) -->
+                <img src="imagen_damaso_encendida.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
             </div>
         </div>
     </section>
@@ -493,7 +481,7 @@
                 { id: 42, name: "Plafón Radial Negro", category: "techo", price: 8900, img: "IMG_2068.png", sku: "DM-TEC-006", desc: "Lámpara de techo negra con varillas que se abren como un paraguas, ideal para centros de mesa.", specsLight: "1x E26 LED Edison 12W", cable: "Instalación a plafón", dims: { w: "100 cm", h: "40 cm", d: "100 cm", dia: "100 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Negro electrostático", time: "4 semanas", cert: "NOM" },
                 { id: 43, name: "Colgante Campana Amarilla", category: "techo", price: 3400, img: "IMG_2070.png", sku: "DM-TEC-007", desc: "Colgante en forma de campana color amarillo brillante, ideal para toques de color en cocinas.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Amarillo brillante", time: "2 a 3 semanas", cert: "NOM" },
                 { id: 44, name: "Colgante Campana Verde", category: "techo", price: 3400, img: "IMG_2071.png", sku: "DM-TEC-008", desc: "Colgante en forma de campana color verde bosque, ideal para dar un toque natural y vibrante.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Verde brillante", time: "2 a 3 semanas", cert: "NOM" },
-                { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_ techo_1.png", sku: "DM-TEC-009", desc: "Lámpara colgante tejida con un patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
+                { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_techo_1.png", sku: "DM-TEC-009", desc: "Lámpara colgante tejida con un patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
 
                 // EXTERIOR
                 { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2012.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores, fabricado en acero con cristales transparentes.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero tratado y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
@@ -502,9 +490,9 @@
                 // PROYECTOS ESPECIALES
                 { id: 48, name: "Instalación Globos Vidrio", category: "proyectos", price: 85000, img: "IMG_2013.png", sku: "DM-PRO-001", desc: "Instalación artística compuesta por decenas de esferas de vidrio soplado de colores flotantes.", specsLight: "Módulos LED 3W internos x 15", cable: "Instalación a plafón oculto", dims: { w: "200 cm", h: "100 cm", d: "200 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Vidrio soplado artesanal", fin: "Colores translúcidos variados", time: "8 a 10 semanas", cert: "NOM" },
                 { id: 49, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-PRO-002", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
-                { id: 50, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.PNG", sku: "DM-PRO-003", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
-                { id: 51, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.jpg", sku: "DM-PRO-004", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" },
-                { id: 52, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-005", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" }
+                { id: 50, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-003", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
+                { id: 51, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.PNG", sku: "DM-PRO-004", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
+                { id: 52, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.jpg", sku: "DM-PRO-005", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" }
             ];
 
             window.catMap = {
@@ -631,8 +619,6 @@
                 const studio = document.getElementById('entry-studio');
                 const cookieModal = document.getElementById('cookie-modal');
                 
-                if (entryOverlay) entryOverlay.classList.remove('hidden');
-                
                 setTimeout(() => {
                     if (letters.length > 0) {
                         letters.forEach((letter, index) => {
@@ -651,7 +637,7 @@
                         
                         setTimeout(() => {
                             if (entryOverlay) {
-                                // ANIMACIÓN CORTINA ARRIBA CORREGIDA
+                                // ANIMACIÓN CORTINA ARRIBA CORREGIDA (Se desliza hacia arriba)
                                 entryOverlay.style.transform = 'translateY(-100%)';
                             }
                             setTimeout(() => {
@@ -662,11 +648,11 @@
                                         cookieModal.classList.remove('opacity-0', 'pointer-events-none');
                                     }, 50);
                                 }
-                            }, 1200);
+                            }, 1500);
                         }, 1500);
                     }, (letters.length * 150) + 300);
 
-                }, 50);
+                }, 100);
             };
 
             window.renderCatalog = function(products) {
@@ -692,7 +678,7 @@
                             html += `
                                 <div class="group">
                                     <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500">
-                                        <!-- CERO BORDES, FORZANDO CARGA CON FALLBACK -->
+                                        <!-- CERO BORDES EN LA IMAGEN. Efecto Zoom elegante al pasar el cursor -->
                                         <img src="${p.img}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/400x400/030303/d4af37?text=DAMASO';" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" onclick="window.openSpecModal(${p.id})" alt="">
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
@@ -875,8 +861,8 @@
                     total += itemTotal;
                     itemsCont.innerHTML += `
                         <div class="flex items-center gap-4 border-b border-brand-border pb-4">
-                            <!-- BORDES ELIMINADOS DEL CARRITO -->
-                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
+                            <!-- CERO BORDES EN LA IMAGEN DEL CARRITO -->
+                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
                                 <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
@@ -938,7 +924,7 @@
                 "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono",
                 "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra",
                 "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo",
-                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "iva": "impuesto", "factura": "impuesto", "impuestos": "impuesto", "incluye": "impuesto"
+                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "iva": "impuesto", "factura": "impuesto", "impuestos": "impuesto", "incluye": "impuesto", "incluido": "impuesto"
             };
 
             const intents = {
@@ -1098,8 +1084,8 @@
 
                     // Simulación de "Aprendizaje Humano" en tiempo real
                     let addedLearning = "";
-                    if (words.length >= 3 && !text.includes("hola") && !text.includes("adios")) {
-                        addedLearning = "<br><br><span class='text-brand-muted text-[10px] italic block mt-3 border-t border-brand-border pt-2'>*He analizado tus palabras y mi red neuronal de 4 millones de parámetros ha integrado esta interacción para servirte mejor.*</span>";
+                    if (words.length >= 4 && !text.includes("hola") && !text.includes("adios")) {
+                        addedLearning = "<br><br><span class='text-brand-muted text-[10px] italic block mt-3 border-t border-brand-border pt-2'>*Mi red neuronal ha procesado tu sintaxis y la ha integrado a mis 4 millones de parámetros para interactuar mejor contigo.*</span>";
                     }
 
                     // 1. Motor Matemático Avanzado Integrado
@@ -1197,7 +1183,7 @@
                                 if (detectedIntents.includes("tiempo")) {
                                     response = `El tiempo de manufactura artesanal para la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}. ¿Gusta que le asesoremos con los gastos de envío y logística?` + addedLearning;
                                 } else if (detectedIntents.includes("precio") || detectedIntents.includes("impuestos")) {
-                                    response = `El precio oficial de catálogo para <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>. Sí, le confirmo que el IVA ya viene incluido. (Gastos de envío por separado).` + addedLearning;
+                                    response = `El precio oficial de catálogo para <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>. Sí, le confirmo categóricamente que el IVA ya viene incluido. (Gastos de envío por separado).` + addedLearning;
                                 } else if (detectedIntents.includes("material")) {
                                     response = `He analizado la estructura de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br>Material principal: <span class="text-white">${foundProduct.mat}</span>.<br>Acabado artesanal: <span class="text-white">${foundProduct.fin}</span>.<br><br>💡 ${knowledgeBase.cleaning}` + addedLearning;
                                 } else if (detectedIntents.includes("medida")) {
@@ -1209,7 +1195,7 @@
                                         response = `Especificaciones del sistema lumínico de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br><br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje soportado: <span class="text-white">${foundProduct.volt}</span><br>• Tipo de Cableado: <span class="text-white">${foundProduct.cable}</span><br>• Certificación: <span class="text-white">${foundProduct.cert}</span>.` + addedLearning;
                                     }
                                 } else {
-                                    response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (Sí, IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
+                                    response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
                                 }
                             } else {
                                 if (detectedIntents.includes("saludo")) {
@@ -1234,7 +1220,7 @@
                                 } else if (detectedIntents.includes("compra")) {
                                     response = `Para iniciar un protocolo de adquisición, le sugiero navegar por nuestro catálogo en el fondo, pulsar 'Agregar a Cotización' en las luminarias deseadas y posteriormente abrir el ícono dorado del carrito de compras ubicado en la barra superior. Allí podrá generar un documento PDF formal con el cálculo automatizado.` + addedLearning;
                                 } else if (detectedIntents.includes("ayuda")) {
-                                    response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Protocolos de limpieza o información de manufactura.` + addedLearning;
+                                    response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Información de que nuestros precios incluyen IVA.<br>• Protocolos de limpieza o información de manufactura.` + addedLearning;
                                 } else {
                                     let chitChat = chitchatResponses[window.botContext.interactionCount % chitchatResponses.length];
                                     response = `Analizo la complejidad de su comentario. ${chitChat}` + addedLearning;
@@ -1392,7 +1378,7 @@
                         doc.text("Condiciones Comerciales:", 15, finalY);
                         
                         doc.setFont("helvetica", "normal");
-                        doc.text("- Precios sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.", 15, finalY + 6);
+                        doc.text("- Precios incluyen IVA. Sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.", 15, finalY + 6);
                         doc.text("- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).", 15, finalY + 11);
 
                         doc.save(`Cotizacion_Damaso_${folio}.pdf`);
@@ -1430,7 +1416,7 @@
 
                 msg += `\n*Subtotal:* $${total.toLocaleString()} MXN\n`;
                 msg += `*Gastos de Envío:* $${envio.toLocaleString()} MXN\n`;
-                msg += `*Total Estimado:* $${granTotal.toLocaleString()} MXN\n`;
+                msg += `*Total Estimado:* $${granTotal.toLocaleString()} MXN (IVA Incluido)\n`;
                 
                 const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
                 const link = document.createElement('a');
