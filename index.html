@@ -113,7 +113,7 @@
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
             <p class="text-brand-muted text-xs font-light leading-relaxed mb-5">
-                Para brindar la experiencia inmersiva y personalizada que caracteriza a DAMASO Studio, utilizamos cookies estrictamente necesarias y analíticas. Estas nos permiten recordar tu selección en la cotización y mejorar el rendimiento de nuestro catálogo (ESTA PAGINA ESTA EN CONSTRUCCION/BETA POR LO QUE LA INFO PODRIA NO SER CORRECTA).
+                Para brindar la experiencia inmersiva y personalizada que caracteriza a DAMASO Studio, utilizamos cookies estrictamente necesarias y analíticas. Estas nos permiten recordar tu selección en la cotización y mejorar el rendimiento de nuestro catálogo.
             </p>
             
             <div id="cookie-details" class="hidden text-left bg-[#0a0a0a] p-4 mb-5 text-[10px] text-brand-muted border border-brand-border h-32 overflow-y-auto leading-relaxed">
@@ -370,9 +370,23 @@
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold mb-12">Iván<br>Damaso</h2>
             <p class="text-xl text-white font-light italic mb-8 border-b border-brand-gold pb-8 inline-block px-8">"La luz es el alma de la arquitectura."</p>
-            <p class="text-brand-muted mx-auto leading-relaxed max-w-2xl">
+            <p class="text-brand-muted mx-auto leading-relaxed max-w-2xl mb-16">
                 Diseñador radicado en Guadalajara, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo. Cada pieza nace de la experimentación de texturas, volúmenes y sombras proyectadas.
             </p>
+            
+            <!-- INSTALACIÓN INTERACTIVA (APAGADA/ENCENDIDA) - SIN ZOOM NI SPECS -->
+            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] transition-opacity duration-700" onclick="this.classList.toggle('active')">
+                <!-- Imagen Apagada (Base) -->
+                <img src="imagen_damaso_apagada.jpg" alt="Instalación DAMASO Apagada" class="w-full h-full object-cover block">
+                
+                <!-- Imagen Encendida (Aparece suavemente al pasar el cursor o hacer click) -->
+                <img src="imagen_damaso_encendida.jpg" alt="Instalación DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
+                
+                <!-- Etiqueta sutil para invitar a la interacción -->
+                <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 pointer-events-none opacity-50 group-hover:opacity-0 transition-opacity duration-500">
+                    <span class="text-white text-[9px] tracking-[0.3em] uppercase bg-black/50 px-4 py-2 backdrop-blur-sm border border-white/20">Interactuar</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1196,7 +1210,7 @@
                                 } else if (detectedIntents.includes("identidad")) {
                                     response = `Soy <strong class="text-brand-gold glow-gold">DAMASO AI</strong>, un motor conversacional algorítmico exclusivo de la firma. Fui desarrollado con arquitectura de software avanzada por nuestro director creativo, <strong class="text-white">Thiago</strong>, con la directiva de brindar servicio técnico y asistencia de diseño sin igual a nuestros clientes. Con cada interacción como esta, sigo evolucionando y aprendiendo.`;
                                 } else if (detectedIntents.includes("marca")) {
-                                    response = `${knowledgeBase.brand} ${knowledgeBase.design}`;
+                                    response = `${knowledgeBase.brand} ${knowledgeBase.design}` + addedLearning;
                                 } else if (detectedIntents.includes("pago")) {
                                     response = `${knowledgeBase.payment}`;
                                 } else if (detectedIntents.includes("impuestos")) {
@@ -1213,7 +1227,7 @@
                                     response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Protocolos de limpieza o información de manufactura.`;
                                 } else {
                                     let chitChat = chitchatResponses[window.botContext.interactionCount % chitchatResponses.length];
-                                    response = `Analizo su comentario en mi red neuronal y aprendo de ello. Sin embargo, mi enfoque deductivo actual prioriza la especificación de diseño arquitectónico y de iluminación. ${chitChat}`;
+                                    response = `Analizo la complejidad de su comentario. ${chitChat}` + addedLearning;
                                 }
                             }
                         }
