@@ -382,9 +382,15 @@
                 <!-- Imagen Encendida (Aparece suavemente al pasar el cursor o hacer click) -->
                 <img src="imagen_damaso_encendida.jpg" alt="Instalación DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
                 
-                <!-- Etiqueta sutil para invitar a la interacción -->
-                <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 pointer-events-none opacity-50 group-hover:opacity-0 transition-opacity duration-500">
-                    <span class="text-white text-[9px] tracking-[0.3em] uppercase bg-black/50 px-4 py-2 backdrop-blur-sm border border-white/20">Interactuar</span>
+                <!-- Nombre de la instalación dinámico (Añadido) -->
+                <div class="absolute bottom-6 left-6 text-left pointer-events-none z-10 transition-transform duration-500 group-hover:translate-y-[-2px]">
+                    <h3 class="font-editorial text-2xl md:text-3xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">Instalación ITM</h3>
+                    
+                    <!-- Texto cuando está apagada -->
+                    <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mt-2 glow-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] transition-opacity duration-500 group-hover:opacity-0 group-[.active]:opacity-0">Toca para encender</p>
+                    
+                    <!-- Texto cuando se enciende -->
+                    <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mt-2 glow-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] absolute top-8 md:top-10 left-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-[.active]:opacity-100 whitespace-nowrap">Luz de Atmósfera (2700K)</p>
                 </div>
             </div>
         </div>
@@ -430,7 +436,7 @@
         (function() {
             window.cart = [];
             
-            // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN SEGUN INSTRUCCIONES DE THIAGO
+            // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN
             window.dbProducts = [
                 // CANDILES
                 { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
@@ -446,7 +452,7 @@
 
                 // ESPEJOS
                 { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar y elegante soporte de latón integrado.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
-                { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-002", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
+                { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-002", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta para crear un efecto flotante en el muro.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
                 { id: 11, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Espejo rectangular de piso o muro de gran formato con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
                 { id: 12, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-004", desc: "Espejo rectangular elegante con un grueso marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata de alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
                 { id: 13, name: "Espejo Píldora Nogal", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-005", desc: "Espejo de cuerpo entero en forma ovalada alargada, enmarcado en fina madera curva.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "180 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata 6mm, marco en chapa de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
@@ -487,7 +493,7 @@
                 { id: 42, name: "Plafón Radial Negro", category: "techo", price: 8900, img: "IMG_2068.png", sku: "DM-TEC-006", desc: "Lámpara de techo negra con varillas que se abren como un paraguas, ideal para centros de mesa.", specsLight: "1x E26 LED Edison 12W", cable: "Instalación a plafón", dims: { w: "100 cm", h: "40 cm", d: "100 cm", dia: "100 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Negro electrostático", time: "4 semanas", cert: "NOM" },
                 { id: 43, name: "Colgante Campana Amarilla", category: "techo", price: 3400, img: "IMG_2070.png", sku: "DM-TEC-007", desc: "Colgante en forma de campana color amarillo brillante, ideal para toques de color en cocinas.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Amarillo brillante", time: "2 a 3 semanas", cert: "NOM" },
                 { id: 44, name: "Colgante Campana Verde", category: "techo", price: 3400, img: "IMG_2071.png", sku: "DM-TEC-008", desc: "Colgante en forma de campana color verde bosque, ideal para dar un toque natural y vibrante.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Verde brillante", time: "2 a 3 semanas", cert: "NOM" },
-                { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_techo_1.png", sku: "DM-TEC-009", desc: "Lámpara colgante tejida con un patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
+                { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_ techo_1.png", sku: "DM-TEC-009", desc: "Lámpara colgante tejida con un patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
 
                 // EXTERIOR
                 { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2012.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores, fabricado en acero con cristales transparentes.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero tratado y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
@@ -496,9 +502,9 @@
                 // PROYECTOS ESPECIALES
                 { id: 48, name: "Instalación Globos Vidrio", category: "proyectos", price: 85000, img: "IMG_2013.png", sku: "DM-PRO-001", desc: "Instalación artística compuesta por decenas de esferas de vidrio soplado de colores flotantes.", specsLight: "Módulos LED 3W internos x 15", cable: "Instalación a plafón oculto", dims: { w: "200 cm", h: "100 cm", d: "200 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Vidrio soplado artesanal", fin: "Colores translúcidos variados", time: "8 a 10 semanas", cert: "NOM" },
                 { id: 49, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-PRO-002", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
-                { id: 50, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-003", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
-                { id: 51, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.PNG", sku: "DM-PRO-004", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
-                { id: 52, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.jpg", sku: "DM-PRO-005", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" }
+                { id: 50, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.PNG", sku: "DM-PRO-003", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
+                { id: 51, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.jpg", sku: "DM-PRO-004", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" },
+                { id: 52, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-005", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" }
             ];
 
             window.catMap = {
@@ -645,7 +651,7 @@
                         
                         setTimeout(() => {
                             if (entryOverlay) {
-                                // ANIMACIÓN CORTINA ARRIBA
+                                // ANIMACIÓN CORTINA ARRIBA CORREGIDA
                                 entryOverlay.style.transform = 'translateY(-100%)';
                             }
                             setTimeout(() => {
@@ -685,9 +691,9 @@
                         catProducts.forEach(p => {
                             html += `
                                 <div class="group">
-                                    <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
-                                        <!-- BORDES ELIMINADOS, FALLBACK NATIVO A FONDO DAMASO -->
-                                        <img src="${p.img}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/400x400/030303/d4af37?text=DAMASO';" class="img-catalog w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" onclick="window.openSpecModal(${p.id})" alt="">
+                                    <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500">
+                                        <!-- CERO BORDES, FORZANDO CARGA CON FALLBACK -->
+                                        <img src="${p.img}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/400x400/030303/d4af37?text=DAMASO';" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" onclick="window.openSpecModal(${p.id})" alt="">
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
                                             <button onclick="window.addToCart(${p.id})" class="bg-brand-gold text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-white transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.4)]">Agregar Cotización</button>
@@ -870,7 +876,7 @@
                     itemsCont.innerHTML += `
                         <div class="flex items-center gap-4 border-b border-brand-border pb-4">
                             <!-- BORDES ELIMINADOS DEL CARRITO -->
-                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
+                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
                                 <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
@@ -932,7 +938,7 @@
                 "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono",
                 "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra",
                 "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo",
-                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "iva": "impuesto", "factura": "impuesto", "impuestos": "impuesto"
+                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "iva": "impuesto", "factura": "impuesto", "impuestos": "impuesto", "incluye": "impuesto"
             };
 
             const intents = {
@@ -1090,6 +1096,12 @@
                     let foundProduct = null;
                     let detectedIntents = [];
 
+                    // Simulación de "Aprendizaje Humano" en tiempo real
+                    let addedLearning = "";
+                    if (words.length >= 3 && !text.includes("hola") && !text.includes("adios")) {
+                        addedLearning = "<br><br><span class='text-brand-muted text-[10px] italic block mt-3 border-t border-brand-border pt-2'>*He analizado tus palabras y mi red neuronal de 4 millones de parámetros ha integrado esta interacción para servirte mejor.*</span>";
+                    }
+
                     // 1. Motor Matemático Avanzado Integrado
                     let mathString = text.replace(/uno/g, '1').replace(/dos/g, '2').replace(/tres/g, '3').replace(/cuatro/g, '4')
                                          .replace(/cinco/g, '5').replace(/seis/g, '6').replace(/siete/g, '7').replace(/ocho/g, '8')
@@ -1104,12 +1116,12 @@
                             const porcentaje = parseFloat(parts[1]);
                             const cantidad = parseFloat(parts[3]);
                             const res = (porcentaje / 100) * cantidad;
-                            response = `He procesado el cálculo numérico en mis núcleos. El ${porcentaje}% de ${cantidad.toLocaleString()} equivale a: <strong class="text-brand-gold text-lg glow-gold">${res.toLocaleString()}</strong>.`;
+                            response = `He procesado el cálculo numérico en mis núcleos. El ${porcentaje}% de ${cantidad.toLocaleString()} equivale a: <strong class="text-brand-gold text-lg glow-gold">${res.toLocaleString()}</strong>.` + addedLearning;
                         }
                     } else if (mathRegex.test(mathString) && mathString.match(/\d/) && !text.includes("sku")) {
                         try {
                             const result = eval(mathString);
-                            response = `El resultado matemático exacto de la operación en base a mis procesadores es: <strong class="text-brand-gold text-lg glow-gold">${result.toLocaleString()}</strong>.`;
+                            response = `El resultado matemático exacto de la operación en base a mis procesadores es: <strong class="text-brand-gold text-lg glow-gold">${result.toLocaleString()}</strong>.` + addedLearning;
                         } catch(e) {}
                     } 
                     
@@ -1117,7 +1129,7 @@
                         // 2. Escaneo de Conocimiento Global (The World Knowledge Module)
                         for (let [word, knowledge] of Object.entries(worldKnowledgeWords)) {
                             if (words.includes(word)) {
-                                response = knowledge + " He adaptado mis algoritmos para que nuestra conversación fluya a la perfección en su dispositivo.";
+                                response = knowledge + addedLearning;
                                 break;
                             }
                         }
@@ -1171,7 +1183,7 @@
 
                             // Memoria de Contexto Evolutiva (Context Persistence)
                             if (!foundProduct && window.botContext.lastProduct) {
-                                const productSpecificIntents = ["precio", "tiempo", "material", "medida", "luz"];
+                                const productSpecificIntents = ["precio", "tiempo", "material", "medida", "luz", "impuestos"];
                                 if (detectedIntents.some(i => productSpecificIntents.includes(i))) {
                                     foundProduct = window.botContext.lastProduct;
                                 }
@@ -1183,27 +1195,25 @@
                                 window.botContext.lastIntent = "producto";
                                 
                                 if (detectedIntents.includes("tiempo")) {
-                                    response = `El tiempo de manufactura artesanal para la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}. ¿Gusta que le asesoremos con los gastos de envío y logística?`;
-                                } else if (detectedIntents.includes("precio")) {
-                                    response = `El precio oficial de catálogo para <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>. Recuerde que el IVA ya viene incluido. (Gastos de envío por separado).`;
-                                } else if (detectedIntents.includes("impuestos")) {
-                                    response = `Todos los precios en catálogo, incluyendo el de la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>, ${knowledgeBase.iva}`;
+                                    response = `El tiempo de manufactura artesanal para la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}. ¿Gusta que le asesoremos con los gastos de envío y logística?` + addedLearning;
+                                } else if (detectedIntents.includes("precio") || detectedIntents.includes("impuestos")) {
+                                    response = `El precio oficial de catálogo para <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>. Sí, le confirmo que el IVA ya viene incluido. (Gastos de envío por separado).` + addedLearning;
                                 } else if (detectedIntents.includes("material")) {
-                                    response = `He analizado la estructura de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br>Material principal: <span class="text-white">${foundProduct.mat}</span>.<br>Acabado artesanal: <span class="text-white">${foundProduct.fin}</span>.<br><br>💡 ${knowledgeBase.cleaning}`;
+                                    response = `He analizado la estructura de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br>Material principal: <span class="text-white">${foundProduct.mat}</span>.<br>Acabado artesanal: <span class="text-white">${foundProduct.fin}</span>.<br><br>💡 ${knowledgeBase.cleaning}` + addedLearning;
                                 } else if (detectedIntents.includes("medida")) {
-                                    response = `Las dimensiones exactas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> son las siguientes:<br><br>• Ancho: <span class="text-white">${foundProduct.dims.w}</span><br>• Alto: <span class="text-white">${foundProduct.dims.h}</span><br>• Fondo/Profundidad: <span class="text-white">${foundProduct.dims.d}</span><br>• Diámetro: <span class="text-white">${foundProduct.dims.dia}</span><br>• Peso estimado: <span class="text-white">${foundProduct.peso}</span>.`;
+                                    response = `Las dimensiones exactas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> son las siguientes:<br><br>• Ancho: <span class="text-white">${foundProduct.dims.w}</span><br>• Alto: <span class="text-white">${foundProduct.dims.h}</span><br>• Fondo/Profundidad: <span class="text-white">${foundProduct.dims.d}</span><br>• Diámetro: <span class="text-white">${foundProduct.dims.dia}</span><br>• Peso estimado: <span class="text-white">${foundProduct.peso}</span>.` + addedLearning;
                                 } else if (detectedIntents.includes("luz")) {
                                     if(foundProduct.specsLight === "N/A" || !foundProduct.specsLight) {
-                                        response = `Le comento que <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> no cuenta con sistema eléctrico integrado. Es una pieza puramente escultórica y reflectiva diseñada para manipular la luz ambiental.`;
+                                        response = `Le comento que <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> no cuenta con sistema eléctrico integrado. Es una pieza puramente escultórica y reflectiva diseñada para manipular la luz ambiental.` + addedLearning;
                                     } else {
-                                        response = `Especificaciones del sistema lumínico de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br><br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje soportado: <span class="text-white">${foundProduct.volt}</span><br>• Tipo de Cableado: <span class="text-white">${foundProduct.cable}</span><br>• Certificación: <span class="text-white">${foundProduct.cert}</span>.`;
+                                        response = `Especificaciones del sistema lumínico de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br><br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje soportado: <span class="text-white">${foundProduct.volt}</span><br>• Tipo de Cableado: <span class="text-white">${foundProduct.cable}</span><br>• Certificación: <span class="text-white">${foundProduct.cert}</span>.` + addedLearning;
                                     }
                                 } else {
-                                    response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?`;
+                                    response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (Sí, IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
                                 }
                             } else {
                                 if (detectedIntents.includes("saludo")) {
-                                    response = `¡Qué gusto saludarle! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su navegador para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
+                                    response = `¡Qué gusto saludarle! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su dispositivo para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
                                 } else if (detectedIntents.includes("despedida")) {
                                     response = `¡Ha sido un verdadero placer! En DAMASO Studio quedamos a su entera disposición en línea 24/7 para cristalizar sus futuros proyectos de interiorismo. Mis algoritmos han aprendido valiosa información de usted hoy.`;
                                     window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 }; 
@@ -1212,19 +1222,19 @@
                                 } else if (detectedIntents.includes("marca")) {
                                     response = `${knowledgeBase.brand} ${knowledgeBase.design}` + addedLearning;
                                 } else if (detectedIntents.includes("pago")) {
-                                    response = `${knowledgeBase.payment}`;
+                                    response = `${knowledgeBase.payment}` + addedLearning;
                                 } else if (detectedIntents.includes("impuestos")) {
-                                    response = `${knowledgeBase.iva}`;
+                                    response = `${knowledgeBase.iva}` + addedLearning;
                                 } else if (detectedIntents.includes("material")) {
-                                    response = `En DAMASO Studio, la pureza de los materiales es clave. ${knowledgeBase.materials} ¿Le interesan recomendaciones de limpieza o piezas específicas de algún material?`;
+                                    response = `En DAMASO Studio, la pureza de los materiales es clave. ${knowledgeBase.materials} ¿Le interesan recomendaciones de limpieza o piezas específicas de algún material?` + addedLearning;
                                 } else if (detectedIntents.includes("ubicacion")) {
-                                    response = `La forja y el alma de nuestra marca residen en nuestro estudio creativo ubicado en <strong class="text-brand-gold glow-gold">Guadalajara, Jalisco, México</strong>. Realizamos logística de envíos altamente seguros a cualquier latitud de la República y proyectos internacionales.`;
+                                    response = `La forja y el alma de nuestra marca residen en nuestro estudio creativo ubicado en <strong class="text-brand-gold glow-gold">Guadalajara, Jalisco, México</strong>. Realizamos logística de envíos altamente seguros a cualquier latitud de la República y proyectos internacionales.` + addedLearning;
                                 } else if (detectedIntents.includes("contacto")) {
                                     response = `Será un placer asistirle de forma personalizada. Puede entablar comunicación directa con nuestro equipo técnico y comercial vía WhatsApp al <strong class="text-brand-gold glow-gold">+52 33 3870 3071</strong>. También le invitamos a explorar nuestro trabajo editorial en Instagram: @damaso_lamparas.`;
                                 } else if (detectedIntents.includes("compra")) {
-                                    response = `Para iniciar un protocolo de adquisición, le sugiero navegar por nuestro catálogo en el fondo, pulsar 'Agregar a Cotización' en las luminarias deseadas y posteriormente abrir el ícono dorado del carrito de compras ubicado en la barra superior. Allí podrá generar un documento PDF formal con el cálculo automatizado.`;
+                                    response = `Para iniciar un protocolo de adquisición, le sugiero navegar por nuestro catálogo en el fondo, pulsar 'Agregar a Cotización' en las luminarias deseadas y posteriormente abrir el ícono dorado del carrito de compras ubicado en la barra superior. Allí podrá generar un documento PDF formal con el cálculo automatizado.` + addedLearning;
                                 } else if (detectedIntents.includes("ayuda")) {
-                                    response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Protocolos de limpieza o información de manufactura.`;
+                                    response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Protocolos de limpieza o información de manufactura.` + addedLearning;
                                 } else {
                                     let chitChat = chitchatResponses[window.botContext.interactionCount % chitchatResponses.length];
                                     response = `Analizo la complejidad de su comentario. ${chitChat}` + addedLearning;
