@@ -122,7 +122,7 @@
         <span id="entry-studio" class="opacity-0 transition-opacity duration-1000 font-editorial italic text-3xl sm:text-4xl md:text-5xl text-brand-gold mt-4 glow-gold">Studio</span>
     </div>
 
-    <!-- MODAL DE COOKIES FLOTANTE (INTELIGENCIA EVOLUTIVA AÑADIDA) -->
+    <!-- MODAL DE COOKIES FLOTANTE -->
     <div id="cookie-modal" class="fixed inset-0 z-[9999998] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-700 bg-black/40 backdrop-blur-sm hidden">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
@@ -201,7 +201,7 @@
             </div>
 
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- ICONO DEL BOT ACTUALIZADO A "AI" -->
+                <!-- ICONO DEL BOT -->
                 <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2" aria-label="Asistente Virtual">
                     <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">AI</span>
                 </button>
@@ -220,7 +220,7 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE CON INDICADOR DE ESTADO EN TIEMPO REAL -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-brand-gold transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[15px_0_30px_rgba(212,175,55,0.15)]">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black">
             <div class="flex items-center gap-3">
@@ -244,7 +244,7 @@
             </div>
         </div>
         <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2">
-            <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-transparent border border-brand-border rounded-full px-4 py-2 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors" onkeypress="if(event.key === 'Enter') window.sendChatMessage()">
+            <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-transparent border-brand-border rounded-full px-4 py-2 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors" onkeypress="if(event.key === 'Enter') window.sendChatMessage()">
             <button onclick="window.sendChatMessage()" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)]">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
@@ -252,13 +252,12 @@
     </div>
     <div id="chat-overlay" onclick="window.toggleChatbot()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- MODAL DE ESPECIFICACIONES (SCROLL MÓVIL REPARADO) -->
+    <!-- MODAL DE ESPECIFICACIONES CON SCROLL MÓVIL REPARADO -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-0 sm:p-8">
         <button onclick="window.closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[100] bg-brand-gold text-black p-3 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)] hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
 
-        <!-- Habilitado overflow-y-auto para deslizar libremente en móviles -->
         <div class="bg-[#050505] border border-brand-gold w-full max-w-6xl h-full sm:h-auto max-h-[100dvh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-none sm:rounded-lg overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
                 <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
@@ -388,7 +387,7 @@
             </p>
             
             <!-- DECORACIÓN INTERACTIVA (APAGADA/ENCENDIDA) -->
-            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24" onclick="this.classList.toggle('active')">
+            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)]" onclick="this.classList.toggle('active')">
                 <img src="imagen_damaso_apagada.png" alt="Decoración DAMASO Apagada" class="w-full h-full object-cover block">
                 <img src="imagen_damaso_encendida.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
             </div>
@@ -435,7 +434,7 @@
         (function() {
             window.cart = [];
             
-            // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN
+            // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN SEGUN INSTRUCCIONES DE THIAGO
             window.dbProducts = [
                 // CANDILES
                 { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
@@ -451,7 +450,7 @@
 
                 // ESPEJOS
                 { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar y elegante soporte de latón integrado.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
-                { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-002", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta para crear un efecto flotante en el muro.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
+                { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-002", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
                 { id: 11, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Espejo rectangular de piso o muro de gran formato con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
                 { id: 12, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-004", desc: "Espejo rectangular elegante con un grueso marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata de alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
                 { id: 13, name: "Espejo Píldora Nogal", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-005", desc: "Espejo de cuerpo entero en forma ovalada alargada, enmarcado en fina madera curva.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "180 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata 6mm, marco en chapa de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
@@ -666,32 +665,12 @@
                 }, 100);
             };
 
-            // LÓGICA DE CARGA DE IMÁGENES Y TIMEOUTS
+            // LÓGICA DE CARGA INFINITA
             window.imageLoaded = function(id) {
                 const img = document.getElementById('img-' + id);
                 const loader = document.getElementById('loader-' + id);
-                const error = document.getElementById('error-' + id);
                 if (img) img.classList.remove('opacity-0');
                 if (loader) loader.classList.add('opacity-0', 'pointer-events-none');
-                if (error) error.classList.add('hidden');
-                if (window['imgTimeout_' + id]) clearTimeout(window['imgTimeout_' + id]);
-            };
-
-            window.imageError = function(id) {
-                const img = document.getElementById('img-' + id);
-                const loader = document.getElementById('loader-' + id);
-                const error = document.getElementById('error-' + id);
-                if (loader) loader.classList.add('hidden');
-                if (error) error.classList.remove('hidden');
-                if (window['imgTimeout_' + id]) clearTimeout(window['imgTimeout_' + id]);
-            };
-
-            window.imageErrorTimeout = function(id) {
-                const img = document.getElementById('img-' + id);
-                if (img && img.classList.contains('opacity-0')) {
-                    window.imageError(id);
-                    img.src = ''; 
-                }
             };
 
             window.renderCatalog = function(products) {
@@ -718,7 +697,7 @@
                                 <div class="group">
                                     <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
                                         
-                                        <!-- ANIMACIÓN DE CARGA GEOMÉTRICA (CUADRADO, CÍRCULO Y TRIÁNGULO) -->
+                                        <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA -->
                                         <div id="loader-${p.id}" class="absolute inset-0 flex items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
                                             <div class="relative w-16 h-16">
                                                 <div class="absolute inset-0 flex items-center justify-center shape-1">
@@ -733,16 +712,9 @@
                                             </div>
                                         </div>
 
-                                        <!-- MENSAJE DE ERROR TRAS 15 SEGUNDOS -->
-                                        <div id="error-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 hidden pointer-events-none">
-                                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" class="text-brand-gold mb-2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                                            <span class="text-brand-gold text-[9px] tracking-widest uppercase text-center px-4 glow-gold">Error al cargar<br>la imagen</span>
-                                        </div>
-
-                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0 -->
-                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="window.imageError(${p.id})" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. ONERROR REINTENTA INFINITAMENTE CADA 3 SEGUNDOS -->
+                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
                                         
-                                        <!-- CAPA DE INTERACCIÓN (VER SPECS / AGREGAR) -->
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
                                             <button onclick="window.addToCart(${p.id})" class="bg-brand-gold text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-white transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.4)]">Agregar Cotización</button>
@@ -761,14 +733,6 @@
                     }
                 }
                 grid.innerHTML = html;
-
-                // ACTIVAR TIMEOUT DE 15 SEGUNDOS PARA CADA IMAGEN
-                products.forEach(p => {
-                    if(window['imgTimeout_' + p.id]) clearTimeout(window['imgTimeout_' + p.id]);
-                    window['imgTimeout_' + p.id] = setTimeout(() => {
-                        window.imageErrorTimeout(p.id);
-                    }, 15000);
-                });
             };
 
             window.toggleCategories = function(e) {
@@ -932,8 +896,7 @@
                     total += itemTotal;
                     itemsCont.innerHTML += `
                         <div class="flex items-center gap-4 border-b border-brand-border pb-4">
-                            <!-- CERO BORDES EN LA IMAGEN DEL CARRITO -->
-                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
+                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
                                 <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
@@ -1001,7 +964,7 @@
             const intents = {
                 saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo"],
                 despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago"],
                 ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio"],
                 contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje"],
                 ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar"],
@@ -1013,7 +976,7 @@
                 luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica", "energia", "corriente", "focos", "iluminacion", "kelvin", "lumens"],
                 marca: ["damaso", "estudio", "studio", "marca", "filosofia", "ivan", "diseñador", "origen", "historia", "brutalismo", "arte", "arquitectura"],
                 pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion"],
-                impuestos: ["iva", "impuestos", "factura", "facturar", "incluye", "incluido", "neto"]
+                impuestos: ["iva", "impuesto", "impuestos", "factura", "facturar", "incluye", "incluido", "neto"]
             };
 
             const worldKnowledgeWords = {
@@ -1267,11 +1230,11 @@
                                         response = `Especificaciones del sistema lumínico de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br><br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje soportado: <span class="text-white">${foundProduct.volt}</span><br>• Tipo de Cableado: <span class="text-white">${foundProduct.cable}</span><br>• Certificación: <span class="text-white">${foundProduct.cert}</span>.` + addedLearning;
                                     }
                                 } else {
-                                    response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (Sí, IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
+                                    response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
                                 }
                             } else {
                                 if (detectedIntents.includes("saludo")) {
-                                    response = `¡Qué gusto saludarle! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros de red para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
+                                    response = `¡Qué gusto saludarle! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su dispositivo para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
                                 } else if (detectedIntents.includes("despedida")) {
                                     response = `¡Ha sido un verdadero placer! En DAMASO Studio quedamos a su entera disposición en línea 24/7 para cristalizar sus futuros proyectos de interiorismo. Mis algoritmos han aprendido valiosa información de usted hoy.`;
                                     window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 }; 
