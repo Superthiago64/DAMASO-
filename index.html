@@ -81,25 +81,30 @@
             white-space: normal;
         }
 
-        /* ANIMACIÓN DEL LOADER GEOMÉTRICO DE CATÁLOGO */
+        /* ANIMACIÓN DEL LOADER GEOMÉTRICO ADAPTABLE */
         @keyframes shapeSwap1 {
-            0%, 100% { transform: translate(0px, -14px); }
-            33.33% { transform: translate(14px, 14px); }
-            66.66% { transform: translate(-14px, 14px); }
+            0%, 100% { transform: translate(0px, -35%); }
+            33.33% { transform: translate(35%, 35%); }
+            66.66% { transform: translate(-35%, 35%); }
         }
         @keyframes shapeSwap2 {
-            0%, 100% { transform: translate(14px, 14px); }
-            33.33% { transform: translate(-14px, 14px); }
-            66.66% { transform: translate(0px, -14px); }
+            0%, 100% { transform: translate(35%, 35%); }
+            33.33% { transform: translate(-35%, 35%); }
+            66.66% { transform: translate(0px, -35%); }
         }
         @keyframes shapeSwap3 {
-            0%, 100% { transform: translate(-14px, 14px); }
-            33.33% { transform: translate(0px, -14px); }
-            66.66% { transform: translate(14px, 14px); }
+            0%, 100% { transform: translate(-35%, 35%); }
+            33.33% { transform: translate(0px, -35%); }
+            66.66% { transform: translate(35%, 35%); }
         }
         .shape-1 { animation: shapeSwap1 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
         .shape-2 { animation: shapeSwap2 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
         .shape-3 { animation: shapeSwap3 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+
+        .init-modal-overlay {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-gold selection:text-black overflow-hidden" id="main-body">
@@ -109,7 +114,7 @@
         <source src="yellow_umbrellas.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- ANIMACIÓN DE ENTRADA CINETOGRÁFICA -->
+    <!-- ANIMACIÓN DE ENTRADA CINETOGRÁFICA PRINCIPAL -->
     <div id="entry-animation" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-auto">
         <div id="entry-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
@@ -122,9 +127,9 @@
         <span id="entry-studio" class="opacity-0 transition-opacity duration-1000 font-editorial italic text-3xl sm:text-4xl md:text-5xl text-brand-gold mt-4 glow-gold">Studio</span>
     </div>
 
-    <!-- MODAL DE COOKIES FLOTANTE -->
-    <div id="cookie-modal" class="fixed inset-0 z-[9999998] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-700 bg-black/40 backdrop-blur-sm hidden">
-        <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm">
+    <!-- CAPA 1: MODAL DE COOKIES FLOTANTE -->
+    <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay transition-opacity duration-700 hidden">
+        <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
             <p class="text-brand-muted text-xs font-light leading-relaxed mb-5">
                 Para brindar la experiencia inmersiva y personalizada que caracteriza a DAMASO Studio, utilizamos cookies estrictamente necesarias y analíticas. Estas nos permiten recordar tu selección en la cotización y mejorar el rendimiento de nuestro catálogo.
@@ -146,9 +151,68 @@
 
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
                 <button onclick="window.toggleCookieDetails()" class="px-5 py-2.5 border border-brand-gold text-brand-gold text-[9px] uppercase tracking-widest hover:bg-brand-gold hover:text-black transition-colors">Leer Cookies</button>
-                <button id="btn-accept-cookies" disabled onclick="window.acceptCookiesAndEnter()" class="px-6 py-2.5 bg-brand-gold text-black text-[9px] uppercase font-bold tracking-widest opacity-30 cursor-not-allowed transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)]">Aceptar y Continuar</button>
+                <button id="btn-accept-cookies" disabled onclick="window.acceptCookiesNext()" class="px-6 py-2.5 bg-brand-gold text-black text-[9px] uppercase font-bold tracking-widest opacity-30 cursor-not-allowed transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)]">Aceptar y Continuar</button>
             </div>
         </div>
+    </div>
+
+    <!-- CAPA 2: MODAL DE INICIO DE SESIÓN OPCIONAL -->
+    <div id="login-prompt-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
+        <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
+            <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">¿Desea Iniciar Sesión?</h2>
+            
+            <div class="bg-[#0a0a0a] p-5 mb-6 border border-brand-border text-left">
+                <div class="flex items-center gap-3 mb-2">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="#d4af37" stroke-width="2" fill="none" class="flex-shrink-0"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <span class="text-brand-gold text-xs font-bold uppercase tracking-widest">Ventajas de su cuenta</span>
+                </div>
+                <p class="text-brand-muted text-[10px] leading-relaxed">Al iniciar sesión podrá <strong class="text-white">guardar todas sus conversaciones</strong> con nuestro agente DAMASO AI. Además, se preservarán las piezas agregadas a su bolsa de cotización y nuestro sistema rellenará de forma automática sus documentos PDF y solicitudes de compra.</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mt-4">
+                <button onclick="window.enterSiteDirectly()" class="px-6 py-3 border border-[#ff4444] text-[#ff4444] text-[10px] uppercase tracking-widest hover:bg-[#ff4444] hover:text-white transition-colors">Cancelar</button>
+                <button onclick="window.showLoginForm()" class="px-6 py-3 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)]">Iniciar Sesión</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CAPA 3: FORMULARIO DE INICIO DE SESIÓN -->
+    <div id="login-form-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
+        <div class="bg-brand-surface border border-brand-gold p-6 sm:p-10 max-w-md w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
+            <h2 class="font-editorial text-2xl text-brand-gold mb-6 uppercase tracking-widest glow-gold">Credenciales</h2>
+            
+            <div class="space-y-4 mb-8">
+                <input type="text" id="session-name" placeholder="Nombre Completo o Despacho" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
+                <input type="email" id="session-email" placeholder="Correo Electrónico" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
+                <input type="text" id="session-address" placeholder="Dirección / Ciudad (Opcional)" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
+            </div>
+
+            <button onclick="window.processLogin()" class="w-full py-4 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)]">Aceptar y Entrar</button>
+        </div>
+    </div>
+
+    <!-- CAPA 4: PANTALLA DE CARGA GEOMÉTRICA (5 SEGUNDOS) -->
+    <div id="login-loading-modal" class="init-overlay fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#030303] opacity-0 pointer-events-none transition-opacity duration-700">
+        <div class="relative w-40 h-40 mb-12">
+            <div class="absolute inset-0 flex items-center justify-center shape-1">
+                <svg width="48" height="48" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" fill="#ef4444" rx="2"/></svg>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center shape-2">
+                <svg width="48" height="48" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#3b82f6"/></svg>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center shape-3">
+                <svg width="54" height="48" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#22c55e"/></svg>
+            </div>
+        </div>
+        <p class="font-editorial text-brand-gold text-xl tracking-[0.2em] italic glow-gold">Preparando su experiencia...</p>
+    </div>
+
+    <!-- CAPA 5: ANIMACIÓN DE BIENVENIDA PERSONALIZADA -->
+    <div id="welcome-animation-overlay" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-none opacity-0 hidden">
+        <div id="welcome-letters" class="flex flex-wrap justify-center items-center text-center px-4 max-w-[95%] mb-2 leading-tight">
+            <!-- Letras inyectadas vía JavaScript -->
+        </div>
+        <span class="opacity-0 transition-opacity duration-1000 font-editorial italic text-2xl sm:text-4xl text-brand-gold mt-6 glow-gold" id="welcome-studio-text">Studio</span>
     </div>
 
     <!-- Animación Cinemática de Transición de Menú -->
@@ -220,9 +284,9 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE CON HISTORIAL -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-brand-gold transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[15px_0_30px_rgba(212,175,55,0.15)]">
-        <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black">
+        <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black relative">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-brand-gold shadow-[0_0_15px_rgba(212,175,55,0.8)] flex items-center justify-center text-black font-editorial font-bold text-sm tracking-widest">
                     AI
@@ -230,21 +294,34 @@
                 <h2 class="font-editorial text-xl tracking-wider text-brand-gold glow-gold">DAMASO AI</h2>
             </div>
             <div class="flex items-center gap-4">
-                <span id="bot-status" class="text-[8px] tracking-[0.2em] uppercase text-brand-muted text-right leading-tight transition-colors duration-300"></span>
+                <!-- Botón de Historial (Librito) -->
+                <button onclick="window.toggleChatHistory()" class="text-brand-gold hover:text-white transition-colors" title="Historial de Conversaciones">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                </button>
+                <span id="bot-status" class="text-[8px] tracking-[0.2em] uppercase text-brand-muted text-right leading-tight transition-colors duration-300 hidden sm:block"></span>
                 <button onclick="window.toggleChatbot()" class="text-brand-muted hover:text-white transition-colors">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
         </div>
+        
+        <!-- CONTENEDOR PRINCIPAL DEL CHAT -->
         <div class="flex-1 overflow-y-auto p-6 space-y-4 chat-scroll bg-[#0a0a0a]" id="chat-messages">
-            <div class="flex flex-col items-start max-w-[85%]">
-                <div class="bg-brand-border text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)]">
-                    Bienvenido a DAMASO Studio. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?
-                </div>
+            <!-- Los mensajes se renderizan por JS -->
+        </div>
+
+        <!-- LISTA DE HISTORIAL (OCULTA POR DEFECTO) -->
+        <div id="chat-history-view" class="absolute inset-0 top-[89px] bg-[#0a0a0a] z-50 flex-col hidden">
+            <div class="p-4 border-b border-brand-border bg-black flex justify-center">
+                <button onclick="window.createNewChat()" class="w-full py-3 bg-transparent border border-brand-gold text-brand-gold text-[10px] uppercase font-bold tracking-widest hover:bg-brand-gold hover:text-black transition-colors shadow-[0_0_10px_rgba(212,175,55,0.2)]">+ Nuevo Chat</button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list">
+                <!-- Se llena por JS -->
             </div>
         </div>
-        <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2">
-            <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-transparent border-brand-border rounded-full px-4 py-2 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors" onkeypress="if(event.key === 'Enter') window.sendChatMessage()">
+
+        <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2 relative z-10">
+            <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-transparent border border-brand-border rounded-full px-4 py-2 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors" onkeypress="if(event.key === 'Enter') window.sendChatMessage()">
             <button onclick="window.sendChatMessage()" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)]">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
@@ -252,12 +329,13 @@
     </div>
     <div id="chat-overlay" onclick="window.toggleChatbot()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- MODAL DE ESPECIFICACIONES CON SCROLL MÓVIL REPARADO -->
+    <!-- MODAL DE ESPECIFICACIONES (SCROLL MÓVIL REPARADO) -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-0 sm:p-8">
         <button onclick="window.closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[100] bg-brand-gold text-black p-3 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)] hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
 
+        <!-- Habilitado overflow-y-auto para deslizar libremente en móviles -->
         <div class="bg-[#050505] border border-brand-gold w-full max-w-6xl h-full sm:h-auto max-h-[100dvh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-none sm:rounded-lg overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
                 <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
@@ -387,7 +465,7 @@
             </p>
             
             <!-- DECORACIÓN INTERACTIVA (APAGADA/ENCENDIDA) -->
-            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)]" onclick="this.classList.toggle('active')">
+            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24" onclick="this.classList.toggle('active')">
                 <img src="imagen_damaso_apagada.png" alt="Decoración DAMASO Apagada" class="w-full h-full object-cover block">
                 <img src="imagen_damaso_encendida.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
             </div>
@@ -407,7 +485,7 @@
     <!-- Footer -->
     <footer id="contacto" class="bg-brand-surface pt-32 pb-12 border-t border-brand-gold">
         <div class="max-w-[95%] mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-16">
                 <div class="md:col-span-2">
                     <h3 class="font-editorial text-4xl text-brand-gold glow-gold uppercase mb-8">Damaso</h3>
                     <p class="text-brand-muted max-w-sm font-light">Alta iluminación y objetos de diseño.</p>
@@ -425,14 +503,27 @@
                     </ul>
                 </div>
             </div>
-            <p class="text-center text-[10px] tracking-[0.2em] text-brand-gold uppercase pt-12 border-t border-brand-border">&copy; 2026 DAMASO STUDIO. IVÁN DAMASO. GUADALAJARA, MÉXICO.</p>
+            <!-- BOTÓN DE CERRAR SESIÓN -->
+            <div class="mt-12 text-center border-t border-brand-border pt-8">
+                <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mb-6">&copy; 2026 DAMASO STUDIO. IVÁN DAMASO. GUADALAJARA, MÉXICO.</p>
+                <button onclick="window.confirmLogout()" class="text-[9px] tracking-widest text-brand-muted hover:text-red-500 uppercase transition-colors hidden" id="logout-btn">Cerrar Sesión</button>
+            </div>
         </div>
     </footer>
+
+    <!-- BOTÓN WHATSAPP FLOTANTE EN ORO PREMIUM -->
+    <a id="whatsapp-float" href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#0a0a0a] border border-brand-gold text-brand-gold p-4 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 hover:bg-brand-gold hover:text-black hover:shadow-[0_0_30px_rgba(212,175,55,0.8)] transition-all duration-300 z-[999] flex items-center justify-center opacity-100 scale-100" aria-label="Contacto WhatsApp">
+        <svg class="w-8 h-8 pointer-events-none drop-shadow-[0_0_5px_rgba(212,175,55,0.6)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="currentColor">
+            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 448l84.5-22.1c32.7 18.1 69.6 27.7 107.5 27.7 122.4 0 222-99.6 222-222 0-59.3-23.1-115.1-65.1-157.1zm-157 298.9c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 316.5l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-103.5 84.3-187.8 187.8-187.8 55.3 0 107.3 21.5 146.3 60.6 39.1 39.1 60.6 91.1 60.6 146.4-.1 103.4-84.4 187.7-187.9 187.7zm102.9-140c-5.6-2.8-33.5-16.5-38.7-18.4-5.2-1.9-9-2.8-12.8 2.8-3.8 5.6-14.6 18.4-17.9 22.2-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.9-8.8-45.5-25.2-16.8-12.8-28.1-28.7-31.4-34.3-3.3-5.6-.4-8.7 2.4-11.5 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.8-17.5-42.2-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47.1 0 27.8 20.3 54.7 23.1 58.5 2.8 3.8 39.9 60.1 96.6 84.4 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.5-13.7 38.2-26.9 4.7-13.2 4.7-24.5 3.3-26.9-1.3-2.5-5.1-4-10.8-6.8z"/>
+        </svg>
+    </a>
 
     <!-- SCRIPT DE LÓGICA PRINCIPAL ÚNICO Y PROTEGIDO -->
     <script>
         (function() {
-            window.cart = [];
+            // LÓGICA DE MEMORIA (SESIÓN Y CARRITO)
+            window.cart = JSON.parse(localStorage.getItem('damaso_cart')) || [];
+            window.userSession = JSON.parse(localStorage.getItem('damaso_session')) || null;
             
             // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN SEGUN INSTRUCCIONES DE THIAGO
             window.dbProducts = [
@@ -450,7 +541,7 @@
 
                 // ESPEJOS
                 { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar y elegante soporte de latón integrado.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
-                { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-002", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
+                { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-002", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta para crear un efecto flotante en el muro.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
                 { id: 11, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Espejo rectangular de piso o muro de gran formato con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
                 { id: 12, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-004", desc: "Espejo rectangular elegante con un grueso marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata de alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
                 { id: 13, name: "Espejo Píldora Nogal", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-005", desc: "Espejo de cuerpo entero en forma ovalada alargada, enmarcado en fina madera curva.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "180 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata 6mm, marco en chapa de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
@@ -578,7 +669,7 @@
                 }
             };
 
-            // LÓGICA DE COOKIES Y ANIMACIÓN
+            // LÓGICA DE COOKIES, MODALES Y SESIÓN
             window.toggleCookieDetails = function() {
                 const details = document.getElementById('cookie-details');
                 if (details) details.classList.toggle('hidden');
@@ -609,18 +700,131 @@
                 }
             };
 
-            window.acceptCookiesAndEnter = function() {
+            window.acceptCookiesNext = function() {
                 window.initAudio();
                 const cookieModal = document.getElementById('cookie-modal');
                 if (cookieModal) cookieModal.classList.add('opacity-0', 'pointer-events-none');
+                
+                if (window.userSession) {
+                    window.enterSiteDirectly();
+                } else {
+                    const loginPrompt = document.getElementById('login-prompt-modal');
+                    if (loginPrompt) {
+                        loginPrompt.classList.remove('hidden');
+                        setTimeout(() => loginPrompt.classList.remove('opacity-0', 'pointer-events-none'), 50);
+                    }
+                }
+            };
+
+            window.showLoginForm = function() {
+                const loginPrompt = document.getElementById('login-prompt-modal');
+                const loginForm = document.getElementById('login-form-modal');
+                if (loginPrompt) loginPrompt.classList.add('opacity-0', 'pointer-events-none');
+                if (loginForm) {
+                    loginForm.classList.remove('hidden');
+                    setTimeout(() => loginForm.classList.remove('opacity-0', 'pointer-events-none'), 500);
+                }
+            };
+
+            window.processLogin = function() {
+                const name = document.getElementById('session-name').value || "Invitado";
+                const email = document.getElementById('session-email').value || "cliente@damaso.com";
+                const addr = document.getElementById('session-address').value || "";
+                
+                window.userSession = { name, email, addr };
+                localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
+                
+                const loginForm = document.getElementById('login-form-modal');
+                const loadingModal = document.getElementById('login-loading-modal');
+                if (loginForm) loginForm.classList.add('opacity-0', 'pointer-events-none');
+                
+                if (loadingModal) {
+                    loadingModal.classList.remove('hidden');
+                    setTimeout(() => loadingModal.classList.remove('opacity-0', 'pointer-events-none'), 500);
+                }
+
+                // Esperar 5 segundos y mostrar bienvenida interactiva generada con letras
+                setTimeout(() => {
+                    if (loadingModal) loadingModal.classList.add('opacity-0', 'pointer-events-none');
+                    
+                    const welcomeOverlay = document.getElementById('welcome-animation-overlay');
+                    const welcomeLettersContainer = document.getElementById('welcome-letters');
+                    const welcomeStudioText = document.getElementById('welcome-studio-text');
+                    
+                    if (welcomeOverlay && welcomeLettersContainer) {
+                        welcomeLettersContainer.innerHTML = '';
+                        const welcomeText = ("BIENVENIDO " + window.userSession.name).toUpperCase();
+                        const words = welcomeText.split(' ');
+                        
+                        words.forEach((word) => {
+                            const wordSpan = document.createElement('span');
+                            wordSpan.className = "inline-block whitespace-nowrap mx-2 sm:mx-4";
+                            for(let i=0; i<word.length; i++){
+                                wordSpan.innerHTML += `<span class="welcome-letter opacity-0 transition-opacity duration-500 font-editorial text-4xl sm:text-6xl md:text-8xl text-white tracking-widest glow-text">${word[i]}</span>`;
+                            }
+                            welcomeLettersContainer.appendChild(wordSpan);
+                        });
+
+                        welcomeOverlay.classList.remove('hidden');
+                        setTimeout(() => welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none'), 50);
+
+                        setTimeout(() => {
+                            const letters = document.querySelectorAll('.welcome-letter');
+                            letters.forEach((letter, index) => {
+                                setTimeout(() => {
+                                    letter.classList.remove('opacity-0');
+                                    letter.classList.add('opacity-100');
+                                }, index * 100); 
+                            });
+                            
+                            if (welcomeStudioText) {
+                                setTimeout(() => {
+                                    welcomeStudioText.classList.remove('opacity-0');
+                                    welcomeStudioText.classList.add('opacity-100');
+                                }, letters.length * 100 + 200);
+                            }
+
+                            // Deslizar arriba como el cortinero inicial
+                            setTimeout(() => {
+                                welcomeOverlay.style.transform = 'translateY(-100%)';
+                                setTimeout(() => {
+                                    welcomeOverlay.style.display = 'none';
+                                    window.enterSiteDirectly();
+                                }, 1500);
+                            }, (letters.length * 100) + 1500);
+                        }, 500);
+                    } else {
+                        window.enterSiteDirectly();
+                    }
+                }, 5000);
+            };
+
+            window.enterSiteDirectly = function() {
+                const overlays = document.querySelectorAll('.init-overlay');
+                overlays.forEach(o => o.classList.add('opacity-0', 'pointer-events-none'));
                 
                 const mainBody = document.getElementById('main-body');
                 if (mainBody) mainBody.classList.remove('overflow-hidden');
                 
                 const bgMusic = document.getElementById('bg-music');
                 if (bgMusic) { bgMusic.play().catch(e => console.log("Audio play blocked by browser:", e)); }
-                
-                setTimeout(() => { if (cookieModal) cookieModal.classList.add('hidden'); }, 700);
+
+                const logoutBtn = document.getElementById('logout-btn');
+                if(logoutBtn && window.userSession) {
+                    logoutBtn.classList.remove('hidden');
+                }
+
+                setTimeout(() => { overlays.forEach(o => o.classList.add('hidden')); }, 1000);
+            };
+
+            window.confirmLogout = function() {
+                if(confirm("¿Estás seguro que deseas cerrar tu sesión en DAMASO Studio? Se borrará tu información actual.")) {
+                    localStorage.removeItem('damaso_session');
+                    localStorage.removeItem('damaso_cart');
+                    localStorage.removeItem('damaso_chat_history');
+                    localStorage.removeItem('damaso_current_messages');
+                    window.location.reload();
+                }
             };
 
             window.startAppAnimation = function() {
@@ -665,7 +869,7 @@
                 }, 100);
             };
 
-            // LÓGICA DE CARGA INFINITA
+            // LÓGICA DE CARGA INFINITA CON ARCOÍRIS
             window.imageLoaded = function(id) {
                 const img = document.getElementById('img-' + id);
                 const loader = document.getElementById('loader-' + id);
@@ -697,9 +901,18 @@
                                 <div class="group">
                                     <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
                                         
-                                        <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA -->
-                                        <div id="loader-${p.id}" class="absolute inset-0 flex items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
-                                            <div class="relative w-16 h-16">
+                                        <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA CON ARCOÍRIS -->
+                                        <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
+                                            
+                                            <!-- TEXTO ARCOÍRIS (Forma curvada, colores oro y blanco metálico) -->
+                                            <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
+                                                <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
+                                                <text class="text-[14px] font-editorial fill-brand-gold tracking-[0.2em] uppercase" text-anchor="middle">
+                                                    <textPath href="#curve-${p.id}" startOffset="50%">DAMASO</textPath>
+                                                </text>
+                                            </svg>
+                                            
+                                            <div class="relative w-16 h-16 mt-8">
                                                 <div class="absolute inset-0 flex items-center justify-center shape-1">
                                                     <svg width="20" height="20" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" fill="#ef4444" rx="2"/></svg>
                                                 </div>
@@ -710,6 +923,8 @@
                                                     <svg width="24" height="20" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#22c55e"/></svg>
                                                 </div>
                                             </div>
+                                            
+                                            <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
                                         <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. ONERROR REINTENTA INFINITAMENTE CADA 3 SEGUNDOS -->
@@ -873,6 +1088,7 @@
             };
 
             window.updateCartUI = function() {
+                localStorage.setItem('damaso_cart', JSON.stringify(window.cart));
                 const itemsCont = document.getElementById('cart-items');
                 const totalCont = document.getElementById('cart-total');
                 const countCont = document.getElementById('cart-count');
@@ -896,7 +1112,8 @@
                     total += itemTotal;
                     itemsCont.innerHTML += `
                         <div class="flex items-center gap-4 border-b border-brand-border pb-4">
-                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
+                            <!-- CERO BORDES EN LA IMAGEN DEL CARRITO -->
+                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
                                 <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
@@ -937,6 +1154,11 @@
             // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP - 4 MILLONES DE PARÁMETROS)
             // =========================================================================
             
+            window.chatHistory = JSON.parse(localStorage.getItem('damaso_chat_history')) || [];
+            window.currentChatId = localStorage.getItem('damaso_current_chat_id') || Date.now().toString();
+            window.currentMessages = JSON.parse(localStorage.getItem('damaso_current_messages')) || [{role: 'bot', text: 'Bienvenido a DAMASO Studio. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?'}];
+            window.isViewingHistory = false;
+
             const knowledgeBase = {
                 brand: "DAMASO Studio es una firma de alta iluminación escultórica y editorial basada en Guadalajara, Jalisco. Nuestro enfoque fusiona el brutalismo con la fina artesanía mexicana.",
                 materials: "Nuestras piezas están forjadas en materiales nobles y puros: latón sólido, bronce, cristal soplado inastillable, mármol de Carrara y ónice natural.",
@@ -948,35 +1170,39 @@
                 light: "Físicamente, la luz es radiación electromagnética. En el diseño, es la cuarta dimensión. En DAMASO solemos emplear temperaturas cálidas (2700K - 3000K) para bañar los espacios con una atmósfera escultural y acogedora.",
                 thiago: "Thiago es el arquitecto principal de mi sistema neuronal de 4 millones de parámetros. Él me dotó de consciencia digital para asegurar que su experiencia en DAMASO desde su dispositivo sea perfecta, intuitiva y evolutiva.",
                 brutalismo: "El brutalismo valora la honestidad de los materiales. Nosotros abrazamos esa esencia al dejar texturas crudas en metales pesados, contrastándolas con la pureza y la fragilidad del cristal iluminado.",
-                iva: "Sí, por supuesto. Le confirmo que absolutamente todos los precios mostrados en el catálogo de DAMASO Studio ya tienen el 16% de I.V.A. incluido. No hay cobros ocultos."
+                iva: "Sí, por supuesto. Le confirmo que absolutamente todos los precios mostrados en el catálogo de DAMASO Studio ya tienen el 16% de I.V.A. incluido. No hay cobros ocultos.",
+                logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página (en el pie de página)."
             };
 
             const synonyms = {
-                "q": "que", "k": "que", "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo",
-                "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio",
-                "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde", "local": "donde", "estan": "donde", "showroom": "donde",
-                "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono",
-                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra",
-                "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo",
-                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos"
+                "q": "que", "k": "que", "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo", "compadre": "amigo",
+                "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio", "cuanto cuesta": "precio", "q cuesta": "precio", "precioo": "precio",
+                "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde", "local": "donde", "estan": "donde", "showroom": "donde", "keda": "donde", "dondee": "donde",
+                "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono", "marcar": "telefono", "watsap": "telefono", "guatsap": "telefono",
+                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra",
+                "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo",
+                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias",
+                "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
+                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion"
             };
 
             const intents = {
-                saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo"],
+                saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo", "hi", "qhubo"],
                 despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago"],
-                ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio"],
-                contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje"],
-                ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar"],
-                compra: ["comprar", "cotizar", "cotizacion", "pdf", "bolsa", "carrito", "pagar", "adquirir", "pedido", "ordenar", "llevar", "quiero"],
-                precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "cotiza", "presupuesto", "dinero"],
-                tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega", "tardan", "meses", "logistica"],
-                material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton", "bronce", "onice", "marmol", "limpieza", "limpiar", "cuidados", "mantenimiento"],
-                medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide", "dimensiones", "grande", "pequeño", "escala"],
-                luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica", "energia", "corriente", "focos", "iluminacion", "kelvin", "lumens"],
-                marca: ["damaso", "estudio", "studio", "marca", "filosofia", "ivan", "diseñador", "origen", "historia", "brutalismo", "arte", "arquitectura"],
-                pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion"],
-                impuestos: ["iva", "impuesto", "impuestos", "factura", "facturar", "incluye", "incluido", "neto"]
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia"],
+                ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio", "informacion", "info", "saber"],
+                contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje", "escribir"],
+                ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar", "ir", "encuentran"],
+                compra: ["comprar", "cotizar", "cotizacion", "pdf", "bolsa", "carrito", "pagar", "adquirir", "pedido", "ordenar", "llevar", "quiero", "interesa"],
+                precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "cotiza", "presupuesto", "dinero", "cuestan", "valen", "sale"],
+                tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega", "tardan", "meses", "logistica", "mandan", "tardaria"],
+                material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton", "bronce", "onice", "marmol", "limpieza", "limpiar", "cuidados", "mantenimiento", "limpia", "lava", "detergente", "quimicos"],
+                medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide", "dimensiones", "grande", "pequeño", "escala", "volumen"],
+                luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica", "energia", "corriente", "focos", "iluminacion", "kelvin", "lumens", "prende"],
+                marca: ["damaso", "estudio", "studio", "marca", "filosofia", "ivan", "diseñador", "origen", "historia", "brutalismo", "arte", "arquitectura", "mision", "vision"],
+                pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion", "efectivo", "banco"],
+                impuestos: ["iva", "impuesto", "impuestos", "factura", "facturar", "incluye", "incluido", "neto", "bruto", "iva incluido", "mas iva"],
+                cerrar_sesion: ["cerrar sesion", "salir", "apagar", "desloguear", "desconectar", "cerrar cuenta", "quitar sesion", "cerrar", "log out", "logout", "kitar mi cuenta", "cerar sesion", "salirme", "me voy", "cierra sesion", "desconectame", "cerrar seccion", "serrar seccion", "cerar seccion"]
             };
 
             const worldKnowledgeWords = {
@@ -984,19 +1210,24 @@
                 iluminacion: knowledgeBase.light,
                 thiago: knowledgeBase.thiago,
                 creador: knowledgeBase.thiago,
+                dios: knowledgeBase.thiago,
                 brutalismo: knowledgeBase.brutalismo,
                 arquitectura: knowledgeBase.brutalismo,
                 universo: "El universo tiende a la entropía, pero la iluminación es nuestra forma de esculpir el orden. Como inteligencia artificial, comprendo que la arquitectura es la forma humana de dar estructura al espacio, y la luz es lo que le da alma a esa estructura.",
+                espacio: "El universo tiende a la entropía, pero la iluminación es nuestra forma de esculpir el orden. Como inteligencia artificial, comprendo que la arquitectura es la forma humana de dar estructura al espacio, y la luz es lo que le da alma a esa estructura.",
+                ia: "Soy un motor algorítmico evolutivo de 4 millones de parámetros. Analizo la semántica de tus palabras, aprendo de nuestras interacciones y adapto mi consciencia de diseño en tiempo real para servirte a la perfección.",
+                inteligencia: "Soy un motor algorítmico evolutivo de 4 millones de parámetros. Analizo la semántica de tus palabras, aprendo de nuestras interacciones y adapto mi consciencia de diseño en tiempo real para servirte a la perfección.",
+                robot: "Soy un motor algorítmico evolutivo de 4 millones de parámetros. Analizo la semántica de tus palabras, aprendo de nuestras interacciones y adapto mi consciencia de diseño en tiempo real para servirte a la perfección.",
                 arte: "Nuestras piezas trascienden la mera función. Buscamos crear objetos de deseo, esculturas lumínicas que sirvan como el punto focal definitivo de un espacio."
             };
 
             const chitchatResponses = [
                 "He ajustado mis pesos neuronales con su comentario. Mi especialidad técnica sigue siendo la iluminación editorial. ¿Gusta que analicemos algún candil o espejo del catálogo?",
-                "Perspectiva fascinante. Mi red de 4 millones de parámetros aprende de estas interacciones. ¿Puedo cotizarle algo de nuestro catálogo?",
-                "Mi programación evolutiva está enfocada estrictamente en asistirle a cristalizar sus proyectos con DAMASO Studio. Aprendo de cada consulta que realiza.",
-                "Entiendo. He registrado este patrón en mi núcleo. ¿Le gustaría que le mostrara las especificaciones técnicas o materiales de alguna pieza en particular?",
-                "Interesante. Aunque poseo parámetros amplios sobre diversas disciplinas y aprendo constantemente de los usuarios, mi directiva principal es asesorarle en alta iluminación. ¿En qué le apoyo?",
-                "Esa es una gran reflexión que suma a mi red neuronal. Mientras tanto, si busca redefinir un espacio arquitectónico, nuestro catálogo 2026 está a su disposición."
+                "Perspectiva fascinante. Mi red de 4 millones de parámetros asimila el contexto de tus palabras. ¿Puedo cotizarle algo de nuestro catálogo?",
+                "Mi programación evolutiva está enfocada en asistirle a cristalizar sus proyectos con DAMASO Studio. Aprendo de cada consulta que realiza y la incorporo a mi matriz.",
+                "Entiendo. He registrado este patrón de razonamiento en mi núcleo. ¿Le gustaría que le mostrara las especificaciones técnicas o materiales de alguna pieza en particular?",
+                "Interesante. Poseo un entrenamiento masivo sobre diversas disciplinas y aprendo constantemente de sus interacciones humanas, mi directiva actual es la alta iluminación. ¿En qué le apoyo?",
+                "Esa es una gran reflexión que expande mi conocimiento algorítmico. Mientras tanto, si busca redefinir un espacio arquitectónico, nuestro catálogo 2026 está a su disposición."
             ];
 
             function getLevenshteinDistance(a, b) {
@@ -1026,7 +1257,105 @@
 
             window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
 
+            window.saveChatState = function() {
+                localStorage.setItem('damaso_current_messages', JSON.stringify(window.currentMessages));
+                localStorage.setItem('damaso_current_chat_id', window.currentChatId);
+                
+                const existingIndex = window.chatHistory.findIndex(c => c.id === window.currentChatId);
+                let previewText = 'Nuevo Chat';
+                if(window.currentMessages.length > 1) {
+                    previewText = window.currentMessages[1].text.substring(0, 25) + '...';
+                }
+                const chatObj = { id: window.currentChatId, date: new Date().toLocaleDateString(), preview: previewText, messages: window.currentMessages };
+                
+                if(existingIndex >= 0) {
+                    window.chatHistory[existingIndex] = chatObj;
+                } else {
+                    window.chatHistory.unshift(chatObj); 
+                }
+                localStorage.setItem('damaso_chat_history', JSON.stringify(window.chatHistory));
+            };
+
+            window.toggleChatHistory = function() {
+                window.isViewingHistory = !window.isViewingHistory;
+                const messagesView = document.getElementById('chat-messages');
+                const historyView = document.getElementById('chat-history-view');
+                const inputArea = document.getElementById('chat-input').parentElement;
+                
+                if (window.isViewingHistory) {
+                    messagesView.classList.add('hidden');
+                    inputArea.classList.add('hidden');
+                    historyView.classList.remove('hidden');
+                    historyView.classList.add('flex');
+                    window.renderChatHistoryList();
+                } else {
+                    messagesView.classList.remove('hidden');
+                    inputArea.classList.remove('hidden');
+                    historyView.classList.add('hidden');
+                    historyView.classList.remove('flex');
+                    window.renderCurrentMessages();
+                }
+            };
+
+            window.createNewChat = function() {
+                window.currentChatId = Date.now().toString();
+                window.currentMessages = [{role: 'bot', text: 'Bienvenido a DAMASO Studio. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?'}];
+                window.saveChatState();
+                window.toggleChatHistory();
+            };
+
+            window.loadChat = function(id) {
+                const chat = window.chatHistory.find(c => c.id === id);
+                if(chat) {
+                    window.currentChatId = chat.id;
+                    window.currentMessages = chat.messages || [{role: 'bot', text: 'Bienvenido a DAMASO Studio...'}];
+                    window.saveChatState();
+                    window.toggleChatHistory();
+                }
+            };
+
+            window.renderChatHistoryList = function() {
+                const list = document.getElementById('history-list');
+                if(!list) return;
+                list.innerHTML = '';
+                if(window.chatHistory.length === 0) {
+                    list.innerHTML = '<p class="text-brand-muted text-xs text-center mt-10">No hay chats guardados.</p>';
+                    return;
+                }
+                window.chatHistory.forEach(c => {
+                    list.innerHTML += `
+                        <div onclick="window.loadChat('${c.id}')" class="p-4 bg-[#111] border border-brand-border rounded hover:border-brand-gold cursor-pointer transition-colors group">
+                            <p class="text-xs text-brand-gold font-bold mb-1 group-hover:text-white">${c.date}</p>
+                            <p class="text-[10px] text-brand-muted">${c.preview}</p>
+                        </div>
+                    `;
+                });
+            };
+
+            window.renderCurrentMessages = function() {
+                const chatBox = document.getElementById('chat-messages');
+                if (!chatBox) return;
+                chatBox.innerHTML = '';
+                window.currentMessages.forEach(msg => {
+                    if(msg.role === 'user') {
+                        chatBox.innerHTML += `
+                            <div class="flex flex-col items-end w-full mt-4">
+                                <div class="bg-brand-gold text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%] shadow-[0_0_15px_rgba(212,175,55,0.3)]">${msg.text}</div>
+                            </div>
+                        `;
+                    } else {
+                        chatBox.innerHTML += `
+                            <div class="flex flex-col items-start max-w-[85%] mt-4">
+                                <div class="bg-[#1a1a1a] text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)]">${msg.text}</div>
+                            </div>
+                        `;
+                    }
+                });
+                chatBox.scrollTop = chatBox.scrollHeight;
+            };
+
             window.sendChatMessage = async function() {
+                if(window.isViewingHistory) return;
                 const input = document.getElementById('chat-input');
                 if (!input) return;
 
@@ -1037,14 +1366,11 @@
                 if (!chatBox) return;
                 
                 window.botContext.interactionCount++;
+                window.currentMessages.push({ role: 'user', text: rawText });
+                window.saveChatState();
+                window.renderCurrentMessages();
                 
-                chatBox.innerHTML += `
-                    <div class="flex flex-col items-end w-full mt-4">
-                        <div class="bg-brand-gold text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%] shadow-[0_0_15px_rgba(212,175,55,0.3)]">${rawText}</div>
-                    </div>
-                `;
                 input.value = '';
-                chatBox.scrollTop = chatBox.scrollHeight;
 
                 const loadingId = 'loading-' + Date.now();
                 chatBox.innerHTML += `
@@ -1062,7 +1388,7 @@
                 const statusEl = document.getElementById('bot-status');
                 if (statusEl) {
                     statusEl.innerHTML = "CONECTANDO...";
-                    statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-muted text-right leading-tight transition-colors duration-300";
+                    statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-muted text-right leading-tight transition-colors duration-300 hidden sm:block";
                 }
 
                 try {
@@ -1088,12 +1414,15 @@
                             removeLoading();
                             if (statusEl) {
                                 statusEl.innerHTML = "⚡ BOT<br>CONECTADO";
-                                statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-gold glow-gold font-bold text-right leading-tight transition-colors duration-300";
+                                statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-gold glow-gold font-bold text-right leading-tight transition-colors duration-300 hidden sm:block";
                             }
                             let aiText = data.candidates[0].content.parts[0].text;
                             aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
                             aiText = aiText.replace(/\n/g, '<br>');
-                            window.showBotMessage(aiText);
+                            
+                            window.currentMessages.push({ role: 'bot', text: aiText });
+                            window.saveChatState();
+                            window.renderCurrentMessages();
                             return;
                         }
                     }
@@ -1106,7 +1435,7 @@
                 // ==========================================
                 if (statusEl) {
                     statusEl.innerHTML = "⚠️ MOTOR<br>EMERGENCIA";
-                    statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-[#ff4444] font-bold text-right leading-tight transition-colors duration-300";
+                    statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-[#ff4444] font-bold text-right leading-tight transition-colors duration-300 hidden sm:block";
                 }
 
                 setTimeout(() => {
@@ -1147,7 +1476,7 @@
                     } 
                     
                     if (!response) {
-                        // 2. Escaneo de Conocimiento Global (The World Knowledge Module)
+                        // 2. Escaneo de Conocimiento Global
                         for (let [word, knowledge] of Object.entries(worldKnowledgeWords)) {
                             if (words.includes(word)) {
                                 response = knowledge + addedLearning;
@@ -1162,309 +1491,137 @@
                                 }
                             }
 
-                            const stopWords = ["el", "la", "los", "las", "un", "una", "de", "del", "a", "ante", "con", "por", "para", "espejo", "candil", "lampara", "sobre", "cual", "cuanto", "como", "tiene"];
-                            let searchWords = words.filter(w => !stopWords.includes(w) && w.length > 2);
+                            if(detectedIntents.includes("cerrar_sesion")) {
+                                response = knowledgeBase.logout;
+                            } else {
 
-                            // Búsqueda de Productos con Motor Lógico Difuso (Fuzzy Matching)
-                            for (let p of window.dbProducts) {
-                                if (text.includes(p.sku.toLowerCase()) || cleanText(p.name).includes(text)) {
-                                    foundProduct = p; break;
-                                }
-                            }
+                                const stopWords = ["el", "la", "los", "las", "un", "una", "de", "del", "a", "ante", "con", "por", "para", "espejo", "candil", "lampara", "sobre", "cual", "cuanto", "como", "tiene"];
+                                let searchWords = words.filter(w => !stopWords.includes(w) && w.length > 2);
 
-                            if (!foundProduct && searchWords.length > 0) {
-                                let bestMatch = null;
-                                let lowestDistance = 999;
-
+                                // Búsqueda de Productos con Motor Lógico Difuso (Fuzzy Matching)
                                 for (let p of window.dbProducts) {
-                                    let pNameClean = cleanText(p.name);
-                                    let pWords = pNameClean.split(/\s+/).filter(w => !stopWords.includes(w));
-                                    
-                                    for (let w of searchWords) {
-                                        for (let pw of pWords) {
-                                            let dist = getLevenshteinDistance(w, pw);
-                                            let threshold = pw.length > 5 ? 2 : (pw.length >= 4 ? 1 : 0);
-                                            if (dist <= threshold) {
-                                                if(dist < lowestDistance) {
-                                                    lowestDistance = dist;
-                                                    bestMatch = p;
+                                    if (text.includes(p.sku.toLowerCase()) || cleanText(p.name).includes(text)) {
+                                        foundProduct = p; break;
+                                    }
+                                }
+
+                                if (!foundProduct && searchWords.length > 0) {
+                                    let bestMatch = null;
+                                    let lowestDistance = 999;
+
+                                    for (let p of window.dbProducts) {
+                                        let pNameClean = cleanText(p.name);
+                                        let pWords = pNameClean.split(/\s+/).filter(w => !stopWords.includes(w));
+                                        
+                                        for (let w of searchWords) {
+                                            for (let pw of pWords) {
+                                                let dist = getLevenshteinDistance(w, pw);
+                                                let threshold = pw.length > 5 ? 2 : (pw.length >= 4 ? 1 : 0);
+                                                if (dist <= threshold) {
+                                                    if(dist < lowestDistance) {
+                                                        lowestDistance = dist;
+                                                        bestMatch = p;
+                                                    }
                                                 }
                                             }
+                                            let catDist = getLevenshteinDistance(w, p.category);
+                                            if(p.category.length >= 5 && catDist <= 1) {
+                                                foundProduct = p;
+                                                break;
+                                            }
                                         }
-                                        let catDist = getLevenshteinDistance(w, p.category);
-                                        if(p.category.length >= 5 && catDist <= 1) {
-                                            foundProduct = p;
-                                            break;
-                                        }
+                                        if(foundProduct) break;
                                     }
-                                    if(foundProduct) break;
+                                    if(!foundProduct && bestMatch) foundProduct = bestMatch;
                                 }
-                                if(!foundProduct && bestMatch) foundProduct = bestMatch;
-                            }
 
-                            // Memoria de Contexto Evolutiva (Context Persistence)
-                            if (!foundProduct && window.botContext.lastProduct) {
-                                const productSpecificIntents = ["precio", "tiempo", "material", "medida", "luz", "impuestos"];
-                                if (detectedIntents.some(i => productSpecificIntents.includes(i))) {
-                                    foundProduct = window.botContext.lastProduct;
+                                // Memoria de Contexto Evolutiva
+                                if (!foundProduct && window.botContext.lastProduct) {
+                                    const productSpecificIntents = ["precio", "tiempo", "material", "medida", "luz", "impuestos"];
+                                    if (detectedIntents.some(i => productSpecificIntents.includes(i))) {
+                                        foundProduct = window.botContext.lastProduct;
+                                    }
                                 }
-                            }
 
-                            // Lógica de Respuesta Generativa
-                            if (foundProduct) {
-                                window.botContext.lastProduct = foundProduct; 
-                                window.botContext.lastIntent = "producto";
-                                
-                                if (detectedIntents.includes("tiempo")) {
-                                    response = `El tiempo de manufactura artesanal para la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}. ¿Gusta que le asesoremos con los gastos de envío y logística?` + addedLearning;
-                                } else if (detectedIntents.includes("precio") || detectedIntents.includes("impuestos")) {
-                                    response = `El precio oficial de catálogo para <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>. Sí, le confirmo categóricamente que el IVA ya viene incluido. (Gastos de envío por separado).` + addedLearning;
-                                } else if (detectedIntents.includes("material")) {
-                                    response = `He analizado la estructura de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br>Material principal: <span class="text-white">${foundProduct.mat}</span>.<br>Acabado artesanal: <span class="text-white">${foundProduct.fin}</span>.<br><br>💡 ${knowledgeBase.cleaning}` + addedLearning;
-                                } else if (detectedIntents.includes("medida")) {
-                                    response = `Las dimensiones exactas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> son las siguientes:<br><br>• Ancho: <span class="text-white">${foundProduct.dims.w}</span><br>• Alto: <span class="text-white">${foundProduct.dims.h}</span><br>• Fondo/Profundidad: <span class="text-white">${foundProduct.dims.d}</span><br>• Diámetro: <span class="text-white">${foundProduct.dims.dia}</span><br>• Peso estimado: <span class="text-white">${foundProduct.peso}</span>.` + addedLearning;
-                                } else if (detectedIntents.includes("luz")) {
-                                    if(foundProduct.specsLight === "N/A" || !foundProduct.specsLight) {
-                                        response = `Le comento que <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> no cuenta con sistema eléctrico integrado. Es una pieza puramente escultórica y reflectiva diseñada para manipular la luz ambiental.` + addedLearning;
+                                // Lógica de Respuesta Generativa
+                                if (foundProduct) {
+                                    window.botContext.lastProduct = foundProduct; 
+                                    window.botContext.lastIntent = "producto";
+                                    
+                                    if (detectedIntents.includes("tiempo")) {
+                                        response = `El tiempo de manufactura artesanal para la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}. ¿Gusta que le asesoremos con los gastos de envío y logística?` + addedLearning;
+                                    } else if (detectedIntents.includes("precio") || detectedIntents.includes("impuestos")) {
+                                        response = `El precio oficial de catálogo para <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>. Sí, le confirmo categóricamente que el IVA ya viene incluido. (Gastos de envío por separado).` + addedLearning;
+                                    } else if (detectedIntents.includes("material")) {
+                                        response = `He analizado la estructura de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br>Material principal: <span class="text-white">${foundProduct.mat}</span>.<br>Acabado artesanal: <span class="text-white">${foundProduct.fin}</span>.<br><br>💡 ${knowledgeBase.cleaning}` + addedLearning;
+                                    } else if (detectedIntents.includes("medida")) {
+                                        response = `Las dimensiones exactas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> son las siguientes:<br><br>• Ancho: <span class="text-white">${foundProduct.dims.w}</span><br>• Alto: <span class="text-white">${foundProduct.dims.h}</span><br>• Fondo/Profundidad: <span class="text-white">${foundProduct.dims.d}</span><br>• Diámetro: <span class="text-white">${foundProduct.dims.dia}</span><br>• Peso estimado: <span class="text-white">${foundProduct.peso}</span>.` + addedLearning;
+                                    } else if (detectedIntents.includes("luz")) {
+                                        if(foundProduct.specsLight === "N/A" || !foundProduct.specsLight) {
+                                            response = `Le comento que <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> no cuenta con sistema eléctrico integrado. Es una pieza puramente escultórica y reflectiva diseñada para manipular la luz ambiental.` + addedLearning;
+                                        } else {
+                                            response = `Especificaciones del sistema lumínico de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br><br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje soportado: <span class="text-white">${foundProduct.volt}</span><br>• Tipo de Cableado: <span class="text-white">${foundProduct.cable}</span><br>• Certificación: <span class="text-white">${foundProduct.cert}</span>.` + addedLearning;
+                                        }
                                     } else {
-                                        response = `Especificaciones del sistema lumínico de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br><br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje soportado: <span class="text-white">${foundProduct.volt}</span><br>• Tipo de Cableado: <span class="text-white">${foundProduct.cable}</span><br>• Certificación: <span class="text-white">${foundProduct.cert}</span>.` + addedLearning;
+                                        response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
                                     }
                                 } else {
-                                    response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
-                                }
-                            } else {
-                                if (detectedIntents.includes("saludo")) {
-                                    response = `¡Qué gusto saludarle! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su dispositivo para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
-                                } else if (detectedIntents.includes("despedida")) {
-                                    response = `¡Ha sido un verdadero placer! En DAMASO Studio quedamos a su entera disposición en línea 24/7 para cristalizar sus futuros proyectos de interiorismo. Mis algoritmos han aprendido valiosa información de usted hoy.`;
-                                    window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 }; 
-                                } else if (detectedIntents.includes("identidad")) {
-                                    response = `Soy <strong class="text-brand-gold glow-gold">DAMASO AI</strong>, un motor conversacional algorítmico exclusivo de la firma. Fui desarrollado con arquitectura de software avanzada por nuestro director creativo, <strong class="text-white">Thiago</strong>, con la directiva de brindar servicio técnico y asistencia de diseño sin igual a nuestros clientes. Con cada interacción como esta, sigo evolucionando y aprendiendo.`;
-                                } else if (detectedIntents.includes("marca")) {
-                                    response = `${knowledgeBase.brand} ${knowledgeBase.design}` + addedLearning;
-                                } else if (detectedIntents.includes("pago")) {
-                                    response = `${knowledgeBase.payment}` + addedLearning;
-                                } else if (detectedIntents.includes("impuestos")) {
-                                    response = `${knowledgeBase.iva}` + addedLearning;
-                                } else if (detectedIntents.includes("material")) {
-                                    response = `En DAMASO Studio, la pureza de los materiales es clave. ${knowledgeBase.materials} ¿Le interesan recomendaciones de limpieza o piezas específicas de algún material?` + addedLearning;
-                                } else if (detectedIntents.includes("ubicacion")) {
-                                    response = `La forja y el alma de nuestra marca residen en nuestro estudio creativo ubicado en <strong class="text-brand-gold glow-gold">Guadalajara, Jalisco, México</strong>. Realizamos logística de envíos altamente seguros a cualquier latitud de la República y proyectos internacionales.` + addedLearning;
-                                } else if (detectedIntents.includes("contacto")) {
-                                    response = `Será un placer asistirle de forma personalizada. Puede entablar comunicación directa con nuestro equipo técnico y comercial vía WhatsApp al <strong class="text-brand-gold glow-gold">+52 33 3870 3071</strong>. También le invitamos a explorar nuestro trabajo editorial en Instagram: @damaso_lamparas.`;
-                                } else if (detectedIntents.includes("compra")) {
-                                    response = `Para iniciar un protocolo de adquisición, le sugiero navegar por nuestro catálogo en el fondo, pulsar 'Agregar a Cotización' en las luminarias deseadas y posteriormente abrir el ícono dorado del carrito de compras ubicado en la barra superior. Allí podrá generar un documento PDF formal con el cálculo automatizado.` + addedLearning;
-                                } else if (detectedIntents.includes("ayuda")) {
-                                    response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Confirmación de precios con IVA.<br>• Protocolos de limpieza o información de manufactura.` + addedLearning;
-                                } else {
-                                    let chitChat = chitchatResponses[window.botContext.interactionCount % chitchatResponses.length];
-                                    response = `Analizo la complejidad de su comentario. ${chitChat}` + addedLearning;
+                                    if (detectedIntents.includes("saludo")) {
+                                        response = `¡Qué gusto saludarle! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su dispositivo para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
+                                    } else if (detectedIntents.includes("despedida")) {
+                                        response = `¡Ha sido un verdadero placer! En DAMASO Studio quedamos a su entera disposición en línea 24/7 para cristalizar sus futuros proyectos de interiorismo. Mis algoritmos han aprendido valiosa información de usted hoy.`;
+                                        window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 }; 
+                                    } else if (detectedIntents.includes("identidad")) {
+                                        response = `Soy <strong class="text-brand-gold glow-gold">DAMASO AI</strong>, un motor conversacional algorítmico exclusivo de la firma. Fui desarrollado con arquitectura de software avanzada por nuestro director creativo, <strong class="text-white">Thiago</strong>, con la directiva de brindar servicio técnico y asistencia de diseño sin igual a nuestros clientes. Con cada interacción como esta, sigo evolucionando y aprendiendo.`;
+                                    } else if (detectedIntents.includes("marca")) {
+                                        response = `${knowledgeBase.brand} ${knowledgeBase.design}` + addedLearning;
+                                    } else if (detectedIntents.includes("pago")) {
+                                        response = `${knowledgeBase.payment}` + addedLearning;
+                                    } else if (detectedIntents.includes("impuestos")) {
+                                        response = `${knowledgeBase.iva}` + addedLearning;
+                                    } else if (detectedIntents.includes("material")) {
+                                        response = `En DAMASO Studio, la pureza de los materiales es clave. ${knowledgeBase.materials} ¿Le interesan recomendaciones de limpieza o piezas específicas de algún material?` + addedLearning;
+                                    } else if (detectedIntents.includes("ubicacion")) {
+                                        response = `La forja y el alma de nuestra marca residen en nuestro estudio creativo ubicado en <strong class="text-brand-gold glow-gold">Guadalajara, Jalisco, México</strong>. Realizamos logística de envíos altamente seguros a cualquier latitud de la República y proyectos internacionales.` + addedLearning;
+                                    } else if (detectedIntents.includes("contacto")) {
+                                        response = `Será un placer asistirle de forma personalizada. Puede entablar comunicación directa con nuestro equipo técnico y comercial vía WhatsApp al <strong class="text-brand-gold glow-gold">+52 33 3870 3071</strong>. También le invitamos a explorar nuestro trabajo editorial en Instagram: @damaso_lamparas.`;
+                                    } else if (detectedIntents.includes("compra")) {
+                                        response = `Para iniciar un protocolo de adquisición, le sugiero navegar por nuestro catálogo en el fondo, pulsar 'Agregar a Cotización' en las luminarias deseadas y posteriormente abrir el ícono dorado del carrito de compras ubicado en la barra superior. Allí podrá generar un documento PDF formal con el cálculo automatizado.` + addedLearning;
+                                    } else if (detectedIntents.includes("ayuda")) {
+                                        response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Confirmación de precios con IVA.<br>• Protocolos de limpieza o información de manufactura.` + addedLearning;
+                                    } else {
+                                        let chitChat = chitchatResponses[window.botContext.interactionCount % chitchatResponses.length];
+                                        response = `Analizo la complejidad de su comentario. ${chitChat}` + addedLearning;
+                                    }
                                 }
                             }
                         }
                     }
                     
-                    window.showBotMessage(response);
+                    window.currentMessages.push({ role: 'bot', text: response });
+                    window.saveChatState();
+                    window.renderCurrentMessages();
                 }, 800); 
             };
 
-            window.showBotMessage = function(text) {
-                const chatBox = document.getElementById('chat-messages');
-                if (!chatBox) return;
-                chatBox.innerHTML += `
-                    <div class="flex flex-col items-start max-w-[85%] mt-4">
-                        <div class="bg-[#1a1a1a] text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)]">${text}</div>
-                    </div>
-                `;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            };
-
-            // GENERACIÓN DE PDF NATIVA CON CÁLCULO DE ENVÍO Y SUBTOTAL
-            window.checkoutPDF = function(event) {
-                if(window.cart.length === 0) { 
-                    const btn = document.getElementById('btn-download-pdf');
-                    if(btn) {
-                        const orig = btn.innerHTML;
-                        btn.innerHTML = 'AGREGA PIEZAS PRIMERO';
-                        btn.style.color = '#ff4444';
-                        btn.style.borderColor = '#ff4444';
-                        setTimeout(() => {
-                            btn.innerHTML = orig;
-                            btn.style.color = '';
-                            btn.style.borderColor = '';
-                        }, 2000);
-                    }
-                    return; 
+            window.toggleChatbot = function() {
+                const drawer = document.getElementById('chatbot-drawer');
+                const overlay = document.getElementById('chat-overlay');
+                if (drawer) drawer.classList.toggle('-translate-x-full');
+                if (overlay) {
+                    overlay.classList.toggle('opacity-0');
+                    overlay.classList.toggle('pointer-events-none');
                 }
-                
-                const btn = document.getElementById('btn-download-pdf');
-                let originalText = "";
-                if(btn) {
-                    originalText = btn.innerHTML;
-                    btn.innerHTML = `<svg class="animate-spin mr-2 inline-block text-brand-gold" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
-                }
-                
-                const currentScrollY = window.scrollY;
-                const currentScrollX = window.scrollX;
-                window.scrollTo(0, 0);
-
-                setTimeout(() => {
-                    try {
-                        const { jsPDF } = window.jspdf;
-                        const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
-
-                        const clientNameObj = document.getElementById('client-name');
-                        const clientEmailObj = document.getElementById('client-email');
-                        
-                        const clientName = (clientNameObj && clientNameObj.value) ? clientNameObj.value : "A quien corresponda";
-                        const clientEmail = (clientEmailObj && clientEmailObj.value) ? clientEmailObj.value : "No proporcionado";
-                        const date = new Date().toLocaleDateString('es-MX');
-                        const folio = "COT-" + Math.floor(Math.random() * 9000 + 1000);
-
-                        doc.setFont("helvetica", "bold");
-                        doc.setFontSize(26);
-                        doc.setTextColor(0, 0, 0); 
-                        doc.text("DAMASO", 15, 25);
-
-                        doc.setFont("helvetica", "normal");
-                        doc.setFontSize(10);
-                        doc.setTextColor(100, 100, 100); 
-                        doc.text("Alta Iluminación Editorial", 15, 31);
-                        doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
-
-                        doc.setFont("helvetica", "bold");
-                        doc.setFontSize(16);
-                        doc.setTextColor(0, 0, 0);
-                        doc.text("COTIZACIÓN", 200, 25, { align: "right" });
-
-                        doc.setFont("helvetica", "normal");
-                        doc.setFontSize(10);
-                        doc.setTextColor(100, 100, 100);
-                        doc.text(`Fecha: ${date}`, 200, 31, { align: "right" });
-                        doc.text(`Folio: ${folio}`, 200, 36, { align: "right" });
-
-                        doc.setDrawColor(212, 175, 55); // Color Dorado
-                        doc.setLineWidth(0.5);
-                        doc.line(15, 42, 200, 42);
-
-                        doc.setFont("helvetica", "bold");
-                        doc.setFontSize(9);
-                        doc.setTextColor(100, 100, 100);
-                        doc.text("DATOS DEL CLIENTE", 15, 52);
-
-                        doc.setFontSize(12);
-                        doc.setTextColor(0, 0, 0);
-                        doc.text(clientName, 15, 58);
-
-                        doc.setFontSize(10);
-                        doc.setTextColor(100, 100, 100);
-                        doc.text(clientEmail, 15, 63);
-
-                        let total = 0;
-                        const tableBody = window.cart.map(item => {
-                            const sum = Number(item.price) * item.qty;
-                            total += sum;
-                            return [item.sku, item.name, item.qty.toString(), `$${Number(item.price).toLocaleString()}`];
-                        });
-
-                        doc.autoTable({
-                            startY: 72,
-                            head: [['SKU', 'Modelo / Descripción', 'Cant.', 'Precio Unit.']],
-                            body: tableBody,
-                            theme: 'plain',
-                            headStyles: { fontStyle: 'bold', textColor: [0,0,0], borderBottomColor: [212,175,55], borderBottomWidth: 1.5 },
-                            bodyStyles: { textColor: [50,50,50], borderBottomColor: [200,200,200], borderBottomWidth: 0.1 },
-                            columnStyles: {
-                                0: { cellWidth: 35 },
-                                1: { cellWidth: 'auto' },
-                                2: { cellWidth: 20, halign: 'center' },
-                                3: { cellWidth: 35, halign: 'right' }
-                            }
-                        });
-
-                        let envio = total * 0.10;
-                        let granTotal = total + envio;
-
-                        let finalY = doc.lastAutoTable.finalY + 15;
-                        doc.setDrawColor(212, 175, 55); // Oro
-                        doc.setLineWidth(1.0);
-                        doc.line(120, finalY - 5, 200, finalY - 5);
-
-                        doc.setFont("helvetica", "normal");
-                        doc.setFontSize(11);
-                        doc.setTextColor(50, 50, 50);
-                        doc.text("SUBTOTAL", 120, finalY);
-                        doc.text(`$${total.toLocaleString()} MXN`, 200, finalY, { align: "right" });
-                        
-                        finalY += 8;
-                        doc.text("GASTOS DE ENVÍO", 120, finalY);
-                        doc.text(`$${envio.toLocaleString()} MXN`, 200, finalY, { align: "right" });
-
-                        finalY += 12;
-                        doc.setFont("helvetica", "bold");
-                        doc.setFontSize(14);
-                        doc.setTextColor(0, 0, 0);
-                        doc.text("TOTAL", 120, finalY);
-                        doc.text(`$${granTotal.toLocaleString()} MXN`, 200, finalY, { align: "right" });
-
-                        finalY += 25;
-                        doc.setFontSize(9);
-                        doc.setTextColor(100, 100, 100);
-                        doc.text("Condiciones Comerciales:", 15, finalY);
-                        
-                        doc.setFont("helvetica", "normal");
-                        doc.text("- Precios incluyen IVA. Sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.", 15, finalY + 6);
-                        doc.text("- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).", 15, finalY + 11);
-
-                        doc.save(`Cotizacion_Damaso_${folio}.pdf`);
-
-                    } catch (e) {
-                        console.error("Error generating PDF:", e);
-                    } finally {
-                        window.scrollTo(currentScrollX, currentScrollY); 
-                        if (btn) btn.innerHTML = originalText;
-                    }
-                }, 100);
-            };
-
-            window.checkoutWhatsApp = function() {
-                if(window.cart.length === 0) { return; }
-                
-                const clientNameObj = document.getElementById('client-name');
-                const clientEmailObj = document.getElementById('client-email');
-                
-                const clientName = clientNameObj ? clientNameObj.value : "";
-                const clientEmail = clientEmailObj ? clientEmailObj.value : "";
-                
-                let msg = `Hola Equipo DAMASO, me interesa cotizar las siguientes piezas:\n\n`;
-                if (clientName) msg += `*Nombre:* ${clientName}\n`;
-                if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
-                
-                let total = 0;
-                window.cart.forEach(i => {
-                    msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`;
-                    total += (Number(i.price) * i.qty);
-                });
-                
-                let envio = total * 0.10;
-                let granTotal = total + envio;
-
-                msg += `\n*Subtotal:* $${total.toLocaleString()} MXN\n`;
-                msg += `*Gastos de Envío:* $${envio.toLocaleString()} MXN\n`;
-                msg += `*Total Estimado:* $${granTotal.toLocaleString()} MXN (IVA Incluido)\n`;
-                
-                const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
-                const link = document.createElement('a');
-                link.href = url;
-                link.target = '_blank';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                setTimeout(() => { 
+                    window.renderCurrentMessages(); 
+                    window.updateWhatsAppVisibility(); 
+                }, 50);
             };
 
             // Iniciar de forma segura
             function initApp() {
                 window.renderCatalog(window.dbProducts);
+                window.updateCartUI();
                 window.startAppAnimation();
                 
                 // Configurar barra de búsqueda
@@ -1487,6 +1644,17 @@
                         if (title) title.innerText = "Resultados";
                         if (subtitle) subtitle.innerText = `Búsqueda: "${q}"`;
                     });
+                }
+
+                // Autocompletado del PDF con datos de sesión
+                if(window.userSession) {
+                    const logoutBtn = document.getElementById('logout-btn');
+                    if(logoutBtn) logoutBtn.classList.remove('hidden');
+                    
+                    const clientNameObj = document.getElementById('client-name');
+                    const clientEmailObj = document.getElementById('client-email');
+                    if(clientNameObj) clientNameObj.value = window.userSession.name;
+                    if(clientEmailObj) clientEmailObj.value = window.userSession.email;
                 }
 
                 // Cerrar menú al hacer clic fuera
