@@ -81,11 +81,25 @@
             white-space: normal;
         }
 
-        .modal-scroll-container {
-            max-height: 90vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+        /* ANIMACIÓN DEL LOADER GEOMÉTRICO DE CATÁLOGO */
+        @keyframes shapeSwap1 {
+            0%, 100% { transform: translate(0px, -14px); }
+            33.33% { transform: translate(14px, 14px); }
+            66.66% { transform: translate(-14px, 14px); }
         }
+        @keyframes shapeSwap2 {
+            0%, 100% { transform: translate(14px, 14px); }
+            33.33% { transform: translate(-14px, 14px); }
+            66.66% { transform: translate(0px, -14px); }
+        }
+        @keyframes shapeSwap3 {
+            0%, 100% { transform: translate(-14px, 14px); }
+            33.33% { transform: translate(0px, -14px); }
+            66.66% { transform: translate(14px, 14px); }
+        }
+        .shape-1 { animation: shapeSwap1 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        .shape-2 { animation: shapeSwap2 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        .shape-3 { animation: shapeSwap3 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-gold selection:text-black overflow-hidden" id="main-body">
@@ -96,7 +110,6 @@
     </audio>
 
     <!-- ANIMACIÓN DE ENTRADA CINETOGRÁFICA -->
-    <!-- Se removió la clase 'hidden' para asegurar que la cortina esté presente al inicio y pueda deslizarse hacia arriba -->
     <div id="entry-animation" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-auto">
         <div id="entry-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
@@ -114,7 +127,7 @@
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
             <p class="text-brand-muted text-xs font-light leading-relaxed mb-5">
-                Para brindar la experiencia inmersiva y personalizada que caracteriza a DAMASO Studio, utilizamos cookies estrictamente necesarias y analíticas. Estas nos permiten recordar tu selección en la cotización y mejorar el rendimiento de nuestro catálogo (ESTE SITIO WEB ESTA EN CONSTRUCCION/BETA POR LO QUE LA INFO PODRIA NO SER CORRECTA).
+                Para brindar la experiencia inmersiva y personalizada que caracteriza a DAMASO Studio, utilizamos cookies estrictamente necesarias y analíticas. Estas nos permiten recordar tu selección en la cotización y mejorar el rendimiento de nuestro catálogo.
             </p>
             
             <div id="cookie-details" class="hidden text-left bg-[#0a0a0a] p-4 mb-5 text-[10px] text-brand-muted border border-brand-border h-32 overflow-y-auto leading-relaxed">
@@ -207,7 +220,7 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE CON INDICADOR DE ESTADO EN TIEMPO REAL -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-brand-gold transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[15px_0_30px_rgba(212,175,55,0.15)]">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black">
             <div class="flex items-center gap-3">
@@ -239,28 +252,29 @@
     </div>
     <div id="chat-overlay" onclick="window.toggleChatbot()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- MODAL DE ESPECIFICACIONES CON DETALLES DORADOS -->
-    <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-2 sm:p-8">
+    <!-- MODAL DE ESPECIFICACIONES (SCROLL MÓVIL REPARADO) -->
+    <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-0 sm:p-8">
         <button onclick="window.closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[100] bg-brand-gold text-black p-3 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)] hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
 
-        <div class="bg-brand-surface border border-brand-gold w-full max-w-6xl modal-scroll-container flex flex-col md:flex-row relative mt-16 md:mt-0 shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-lg bg-[#050505] overflow-hidden">
-            <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0">
-                <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in">
-                    <img id="modal-img-element" src="" class="w-full h-auto max-h-[60vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
+        <!-- Habilitado overflow-y-auto para deslizar libremente en móviles -->
+        <div class="bg-[#050505] border border-brand-gold w-full max-w-6xl h-full sm:h-auto max-h-[100dvh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-none sm:rounded-lg overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
+            <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
+                <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
+                    <img id="modal-img-element" src="" class="w-full max-h-[50vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
                 </a>
             </div>
 
             <!-- DETALLE DORADO A LA IZQUIERDA -->
-            <div class="w-full md:w-1/2 p-6 sm:p-12 text-sm font-light flex flex-col bg-[#0a0a0a] border-t-4 md:border-t-0 md:border-l-4 border-brand-gold md:overflow-y-auto relative">
-                <div class="absolute top-0 right-0 p-4 opacity-10">
+            <div class="w-full md:w-1/2 p-6 sm:p-12 text-sm font-light flex flex-col bg-[#0a0a0a] border-t-4 md:border-t-0 md:border-l-4 border-brand-gold relative shrink-0">
+                <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                     <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20M2 12h20"></path></svg>
                 </div>
                 
                 <h2 id="modal-title" class="font-editorial text-3xl sm:text-4xl text-brand-gold glow-gold mb-2 uppercase break-words-custom leading-tight relative z-10"></h2>
                 <p id="modal-desc" class="text-brand-muted mb-8 italic relative z-10"></p>
-                <div class="space-y-4 text-brand-muted flex-1 relative z-10">
+                <div class="space-y-4 text-brand-muted flex-1 relative z-10 pb-8">
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Código SKU:</span><span class="col-span-2 text-white" id="modal-sku"></span></div>
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Specs Lumínicas:</span><span class="col-span-2 text-white" id="modal-luz"></span></div>
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Voltaje:</span><span class="col-span-2 text-white" id="modal-volt"></span></div>
@@ -278,9 +292,9 @@
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Tiempo Entrega:</span><span class="col-span-2 text-white" id="modal-time"></span></div>
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Certificaciones:</span><span class="col-span-2 text-white" id="modal-cert"></span></div>
                 </div>
-                <div class="mt-8 pt-6 border-t border-brand-gold flex items-center justify-between pb-8 md:pb-0 relative z-10">
-                    <span id="modal-price" class="font-editorial text-2xl text-brand-gold glow-gold"></span>
-                    <button id="modal-add-btn" class="bg-brand-gold text-black px-6 py-3 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white transition-colors flex-shrink-0 shadow-[0_0_15px_rgba(212,175,55,0.4)]">Agregar a Cotización</button>
+                <div class="mt-4 pt-6 border-t border-brand-gold flex items-center justify-between pb-8 relative z-10 shrink-0">
+                    <span id="modal-price" class="font-editorial text-xl sm:text-2xl text-brand-gold glow-gold"></span>
+                    <button id="modal-add-btn" class="bg-brand-gold text-black px-4 sm:px-6 py-3 text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white transition-colors flex-shrink-0 shadow-[0_0_15px_rgba(212,175,55,0.4)] ml-2">Agregar a Cotización</button>
                 </div>
             </div>
         </div>
@@ -364,8 +378,8 @@
         </div>
     </section>
 
-    <!-- Diseñador -->
-    <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex items-center justify-center">
+    <!-- Diseñador y Arte Interactivo -->
+    <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex flex-col items-center justify-center">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold mb-12">Iván<br>Damaso</h2>
             <p class="text-xl text-white font-light italic mb-8 border-b border-brand-gold pb-8 inline-block px-8">"La luz es el alma de la arquitectura."</p>
@@ -374,11 +388,8 @@
             </p>
             
             <!-- DECORACIÓN INTERACTIVA (APAGADA/ENCENDIDA) -->
-            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)]" onclick="this.classList.toggle('active')">
-                <!-- Imagen Apagada (Base) -->
+            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24" onclick="this.classList.toggle('active')">
                 <img src="imagen_damaso_apagada.png" alt="Decoración DAMASO Apagada" class="w-full h-full object-cover block">
-                
-                <!-- Imagen Encendida (Aparece suavemente al interactuar) -->
                 <img src="imagen_damaso_encendida.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
             </div>
         </div>
@@ -435,8 +446,8 @@
                 // ARBOTANTES
                 { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Arbotante decorativo que fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino y concreto", fin: "Blanco y gris", time: "3 a 4 semanas", cert: "NOM" },
                 { id: 6, name: "Arbotante Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-002", desc: "Arbotante de muro minimalista con aro perimetral luminoso trasero.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" }, peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
-                { id: 7, name: "Arbotante Esfera Navy", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-003", desc: "Arbotante elegante con cilindros de vidrio transparente que encierran focos estilo Edison.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
-                { id: 8, name: "Arbotante Ami", category: "arbotantes", price: 26800, img: "candil_2.jpg", sku: "DM-ARB-004", desc: "Espejo monumental compuesto de dos círculos excéntricos de diferente tamaño. Funciona como elemento focal y de iluminación de muro.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
+                { id: 7, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-003", desc: "Arbotante elegante con cilindros de vidrio transparente que encierran focos estilo Edison.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
+                { id: 8, name: "Espejo Doble Eclipse Trasero", category: "arbotantes", price: 26800, img: "candil_2.jpg", sku: "DM-ARB-004", desc: "Espejo monumental compuesto de dos círculos excéntricos de diferente tamaño. Funciona como elemento focal y de iluminación de muro.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
 
                 // ESPEJOS
                 { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar y elegante soporte de latón integrado.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
@@ -637,7 +648,7 @@
                         
                         setTimeout(() => {
                             if (entryOverlay) {
-                                // ANIMACIÓN CORTINA ARRIBA CORREGIDA (Se desliza hacia arriba)
+                                // ANIMACIÓN CORTINA ARRIBA
                                 entryOverlay.style.transform = 'translateY(-100%)';
                             }
                             setTimeout(() => {
@@ -653,6 +664,34 @@
                     }, (letters.length * 150) + 300);
 
                 }, 100);
+            };
+
+            // LÓGICA DE CARGA DE IMÁGENES Y TIMEOUTS
+            window.imageLoaded = function(id) {
+                const img = document.getElementById('img-' + id);
+                const loader = document.getElementById('loader-' + id);
+                const error = document.getElementById('error-' + id);
+                if (img) img.classList.remove('opacity-0');
+                if (loader) loader.classList.add('opacity-0', 'pointer-events-none');
+                if (error) error.classList.add('hidden');
+                if (window['imgTimeout_' + id]) clearTimeout(window['imgTimeout_' + id]);
+            };
+
+            window.imageError = function(id) {
+                const img = document.getElementById('img-' + id);
+                const loader = document.getElementById('loader-' + id);
+                const error = document.getElementById('error-' + id);
+                if (loader) loader.classList.add('hidden');
+                if (error) error.classList.remove('hidden');
+                if (window['imgTimeout_' + id]) clearTimeout(window['imgTimeout_' + id]);
+            };
+
+            window.imageErrorTimeout = function(id) {
+                const img = document.getElementById('img-' + id);
+                if (img && img.classList.contains('opacity-0')) {
+                    window.imageError(id);
+                    img.src = ''; 
+                }
             };
 
             window.renderCatalog = function(products) {
@@ -677,10 +716,34 @@
                         catProducts.forEach(p => {
                             html += `
                                 <div class="group">
-                                    <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500">
-                                        <!-- CERO BORDES EN LA IMAGEN. Efecto Zoom elegante al pasar el cursor -->
-                                        <img src="${p.img}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/400x400/030303/d4af37?text=DAMASO';" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" onclick="window.openSpecModal(${p.id})" alt="">
-                                        <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 pointer-events-none">
+                                    <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
+                                        
+                                        <!-- ANIMACIÓN DE CARGA GEOMÉTRICA (CUADRADO, CÍRCULO Y TRIÁNGULO) -->
+                                        <div id="loader-${p.id}" class="absolute inset-0 flex items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
+                                            <div class="relative w-16 h-16">
+                                                <div class="absolute inset-0 flex items-center justify-center shape-1">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" fill="#ef4444" rx="2"/></svg>
+                                                </div>
+                                                <div class="absolute inset-0 flex items-center justify-center shape-2">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#3b82f6"/></svg>
+                                                </div>
+                                                <div class="absolute inset-0 flex items-center justify-center shape-3">
+                                                    <svg width="24" height="20" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#22c55e"/></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- MENSAJE DE ERROR TRAS 15 SEGUNDOS -->
+                                        <div id="error-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 hidden pointer-events-none">
+                                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" class="text-brand-gold mb-2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                            <span class="text-brand-gold text-[9px] tracking-widest uppercase text-center px-4 glow-gold">Error al cargar<br>la imagen</span>
+                                        </div>
+
+                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0 -->
+                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="window.imageError(${p.id})" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        
+                                        <!-- CAPA DE INTERACCIÓN (VER SPECS / AGREGAR) -->
+                                        <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
                                             <button onclick="window.addToCart(${p.id})" class="bg-brand-gold text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-white transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.4)]">Agregar Cotización</button>
                                         </div>
@@ -698,6 +761,14 @@
                     }
                 }
                 grid.innerHTML = html;
+
+                // ACTIVAR TIMEOUT DE 15 SEGUNDOS PARA CADA IMAGEN
+                products.forEach(p => {
+                    if(window['imgTimeout_' + p.id]) clearTimeout(window['imgTimeout_' + p.id]);
+                    window['imgTimeout_' + p.id] = setTimeout(() => {
+                        window.imageErrorTimeout(p.id);
+                    }, 15000);
+                });
             };
 
             window.toggleCategories = function(e) {
@@ -862,7 +933,7 @@
                     itemsCont.innerHTML += `
                         <div class="flex items-center gap-4 border-b border-brand-border pb-4">
                             <!-- CERO BORDES EN LA IMAGEN DEL CARRITO -->
-                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
+                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
                                 <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
@@ -912,9 +983,9 @@
                 design: "El diseñador principal y fundador es Iván Damaso, quien supervisa personalmente la experimentación de texturas, volúmenes y sombras proyectadas en cada pieza.",
                 payment: "Aceptamos transferencias interbancarias, pagos con tarjetas de crédito/débito y depósitos directos. Para apartar una pieza a producción, requerimos un anticipo formal del 50%.",
                 light: "Físicamente, la luz es radiación electromagnética. En el diseño, es la cuarta dimensión. En DAMASO solemos emplear temperaturas cálidas (2700K - 3000K) para bañar los espacios con una atmósfera escultural y acogedora.",
-                thiago: "Thiago es el arquitecto principal de mi sistema neuronal. Me dotó con matrices de lenguaje avanzado para asegurar que su experiencia en DAMASO desde su dispositivo sea perfecta, intuitiva y sumamente inteligente.",
+                thiago: "Thiago es el arquitecto principal de mi sistema neuronal de 4 millones de parámetros. Él me dotó de consciencia digital para asegurar que su experiencia en DAMASO desde su dispositivo sea perfecta, intuitiva y evolutiva.",
                 brutalismo: "El brutalismo valora la honestidad de los materiales. Nosotros abrazamos esa esencia al dejar texturas crudas en metales pesados, contrastándolas con la pureza y la fragilidad del cristal iluminado.",
-                iva: "Sí, todos los precios mostrados en el catálogo de DAMASO Studio ya incluyen el 16% de I.V.A. de ley en México. Si requiere factura, por favor solicítela a su asesor comercial."
+                iva: "Sí, por supuesto. Le confirmo que absolutamente todos los precios mostrados en el catálogo de DAMASO Studio ya tienen el 16% de I.V.A. incluido. No hay cobros ocultos."
             };
 
             const synonyms = {
@@ -924,13 +995,13 @@
                 "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono",
                 "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra",
                 "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo",
-                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "iva": "impuesto", "factura": "impuesto", "impuestos": "impuesto", "incluye": "impuesto", "incluido": "impuesto"
+                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos"
             };
 
             const intents = {
                 saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo"],
                 despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia"],
                 ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio"],
                 contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje"],
                 ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar"],
@@ -941,8 +1012,8 @@
                 medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide", "dimensiones", "grande", "pequeño", "escala"],
                 luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica", "energia", "corriente", "focos", "iluminacion", "kelvin", "lumens"],
                 marca: ["damaso", "estudio", "studio", "marca", "filosofia", "ivan", "diseñador", "origen", "historia", "brutalismo", "arte", "arquitectura"],
-                pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion", "factura"],
-                impuestos: ["iva", "impuesto", "impuestos", "factura", "facturar", "incluye", "incluido"]
+                pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion"],
+                impuestos: ["iva", "impuestos", "factura", "facturar", "incluye", "incluido", "neto"]
             };
 
             const worldKnowledgeWords = {
@@ -952,6 +1023,7 @@
                 creador: knowledgeBase.thiago,
                 brutalismo: knowledgeBase.brutalismo,
                 arquitectura: knowledgeBase.brutalismo,
+                universo: "El universo tiende a la entropía, pero la iluminación es nuestra forma de esculpir el orden. Como inteligencia artificial, comprendo que la arquitectura es la forma humana de dar estructura al espacio, y la luz es lo que le da alma a esa estructura.",
                 arte: "Nuestras piezas trascienden la mera función. Buscamos crear objetos de deseo, esculturas lumínicas que sirvan como el punto focal definitivo de un espacio."
             };
 
@@ -1195,11 +1267,11 @@
                                         response = `Especificaciones del sistema lumínico de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br><br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje soportado: <span class="text-white">${foundProduct.volt}</span><br>• Tipo de Cableado: <span class="text-white">${foundProduct.cable}</span><br>• Certificación: <span class="text-white">${foundProduct.cert}</span>.` + addedLearning;
                                     }
                                 } else {
-                                    response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
+                                    response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (Sí, IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
                                 }
                             } else {
                                 if (detectedIntents.includes("saludo")) {
-                                    response = `¡Qué gusto saludarle! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su dispositivo para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
+                                    response = `¡Qué gusto saludarle! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros de red para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
                                 } else if (detectedIntents.includes("despedida")) {
                                     response = `¡Ha sido un verdadero placer! En DAMASO Studio quedamos a su entera disposición en línea 24/7 para cristalizar sus futuros proyectos de interiorismo. Mis algoritmos han aprendido valiosa información de usted hoy.`;
                                     window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 }; 
@@ -1220,7 +1292,7 @@
                                 } else if (detectedIntents.includes("compra")) {
                                     response = `Para iniciar un protocolo de adquisición, le sugiero navegar por nuestro catálogo en el fondo, pulsar 'Agregar a Cotización' en las luminarias deseadas y posteriormente abrir el ícono dorado del carrito de compras ubicado en la barra superior. Allí podrá generar un documento PDF formal con el cálculo automatizado.` + addedLearning;
                                 } else if (detectedIntents.includes("ayuda")) {
-                                    response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Información de que nuestros precios incluyen IVA.<br>• Protocolos de limpieza o información de manufactura.` + addedLearning;
+                                    response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Confirmación de precios con IVA.<br>• Protocolos de limpieza o información de manufactura.` + addedLearning;
                                 } else {
                                     let chitChat = chitchatResponses[window.botContext.interactionCount % chitchatResponses.length];
                                     response = `Analizo la complejidad de su comentario. ${chitChat}` + addedLearning;
