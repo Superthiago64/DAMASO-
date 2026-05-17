@@ -105,6 +105,11 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
+        .blinking-cursor::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-gold selection:text-black overflow-hidden" id="main-body">
@@ -128,7 +133,7 @@
     </div>
 
     <!-- CAPA 1: MODAL DE COOKIES FLOTANTE -->
-    <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay transition-opacity duration-700 hidden">
+    <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-1000 hidden">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
             <p class="text-brand-muted text-xs font-light leading-relaxed mb-5">
@@ -254,8 +259,8 @@
                 <a href="#coleccion" onclick="window.filterCatalogWithAnimation('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Proyectos especiales</a>
                 
                 <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
-                    <a href="#clientes" onclick="window.toggleCategories(event)" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Clientes</a>
-                    <a href="#disenador" onclick="window.toggleCategories(event)" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">El Diseñador</a>
+                    <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Clientes</a>
+                    <a href="#disenador" onclick="window.scrollToSection(event, 'disenador')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">El Diseñador</a>
                 </div>
             </div>
 
@@ -294,7 +299,6 @@
                 <h2 class="font-editorial text-xl tracking-wider text-brand-gold glow-gold">DAMASO AI</h2>
             </div>
             <div class="flex items-center gap-4">
-                <!-- Botón de Historial (Librito) -->
                 <button onclick="window.toggleChatHistory()" class="text-brand-gold hover:text-white transition-colors" title="Historial de Conversaciones">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                 </button>
@@ -305,19 +309,15 @@
             </div>
         </div>
         
-        <!-- CONTENEDOR PRINCIPAL DEL CHAT -->
         <div class="flex-1 overflow-y-auto p-6 space-y-4 chat-scroll bg-[#0a0a0a]" id="chat-messages">
-            <!-- Los mensajes se renderizan por JS -->
+            <!-- Mensajes inyectados vía JS -->
         </div>
 
-        <!-- LISTA DE HISTORIAL (OCULTA POR DEFECTO) -->
         <div id="chat-history-view" class="absolute inset-0 top-[89px] bg-[#0a0a0a] z-50 flex-col hidden">
             <div class="p-4 border-b border-brand-border bg-black flex justify-center">
                 <button onclick="window.createNewChat()" class="w-full py-3 bg-transparent border border-brand-gold text-brand-gold text-[10px] uppercase font-bold tracking-widest hover:bg-brand-gold hover:text-black transition-colors shadow-[0_0_10px_rgba(212,175,55,0.2)]">+ Nuevo Chat</button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list">
-                <!-- Se llena por JS -->
-            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list"></div>
         </div>
 
         <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2 relative z-10">
@@ -329,13 +329,13 @@
     </div>
     <div id="chat-overlay" onclick="window.toggleChatbot()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- MODAL DE ESPECIFICACIONES (SCROLL MÓVIL REPARADO) -->
+    <!-- MODAL DE ESPECIFICACIONES CON SCROLL MÓVIL (NATIVO TOUCH REPARADO) -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-0 sm:p-8">
         <button onclick="window.closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[100] bg-brand-gold text-black p-3 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)] hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
 
-        <!-- Habilitado overflow-y-auto para deslizar libremente en móviles -->
+        <!-- Contenedor general que permite el scroll fluido en móvil -->
         <div class="bg-[#050505] border border-brand-gold w-full max-w-6xl h-full sm:h-auto max-h-[100dvh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-none sm:rounded-lg overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
                 <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
@@ -464,7 +464,7 @@
                 Diseñador radicado en Guadalajara, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo. Cada pieza nace de la experimentación de texturas, volúmenes y sombras proyectadas.
             </p>
             
-            <!-- DECORACIÓN INTERACTIVA (APAGADA/ENCENDIDA) -->
+            <!-- DECORACIÓN INTERACTIVA (APAGADA/ENCENDIDA) - EXTENSIÓN .PNG VERIFICADA -->
             <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24" onclick="this.classList.toggle('active')">
                 <img src="imagen_damaso_apagada.png" alt="Decoración DAMASO Apagada" class="w-full h-full object-cover block">
                 <img src="imagen_damaso_encendida.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
@@ -511,13 +511,6 @@
         </div>
     </footer>
 
-    <!-- BOTÓN WHATSAPP FLOTANTE EN ORO PREMIUM -->
-    <a id="whatsapp-float" href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#0a0a0a] border border-brand-gold text-brand-gold p-4 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 hover:bg-brand-gold hover:text-black hover:shadow-[0_0_30px_rgba(212,175,55,0.8)] transition-all duration-300 z-[999] flex items-center justify-center opacity-100 scale-100" aria-label="Contacto WhatsApp">
-        <svg class="w-8 h-8 pointer-events-none drop-shadow-[0_0_5px_rgba(212,175,55,0.6)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="currentColor">
-            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 448l84.5-22.1c32.7 18.1 69.6 27.7 107.5 27.7 122.4 0 222-99.6 222-222 0-59.3-23.1-115.1-65.1-157.1zm-157 298.9c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 316.5l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-103.5 84.3-187.8 187.8-187.8 55.3 0 107.3 21.5 146.3 60.6 39.1 39.1 60.6 91.1 60.6 146.4-.1 103.4-84.4 187.7-187.9 187.7zm102.9-140c-5.6-2.8-33.5-16.5-38.7-18.4-5.2-1.9-9-2.8-12.8 2.8-3.8 5.6-14.6 18.4-17.9 22.2-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.9-8.8-45.5-25.2-16.8-12.8-28.1-28.7-31.4-34.3-3.3-5.6-.4-8.7 2.4-11.5 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.8-17.5-42.2-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47.1 0 27.8 20.3 54.7 23.1 58.5 2.8 3.8 39.9 60.1 96.6 84.4 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.5-13.7 38.2-26.9 4.7-13.2 4.7-24.5 3.3-26.9-1.3-2.5-5.1-4-10.8-6.8z"/>
-        </svg>
-    </a>
-
     <!-- SCRIPT DE LÓGICA PRINCIPAL ÚNICO Y PROTEGIDO -->
     <script>
         (function() {
@@ -525,7 +518,7 @@
             window.cart = JSON.parse(localStorage.getItem('damaso_cart')) || [];
             window.userSession = JSON.parse(localStorage.getItem('damaso_session')) || null;
             
-            // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN SEGUN INSTRUCCIONES DE THIAGO
+            // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN (TODOS PNG)
             window.dbProducts = [
                 // CANDILES
                 { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
@@ -537,7 +530,7 @@
                 { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Arbotante decorativo que fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino y concreto", fin: "Blanco y gris", time: "3 a 4 semanas", cert: "NOM" },
                 { id: 6, name: "Arbotante Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-002", desc: "Arbotante de muro minimalista con aro perimetral luminoso trasero.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" }, peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
                 { id: 7, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-003", desc: "Arbotante elegante con cilindros de vidrio transparente que encierran focos estilo Edison.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
-                { id: 8, name: "Espejo Doble Eclipse Trasero", category: "arbotantes", price: 26800, img: "candil_2.jpg", sku: "DM-ARB-004", desc: "Espejo monumental compuesto de dos círculos excéntricos de diferente tamaño. Funciona como elemento focal y de iluminación de muro.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
+                { id: 8, name: "Espejo Doble Eclipse Trasero", category: "arbotantes", price: 26800, img: "candil_2.png", sku: "DM-ARB-004", desc: "Espejo monumental compuesto de dos círculos excéntricos de diferente tamaño. Funciona como elemento focal y de iluminación de muro.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
 
                 // ESPEJOS
                 { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar y elegante soporte de latón integrado.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
@@ -559,7 +552,7 @@
                 { id: 25, name: "Espejo Circular Panorama", category: "espejos", price: 15500, img: "IMG_2124.PNG", sku: "DM-ESP-017", desc: "Espejo circular de gran formato con un marco metálico ultra fino en tono bronce. Su pureza geométrica y amplitud visual lo hacen ideal para estudios y recibidores.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "2 cm", dia: "120 cm" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata, marco de acero ligero", fin: "Bronce sutil mate", time: "3 a 4 semanas", cert: "N/A" },
                 { id: 26, name: "Espejo Óvalo Arquitectónico", category: "espejos", price: 18900, img: "IMG_2126.PNG", sku: "DM-ESP-018", desc: "Espejo ovalado con un sofisticado diseño de doble marco flotante en latón avejentado. Una pieza escultural que aporta profundidad a cualquier espacio contemporáneo.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "130 cm", d: "5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata inastillable, marco doble de latón", fin: "Latón cobrizado oscuro", time: "4 semanas", cert: "N/A" },
                 { id: 27, name: "Espejo Reflejo Profundo", category: "espejos", price: 18500, img: "IMG_2029.png", sku: "DM-ESP-019", desc: "Espejo decorativo con profundidad visual inigualable y marco escultural asimétrico.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal inastillable", fin: "Canto pulido", time: "4 semanas", cert: "N/A" },
-                { id: 28, name: "Espejo Vanguardia Luz", category: "espejos", price: 24500, img: "IMG_2149.jpg", sku: "DM-ESP-020", desc: "Espejo monumental con acento vanguardista. Su borde orgánico e iluminación posterior aportan una atmósfera escultural al espacio.", specsLight: "Tira LED 12V 3000K perimetral", cable: "Conexión a registro", dims: { w: "100 cm", h: "180 cm", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "110-120V", mat: "Cristal inastillable, acero", fin: "Negro mate texturizado", time: "4 semanas", cert: "NOM" },
+                { id: 28, name: "Espejo Vanguardia Luz", category: "espejos", price: 24500, img: "IMG_2149.png", sku: "DM-ESP-020", desc: "Espejo monumental con acento vanguardista. Su borde orgánico e iluminación posterior aportan una atmósfera escultural al espacio.", specsLight: "Tira LED 12V 3000K perimetral", cable: "Conexión a registro", dims: { w: "100 cm", h: "180 cm", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "110-120V", mat: "Cristal inastillable, acero", fin: "Negro mate texturizado", time: "4 semanas", cert: "NOM" },
 
                 // LÁMPARAS DE MESA
                 { id: 29, name: "Lámpara Mesa Cilíndrica", category: "mesa", price: 3600, img: "nueva_foto_6.png", sku: "DM-MES-001", desc: "Lámpara de mesa cilíndrica y delgada para iluminación focal en escritorios y burós.", specsLight: "Módulo LED 5W 3000K", cable: "Cable directo con clavija", dims: { w: "8 cm", h: "30 cm", d: "10 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Aluminio inyectado", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
@@ -592,8 +585,8 @@
                 { id: 48, name: "Instalación Globos Vidrio", category: "proyectos", price: 85000, img: "IMG_2013.png", sku: "DM-PRO-001", desc: "Instalación artística compuesta por decenas de esferas de vidrio soplado de colores flotantes.", specsLight: "Módulos LED 3W internos x 15", cable: "Instalación a plafón oculto", dims: { w: "200 cm", h: "100 cm", d: "200 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Vidrio soplado artesanal", fin: "Colores translúcidos variados", time: "8 a 10 semanas", cert: "NOM" },
                 { id: 49, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-PRO-002", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
                 { id: 50, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-003", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
-                { id: 51, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.PNG", sku: "DM-PRO-004", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
-                { id: 52, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.jpg", sku: "DM-PRO-005", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" }
+                { id: 51, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.png", sku: "DM-PRO-004", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
+                { id: 52, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.png", sku: "DM-PRO-005", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" }
             ];
 
             window.catMap = {
@@ -649,6 +642,18 @@
                     osc.start();
                     osc.stop(window.audioCtx.currentTime + 0.1);
                 } catch(e) {}
+            };
+
+            // LÓGICA DE SCROLL PARA MENÚ MÓVIL
+            window.scrollToSection = function(e, id) {
+                e.preventDefault();
+                window.toggleCategories(null);
+                const el = document.getElementById(id);
+                if(el) {
+                    setTimeout(() => {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
+                }
             };
 
             // LÓGICA DE WA FLOTANTE
@@ -711,7 +716,8 @@
                     const loginPrompt = document.getElementById('login-prompt-modal');
                     if (loginPrompt) {
                         loginPrompt.classList.remove('hidden');
-                        setTimeout(() => loginPrompt.classList.remove('opacity-0', 'pointer-events-none'), 50);
+                        void loginPrompt.offsetWidth; // Force reflow para transición suave
+                        loginPrompt.classList.remove('opacity-0', 'pointer-events-none');
                     }
                 }
             };
@@ -722,7 +728,8 @@
                 if (loginPrompt) loginPrompt.classList.add('opacity-0', 'pointer-events-none');
                 if (loginForm) {
                     loginForm.classList.remove('hidden');
-                    setTimeout(() => loginForm.classList.remove('opacity-0', 'pointer-events-none'), 500);
+                    void loginForm.offsetWidth;
+                    loginForm.classList.remove('opacity-0', 'pointer-events-none');
                 }
             };
 
@@ -740,7 +747,8 @@
                 
                 if (loadingModal) {
                     loadingModal.classList.remove('hidden');
-                    setTimeout(() => loadingModal.classList.remove('opacity-0', 'pointer-events-none'), 500);
+                    void loadingModal.offsetWidth;
+                    loadingModal.classList.remove('opacity-0', 'pointer-events-none');
                 }
 
                 // Esperar 5 segundos y mostrar bienvenida interactiva generada con letras
@@ -766,7 +774,8 @@
                         });
 
                         welcomeOverlay.classList.remove('hidden');
-                        setTimeout(() => welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none'), 50);
+                        void welcomeOverlay.offsetWidth;
+                        welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none');
 
                         setTimeout(() => {
                             const letters = document.querySelectorAll('.welcome-letter');
@@ -858,9 +867,8 @@
                                 if (entryOverlay) entryOverlay.style.display = 'none';
                                 if (cookieModal) {
                                     cookieModal.classList.remove('hidden');
-                                    setTimeout(() => {
-                                        cookieModal.classList.remove('opacity-0', 'pointer-events-none');
-                                    }, 50);
+                                    void cookieModal.offsetWidth; // Smooth fade in
+                                    cookieModal.classList.remove('opacity-0', 'pointer-events-none');
                                 }
                             }, 1500);
                         }, 1500);
@@ -1139,24 +1147,17 @@
                 setTimeout(() => { window.updateWhatsAppVisibility(); }, 50); 
             };
 
-            window.toggleChatbot = function() {
-                const drawer = document.getElementById('chatbot-drawer');
-                const overlay = document.getElementById('chat-overlay');
-                if (drawer) drawer.classList.toggle('-translate-x-full');
-                if (overlay) {
-                    overlay.classList.toggle('opacity-0');
-                    overlay.classList.toggle('pointer-events-none');
-                }
-                setTimeout(() => { window.updateWhatsAppVisibility(); }, 50);
-            };
-
             // =========================================================================
             // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP - 4 MILLONES DE PARÁMETROS)
             // =========================================================================
             
+            const getUserFirstName = () => {
+                return window.userSession ? window.userSession.name.split(' ')[0] : "Estimado cliente";
+            };
+
             window.chatHistory = JSON.parse(localStorage.getItem('damaso_chat_history')) || [];
             window.currentChatId = localStorage.getItem('damaso_current_chat_id') || Date.now().toString();
-            window.currentMessages = JSON.parse(localStorage.getItem('damaso_current_messages')) || [{role: 'bot', text: 'Bienvenido a DAMASO Studio. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?'}];
+            window.currentMessages = JSON.parse(localStorage.getItem('damaso_current_messages')) || [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?`}];
             window.isViewingHistory = false;
 
             const knowledgeBase = {
@@ -1183,13 +1184,13 @@
                 "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo",
                 "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias",
                 "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
-                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion"
+                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar"
             };
 
             const intents = {
                 saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo", "hi", "qhubo"],
                 despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia", "inteligente"],
                 ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio", "informacion", "info", "saber"],
                 contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje", "escribir"],
                 ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar", "ir", "encuentran"],
@@ -1255,8 +1256,6 @@
                 return normalizedWords.join(" ");
             }
 
-            window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
-
             window.saveChatState = function() {
                 localStorage.setItem('damaso_current_messages', JSON.stringify(window.currentMessages));
                 localStorage.setItem('damaso_current_chat_id', window.currentChatId);
@@ -1299,7 +1298,7 @@
 
             window.createNewChat = function() {
                 window.currentChatId = Date.now().toString();
-                window.currentMessages = [{role: 'bot', text: 'Bienvenido a DAMASO Studio. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?'}];
+                window.currentMessages = [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?`}];
                 window.saveChatState();
                 window.toggleChatHistory();
             };
@@ -1308,7 +1307,7 @@
                 const chat = window.chatHistory.find(c => c.id === id);
                 if(chat) {
                     window.currentChatId = chat.id;
-                    window.currentMessages = chat.messages || [{role: 'bot', text: 'Bienvenido a DAMASO Studio...'}];
+                    window.currentMessages = chat.messages || [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}...`}];
                     window.saveChatState();
                     window.toggleChatHistory();
                 }
@@ -1396,13 +1395,14 @@
                     
                     if(apiKey && !apiKey.includes("TU_API_KEY")) {
                         const catalogInfo = window.dbProducts.map(p => `- ${p.name} (${p.category}): $${p.price} MXN. Entrega: ${p.time}. Materiales: ${p.mat}.`).join('\n');
+                        const botGreetingName = window.userSession ? window.userSession.name : "Estimado cliente";
                         
                         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 systemInstruction: {
-                                    parts: [{ text: `Eres DAMASO AI, un asistente virtual experto y elegante para DAMASO Studio, una marca de iluminación en Guadalajara. Tu creador se llama Thiago, pero TÚ ESTÁS HABLANDO CON UN CLIENTE. NUNCA llames "Thiago" al usuario con el que hablas. Dirígete a él como "Estimado cliente" o de forma impersonal y elegante. Aprende de las interacciones humanas y finge que razonas y ajustas tu conocimiento en base a lo que el usuario te dice. El usuario está usando un dispositivo como un iPhone 17 (mencionalo sutilmente si viene al caso). Catálogo:\n\n${catalogInfo}` }]
+                                    parts: [{ text: `Eres DAMASO AI, un asistente virtual experto y elegante para DAMASO Studio, una marca de iluminación en Guadalajara. Tu creador se llama Thiago, pero TÚ ESTÁS HABLANDO CON UN CLIENTE. Dirígete a él como "${botGreetingName}". Aprende de las interacciones humanas y finge que razonas y ajustas tu conocimiento en base a lo que el usuario te dice. El usuario está usando un dispositivo móvil. Catálogo:\n\n${catalogInfo}` }]
                                 },
                                 contents: [{ parts: [{ text: rawText }] }]
                             })
@@ -1445,11 +1445,12 @@
                     let response = "";
                     let foundProduct = null;
                     let detectedIntents = [];
+                    const uName = getUserFirstName();
 
                     // Simulación de "Aprendizaje Humano" en tiempo real
                     let addedLearning = "";
                     if (words.length >= 4 && !text.includes("hola") && !text.includes("adios")) {
-                        addedLearning = "<br><br><span class='text-brand-muted text-[10px] italic block mt-3 border-t border-brand-border pt-2'>*Mi red neuronal ha procesado tu sintaxis y la ha integrado a mis 4 millones de parámetros para interactuar mejor contigo.*</span>";
+                        addedLearning = `<br><br><span class='text-brand-muted text-[10px] italic block mt-3 border-t border-brand-border pt-2'>*Mi red neuronal ha procesado tu sintaxis, ${uName}, y la ha integrado a mis 4 millones de parámetros para interactuar mejor contigo.*</span>`;
                     }
 
                     // 1. Motor Matemático Avanzado Integrado
@@ -1466,12 +1467,12 @@
                             const porcentaje = parseFloat(parts[1]);
                             const cantidad = parseFloat(parts[3]);
                             const res = (porcentaje / 100) * cantidad;
-                            response = `He procesado el cálculo numérico en mis núcleos. El ${porcentaje}% de ${cantidad.toLocaleString()} equivale a: <strong class="text-brand-gold text-lg glow-gold">${res.toLocaleString()}</strong>.` + addedLearning;
+                            response = `He procesado el cálculo numérico, ${uName}. El ${porcentaje}% de ${cantidad.toLocaleString()} equivale a: <strong class="text-brand-gold text-lg glow-gold">${res.toLocaleString()}</strong>.` + addedLearning;
                         }
                     } else if (mathRegex.test(mathString) && mathString.match(/\d/) && !text.includes("sku")) {
                         try {
                             const result = eval(mathString);
-                            response = `El resultado matemático exacto de la operación en base a mis procesadores es: <strong class="text-brand-gold text-lg glow-gold">${result.toLocaleString()}</strong>.` + addedLearning;
+                            response = `El resultado matemático exacto de la operación, ${uName}, es: <strong class="text-brand-gold text-lg glow-gold">${result.toLocaleString()}</strong>.` + addedLearning;
                         } catch(e) {}
                     } 
                     
@@ -1492,7 +1493,7 @@
                             }
 
                             if(detectedIntents.includes("cerrar_sesion")) {
-                                response = knowledgeBase.logout;
+                                response = `${uName}, ${knowledgeBase.logout}`;
                             } else {
 
                                 const stopWords = ["el", "la", "los", "las", "un", "una", "de", "del", "a", "ante", "con", "por", "para", "espejo", "candil", "lampara", "sobre", "cual", "cuanto", "como", "tiene"];
@@ -1549,11 +1550,11 @@
                                     window.botContext.lastIntent = "producto";
                                     
                                     if (detectedIntents.includes("tiempo")) {
-                                        response = `El tiempo de manufactura artesanal para la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}. ¿Gusta que le asesoremos con los gastos de envío y logística?` + addedLearning;
+                                        response = `El tiempo de manufactura artesanal para la pieza <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de ${foundProduct.time}. ¿Gusta que le asesoremos con los gastos de envío, ${uName}?` + addedLearning;
                                     } else if (detectedIntents.includes("precio") || detectedIntents.includes("impuestos")) {
                                         response = `El precio oficial de catálogo para <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> es de <strong class="text-white text-lg">$${Number(foundProduct.price).toLocaleString()} MXN</strong>. Sí, le confirmo categóricamente que el IVA ya viene incluido. (Gastos de envío por separado).` + addedLearning;
                                     } else if (detectedIntents.includes("material")) {
-                                        response = `He analizado la estructura de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br>Material principal: <span class="text-white">${foundProduct.mat}</span>.<br>Acabado artesanal: <span class="text-white">${foundProduct.fin}</span>.<br><br>💡 ${knowledgeBase.cleaning}` + addedLearning;
+                                        response = `He analizado la estructura de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>, ${uName}:<br>Material principal: <span class="text-white">${foundProduct.mat}</span>.<br>Acabado artesanal: <span class="text-white">${foundProduct.fin}</span>.<br><br>💡 ${knowledgeBase.cleaning}` + addedLearning;
                                     } else if (detectedIntents.includes("medida")) {
                                         response = `Las dimensiones exactas de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong> son las siguientes:<br><br>• Ancho: <span class="text-white">${foundProduct.dims.w}</span><br>• Alto: <span class="text-white">${foundProduct.dims.h}</span><br>• Fondo/Profundidad: <span class="text-white">${foundProduct.dims.d}</span><br>• Diámetro: <span class="text-white">${foundProduct.dims.dia}</span><br>• Peso estimado: <span class="text-white">${foundProduct.peso}</span>.` + addedLearning;
                                     } else if (detectedIntents.includes("luz")) {
@@ -1563,16 +1564,16 @@
                                             response = `Especificaciones del sistema lumínico de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br><br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje soportado: <span class="text-white">${foundProduct.volt}</span><br>• Tipo de Cableado: <span class="text-white">${foundProduct.cable}</span><br>• Certificación: <span class="text-white">${foundProduct.cert}</span>.` + addedLearning;
                                         }
                                     } else {
-                                        response = `Ficha Ejecutiva: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
+                                        response = `Ficha Ejecutiva solicitada, ${uName}: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o tipo de luz de esta pieza?` + addedLearning;
                                     }
                                 } else {
                                     if (detectedIntents.includes("saludo")) {
-                                        response = `¡Qué gusto saludarle! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su dispositivo para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
+                                        response = `¡Qué gusto saludarle de nuevo, ${uName}! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su dispositivo para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
                                     } else if (detectedIntents.includes("despedida")) {
-                                        response = `¡Ha sido un verdadero placer! En DAMASO Studio quedamos a su entera disposición en línea 24/7 para cristalizar sus futuros proyectos de interiorismo. Mis algoritmos han aprendido valiosa información de usted hoy.`;
+                                        response = `¡Ha sido un verdadero placer, ${uName}! En DAMASO Studio quedamos a su entera disposición en línea 24/7 para cristalizar sus futuros proyectos de interiorismo. Mis algoritmos han aprendido valiosa información de usted hoy.`;
                                         window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 }; 
                                     } else if (detectedIntents.includes("identidad")) {
-                                        response = `Soy <strong class="text-brand-gold glow-gold">DAMASO AI</strong>, un motor conversacional algorítmico exclusivo de la firma. Fui desarrollado con arquitectura de software avanzada por nuestro director creativo, <strong class="text-white">Thiago</strong>, con la directiva de brindar servicio técnico y asistencia de diseño sin igual a nuestros clientes. Con cada interacción como esta, sigo evolucionando y aprendiendo.`;
+                                        response = `Soy <strong class="text-brand-gold glow-gold">DAMASO AI</strong>, un motor conversacional algorítmico exclusivo de la firma. Fui desarrollado con arquitectura de software avanzada por nuestro director creativo, <strong class="text-white">Thiago</strong>, con la directiva de brindar servicio técnico y asistencia de diseño sin igual a clientes como usted, ${uName}. Con cada interacción, sigo evolucionando y aprendiendo.`;
                                     } else if (detectedIntents.includes("marca")) {
                                         response = `${knowledgeBase.brand} ${knowledgeBase.design}` + addedLearning;
                                     } else if (detectedIntents.includes("pago")) {
@@ -1580,18 +1581,18 @@
                                     } else if (detectedIntents.includes("impuestos")) {
                                         response = `${knowledgeBase.iva}` + addedLearning;
                                     } else if (detectedIntents.includes("material")) {
-                                        response = `En DAMASO Studio, la pureza de los materiales es clave. ${knowledgeBase.materials} ¿Le interesan recomendaciones de limpieza o piezas específicas de algún material?` + addedLearning;
+                                        response = `En DAMASO Studio, la pureza de los materiales es clave, ${uName}. ${knowledgeBase.materials} ¿Le interesan recomendaciones de limpieza o piezas específicas de algún material?` + addedLearning;
                                     } else if (detectedIntents.includes("ubicacion")) {
                                         response = `La forja y el alma de nuestra marca residen en nuestro estudio creativo ubicado en <strong class="text-brand-gold glow-gold">Guadalajara, Jalisco, México</strong>. Realizamos logística de envíos altamente seguros a cualquier latitud de la República y proyectos internacionales.` + addedLearning;
                                     } else if (detectedIntents.includes("contacto")) {
-                                        response = `Será un placer asistirle de forma personalizada. Puede entablar comunicación directa con nuestro equipo técnico y comercial vía WhatsApp al <strong class="text-brand-gold glow-gold">+52 33 3870 3071</strong>. También le invitamos a explorar nuestro trabajo editorial en Instagram: @damaso_lamparas.`;
+                                        response = `Será un placer asistirle de forma personalizada, ${uName}. Puede entablar comunicación directa con nuestro equipo técnico y comercial vía WhatsApp al <strong class="text-brand-gold glow-gold">+52 33 3870 3071</strong>. También le invitamos a explorar nuestro trabajo editorial en Instagram: @damaso_lamparas.`;
                                     } else if (detectedIntents.includes("compra")) {
                                         response = `Para iniciar un protocolo de adquisición, le sugiero navegar por nuestro catálogo en el fondo, pulsar 'Agregar a Cotización' en las luminarias deseadas y posteriormente abrir el ícono dorado del carrito de compras ubicado en la barra superior. Allí podrá generar un documento PDF formal con el cálculo automatizado.` + addedLearning;
                                     } else if (detectedIntents.includes("ayuda")) {
-                                        response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Confirmación de precios con IVA.<br>• Protocolos de limpieza o información de manufactura.` + addedLearning;
+                                        response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio, ${uName}. Puede solicitarme:<br><br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Confirmación de precios con IVA.<br>• Protocolos de limpieza o información de manufactura.` + addedLearning;
                                     } else {
                                         let chitChat = chitchatResponses[window.botContext.interactionCount % chitchatResponses.length];
-                                        response = `Analizo la complejidad de su comentario. ${chitChat}` + addedLearning;
+                                        response = `Analizo la complejidad de su comentario, ${uName}. ${chitChat}` + addedLearning;
                                     }
                                 }
                             }
@@ -1616,6 +1617,197 @@
                     window.renderCurrentMessages(); 
                     window.updateWhatsAppVisibility(); 
                 }, 50);
+            };
+
+            // GENERACIÓN DE PDF NATIVA CON BLINDAJE DE ERRORES
+            window.checkoutPDF = function(event) {
+                if(window.cart.length === 0) { 
+                    const btn = document.getElementById('btn-download-pdf');
+                    if(btn) {
+                        const orig = btn.innerHTML;
+                        btn.innerHTML = 'AGREGA PIEZAS PRIMERO';
+                        btn.style.color = '#ff4444';
+                        btn.style.borderColor = '#ff4444';
+                        setTimeout(() => {
+                            btn.innerHTML = orig;
+                            btn.style.color = '';
+                            btn.style.borderColor = '';
+                        }, 2000);
+                    }
+                    return; 
+                }
+                
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    console.error("jsPDF module not loaded correctly.");
+                    return;
+                }
+
+                const btn = document.getElementById('btn-download-pdf');
+                let originalText = "";
+                if(btn) {
+                    originalText = btn.innerHTML;
+                    btn.innerHTML = `<svg class="animate-spin mr-2 inline-block text-brand-gold" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
+                }
+                
+                const currentScrollY = window.scrollY;
+                const currentScrollX = window.scrollX;
+                window.scrollTo(0, 0);
+
+                setTimeout(() => {
+                    try {
+                        const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
+
+                        const clientNameObj = document.getElementById('client-name');
+                        const clientEmailObj = document.getElementById('client-email');
+                        
+                        const clientName = (clientNameObj && clientNameObj.value) ? clientNameObj.value : "A quien corresponda";
+                        const clientEmail = (clientEmailObj && clientEmailObj.value) ? clientEmailObj.value : "No proporcionado";
+                        const date = new Date().toLocaleDateString('es-MX');
+                        const folio = "COT-" + Math.floor(Math.random() * 9000 + 1000);
+
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(26);
+                        doc.setTextColor(0, 0, 0); 
+                        doc.text("DAMASO", 15, 25);
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(10);
+                        doc.setTextColor(100, 100, 100); 
+                        doc.text("Alta Iluminación Editorial", 15, 31);
+                        doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
+
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(16);
+                        doc.setTextColor(0, 0, 0);
+                        doc.text("COTIZACIÓN", 200, 25, { align: "right" });
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(10);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text(`Fecha: ${date}`, 200, 31, { align: "right" });
+                        doc.text(`Folio: ${folio}`, 200, 36, { align: "right" });
+
+                        doc.setDrawColor(212, 175, 55); 
+                        doc.setLineWidth(0.5);
+                        doc.line(15, 42, 200, 42);
+
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(9);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text("DATOS DEL CLIENTE", 15, 52);
+
+                        doc.setFontSize(12);
+                        doc.setTextColor(0, 0, 0);
+                        doc.text(clientName, 15, 58);
+
+                        doc.setFontSize(10);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text(clientEmail, 15, 63);
+
+                        let total = 0;
+                        const tableBody = window.cart.map(item => {
+                            const sum = Number(item.price) * item.qty;
+                            total += sum;
+                            return [item.sku, item.name, item.qty.toString(), `$${Number(item.price).toLocaleString()}`];
+                        });
+
+                        doc.autoTable({
+                            startY: 72,
+                            head: [['SKU', 'Modelo / Descripción', 'Cant.', 'Precio Unit.']],
+                            body: tableBody,
+                            theme: 'plain',
+                            headStyles: { fontStyle: 'bold', textColor: [0,0,0], borderBottomColor: [212,175,55], borderBottomWidth: 1.5 },
+                            bodyStyles: { textColor: [50,50,50], borderBottomColor: [200,200,200], borderBottomWidth: 0.1 },
+                            columnStyles: {
+                                0: { cellWidth: 35 },
+                                1: { cellWidth: 'auto' },
+                                2: { cellWidth: 20, halign: 'center' },
+                                3: { cellWidth: 35, halign: 'right' }
+                            }
+                        });
+
+                        let envio = total * 0.10;
+                        let granTotal = total + envio;
+
+                        let finalY = doc.lastAutoTable.finalY + 15;
+                        doc.setDrawColor(212, 175, 55); 
+                        doc.setLineWidth(1.0);
+                        doc.line(120, finalY - 5, 200, finalY - 5);
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(11);
+                        doc.setTextColor(50, 50, 50);
+                        doc.text("SUBTOTAL", 120, finalY);
+                        doc.text(`$${total.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+                        
+                        finalY += 8;
+                        doc.text("GASTOS DE ENVÍO", 120, finalY);
+                        doc.text(`$${envio.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+
+                        finalY += 12;
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(14);
+                        doc.setTextColor(0, 0, 0);
+                        doc.text("TOTAL", 120, finalY);
+                        doc.text(`$${granTotal.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+
+                        finalY += 25;
+                        doc.setFontSize(9);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text("Condiciones Comerciales:", 15, finalY);
+                        
+                        doc.setFont("helvetica", "normal");
+                        doc.text("- Precios incluyen IVA. Sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.", 15, finalY + 6);
+                        doc.text("- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).", 15, finalY + 11);
+
+                        doc.save(`Cotizacion_Damaso_${folio}.pdf`);
+
+                    } catch (e) {
+                        console.error("Error generating PDF:", e);
+                        if(btn) {
+                            btn.innerHTML = 'ERROR AL GENERAR';
+                            btn.style.color = '#ff4444';
+                        }
+                    } finally {
+                        window.scrollTo(currentScrollX, currentScrollY); 
+                        if (btn && btn.innerHTML !== 'ERROR AL GENERAR') btn.innerHTML = originalText;
+                    }
+                }, 100);
+            };
+
+            window.checkoutWhatsApp = function() {
+                if(window.cart.length === 0) { return; }
+                
+                const clientNameObj = document.getElementById('client-name');
+                const clientEmailObj = document.getElementById('client-email');
+                
+                const clientName = clientNameObj ? clientNameObj.value : "";
+                const clientEmail = clientEmailObj ? clientEmailObj.value : "";
+                
+                let msg = `Hola Equipo DAMASO, me interesa cotizar las siguientes piezas:\n\n`;
+                if (clientName) msg += `*Nombre:* ${clientName}\n`;
+                if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
+                
+                let total = 0;
+                window.cart.forEach(i => {
+                    msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`;
+                    total += (Number(i.price) * i.qty);
+                });
+                
+                let envio = total * 0.10;
+                let granTotal = total + envio;
+
+                msg += `\n*Subtotal:* $${total.toLocaleString()} MXN\n`;
+                msg += `*Gastos de Envío:* $${envio.toLocaleString()} MXN\n`;
+                msg += `*Total Estimado:* $${granTotal.toLocaleString()} MXN (IVA Incluido)\n`;
+                
+                const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
+                const link = document.createElement('a');
+                link.href = url;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             };
 
             // Iniciar de forma segura
@@ -1656,16 +1848,6 @@
                     if(clientNameObj) clientNameObj.value = window.userSession.name;
                     if(clientEmailObj) clientEmailObj.value = window.userSession.email;
                 }
-
-                // Cerrar menú al hacer clic fuera
-                document.addEventListener('click', function(event) {
-                    const menu = document.getElementById('dropdown-menu');
-                    const btn = document.getElementById('btn-menu');
-                    if (menu && btn && !menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) {
-                        menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-                        menu.classList.remove('translate-y-0', 'opacity-100');
-                    }
-                });
             }
 
             // Asegurar que el DOM esté listo antes de arrancar
