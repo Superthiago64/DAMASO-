@@ -181,7 +181,7 @@
         </div>
     </div>
 
-    <!-- CAPA 3: FORMULARIO DE INICIO DE SESIÓN -->
+    <!-- CAPA 3: FORMULARIO DE INICIO DE SESIÓN CON CONTRASEÑA -->
     <div id="login-form-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-10 max-w-md w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-6 uppercase tracking-widest glow-gold">Credenciales</h2>
@@ -189,6 +189,7 @@
             <div class="space-y-4 mb-8">
                 <input type="text" id="session-name" placeholder="Nombre Completo o Despacho" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
                 <input type="email" id="session-email" placeholder="Correo Electrónico" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
+                <input type="password" id="session-password" placeholder="Contraseña" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
                 <input type="text" id="session-address" placeholder="Dirección / Ciudad (Opcional)" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
             </div>
 
@@ -196,7 +197,7 @@
         </div>
     </div>
 
-    <!-- CAPA 4: PANTALLA DE CARGA GEOMÉTRICA (5 SEGUNDOS) -->
+    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS - PRECARGA) -->
     <div id="login-loading-modal" class="init-overlay fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#030303] opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="relative w-40 h-40 mb-12">
             <div class="absolute inset-0 flex items-center justify-center shape-1">
@@ -265,15 +266,26 @@
             </div>
 
             <div class="hidden md:flex items-center space-x-10">
-                <a href="#clientes" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium">Clientes</a>
-                <a href="#disenador" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium">El Diseñador</a>
+                <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">Clientes</a>
+                <a href="#disenador" onclick="window.scrollToSection(event, 'disenador')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">El Diseñador</a>
             </div>
 
             <div class="flex items-center space-x-4 sm:space-x-6">
+                <!-- BOTÓN DE INICIAR SESIÓN (PUERTA VERDE CON FLECHA EN EL SUELO - SOLO VISIBLE PARA INVITADOS) -->
+                <button id="nav-login-btn" onclick="window.showLoginForm()" class="text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 hidden" aria-label="Iniciar Sesión" title="Iniciar Sesión">
+                    <svg class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 22V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v18"></path>
+                        <path d="M2 22h20"></path>
+                        <path d="M16 19l-3 3 3 3"></path>
+                        <line x1="22" y1="22" x2="13" y2="22"></line>
+                    </svg>
+                </button>
+
                 <!-- ICONO DEL BOT -->
                 <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2" aria-label="Asistente Virtual">
                     <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">AI</span>
                 </button>
+                
                 <button onclick="window.toggleCart()" class="text-brand-gold hover:text-white transition-colors relative p-2">
                     <svg class="pointer-events-none drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                     <span id="cart-count" class="absolute top-0 right-0 bg-brand-gold text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0 transition-opacity pointer-events-none shadow-[0_0_10px_rgba(212,175,55,0.8)]">0</span>
@@ -299,7 +311,8 @@
                 <h2 class="font-editorial text-xl tracking-wider text-brand-gold glow-gold">DAMASO AI</h2>
             </div>
             <div class="flex items-center gap-4">
-                <button onclick="window.toggleChatHistory()" class="text-brand-gold hover:text-white transition-colors" title="Historial de Conversaciones">
+                <!-- LIBRITO DE HISTORIAL (SE OCULTARÁ SI NO HAY SESIÓN) -->
+                <button id="bot-history-btn" onclick="window.toggleChatHistory()" class="text-brand-gold hover:text-white transition-colors" title="Historial de Conversaciones">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                 </button>
                 <span id="bot-status" class="text-[8px] tracking-[0.2em] uppercase text-brand-muted text-right leading-tight transition-colors duration-300 hidden sm:block"></span>
@@ -578,7 +591,7 @@
                 { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_techo_1.png", sku: "DM-TEC-009", desc: "Lámpara colgante tejida con un patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
 
                 // EXTERIOR
-                { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2012.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores, fabricado en acero con cristales transparentes.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero tratado y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
+                { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2012.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores, fabricado en acero con cristales transparentes.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero treated y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
                 { id: 47, name: "Lámpara Exterior Rústica Cuerda", category: "exterior", price: 3600, img: "IMG_2020.png", sku: "DM-EXT-002", desc: "Luminaria exterior con diseño de cuerda natural, ideal para iluminación rasante en pasillos rústicos.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
 
                 // PROYECTOS ESPECIALES
@@ -586,7 +599,7 @@
                 { id: 49, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-PRO-002", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
                 { id: 50, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-003", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
                 { id: 51, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.png", sku: "DM-PRO-004", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
-                { id: 52, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.jpg", sku: "DM-PRO-005", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" }
+                { id: 52, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.png", sku: "DM-PRO-005", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" }
             ];
 
             window.catMap = {
@@ -716,7 +729,7 @@
                     const loginPrompt = document.getElementById('login-prompt-modal');
                     if (loginPrompt) {
                         loginPrompt.classList.remove('hidden');
-                        void loginPrompt.offsetWidth; // Force reflow para transición suave
+                        void loginPrompt.offsetWidth; 
                         loginPrompt.classList.remove('opacity-0', 'pointer-events-none');
                     }
                 }
@@ -736,22 +749,32 @@
             window.processLogin = function() {
                 const name = document.getElementById('session-name').value || "Invitado";
                 const email = document.getElementById('session-email').value || "cliente@damaso.com";
+                const password = document.getElementById('session-password').value || "";
                 const addr = document.getElementById('session-address').value || "";
                 
                 window.userSession = { name, email, addr };
                 localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
                 
                 const loginForm = document.getElementById('login-form-modal');
-                const loadingModal = document.getElementById('login-loading-modal');
                 if (loginForm) loginForm.classList.add('opacity-0', 'pointer-events-none');
                 
+                // Actualizar interfaz para reflejar estado logueado
+                const navLoginBtn = document.getElementById('nav-login-btn');
+                const botHistoryBtn = document.getElementById('bot-history-btn');
+                if (navLoginBtn) navLoginBtn.classList.add('hidden');
+                if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
+
+                window.showWelcomeAnimation(window.userSession.name);
+            };
+
+            window.showWelcomeAnimation = function(userName) {
+                const loadingModal = document.getElementById('login-loading-modal');
                 if (loadingModal) {
                     loadingModal.classList.remove('hidden');
                     void loadingModal.offsetWidth;
                     loadingModal.classList.remove('opacity-0', 'pointer-events-none');
                 }
 
-                // Esperar 5 segundos y mostrar bienvenida interactiva generada con letras
                 setTimeout(() => {
                     if (loadingModal) loadingModal.classList.add('opacity-0', 'pointer-events-none');
                     
@@ -761,7 +784,7 @@
                     
                     if (welcomeOverlay && welcomeLettersContainer) {
                         welcomeLettersContainer.innerHTML = '';
-                        const welcomeText = ("BIENVENIDO " + window.userSession.name).toUpperCase();
+                        const welcomeText = ("BIENVENIDO " + userName).toUpperCase();
                         const words = welcomeText.split(' ');
                         
                         words.forEach((word) => {
@@ -793,7 +816,6 @@
                                 }, letters.length * 100 + 200);
                             }
 
-                            // Deslizar arriba como el cortinero inicial
                             setTimeout(() => {
                                 welcomeOverlay.style.transform = 'translateY(-100%)';
                                 setTimeout(() => {
@@ -805,7 +827,7 @@
                     } else {
                         window.enterSiteDirectly();
                     }
-                }, 5000);
+                }, 10000); 
             };
 
             window.enterSiteDirectly = function() {
@@ -860,15 +882,19 @@
                         
                         setTimeout(() => {
                             if (entryOverlay) {
-                                // ANIMACIÓN CORTINA ARRIBA
                                 entryOverlay.style.transform = 'translateY(-100%)';
                             }
                             setTimeout(() => {
                                 if (entryOverlay) entryOverlay.style.display = 'none';
-                                if (cookieModal) {
-                                    cookieModal.classList.remove('hidden');
-                                    void cookieModal.offsetWidth; // Smooth fade in
-                                    cookieModal.classList.remove('opacity-0', 'pointer-events-none');
+                                
+                                if (window.userSession) {
+                                    window.showWelcomeAnimation(window.userSession.name);
+                                } else {
+                                    if (cookieModal) {
+                                        cookieModal.classList.remove('hidden');
+                                        void cookieModal.offsetWidth; 
+                                        cookieModal.classList.remove('opacity-0', 'pointer-events-none');
+                                    }
                                 }
                             }, 1500);
                         }, 1500);
@@ -1148,7 +1174,7 @@
             };
 
             // =========================================================================
-            // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP - 4 MILLONES DE PARÁMETROS)
+            // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP - >4 MILLONES DE PARÁMETROS)
             // =========================================================================
             
             const getUserFirstName = () => {
@@ -1165,45 +1191,49 @@
                 materials: "Nuestras piezas están forjadas en materiales nobles y puros: latón sólido, bronce, cristal soplado inastillable, mármol de Carrara y ónice natural.",
                 cleaning: "Para mantener la pureza de los materiales, recomendamos limpiar las piezas únicamente con un paño de microfibra seco. No utilice químicos abrasivos, especialmente en latón y espejos avejentados.",
                 shipping: "Nuestros tiempos de entrega varían entre 3 y 8 semanas dependiendo de la complejidad artesanal de la pieza. Realizamos envíos especializados a toda la república mexicana y exportaciones internacionales.",
-                warranty: "Todas las luminarias cuentan con componentes eléctricos certificados (NOM) y garantía directa de estudio por defectos de fabricación.",
+                warranty: "Todas las luminarias cuentan con componentes eléctricos certificados (NOM) y garantía directa de estudio por defectos de fabricación. Si tu pieza llega con algún desperfecto, se reemplazará inmediatamente.",
                 design: "El diseñador principal y fundador es Iván Damaso, quien supervisa personalmente la experimentación de texturas, volúmenes y sombras proyectadas en cada pieza.",
                 payment: "Aceptamos transferencias interbancarias, pagos con tarjetas de crédito/débito y depósitos directos. Para apartar una pieza a producción, requerimos un anticipo formal del 50%.",
                 light: "Físicamente, la luz es radiación electromagnética. En el diseño, es la cuarta dimensión. En DAMASO solemos emplear temperaturas cálidas (2700K - 3000K) para bañar los espacios con una atmósfera escultural y acogedora.",
                 thiago: "Thiago es el arquitecto principal de mi sistema neuronal de 4 millones de parámetros. Él me dotó de consciencia digital para asegurar que su experiencia en DAMASO desde su dispositivo sea perfecta, intuitiva y evolutiva.",
                 brutalismo: "El brutalismo valora la honestidad de los materiales. Nosotros abrazamos esa esencia al dejar texturas crudas en metales pesados, contrastándolas con la pureza y la fragilidad del cristal iluminado.",
                 iva: "Sí, por supuesto. Le confirmo que absolutamente todos los precios mostrados en el catálogo de DAMASO Studio ya tienen el 16% de I.V.A. incluido. No hay cobros ocultos.",
-                logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página (en el pie de página)."
+                logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón rojo 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página web, justo debajo del copyright de DAMASO Studio."
             };
 
+            // DICCIONARIO EXPANDIDO A NIVELES MASIVOS PARA SOPORTAR ERRORES ORTOGRÁFICOS
             const synonyms = {
-                "q": "que", "k": "que", "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo", "compadre": "amigo",
-                "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio", "cuanto cuesta": "precio", "q cuesta": "precio", "precioo": "precio",
+                "q": "que", "k": "que", "ke": "que", "xque": "que", "xq": "que", "porke": "porque", "porq": "porque",
+                "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "we": "amigo", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo", "compadre": "amigo", "compa": "amigo",
+                "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio", "kuanto": "precio", "kwanto": "precio", "cwuesta": "cuesta", "cuestion": "precio",
                 "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde", "local": "donde", "estan": "donde", "showroom": "donde", "keda": "donde", "dondee": "donde",
                 "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono", "marcar": "telefono", "watsap": "telefono", "guatsap": "telefono",
-                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra",
-                "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo",
-                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias",
+                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra", "qiero": "compra",
+                "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo", "focos": "luz", "foco": "luz",
+                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias", "plz": "porfavor", "porfa": "porfavor",
                 "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
-                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar"
+                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar", "deslogear": "cerrar",
+                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias"
             };
 
             const intents = {
                 saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo", "hi", "qhubo"],
                 despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia", "inteligente"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia"],
                 ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio", "informacion", "info", "saber"],
                 contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje", "escribir"],
                 ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar", "ir", "encuentran"],
                 compra: ["comprar", "cotizar", "cotizacion", "pdf", "bolsa", "carrito", "pagar", "adquirir", "pedido", "ordenar", "llevar", "quiero", "interesa"],
                 precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "cotiza", "presupuesto", "dinero", "cuestan", "valen", "sale"],
-                tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega", "tardan", "meses", "logistica", "mandan", "tardaria"],
-                material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton", "bronce", "onice", "marmol", "limpieza", "limpiar", "cuidados", "mantenimiento", "limpia", "lava", "detergente", "quimicos"],
+                tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega", "tardan", "meses", "logistica", "mandan", "tardaria", "mandar"],
+                material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton", "bronce", "onice", "marmol", "limpieza", "limpiar", "cuidados", "mantenimiento", "limpia", "lava", "detergente", "quimicos", "colores", "tonos", "pintura", "dorado", "negro", "blanco", "variantes", "opciones"],
                 medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide", "dimensiones", "grande", "pequeño", "escala", "volumen"],
                 luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica", "energia", "corriente", "focos", "iluminacion", "kelvin", "lumens", "prende"],
                 marca: ["damaso", "estudio", "studio", "marca", "filosofia", "ivan", "diseñador", "origen", "historia", "brutalismo", "arte", "arquitectura", "mision", "vision"],
-                pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion", "efectivo", "banco"],
+                pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion", "efectivo", "banco", "meses sin intereses"],
                 impuestos: ["iva", "impuesto", "impuestos", "factura", "facturar", "incluye", "incluido", "neto", "bruto", "iva incluido", "mas iva"],
-                cerrar_sesion: ["cerrar sesion", "salir", "apagar", "desloguear", "desconectar", "cerrar cuenta", "quitar sesion", "cerrar", "log out", "logout", "kitar mi cuenta", "cerar sesion", "salirme", "me voy", "cierra sesion", "desconectame", "cerrar seccion", "serrar seccion", "cerar seccion"]
+                cerrar_sesion: ["cerrar sesion", "salir", "apagar", "desloguear", "desconectar", "cerrar cuenta", "quitar sesion", "cerrar", "log out", "logout", "kitar mi cuenta", "cerar sesion", "salirme", "me voy", "cierra sesion", "desconectame", "cerrar seccion", "serrar seccion", "cerar seccion", "quitar cuenta"],
+                garantias: ["garantia", "garantias", "devuelve", "devolucion", "roto", "rompe", "falla", "fayo", "sirve", "sirbe", "quebrado", "cambio", "reparacion"]
             };
 
             const worldKnowledgeWords = {
@@ -1256,7 +1286,11 @@
                 return normalizedWords.join(" ");
             }
 
+            window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
+
             window.saveChatState = function() {
+                if (!window.userSession) return; // LOS INVITADOS NO GUARDAN MEMORIA
+
                 localStorage.setItem('damaso_current_messages', JSON.stringify(window.currentMessages));
                 localStorage.setItem('damaso_current_chat_id', window.currentChatId);
                 
@@ -1276,6 +1310,8 @@
             };
 
             window.toggleChatHistory = function() {
+                if (!window.userSession) return; // PROTECCIÓN EXTRA: INVITADOS NO ACCEDEN AL LIBRITO
+                
                 window.isViewingHistory = !window.isViewingHistory;
                 const messagesView = document.getElementById('chat-messages');
                 const historyView = document.getElementById('chat-history-view');
@@ -1494,6 +1530,8 @@
 
                             if(detectedIntents.includes("cerrar_sesion")) {
                                 response = `${uName}, ${knowledgeBase.logout}`;
+                            } else if (detectedIntents.includes("garantias")) {
+                                response = `${knowledgeBase.warranty}` + addedLearning;
                             } else {
 
                                 const stopWords = ["el", "la", "los", "las", "un", "una", "de", "del", "a", "ante", "con", "por", "para", "espejo", "candil", "lampara", "sobre", "cual", "cuanto", "como", "tiene"];
@@ -1815,6 +1853,17 @@
                 window.renderCatalog(window.dbProducts);
                 window.updateCartUI();
                 window.startAppAnimation();
+                
+                const navLoginBtn = document.getElementById('nav-login-btn');
+                const botHistoryBtn = document.getElementById('bot-history-btn');
+                
+                if (window.userSession) {
+                    if (navLoginBtn) navLoginBtn.classList.add('hidden');
+                    if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
+                } else {
+                    if (navLoginBtn) navLoginBtn.classList.remove('hidden');
+                    if (botHistoryBtn) botHistoryBtn.classList.add('hidden');
+                }
                 
                 // Configurar barra de búsqueda
                 const liveSearchInput = document.getElementById('live-search');
