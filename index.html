@@ -47,7 +47,8 @@
         ::-webkit-scrollbar-track { background: #030303; }
         ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        /* ANIMACIONES PROFESIONALES DE REVEAL */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         
         .modal-overlay { backdrop-filter: blur(8px); }
@@ -66,50 +67,31 @@
         .chat-scroll::-webkit-scrollbar { width: 4px; }
         .chat-scroll::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
 
-        .glow-text {
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 50px rgba(255, 255, 255, 0.3);
-        }
+        .glow-text { text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 50px rgba(255, 255, 255, 0.3); }
+        .glow-gold { text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4), 0 0 30px rgba(212,175,55,0.2); }
 
-        .glow-gold {
-            text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4), 0 0 30px rgba(212,175,55,0.2);
-        }
+        .break-words-custom { word-wrap: break-word; word-break: break-word; hyphens: auto; white-space: normal; }
+        .modal-scroll-container { max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
-        .break-words-custom {
-            word-wrap: break-word;
-            word-break: break-word;
-            hyphens: auto;
-            white-space: normal;
-        }
-
-        /* ANIMACIÓN DEL LOADER GEOMÉTRICO ADAPTABLE */
-        @keyframes shapeSwap1 {
-            0%, 100% { transform: translate(0px, -35%); }
-            33.33% { transform: translate(35%, 35%); }
-            66.66% { transform: translate(-35%, 35%); }
-        }
-        @keyframes shapeSwap2 {
-            0%, 100% { transform: translate(35%, 35%); }
-            33.33% { transform: translate(-35%, 35%); }
-            66.66% { transform: translate(0px, -35%); }
-        }
-        @keyframes shapeSwap3 {
-            0%, 100% { transform: translate(-35%, 35%); }
-            33.33% { transform: translate(0px, -35%); }
-            66.66% { transform: translate(35%, 35%); }
-        }
+        /* LOADER GEOMÉTRICO INFINITO */
+        @keyframes shapeSwap1 { 0%, 100% { transform: translate(0px, -35%); } 33.33% { transform: translate(35%, 35%); } 66.66% { transform: translate(-35%, 35%); } }
+        @keyframes shapeSwap2 { 0%, 100% { transform: translate(35%, 35%); } 33.33% { transform: translate(-35%, 35%); } 66.66% { transform: translate(0px, -35%); } }
+        @keyframes shapeSwap3 { 0%, 100% { transform: translate(-35%, 35%); } 33.33% { transform: translate(0px, -35%); } 66.66% { transform: translate(35%, 35%); } }
         .shape-1 { animation: shapeSwap1 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
         .shape-2 { animation: shapeSwap2 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
         .shape-3 { animation: shapeSwap3 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
 
-        .init-modal-overlay {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .blinking-cursor::after {
-            content: '|';
-            animation: blink 1s step-end infinite;
-        }
+        .init-modal-overlay { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .blinking-cursor::after { content: '|'; animation: blink 1s step-end infinite; }
         @keyframes blink { 50% { opacity: 0; } }
+
+        /* ANIMACIÓN DE ENTRADA SUAVE PARA EL PDF DEL BOT */
+        @keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 20px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        
+        /* ANIMACIÓN DE FLOTACIÓN SUTIL PARA EL ICONO AI */
+        @keyframes float-icon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        .animate-float { animation: float-icon 3s ease-in-out infinite; }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-gold selection:text-black overflow-hidden" id="main-body">
@@ -181,7 +163,7 @@
         </div>
     </div>
 
-    <!-- CAPA 3: FORMULARIO DE INICIO DE SESIÓN CON CONTRASEÑA -->
+    <!-- CAPA 3: FORMULARIO DE INICIO DE SESIÓN -->
     <div id="login-form-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-10 max-w-md w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-6 uppercase tracking-widest glow-gold">Credenciales</h2>
@@ -197,7 +179,7 @@
         </div>
     </div>
 
-    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS - PRECARGA) -->
+    <!-- CAPA 4: PANTALLA DE CARGA GEOMÉTRICA (10 SEGUNDOS) -->
     <div id="login-loading-modal" class="init-overlay fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#030303] opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="relative w-40 h-40 mb-12">
             <div class="absolute inset-0 flex items-center justify-center shape-1">
@@ -213,7 +195,7 @@
         <p class="font-editorial text-brand-gold text-xl tracking-[0.2em] italic glow-gold">Preparando su experiencia...</p>
     </div>
 
-    <!-- CAPA 5: ANIMACIÓN DE BIENVENIDA PERSONALIZADA (SIN "STUDIO") -->
+    <!-- CAPA 5: ANIMACIÓN DE BIENVENIDA PERSONALIZADA -->
     <div id="welcome-animation-overlay" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-none opacity-0 hidden">
         <div id="welcome-letters" class="flex flex-wrap justify-center items-center text-center px-4 max-w-[95%] mb-2 leading-tight">
             <!-- Letras inyectadas vía JavaScript -->
@@ -259,18 +241,18 @@
                 <a href="#coleccion" onclick="window.filterCatalogWithAnimation('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Proyectos especiales</a>
                 
                 <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
-                    <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Clientes</a>
-                    <a href="#disenador" onclick="window.scrollToSection(event, 'disenador')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">El Diseñador</a>
+                    <a href="#clientes" onclick="window.toggleCategories(event); setTimeout(() => document.getElementById('clientes').scrollIntoView({behavior:'smooth'}), 100);" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Clientes</a>
+                    <a href="#disenador" onclick="window.toggleCategories(event); setTimeout(() => document.getElementById('disenador').scrollIntoView({behavior:'smooth'}), 100);" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">El Diseñador</a>
                 </div>
             </div>
 
             <div class="hidden md:flex items-center space-x-10">
-                <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">Clientes</a>
-                <a href="#disenador" onclick="window.scrollToSection(event, 'disenador')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">El Diseñador</a>
+                <a href="#clientes" onclick="document.getElementById('clientes').scrollIntoView({behavior:'smooth'})" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">Clientes</a>
+                <a href="#disenador" onclick="document.getElementById('disenador').scrollIntoView({behavior:'smooth'})" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">El Diseñador</a>
             </div>
 
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- BOTÓN DE INICIAR SESIÓN (PUERTA VERDE CON FLECHA EN EL SUELO) -->
+                <!-- BOTÓN DE INICIAR SESIÓN (SOLO VISIBLE PARA INVITADOS) -->
                 <button id="nav-login-btn" onclick="window.showLoginForm()" class="text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 hidden" aria-label="Iniciar Sesión" title="Iniciar Sesión">
                     <svg class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M8 22V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v18"></path>
@@ -280,8 +262,8 @@
                     </svg>
                 </button>
 
-                <!-- ICONO DEL BOT (AI Dorado) -->
-                <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2" aria-label="Asistente Virtual">
+                <!-- ICONO DEL BOT (NUEVO DISEÑO FLOTANTE) -->
+                <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2 animate-float" aria-label="Asistente Virtual">
                     <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">AI</span>
                 </button>
                 
@@ -300,11 +282,11 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE CON BORDES BLANCOS (LUZ PURA) -->
-    <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-white shadow-[15px_0_30px_rgba(255,255,255,0.15)] transform -translate-x-full transition-transform duration-500 flex flex-col">
+    <!-- CHATBOT ASISTENTE INTELIGENTE CON GLOW BLANCO FOTOGRÁFICO -->
+    <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-white transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)]">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black relative">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-brand-gold shadow-[0_0_15px_rgba(212,175,55,0.8)] flex items-center justify-center text-black font-editorial font-bold text-sm tracking-widest">
+                <div class="w-10 h-10 rounded-full bg-brand-gold shadow-[0_0_15px_rgba(212,175,55,0.8)] flex items-center justify-center text-black font-editorial font-bold text-sm tracking-widest animate-float">
                     AI
                 </div>
                 <h2 class="font-editorial text-xl tracking-wider text-brand-gold glow-gold">DAMASO AI</h2>
@@ -350,7 +332,6 @@
         <div class="bg-[#050505] border border-brand-gold w-full max-w-6xl h-full sm:h-auto max-h-[100dvh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-none sm:rounded-lg overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
                 <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
-                    <!-- Imagen pura sin bordes -->
                     <img id="modal-img-element" src="" class="w-full max-h-[50vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
                 </a>
             </div>
@@ -389,8 +370,8 @@
         </div>
     </div>
 
-    <!-- Carrito Lateral (LUZ BLANCA EN BORDE) -->
-    <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-white shadow-[-15px_0_30px_rgba(255,255,255,0.15)] transform translate-x-full transition-transform duration-500 flex flex-col">
+    <!-- Carrito Lateral CON GLOW BLANCO -->
+    <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-white transform translate-x-full transition-transform duration-500 flex flex-col shadow-[-20px_0_45px_rgba(255,255,255,0.25)]">
         <div class="p-8 border-b border-brand-gold flex justify-between items-center">
             <h2 class="font-editorial text-2xl tracking-wider text-brand-gold glow-gold">Mi Selección</h2>
             <button onclick="window.toggleCart()" class="text-brand-gold hover:text-white">
@@ -414,7 +395,7 @@
     <div id="cart-overlay" onclick="window.toggleCart()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
     <!-- HERO PRINCIPAL -->
-    <header class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden bg-black">
+    <header class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden bg-black reveal">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2574&auto=format&fit=crop" alt="Damaso Hero" class="w-full h-full object-cover opacity-60 brightness-110">
             <div class="absolute inset-0 bg-gradient-to-b from-brand-bg/40 via-transparent to-brand-bg"></div>
@@ -433,7 +414,7 @@
     </header>
 
     <!-- Catálogo Organizado por Secciones -->
-    <section id="coleccion" class="py-32 bg-brand-bg">
+    <section id="coleccion" class="py-32 bg-brand-bg reveal">
         <div class="max-w-[95%] mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16">
                 <div>
@@ -447,7 +428,7 @@
     </section>
 
     <!-- Marquesina de Clientes -->
-    <section id="clientes" class="pt-32 pb-16 bg-black border-t border-brand-gold">
+    <section id="clientes" class="pt-32 pb-16 bg-black border-t border-brand-gold reveal">
         <div class="max-w-[95%] mx-auto px-4 mb-12 text-center">
             <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-4 glow-gold">Confianza que ilumina</p>
             <h2 class="font-editorial text-4xl text-white">Nuestros Clientes</h2>
@@ -468,7 +449,7 @@
     </section>
 
     <!-- Diseñador y Arte Interactivo -->
-    <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex flex-col items-center justify-center">
+    <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex flex-col items-center justify-center reveal">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold mb-12">Iván<br>Damaso</h2>
             <p class="text-xl text-white font-light italic mb-8 border-b border-brand-gold pb-8 inline-block px-8">"La luz es el alma de la arquitectura."</p>
@@ -476,7 +457,7 @@
                 Diseñador radicado en Guadalajara, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo. Cada pieza nace de la experimentación de texturas, volúmenes y sombras proyectadas.
             </p>
             
-            <!-- DECORACIÓN INTERACTIVA (APAGADA/ENCENDIDA) -->
+            <!-- DECORACIÓN INTERACTIVA -->
             <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24" onclick="this.classList.toggle('active')">
                 <img src="imagen_damaso_apagada.png" alt="Decoración DAMASO Apagada" class="w-full h-full object-cover block">
                 <img src="imagen_damaso_encendida.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
@@ -485,7 +466,7 @@
     </section>
 
     <!-- Manifiesto -->
-    <section id="manifiesto" class="py-40 bg-black text-center">
+    <section id="manifiesto" class="py-40 bg-black text-center reveal">
         <div class="max-w-4xl mx-auto px-6">
             <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-12 glow-gold">Filosofía de marca</p>
             <h2 class="font-editorial text-4xl md:text-6xl text-white leading-tight">
@@ -494,8 +475,8 @@
         </div>
     </section>
 
-    <!-- Footer (LUZ BLANCA SUPERIOR) -->
-    <footer id="contacto" class="bg-brand-surface pt-32 pb-12 border-t border-white shadow-[0_-15px_30px_rgba(255,255,255,0.1)]">
+    <!-- Footer -->
+    <footer id="contacto" class="bg-brand-surface pt-32 pb-12 border-t border-brand-gold reveal">
         <div class="max-w-[95%] mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-16">
                 <div class="md:col-span-2">
@@ -515,7 +496,6 @@
                     </ul>
                 </div>
             </div>
-            <!-- BOTÓN DE CERRAR SESIÓN -->
             <div class="mt-12 text-center border-t border-brand-border pt-8">
                 <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mb-6">&copy; 2026 DAMASO STUDIO. IVÁN DAMASO. GUADALAJARA, MÉXICO.</p>
                 <button onclick="window.confirmLogout()" class="text-[9px] tracking-widest text-brand-muted hover:text-red-500 uppercase transition-colors hidden" id="logout-btn">Cerrar Sesión</button>
@@ -526,11 +506,10 @@
     <!-- SCRIPT DE LÓGICA PRINCIPAL ÚNICO Y PROTEGIDO -->
     <script>
         (function() {
-            // LÓGICA DE MEMORIA (SESIÓN Y CARRITO)
             window.cart = JSON.parse(localStorage.getItem('damaso_cart')) || [];
             window.userSession = JSON.parse(localStorage.getItem('damaso_session')) || null;
             
-            // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN (TODOS PNG)
+            // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN (TODOS .PNG)
             window.dbProducts = [
                 // CANDILES
                 { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
@@ -656,18 +635,6 @@
                 } catch(e) {}
             };
 
-            // LÓGICA DE SCROLL PARA MENÚ MÓVIL (Reparada)
-            window.scrollToSection = function(e, id) {
-                e.preventDefault();
-                window.toggleCategories(null);
-                const el = document.getElementById(id);
-                if(el) {
-                    setTimeout(() => {
-                        el.scrollIntoView({ behavior: 'smooth' });
-                    }, 300);
-                }
-            };
-
             // LÓGICA DE WA FLOTANTE
             window.updateWhatsAppVisibility = function() {
                 const waBtn = document.getElementById('whatsapp-float');
@@ -686,7 +653,7 @@
                 }
             };
 
-            // LÓGICA DE COOKIES, MODALES Y SESIÓN (Transición Suave)
+            // LÓGICA DE COOKIES Y ANIMACIÓN
             window.toggleCookieDetails = function() {
                 const details = document.getElementById('cookie-details');
                 if (details) details.classList.toggle('hidden');
@@ -728,7 +695,7 @@
                     const loginPrompt = document.getElementById('login-prompt-modal');
                     if (loginPrompt) {
                         loginPrompt.classList.remove('hidden');
-                        void loginPrompt.offsetWidth; // Reflow para fade-in suave
+                        void loginPrompt.offsetWidth; // Force reflow para transición suave
                         loginPrompt.classList.remove('opacity-0', 'pointer-events-none');
                     }
                 }
@@ -740,7 +707,7 @@
                 if (loginPrompt) loginPrompt.classList.add('opacity-0', 'pointer-events-none');
                 if (loginForm) {
                     loginForm.classList.remove('hidden');
-                    void loginForm.offsetWidth; // Reflow para fade-in suave
+                    void loginForm.offsetWidth;
                     loginForm.classList.remove('opacity-0', 'pointer-events-none');
                 }
             };
@@ -755,22 +722,25 @@
                 localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
                 
                 const loginForm = document.getElementById('login-form-modal');
-                const loadingModal = document.getElementById('login-loading-modal');
                 if (loginForm) loginForm.classList.add('opacity-0', 'pointer-events-none');
                 
+                // Actualizar interfaz
+                const navLoginBtn = document.getElementById('nav-login-btn');
+                const botHistoryBtn = document.getElementById('bot-history-btn');
+                if (navLoginBtn) navLoginBtn.classList.add('hidden');
+                if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
+
+                window.showWelcomeAnimation(window.userSession.name);
+            };
+
+            window.showWelcomeAnimation = function(userName) {
+                const loadingModal = document.getElementById('login-loading-modal');
                 if (loadingModal) {
                     loadingModal.classList.remove('hidden');
                     void loadingModal.offsetWidth;
                     loadingModal.classList.remove('opacity-0', 'pointer-events-none');
                 }
 
-                // Actualizar interfaz para reflejar estado logueado
-                const navLoginBtn = document.getElementById('nav-login-btn');
-                const botHistoryBtn = document.getElementById('bot-history-btn');
-                if (navLoginBtn) navLoginBtn.classList.add('hidden');
-                if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
-
-                // Mostrar bienvenida sin "STUDIO"
                 setTimeout(() => {
                     if (loadingModal) loadingModal.classList.add('opacity-0', 'pointer-events-none');
                     
@@ -779,7 +749,7 @@
                     
                     if (welcomeOverlay && welcomeLettersContainer) {
                         welcomeLettersContainer.innerHTML = '';
-                        const welcomeText = ("BIENVENIDO " + window.userSession.name.split(' ')[0]).toUpperCase();
+                        const welcomeText = ("BIENVENIDO " + userName).toUpperCase();
                         const words = welcomeText.split(' ');
                         
                         words.forEach((word) => {
@@ -804,7 +774,6 @@
                                 }, index * 100); 
                             });
 
-                            // Deslizar arriba como el cortinero inicial (Sin texto Studio)
                             setTimeout(() => {
                                 welcomeOverlay.style.transform = 'translateY(-100%)';
                                 setTimeout(() => {
@@ -834,7 +803,23 @@
                     logoutBtn.classList.remove('hidden');
                 }
 
-                setTimeout(() => { overlays.forEach(o => o.classList.add('hidden')); }, 1000);
+                // Iniciar observador de scroll
+                setTimeout(() => { 
+                    overlays.forEach(o => o.classList.add('hidden')); 
+                    
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('active');
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    
+                    document.querySelectorAll('.reveal').forEach((el) => {
+                        observer.observe(el);
+                    });
+                }, 1000);
             };
 
             window.confirmLogout = function() {
@@ -871,59 +856,17 @@
                         
                         setTimeout(() => {
                             if (entryOverlay) {
-                                // ANIMACIÓN CORTINA ARRIBA
                                 entryOverlay.style.transform = 'translateY(-100%)';
                             }
                             setTimeout(() => {
                                 if (entryOverlay) entryOverlay.style.display = 'none';
                                 
                                 if (window.userSession) {
-                                    // SI YA HAY SESION, MOSTRAR BIENVENIDA PERSONALIZADA SIN "STUDIO"
-                                    const welcomeOverlay = document.getElementById('welcome-animation-overlay');
-                                    const welcomeLettersContainer = document.getElementById('welcome-letters');
-                                    
-                                    if (welcomeOverlay && welcomeLettersContainer) {
-                                        welcomeLettersContainer.innerHTML = '';
-                                        const welcomeText = ("BIENVENIDO " + window.userSession.name.split(' ')[0]).toUpperCase();
-                                        const words = welcomeText.split(' ');
-                                        
-                                        words.forEach((word) => {
-                                            const wordSpan = document.createElement('span');
-                                            wordSpan.className = "inline-block whitespace-nowrap mx-2 sm:mx-4";
-                                            for(let i=0; i<word.length; i++){
-                                                wordSpan.innerHTML += `<span class="welcome-letter opacity-0 transition-opacity duration-500 font-editorial text-4xl sm:text-6xl md:text-8xl text-white tracking-widest glow-text">${word[i]}</span>`;
-                                            }
-                                            welcomeLettersContainer.appendChild(wordSpan);
-                                        });
-
-                                        welcomeOverlay.classList.remove('hidden');
-                                        void welcomeOverlay.offsetWidth;
-                                        welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none');
-
-                                        setTimeout(() => {
-                                            const letters = document.querySelectorAll('.welcome-letter');
-                                            letters.forEach((letter, index) => {
-                                                setTimeout(() => {
-                                                    letter.classList.remove('opacity-0');
-                                                    letter.classList.add('opacity-100');
-                                                }, index * 100); 
-                                            });
-
-                                            setTimeout(() => {
-                                                welcomeOverlay.style.transform = 'translateY(-100%)';
-                                                setTimeout(() => {
-                                                    welcomeOverlay.style.display = 'none';
-                                                    window.enterSiteDirectly();
-                                                }, 1500);
-                                            }, (letters.length * 100) + 1500);
-                                        }, 500);
-                                    } else {
-                                        window.enterSiteDirectly();
-                                    }
+                                    window.showWelcomeAnimation(window.userSession.name);
                                 } else {
                                     if (cookieModal) {
                                         cookieModal.classList.remove('hidden');
-                                        void cookieModal.offsetWidth; // Reflow para transición de seda
+                                        void cookieModal.offsetWidth; 
                                         cookieModal.classList.remove('opacity-0', 'pointer-events-none');
                                     }
                                 }
@@ -957,26 +900,22 @@
                     const catProducts = products.filter(p => p.category === catKey);
                     if (catProducts.length > 0) {
                         html += `
-                            <div class="col-span-full mt-16 mb-4 border-b border-brand-gold pb-4">
+                            <div class="col-span-full mt-16 mb-4 border-b border-brand-gold pb-4 reveal">
                                 <h3 class="font-editorial text-4xl text-brand-gold uppercase glow-gold">${catTitle}</h3>
                             </div>
                         `;
                         catProducts.forEach(p => {
                             html += `
-                                <div class="group">
-                                    <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
-                                        
-                                        <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA CON ARCOÍRIS -->
+                                <div class="group reveal">
+                                    <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500">
+                                        <!-- ANIMACIÓN DE CARGA INFINITA -->
                                         <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
-                                            
-                                            <!-- TEXTO ARCOÍRIS (Forma curvada, colores oro y blanco metálico) -->
                                             <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
                                                 <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
                                                 <text class="text-[14px] font-editorial fill-brand-gold tracking-[0.2em] uppercase" text-anchor="middle">
                                                     <textPath href="#curve-${p.id}" startOffset="50%">DAMASO</textPath>
                                                 </text>
                                             </svg>
-                                            
                                             <div class="relative w-16 h-16 mt-8">
                                                 <div class="absolute inset-0 flex items-center justify-center shape-1">
                                                     <svg width="20" height="20" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" fill="#ef4444" rx="2"/></svg>
@@ -988,12 +927,11 @@
                                                     <svg width="24" height="20" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#22c55e"/></svg>
                                                 </div>
                                             </div>
-                                            
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
-                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. ONERROR REINTENTA INFINITAMENTE CADA 3 SEGUNDOS -->
-                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        <!-- IMAGEN LIMPIA SIN BORDES -->
+                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 opacity-0" alt="">
                                         
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
@@ -1081,6 +1019,19 @@
                     
                     const coleccionSection = document.getElementById('coleccion');
                     if (coleccionSection) coleccionSection.scrollIntoView({ behavior: 'smooth' });
+
+                    // Re-inicializar reveal
+                    setTimeout(() => {
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    entry.target.classList.add('active');
+                                    observer.unobserve(entry.target);
+                                }
+                            });
+                        }, { threshold: 0.1 });
+                        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+                    }, 100);
 
                     setTimeout(() => {
                         if (overlay) {
@@ -1177,8 +1128,8 @@
                     total += itemTotal;
                     itemsCont.innerHTML += `
                         <div class="flex items-center gap-4 border-b border-brand-border pb-4">
-                            <!-- CERO BORDES EN LA IMAGEN DEL CARRITO -->
-                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
+                            <!-- IMAGEN LIMPIA SIN BORDES -->
+                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
                                 <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
@@ -1222,7 +1173,7 @@
                 materials: "Nuestras piezas están forjadas en materiales nobles y puros: latón sólido, bronce, cristal soplado inastillable, mármol de Carrara y ónice natural.",
                 cleaning: "Para mantener la pureza de los materiales, recomendamos limpiar las piezas únicamente con un paño de microfibra seco. No utilice químicos abrasivos, especialmente en latón y espejos avejentados.",
                 shipping: "Nuestros tiempos de entrega varían entre 3 y 8 semanas dependiendo de la complejidad artesanal de la pieza. Realizamos envíos especializados a toda la república mexicana y exportaciones internacionales.",
-                warranty: "Todas las luminarias cuentan con componentes eléctricos certificados (NOM) y garantía directa de estudio por defectos de fabricación. Si tu pieza llega con algún desperfecto, se reemplazará inmediatamente.",
+                warranty: "Todas las luminarias cuentan con componentes eléctricos certificados (NOM) y garantía directa de estudio por defectos de fabricación.",
                 design: "El diseñador principal y fundador es Iván Damaso, quien supervisa personalmente la experimentación de texturas, volúmenes y sombras proyectadas en cada pieza.",
                 payment: "Aceptamos transferencias interbancarias, pagos con tarjetas de crédito/débito y depósitos directos. Para apartar una pieza a producción, requerimos un anticipo formal del 50%.",
                 light: "Físicamente, la luz es radiación electromagnética. En el diseño, es la cuarta dimensión. En DAMASO solemos emplear temperaturas cálidas (2700K - 3000K) para bañar los espacios con una atmósfera escultural y acogedora.",
@@ -1232,7 +1183,6 @@
                 logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón rojo 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página web, justo debajo del copyright de DAMASO Studio."
             };
 
-            // DICCIONARIO EXPANDIDO A NIVELES MASIVOS PARA SOPORTAR ERRORES ORTOGRÁFICOS Y VARIANTES
             const synonyms = {
                 "q": "que", "k": "que", "ke": "que", "xque": "que", "xq": "que", "porke": "porque", "porq": "porque",
                 "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "we": "amigo", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo", "compadre": "amigo", "compa": "amigo",
@@ -1243,15 +1193,15 @@
                 "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo", "focos": "luz", "foco": "luz",
                 "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias", "plz": "porfavor", "porfa": "porfavor",
                 "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
-                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar", "deslogear": "cerrar",
+                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar", "deslogear": "cerrar", "cerrar_sesion": "sesion",
                 "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias",
                 "doc": "pdf", "documento": "pdf", "ficha": "pdf", "arxivo": "pdf", "archivo": "pdf", "mandame": "pdf", "imprimir": "pdf", "enviame": "pdf"
             };
 
             const intents = {
                 saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo", "hi", "qhubo"],
-                despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia"],
+                despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre", "listo"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia", "inteligente"],
                 ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio", "informacion", "info", "saber"],
                 contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje", "escribir"],
                 ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar", "ir", "encuentran"],
@@ -1294,33 +1244,6 @@
                 "Esa es una gran reflexión que expande mi conocimiento algorítmico. Mientras tanto, si busca redefinir un espacio arquitectónico, nuestro catálogo 2026 está a su disposición."
             ];
 
-            function getLevenshteinDistance(a, b) {
-                if(a.length === 0) return b.length;
-                if(b.length === 0) return a.length;
-                var matrix = [];
-                for(let i = 0; i <= b.length; i++){ matrix[i] = [i]; }
-                for(let j = 0; j <= a.length; j++){ matrix[0][j] = j; }
-                for(let i = 1; i <= b.length; i++){
-                    for(let j = 1; j <= a.length; j++){
-                        if(b.charAt(i-1) == a.charAt(j-1)){
-                            matrix[i][j] = matrix[i-1][j-1];
-                        } else {
-                            matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, Math.min(matrix[i][j-1] + 1, matrix[i-1][j] + 1));
-                        }
-                    }
-                }
-                return matrix[b.length][a.length];
-            }
-
-            function cleanText(str) {
-                let cleaned = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[¿?¡!.,;:]/g, "");
-                let words = cleaned.split(/\s+/);
-                let normalizedWords = words.map(w => synonyms[w] || w);
-                return normalizedWords.join(" ");
-            }
-
-            window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
-
             window.saveChatState = function() {
                 if (!window.userSession) return; // LOS INVITADOS NO GUARDAN MEMORIA
 
@@ -1343,7 +1266,7 @@
             };
 
             window.toggleChatHistory = function() {
-                if (!window.userSession) return; // PROTECCIÓN EXTRA: INVITADOS NO ACCEDEN AL LIBRITO
+                if (!window.userSession) return; // PROTECCIÓN EXTRA
                 
                 window.isViewingHistory = !window.isViewingHistory;
                 const messagesView = document.getElementById('chat-messages');
@@ -1412,7 +1335,6 @@
                             </div>
                         `;
                     } else {
-                        // Cargar HTML renderizado (ej. para el PDF bot request)
                         chatBox.innerHTML += `
                             <div class="flex flex-col items-start max-w-[85%] mt-4 w-full">
                                 <div class="bg-[#1a1a1a] text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)] w-full overflow-hidden">${msg.text}</div>
@@ -1421,6 +1343,110 @@
                     }
                 });
                 chatBox.scrollTop = chatBox.scrollHeight;
+            };
+
+            // GENERACIÓN DE PDF NATIVO DIRECTO DESDE EL BOT
+            window.generateSinglePDF = function(id) {
+                const p = window.dbProducts.find(x => x.id === parseInt(id));
+                if(!p) return;
+                
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
+                    
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(26);
+                    doc.setTextColor(0, 0, 0); 
+                    doc.text("DAMASO", 15, 25);
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100); 
+                    doc.text("Alta Iluminación Editorial", 15, 31);
+                    doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(14);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text("FICHA TÉCNICA", 200, 25, { align: "right" });
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(`Fecha: ${new Date().toLocaleDateString('es-MX')}`, 200, 31, { align: "right" });
+
+                    doc.setDrawColor(212, 175, 55); 
+                    doc.setLineWidth(0.5);
+                    doc.line(15, 42, 200, 42);
+
+                    doc.setFontSize(22);
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFont("helvetica", "bold");
+                    doc.text(p.name, 15, 55);
+
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text("SKU: " + p.sku, 15, 62);
+                    doc.text("Colección: " + p.category.toUpperCase(), 15, 67);
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setTextColor(50, 50, 50);
+                    doc.setFontSize(11);
+                    let splitDesc = doc.splitTextToSize(p.desc, 180);
+                    doc.text(splitDesc, 15, 80);
+
+                    let startY = 85 + (splitDesc.length * 6);
+                    
+                    doc.setDrawColor(200, 200, 200); 
+                    doc.setLineWidth(0.2);
+                    doc.line(15, startY, 200, startY);
+                    
+                    startY += 10;
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(12);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text("ESPECIFICACIONES DEL MODELO:", 15, startY);
+                    
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(10);
+                    doc.setTextColor(50, 50, 50);
+                    
+                    startY += 10;
+                    doc.text("Iluminación:", 15, startY); doc.text(p.specsLight, 60, startY);
+                    startY += 8;
+                    doc.text("Voltaje:", 15, startY); doc.text(p.volt, 60, startY);
+                    startY += 8;
+                    doc.text("Cable/Herraje:", 15, startY); doc.text(p.cable, 60, startY);
+                    startY += 8;
+                    doc.text("Dimensiones:", 15, startY); doc.text(`W: ${p.dims.w} | H: ${p.dims.h} | D: ${p.dims.d} | Dia: ${p.dims.dia}`, 60, startY);
+                    startY += 8;
+                    doc.text("Peso Estimado:", 15, startY); doc.text(p.peso, 60, startY);
+                    startY += 8;
+                    doc.text("Materiales:", 15, startY); doc.text(p.mat, 60, startY);
+                    startY += 8;
+                    doc.text("Acabado:", 15, startY); doc.text(p.fin, 60, startY);
+                    startY += 8;
+                    doc.text("Tiempo Fabricación:", 15, startY); doc.text(p.time, 60, startY);
+                    startY += 8;
+                    doc.text("Certificaciones:", 15, startY); doc.text(p.cert, 60, startY);
+
+                    startY += 20;
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(18);
+                    doc.setTextColor(212, 175, 55); 
+                    doc.text("Inversión: $" + Number(p.price).toLocaleString() + " MXN", 15, startY);
+                    
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(8);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text("* Todos los precios incluyen I.V.A.", 15, startY + 6);
+                    doc.text("* Gastos de envío se calculan por separado según logística.", 15, startY + 11);
+
+                    doc.save(`Ficha_Damaso_${p.sku}.pdf`);
+                } catch(e) {
+                    console.error("Fallo al generar PDF", e);
+                }
             };
 
             window.sendChatMessage = async function() {
@@ -1455,14 +1481,6 @@
                 };
 
                 const statusEl = document.getElementById('bot-status');
-                if (statusEl) {
-                    statusEl.innerHTML = "CONECTANDO...";
-                    statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-muted text-right leading-tight transition-colors duration-300 hidden sm:block";
-                }
-
-                // ==========================================
-                // EJECUCIÓN DEL SUPER BOT LOCAL NLP EXTREMO
-                // ==========================================
                 if (statusEl) {
                     statusEl.innerHTML = "⚠️ MOTOR<br>EMERGENCIA";
                     statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-[#ff4444] font-bold text-right leading-tight transition-colors duration-300 hidden sm:block";
@@ -1582,10 +1600,9 @@
                                     window.botContext.lastIntent = "producto";
                                     
                                     if (detectedIntents.includes("generar_pdf")) {
-                                        // LOGICA DE PDF INDIVIDUAL DESDE BOT
                                         let pdfId = 'pdf-box-' + Date.now();
-                                        response = `Claro estoy generando tu documento en breves estará listo ${uName}.<br><br>
-                                        <div id="${pdfId}" class="bg-white text-black p-5 rounded-sm mt-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                        response = `Claro estoy generando tu documento, en breves estará listo ${uName}.<br><br>
+                                        <div id="${pdfId}" class="bg-white text-black p-5 rounded-sm mt-2 shadow-[0_0_20px_rgba(255,255,255,0.2)] animate-fade-in-up">
                                             <p class="font-bold text-xs uppercase tracking-widest border-b border-gray-300 pb-2 mb-3 truncate">${foundProduct.name}</p>
                                             <p class="text-[10px] text-gray-500 mb-4 font-mono">SKU: ${foundProduct.sku}</p>
                                             <div id="loader-${pdfId}" class="flex flex-col items-center justify-center py-4">
@@ -1593,11 +1610,11 @@
                                                 <span class="text-[9px] uppercase tracking-widest text-gray-500">Procesando...</span>
                                             </div>
                                             <div id="btn-${pdfId}" class="hidden flex justify-center mt-2">
-                                                <button onclick="window.generateSinglePDF('${foundProduct.id}')" class="w-full bg-black text-white px-4 py-3 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-brand-gold hover:text-black transition-colors shadow-lg">ABRIR</button>
+                                                <button onclick="window.generateSinglePDF('${foundProduct.id}')" class="w-full bg-black text-white px-4 py-3 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-brand-gold hover:text-black transition-colors shadow-lg">ABRIR PDF</button>
                                             </div>
                                         </div>`;
                                         
-                                        // Forzamos el timeout después de inyectar el HTML
+                                        // Timeout para botón abrir PDF
                                         setTimeout(() => {
                                             const l = document.getElementById(`loader-${pdfId}`);
                                             const b = document.getElementById(`btn-${pdfId}`);
@@ -1664,299 +1681,18 @@
                 }, 800); 
             };
 
-            // NUEVA FUNCIÓN: GENERADOR DE PDF INDIVIDUAL DESDE EL BOT
-            window.generateSinglePDF = function(id) {
-                const p = window.dbProducts.find(x => x.id === parseInt(id));
-                if(!p) return;
-                
-                try {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
-                    
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(26);
-                    doc.setTextColor(0, 0, 0); 
-                    doc.text("DAMASO", 15, 25);
-
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100); 
-                    doc.text("Alta Iluminación Editorial", 15, 31);
-                    doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
-
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(14);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text("FICHA TÉCNICA", 200, 25, { align: "right" });
-
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text(`Fecha: ${new Date().toLocaleDateString('es-MX')}`, 200, 31, { align: "right" });
-
-                    doc.setDrawColor(212, 175, 55); 
-                    doc.setLineWidth(0.5);
-                    doc.line(15, 42, 200, 42);
-
-                    doc.setFontSize(22);
-                    doc.setTextColor(0, 0, 0);
-                    doc.setFont("helvetica", "bold");
-                    doc.text(p.name, 15, 55);
-
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text("SKU: " + p.sku, 15, 62);
-                    doc.text("Colección: " + p.category.toUpperCase(), 15, 67);
-
-                    doc.setFont("helvetica", "normal");
-                    doc.setTextColor(50, 50, 50);
-                    doc.setFontSize(11);
-                    let splitDesc = doc.splitTextToSize(p.desc, 180);
-                    doc.text(splitDesc, 15, 80);
-
-                    let startY = 85 + (splitDesc.length * 6);
-                    
-                    doc.setDrawColor(200, 200, 200); 
-                    doc.setLineWidth(0.2);
-                    doc.line(15, startY, 200, startY);
-                    
-                    startY += 10;
-
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(12);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text("ESPECIFICACIONES DEL MODELO:", 15, startY);
-                    
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(10);
-                    doc.setTextColor(50, 50, 50);
-                    
-                    startY += 10;
-                    doc.text("Iluminación:", 15, startY); doc.text(p.specsLight, 60, startY);
-                    startY += 8;
-                    doc.text("Voltaje:", 15, startY); doc.text(p.volt, 60, startY);
-                    startY += 8;
-                    doc.text("Cable/Herraje:", 15, startY); doc.text(p.cable, 60, startY);
-                    startY += 8;
-                    doc.text("Dimensiones:", 15, startY); doc.text(`W: ${p.dims.w} | H: ${p.dims.h} | D: ${p.dims.d} | Dia: ${p.dims.dia}`, 60, startY);
-                    startY += 8;
-                    doc.text("Peso Estimado:", 15, startY); doc.text(p.peso, 60, startY);
-                    startY += 8;
-                    doc.text("Materiales:", 15, startY); doc.text(p.mat, 60, startY);
-                    startY += 8;
-                    doc.text("Acabado:", 15, startY); doc.text(p.fin, 60, startY);
-                    startY += 8;
-                    doc.text("Tiempo Fabricación:", 15, startY); doc.text(p.time, 60, startY);
-                    startY += 8;
-                    doc.text("Certificaciones:", 15, startY); doc.text(p.cert, 60, startY);
-
-                    startY += 20;
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(18);
-                    doc.setTextColor(212, 175, 55); // Dorado
-                    doc.text("Inversión: $" + Number(p.price).toLocaleString() + " MXN", 15, startY);
-                    
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(8);
-                    doc.setTextColor(150, 150, 150);
-                    doc.text("* Todos los precios incluyen I.V.A.", 15, startY + 6);
-                    doc.text("* Gastos de envío se calculan por separado según logística.", 15, startY + 11);
-
-                    doc.save(`Ficha_Damaso_${p.sku}.pdf`);
-                } catch(e) {
-                    console.error("Fallo al generar PDF", e);
+            window.toggleChatbot = function() {
+                const drawer = document.getElementById('chatbot-drawer');
+                const overlay = document.getElementById('chat-overlay');
+                if (drawer) drawer.classList.toggle('-translate-x-full');
+                if (overlay) {
+                    overlay.classList.toggle('opacity-0');
+                    overlay.classList.toggle('pointer-events-none');
                 }
-            };
-
-            // GENERACIÓN DE PDF NATIVA DE CARRITO CON BLINDAJE DE ERRORES
-            window.checkoutPDF = function(event) {
-                if(window.cart.length === 0) { 
-                    const btn = document.getElementById('btn-download-pdf');
-                    if(btn) {
-                        const orig = btn.innerHTML;
-                        btn.innerHTML = 'AGREGA PIEZAS PRIMERO';
-                        btn.style.color = '#ff4444';
-                        btn.style.borderColor = '#ff4444';
-                        setTimeout(() => {
-                            btn.innerHTML = orig;
-                            btn.style.color = '';
-                            btn.style.borderColor = '';
-                        }, 2000);
-                    }
-                    return; 
-                }
-                
-                if (!window.jspdf || !window.jspdf.jsPDF) {
-                    console.error("jsPDF module not loaded correctly.");
-                    return;
-                }
-
-                const btn = document.getElementById('btn-download-pdf');
-                let originalText = "";
-                if(btn) {
-                    originalText = btn.innerHTML;
-                    btn.innerHTML = `<svg class="animate-spin mr-2 inline-block text-brand-gold" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
-                }
-                
-                const currentScrollY = window.scrollY;
-                const currentScrollX = window.scrollX;
-                window.scrollTo(0, 0);
-
-                setTimeout(() => {
-                    try {
-                        const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
-
-                        const clientNameObj = document.getElementById('client-name');
-                        const clientEmailObj = document.getElementById('client-email');
-                        
-                        const clientName = (clientNameObj && clientNameObj.value) ? clientNameObj.value : "A quien corresponda";
-                        const clientEmail = (clientEmailObj && clientEmailObj.value) ? clientEmailObj.value : "No proporcionado";
-                        const date = new Date().toLocaleDateString('es-MX');
-                        const folio = "COT-" + Math.floor(Math.random() * 9000 + 1000);
-
-                        doc.setFont("helvetica", "bold");
-                        doc.setFontSize(26);
-                        doc.setTextColor(0, 0, 0); 
-                        doc.text("DAMASO", 15, 25);
-
-                        doc.setFont("helvetica", "normal");
-                        doc.setFontSize(10);
-                        doc.setTextColor(100, 100, 100); 
-                        doc.text("Alta Iluminación Editorial", 15, 31);
-                        doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
-
-                        doc.setFont("helvetica", "bold");
-                        doc.setFontSize(16);
-                        doc.setTextColor(0, 0, 0);
-                        doc.text("COTIZACIÓN", 200, 25, { align: "right" });
-
-                        doc.setFont("helvetica", "normal");
-                        doc.setFontSize(10);
-                        doc.setTextColor(100, 100, 100);
-                        doc.text(`Fecha: ${date}`, 200, 31, { align: "right" });
-                        doc.text(`Folio: ${folio}`, 200, 36, { align: "right" });
-
-                        doc.setDrawColor(212, 175, 55); 
-                        doc.setLineWidth(0.5);
-                        doc.line(15, 42, 200, 42);
-
-                        doc.setFont("helvetica", "bold");
-                        doc.setFontSize(9);
-                        doc.setTextColor(100, 100, 100);
-                        doc.text("DATOS DEL CLIENTE", 15, 52);
-
-                        doc.setFontSize(12);
-                        doc.setTextColor(0, 0, 0);
-                        doc.text(clientName, 15, 58);
-
-                        doc.setFontSize(10);
-                        doc.setTextColor(100, 100, 100);
-                        doc.text(clientEmail, 15, 63);
-
-                        let total = 0;
-                        const tableBody = window.cart.map(item => {
-                            const sum = Number(item.price) * item.qty;
-                            total += sum;
-                            return [item.sku, item.name, item.qty.toString(), `$${Number(item.price).toLocaleString()}`];
-                        });
-
-                        doc.autoTable({
-                            startY: 72,
-                            head: [['SKU', 'Modelo / Descripción', 'Cant.', 'Precio Unit.']],
-                            body: tableBody,
-                            theme: 'plain',
-                            headStyles: { fontStyle: 'bold', textColor: [0,0,0], borderBottomColor: [212,175,55], borderBottomWidth: 1.5 },
-                            bodyStyles: { textColor: [50,50,50], borderBottomColor: [200,200,200], borderBottomWidth: 0.1 },
-                            columnStyles: {
-                                0: { cellWidth: 35 },
-                                1: { cellWidth: 'auto' },
-                                2: { cellWidth: 20, halign: 'center' },
-                                3: { cellWidth: 35, halign: 'right' }
-                            }
-                        });
-
-                        let envio = total * 0.10;
-                        let granTotal = total + envio;
-
-                        let finalY = doc.lastAutoTable.finalY + 15;
-                        doc.setDrawColor(212, 175, 55); 
-                        doc.setLineWidth(1.0);
-                        doc.line(120, finalY - 5, 200, finalY - 5);
-
-                        doc.setFont("helvetica", "normal");
-                        doc.setFontSize(11);
-                        doc.setTextColor(50, 50, 50);
-                        doc.text("SUBTOTAL", 120, finalY);
-                        doc.text(`$${total.toLocaleString()} MXN`, 200, finalY, { align: "right" });
-                        
-                        finalY += 8;
-                        doc.text("GASTOS DE ENVÍO", 120, finalY);
-                        doc.text(`$${envio.toLocaleString()} MXN`, 200, finalY, { align: "right" });
-
-                        finalY += 12;
-                        doc.setFont("helvetica", "bold");
-                        doc.setFontSize(14);
-                        doc.setTextColor(0, 0, 0);
-                        doc.text("TOTAL", 120, finalY);
-                        doc.text(`$${granTotal.toLocaleString()} MXN`, 200, finalY, { align: "right" });
-
-                        finalY += 25;
-                        doc.setFontSize(9);
-                        doc.setTextColor(100, 100, 100);
-                        doc.text("Condiciones Comerciales:", 15, finalY);
-                        
-                        doc.setFont("helvetica", "normal");
-                        doc.text("- Precios incluyen IVA. Sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.", 15, finalY + 6);
-                        doc.text("- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).", 15, finalY + 11);
-
-                        doc.save(`Cotizacion_Damaso_${folio}.pdf`);
-
-                    } catch (e) {
-                        console.error("Error generating PDF:", e);
-                        if(btn) {
-                            btn.innerHTML = 'ERROR AL GENERAR';
-                            btn.style.color = '#ff4444';
-                        }
-                    } finally {
-                        window.scrollTo(currentScrollX, currentScrollY); 
-                        if (btn && btn.innerHTML !== 'ERROR AL GENERAR') btn.innerHTML = originalText;
-                    }
-                }, 100);
-            };
-
-            window.checkoutWhatsApp = function() {
-                if(window.cart.length === 0) { return; }
-                
-                const clientNameObj = document.getElementById('client-name');
-                const clientEmailObj = document.getElementById('client-email');
-                
-                const clientName = clientNameObj ? clientNameObj.value : "";
-                const clientEmail = clientEmailObj ? clientEmailObj.value : "";
-                
-                let msg = `Hola Equipo DAMASO, me interesa cotizar las siguientes piezas:\n\n`;
-                if (clientName) msg += `*Nombre:* ${clientName}\n`;
-                if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
-                
-                let total = 0;
-                window.cart.forEach(i => {
-                    msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`;
-                    total += (Number(i.price) * i.qty);
-                });
-                
-                let envio = total * 0.10;
-                let granTotal = total + envio;
-
-                msg += `\n*Subtotal:* $${total.toLocaleString()} MXN\n`;
-                msg += `*Gastos de Envío:* $${envio.toLocaleString()} MXN\n`;
-                msg += `*Total Estimado:* $${granTotal.toLocaleString()} MXN (IVA Incluido)\n`;
-                
-                const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
-                const link = document.createElement('a');
-                link.href = url;
-                link.target = '_blank';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                setTimeout(() => { 
+                    window.renderCurrentMessages(); 
+                    window.updateWhatsAppVisibility(); 
+                }, 50);
             };
 
             // Iniciar de forma segura
@@ -1996,17 +1732,6 @@
                         if (title) title.innerText = "Resultados";
                         if (subtitle) subtitle.innerText = `Búsqueda: "${q}"`;
                     });
-                }
-
-                // Autocompletado del PDF con datos de sesión
-                if(window.userSession) {
-                    const logoutBtn = document.getElementById('logout-btn');
-                    if(logoutBtn) logoutBtn.classList.remove('hidden');
-                    
-                    const clientNameObj = document.getElementById('client-name');
-                    const clientEmailObj = document.getElementById('client-email');
-                    if(clientNameObj) clientNameObj.value = window.userSession.name;
-                    if(clientEmailObj) clientEmailObj.value = window.userSession.email;
                 }
 
                 // Cerrar menú al hacer clic fuera
