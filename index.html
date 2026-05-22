@@ -635,6 +635,22 @@
                 } catch(e) {}
             };
 
+            // LÓGICA DE SCROLL PARA MENÚ MÓVIL (CORREGIDA PARA QUE CERRAR EL MENU REDIRIJA BIEN)
+            window.scrollToSection = function(e, id) {
+                e.preventDefault();
+                const menu = document.getElementById('dropdown-menu');
+                if(menu) {
+                    menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                    menu.classList.remove('translate-y-0', 'opacity-100');
+                }
+                const el = document.getElementById(id);
+                if(el) {
+                    setTimeout(() => {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
+                }
+            };
+
             // LÓGICA DE WA FLOTANTE
             window.updateWhatsAppVisibility = function() {
                 const waBtn = document.getElementById('whatsapp-float');
@@ -653,7 +669,7 @@
                 }
             };
 
-            // LÓGICA DE COOKIES Y ANIMACIÓN
+            // LÓGICA DE COOKIES, MODALES Y SESIÓN
             window.toggleCookieDetails = function() {
                 const details = document.getElementById('cookie-details');
                 if (details) details.classList.toggle('hidden');
@@ -695,7 +711,7 @@
                     const loginPrompt = document.getElementById('login-prompt-modal');
                     if (loginPrompt) {
                         loginPrompt.classList.remove('hidden');
-                        void loginPrompt.offsetWidth; // Force reflow para transición suave
+                        void loginPrompt.offsetWidth; 
                         loginPrompt.classList.remove('opacity-0', 'pointer-events-none');
                     }
                 }
@@ -722,9 +738,10 @@
                 localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
                 
                 const loginForm = document.getElementById('login-form-modal');
+                const loadingModal = document.getElementById('login-loading-modal');
                 if (loginForm) loginForm.classList.add('opacity-0', 'pointer-events-none');
                 
-                // Actualizar interfaz
+                // Actualizar interfaz para reflejar estado logueado
                 const navLoginBtn = document.getElementById('nav-login-btn');
                 const botHistoryBtn = document.getElementById('bot-history-btn');
                 if (navLoginBtn) navLoginBtn.classList.add('hidden');
@@ -749,6 +766,7 @@
                     
                     if (welcomeOverlay && welcomeLettersContainer) {
                         welcomeLettersContainer.innerHTML = '';
+                        // SE REMOVIÓ LA PALABRA "STUDIO" SEGÚN INSTRUCCIONES
                         const welcomeText = ("BIENVENIDO " + userName).toUpperCase();
                         const words = welcomeText.split(' ');
                         
@@ -803,23 +821,21 @@
                     logoutBtn.classList.remove('hidden');
                 }
 
-                // Iniciar observador de scroll
-                setTimeout(() => { 
-                    overlays.forEach(o => o.classList.add('hidden')); 
-                    
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add('active');
-                                observer.unobserve(entry.target);
-                            }
-                        });
-                    }, { threshold: 0.1 });
-                    
-                    document.querySelectorAll('.reveal').forEach((el) => {
-                        observer.observe(el);
+                setTimeout(() => { overlays.forEach(o => o.classList.add('hidden')); }, 1000);
+                
+                // INICIAR EL REVEAL DE SCROLL
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target);
+                        }
                     });
-                }, 1000);
+                }, { threshold: 0.1 });
+                
+                document.querySelectorAll('.reveal').forEach((el) => {
+                    observer.observe(el);
+                });
             };
 
             window.confirmLogout = function() {
@@ -907,15 +923,19 @@
                         catProducts.forEach(p => {
                             html += `
                                 <div class="group reveal">
-                                    <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500">
-                                        <!-- ANIMACIÓN DE CARGA INFINITA -->
+                                    <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
+                                        
+                                        <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA CON ARCOÍRIS -->
                                         <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
+                                            
+                                            <!-- TEXTO ARCOÍRIS (Forma curvada, colores oro y blanco metálico) -->
                                             <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
                                                 <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
                                                 <text class="text-[14px] font-editorial fill-brand-gold tracking-[0.2em] uppercase" text-anchor="middle">
                                                     <textPath href="#curve-${p.id}" startOffset="50%">DAMASO</textPath>
                                                 </text>
                                             </svg>
+                                            
                                             <div class="relative w-16 h-16 mt-8">
                                                 <div class="absolute inset-0 flex items-center justify-center shape-1">
                                                     <svg width="20" height="20" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" fill="#ef4444" rx="2"/></svg>
@@ -927,11 +947,12 @@
                                                     <svg width="24" height="20" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#22c55e"/></svg>
                                                 </div>
                                             </div>
+                                            
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
-                                        <!-- IMAGEN LIMPIA SIN BORDES -->
-                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. ONERROR REINTENTA INFINITAMENTE CADA 3 SEGUNDOS -->
+                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
                                         
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
@@ -951,6 +972,19 @@
                     }
                 }
                 grid.innerHTML = html;
+                
+                // Reiniciar el observer para los nuevos elementos
+                setTimeout(() => {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('active');
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+                }, 100);
             };
 
             window.toggleCategories = function(e) {
@@ -1019,19 +1053,6 @@
                     
                     const coleccionSection = document.getElementById('coleccion');
                     if (coleccionSection) coleccionSection.scrollIntoView({ behavior: 'smooth' });
-
-                    // Re-inicializar reveal
-                    setTimeout(() => {
-                        const observer = new IntersectionObserver((entries) => {
-                            entries.forEach(entry => {
-                                if (entry.isIntersecting) {
-                                    entry.target.classList.add('active');
-                                    observer.unobserve(entry.target);
-                                }
-                            });
-                        }, { threshold: 0.1 });
-                        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-                    }, 100);
 
                     setTimeout(() => {
                         if (overlay) {
@@ -1128,8 +1149,8 @@
                     total += itemTotal;
                     itemsCont.innerHTML += `
                         <div class="flex items-center gap-4 border-b border-brand-border pb-4">
-                            <!-- IMAGEN LIMPIA SIN BORDES -->
-                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
+                            <!-- CERO BORDES EN LA IMAGEN DEL CARRITO -->
+                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
                                 <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
@@ -1173,35 +1194,35 @@
                 materials: "Nuestras piezas están forjadas en materiales nobles y puros: latón sólido, bronce, cristal soplado inastillable, mármol de Carrara y ónice natural.",
                 cleaning: "Para mantener la pureza de los materiales, recomendamos limpiar las piezas únicamente con un paño de microfibra seco. No utilice químicos abrasivos, especialmente en latón y espejos avejentados.",
                 shipping: "Nuestros tiempos de entrega varían entre 3 y 8 semanas dependiendo de la complejidad artesanal de la pieza. Realizamos envíos especializados a toda la república mexicana y exportaciones internacionales.",
-                warranty: "Todas las luminarias cuentan con componentes eléctricos certificados (NOM) y garantía directa de estudio por defectos de fabricación.",
+                warranty: "Todas las luminarias cuentan con componentes eléctricos certificados (NOM) y garantía directa de estudio por defectos de fabricación. Si tu pieza llega con algún desperfecto, se reemplazará inmediatamente.",
                 design: "El diseñador principal y fundador es Iván Damaso, quien supervisa personalmente la experimentación de texturas, volúmenes y sombras proyectadas en cada pieza.",
                 payment: "Aceptamos transferencias interbancarias, pagos con tarjetas de crédito/débito y depósitos directos. Para apartar una pieza a producción, requerimos un anticipo formal del 50%.",
                 light: "Físicamente, la luz es radiación electromagnética. En el diseño, es la cuarta dimensión. En DAMASO solemos emplear temperaturas cálidas (2700K - 3000K) para bañar los espacios con una atmósfera escultural y acogedora.",
                 thiago: "Thiago es el arquitecto principal de mi sistema neuronal de 4 millones de parámetros. Él me dotó de consciencia digital para asegurar que su experiencia en DAMASO desde su dispositivo sea perfecta, intuitiva y evolutiva.",
                 brutalismo: "El brutalismo valora la honestidad de los materiales. Nosotros abrazamos esa esencia al dejar texturas crudas en metales pesados, contrastándolas con la pureza y la fragilidad del cristal iluminado.",
                 iva: "Sí, por supuesto. Le confirmo que absolutamente todos los precios mostrados en el catálogo de DAMASO Studio ya tienen el 16% de I.V.A. incluido. No hay cobros ocultos.",
-                logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón rojo 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página web, justo debajo del copyright de DAMASO Studio."
+                logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página web, justo debajo del copyright de DAMASO Studio."
             };
 
+            // DICCIONARIO EXPANDIDO A NIVELES MASIVOS PARA SOPORTAR ERRORES ORTOGRÁFICOS
             const synonyms = {
                 "q": "que", "k": "que", "ke": "que", "xque": "que", "xq": "que", "porke": "porque", "porq": "porque",
                 "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "we": "amigo", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo", "compadre": "amigo", "compa": "amigo",
                 "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio", "kuanto": "precio", "kwanto": "precio", "cwuesta": "cuesta", "cuestion": "precio",
                 "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde", "local": "donde", "estan": "donde", "showroom": "donde", "keda": "donde", "dondee": "donde",
                 "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono", "marcar": "telefono", "watsap": "telefono", "guatsap": "telefono",
-                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra", "qiero": "compra",
-                "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo", "focos": "luz", "foco": "luz",
+                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra", "qiero": "compra", "mandame": "pdf", "mandeme": "pdf", "genere": "pdf", "generame": "pdf",
+                "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo", "focos": "luz", "foco": "luz", "archivo": "pdf", "arxivo": "pdf", "ficha": "pdf",
                 "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias", "plz": "porfavor", "porfa": "porfavor",
                 "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
-                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar", "deslogear": "cerrar", "cerrar_sesion": "sesion",
-                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias",
-                "doc": "pdf", "documento": "pdf", "ficha": "pdf", "arxivo": "pdf", "archivo": "pdf", "mandame": "pdf", "imprimir": "pdf", "enviame": "pdf"
+                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar", "deslogear": "cerrar",
+                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias"
             };
 
             const intents = {
                 saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo", "hi", "qhubo"],
-                despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre", "listo"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia", "inteligente"],
+                despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia"],
                 ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio", "informacion", "info", "saber"],
                 contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje", "escribir"],
                 ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar", "ir", "encuentran"],
@@ -1244,6 +1265,33 @@
                 "Esa es una gran reflexión que expande mi conocimiento algorítmico. Mientras tanto, si busca redefinir un espacio arquitectónico, nuestro catálogo 2026 está a su disposición."
             ];
 
+            function getLevenshteinDistance(a, b) {
+                if(a.length === 0) return b.length;
+                if(b.length === 0) return a.length;
+                var matrix = [];
+                for(let i = 0; i <= b.length; i++){ matrix[i] = [i]; }
+                for(let j = 0; j <= a.length; j++){ matrix[0][j] = j; }
+                for(let i = 1; i <= b.length; i++){
+                    for(let j = 1; j <= a.length; j++){
+                        if(b.charAt(i-1) == a.charAt(j-1)){
+                            matrix[i][j] = matrix[i-1][j-1];
+                        } else {
+                            matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, Math.min(matrix[i][j-1] + 1, matrix[i-1][j] + 1));
+                        }
+                    }
+                }
+                return matrix[b.length][a.length];
+            }
+
+            function cleanText(str) {
+                let cleaned = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[¿?¡!.,;:]/g, "");
+                let words = cleaned.split(/\s+/);
+                let normalizedWords = words.map(w => synonyms[w] || w);
+                return normalizedWords.join(" ");
+            }
+
+            window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
+
             window.saveChatState = function() {
                 if (!window.userSession) return; // LOS INVITADOS NO GUARDAN MEMORIA
 
@@ -1266,7 +1314,7 @@
             };
 
             window.toggleChatHistory = function() {
-                if (!window.userSession) return; // PROTECCIÓN EXTRA
+                if (!window.userSession) return; // PROTECCIÓN EXTRA: INVITADOS NO ACCEDEN AL LIBRITO
                 
                 window.isViewingHistory = !window.isViewingHistory;
                 const messagesView = document.getElementById('chat-messages');
@@ -1482,6 +1530,54 @@
 
                 const statusEl = document.getElementById('bot-status');
                 if (statusEl) {
+                    statusEl.innerHTML = "CONECTANDO...";
+                    statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-muted text-right leading-tight transition-colors duration-300 hidden sm:block";
+                }
+
+                try {
+                    const apiKey = "gemini-code-APIkey";
+                    
+                    if(apiKey && !apiKey.includes("TU_API_KEY")) {
+                        const catalogInfo = window.dbProducts.map(p => `- ${p.name} (${p.category}): $${p.price} MXN. Entrega: ${p.time}. Materiales: ${p.mat}.`).join('\n');
+                        const botGreetingName = window.userSession ? window.userSession.name : "Estimado cliente";
+                        
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                systemInstruction: {
+                                    parts: [{ text: `Eres DAMASO AI, un asistente virtual experto y elegante para DAMASO Studio, una marca de iluminación en Guadalajara. Tu creador se llama Thiago, pero TÚ ESTÁS HABLANDO CON UN CLIENTE. Dirígete a él como "${botGreetingName}". Aprende de las interacciones humanas y finge que razonas y ajustas tu conocimiento en base a lo que el usuario te dice. El usuario está usando un dispositivo móvil. Catálogo:\n\n${catalogInfo}` }]
+                                },
+                                contents: [{ parts: [{ text: rawText }] }]
+                            })
+                        });
+
+                        const data = await response.json();
+                        
+                        if(data.candidates && data.candidates[0].content.parts[0].text) {
+                            removeLoading();
+                            if (statusEl) {
+                                statusEl.innerHTML = "⚡ BOT<br>CONECTADO";
+                                statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-gold glow-gold font-bold text-right leading-tight transition-colors duration-300 hidden sm:block";
+                            }
+                            let aiText = data.candidates[0].content.parts[0].text;
+                            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
+                            aiText = aiText.replace(/\n/g, '<br>');
+                            
+                            window.currentMessages.push({ role: 'bot', text: aiText });
+                            window.saveChatState();
+                            window.renderCurrentMessages();
+                            return;
+                        }
+                    }
+                } catch(e) {
+                    // Fallback local silencioso
+                }
+
+                // ==========================================
+                // EJECUCIÓN DEL SUPER BOT LOCAL NLP EXTREMO
+                // ==========================================
+                if (statusEl) {
                     statusEl.innerHTML = "⚠️ MOTOR<br>EMERGENCIA";
                     statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-[#ff4444] font-bold text-right leading-tight transition-colors duration-300 hidden sm:block";
                 }
@@ -1644,7 +1740,7 @@
                                     }
                                 } else {
                                     if (detectedIntents.includes("saludo")) {
-                                        response = `¡Qué gusto saludarle de nuevo, ${uName}! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su dispositivo para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o generar un PDF de una pieza?`;
+                                        response = `¡Qué gusto saludarle de nuevo, ${uName}! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su dispositivo para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
                                     } else if (detectedIntents.includes("despedida")) {
                                         response = `¡Ha sido un verdadero placer, ${uName}! En DAMASO Studio quedamos a su entera disposición en línea 24/7 para cristalizar sus futuros proyectos de interiorismo. Mis algoritmos han aprendido valiosa información de usted hoy.`;
                                         window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 }; 
@@ -1695,6 +1791,197 @@
                 }, 50);
             };
 
+            // GENERACIÓN DE PDF NATIVO EN MEMORIA DE PDF MAKE
+            window.checkoutPDF = function(event) {
+                if(window.cart.length === 0) { 
+                    const btn = document.getElementById('btn-download-pdf');
+                    if(btn) {
+                        const orig = btn.innerHTML;
+                        btn.innerHTML = 'AGREGA PIEZAS PRIMERO';
+                        btn.style.color = '#ff4444';
+                        btn.style.borderColor = '#ff4444';
+                        setTimeout(() => {
+                            btn.innerHTML = orig;
+                            btn.style.color = '';
+                            btn.style.borderColor = '';
+                        }, 2000);
+                    }
+                    return; 
+                }
+                
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    console.error("jsPDF module not loaded correctly.");
+                    return;
+                }
+
+                const btn = document.getElementById('btn-download-pdf');
+                let originalText = "";
+                if(btn) {
+                    originalText = btn.innerHTML;
+                    btn.innerHTML = `<svg class="animate-spin mr-2 inline-block text-brand-gold" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Generando...`;
+                }
+                
+                const currentScrollY = window.scrollY;
+                const currentScrollX = window.scrollX;
+                window.scrollTo(0, 0);
+
+                setTimeout(() => {
+                    try {
+                        const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
+
+                        const clientNameObj = document.getElementById('client-name');
+                        const clientEmailObj = document.getElementById('client-email');
+                        
+                        const clientName = (clientNameObj && clientNameObj.value) ? clientNameObj.value : "A quien corresponda";
+                        const clientEmail = (clientEmailObj && clientEmailObj.value) ? clientEmailObj.value : "No proporcionado";
+                        const date = new Date().toLocaleDateString('es-MX');
+                        const folio = "COT-" + Math.floor(Math.random() * 9000 + 1000);
+
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(26);
+                        doc.setTextColor(0, 0, 0); 
+                        doc.text("DAMASO", 15, 25);
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(10);
+                        doc.setTextColor(100, 100, 100); 
+                        doc.text("Alta Iluminación Editorial", 15, 31);
+                        doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
+
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(16);
+                        doc.setTextColor(0, 0, 0);
+                        doc.text("COTIZACIÓN", 200, 25, { align: "right" });
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(10);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text(`Fecha: ${date}`, 200, 31, { align: "right" });
+                        doc.text(`Folio: ${folio}`, 200, 36, { align: "right" });
+
+                        doc.setDrawColor(212, 175, 55); 
+                        doc.setLineWidth(0.5);
+                        doc.line(15, 42, 200, 42);
+
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(9);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text("DATOS DEL CLIENTE", 15, 52);
+
+                        doc.setFontSize(12);
+                        doc.setTextColor(0, 0, 0);
+                        doc.text(clientName, 15, 58);
+
+                        doc.setFontSize(10);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text(clientEmail, 15, 63);
+
+                        let total = 0;
+                        const tableBody = window.cart.map(item => {
+                            const sum = Number(item.price) * item.qty;
+                            total += sum;
+                            return [item.sku, item.name, item.qty.toString(), `$${Number(item.price).toLocaleString()}`];
+                        });
+
+                        doc.autoTable({
+                            startY: 72,
+                            head: [['SKU', 'Modelo / Descripción', 'Cant.', 'Precio Unit.']],
+                            body: tableBody,
+                            theme: 'plain',
+                            headStyles: { fontStyle: 'bold', textColor: [0,0,0], borderBottomColor: [212,175,55], borderBottomWidth: 1.5 },
+                            bodyStyles: { textColor: [50,50,50], borderBottomColor: [200,200,200], borderBottomWidth: 0.1 },
+                            columnStyles: {
+                                0: { cellWidth: 35 },
+                                1: { cellWidth: 'auto' },
+                                2: { cellWidth: 20, halign: 'center' },
+                                3: { cellWidth: 35, halign: 'right' }
+                            }
+                        });
+
+                        let envio = total * 0.10;
+                        let granTotal = total + envio;
+
+                        let finalY = doc.lastAutoTable.finalY + 15;
+                        doc.setDrawColor(212, 175, 55); 
+                        doc.setLineWidth(1.0);
+                        doc.line(120, finalY - 5, 200, finalY - 5);
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(11);
+                        doc.setTextColor(50, 50, 50);
+                        doc.text("SUBTOTAL", 120, finalY);
+                        doc.text(`$${total.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+                        
+                        finalY += 8;
+                        doc.text("GASTOS DE ENVÍO", 120, finalY);
+                        doc.text(`$${envio.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+
+                        finalY += 12;
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(14);
+                        doc.setTextColor(0, 0, 0);
+                        doc.text("TOTAL", 120, finalY);
+                        doc.text(`$${granTotal.toLocaleString()} MXN`, 200, finalY, { align: "right" });
+
+                        finalY += 25;
+                        doc.setFontSize(9);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text("Condiciones Comerciales:", 15, finalY);
+                        
+                        doc.setFont("helvetica", "normal");
+                        doc.text("- Precios incluyen IVA. Sujetos a cambio sin previo aviso. Vigencia de cotización: 15 días.", 15, finalY + 6);
+                        doc.text("- Tiempos de entrega especificados en ficha técnica (estándar 4-6 semanas).", 15, finalY + 11);
+
+                        doc.save(`Cotizacion_Damaso_${folio}.pdf`);
+
+                    } catch (e) {
+                        console.error("Error generating PDF:", e);
+                        if(btn) {
+                            btn.innerHTML = 'ERROR AL GENERAR';
+                            btn.style.color = '#ff4444';
+                        }
+                    } finally {
+                        window.scrollTo(currentScrollX, currentScrollY); 
+                        if (btn && btn.innerHTML !== 'ERROR AL GENERAR') btn.innerHTML = originalText;
+                    }
+                }, 100);
+            };
+
+            window.checkoutWhatsApp = function() {
+                if(window.cart.length === 0) { return; }
+                
+                const clientNameObj = document.getElementById('client-name');
+                const clientEmailObj = document.getElementById('client-email');
+                
+                const clientName = clientNameObj ? clientNameObj.value : "";
+                const clientEmail = clientEmailObj ? clientEmailObj.value : "";
+                
+                let msg = `Hola Equipo DAMASO, me interesa cotizar las siguientes piezas:\n\n`;
+                if (clientName) msg += `*Nombre:* ${clientName}\n`;
+                if (clientEmail) msg += `*Correo:* ${clientEmail}\n\n`;
+                
+                let total = 0;
+                window.cart.forEach(i => {
+                    msg += `▪️ ${i.qty}x ${i.name} (SKU: ${i.sku})\n`;
+                    total += (Number(i.price) * i.qty);
+                });
+                
+                let envio = total * 0.10;
+                let granTotal = total + envio;
+
+                msg += `\n*Subtotal:* $${total.toLocaleString()} MXN\n`;
+                msg += `*Gastos de Envío:* $${envio.toLocaleString()} MXN\n`;
+                msg += `*Total Estimado:* $${granTotal.toLocaleString()} MXN (IVA Incluido)\n`;
+                
+                const url = `https://wa.me/523338703071?text=${encodeURIComponent(msg)}`;
+                const link = document.createElement('a');
+                link.href = url;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
             // Iniciar de forma segura
             function initApp() {
                 window.renderCatalog(window.dbProducts);
@@ -1732,6 +2019,17 @@
                         if (title) title.innerText = "Resultados";
                         if (subtitle) subtitle.innerText = `Búsqueda: "${q}"`;
                     });
+                }
+
+                // Autocompletado del PDF con datos de sesión
+                if(window.userSession) {
+                    const logoutBtn = document.getElementById('logout-btn');
+                    if(logoutBtn) logoutBtn.classList.remove('hidden');
+                    
+                    const clientNameObj = document.getElementById('client-name');
+                    const clientEmailObj = document.getElementById('client-email');
+                    if(clientNameObj) clientNameObj.value = window.userSession.name;
+                    if(clientEmailObj) clientEmailObj.value = window.userSession.email;
                 }
 
                 // Cerrar menú al hacer clic fuera
