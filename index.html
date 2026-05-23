@@ -47,7 +47,8 @@
         ::-webkit-scrollbar-track { background: #030303; }
         ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        /* Animación Reveal Optimizada para velocidad de la luz */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1); will-change: opacity, transform; }
         .reveal.active { opacity: 1; transform: translateY(0); }
         
         .modal-overlay { backdrop-filter: blur(8px); }
@@ -66,20 +67,11 @@
         .chat-scroll::-webkit-scrollbar { width: 4px; }
         .chat-scroll::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
 
-        .glow-text {
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 50px rgba(255, 255, 255, 0.3);
-        }
+        .glow-text { text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 50px rgba(255, 255, 255, 0.3); }
+        .glow-gold { text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4), 0 0 30px rgba(212,175,55,0.2); }
 
-        .glow-gold {
-            text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4), 0 0 30px rgba(212,175,55,0.2);
-        }
-
-        .break-words-custom {
-            word-wrap: break-word;
-            word-break: break-word;
-            hyphens: auto;
-            white-space: normal;
-        }
+        .break-words-custom { word-wrap: break-word; word-break: break-word; hyphens: auto; white-space: normal; }
+        .modal-scroll-container { max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
         /* ANIMACIÓN DEL LOADER GEOMÉTRICO ADAPTABLE */
         @keyframes shapeSwap1 {
@@ -101,10 +93,7 @@
         .shape-2 { animation: shapeSwap2 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
         .shape-3 { animation: shapeSwap3 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
 
-        .init-modal-overlay {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
+        .init-modal-overlay { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-gold selection:text-black overflow-hidden" id="main-body">
@@ -129,7 +118,7 @@
 
     <!-- CAPA 1: MODAL DE COOKIES FLOTANTE -->
     <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-1000 hidden">
-        <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
+        <div class="bg-brand-surface border border-white/20 p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_45px_rgba(255,255,255,0.15)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
             <p class="text-brand-muted text-xs font-light leading-relaxed mb-5">
                 Para brindar la experiencia inmersiva y personalizada que caracteriza a DAMASO Studio, utilizamos cookies estrictamente necesarias y analíticas. Estas nos permiten recordar tu selección en la cotización y mejorar el rendimiento de nuestro catálogo.
@@ -158,7 +147,7 @@
 
     <!-- CAPA 2: MODAL DE INICIO DE SESIÓN OPCIONAL -->
     <div id="login-prompt-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
-        <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
+        <div class="bg-brand-surface border border-white/20 p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_45px_rgba(255,255,255,0.15)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">¿Desea Iniciar Sesión?</h2>
             
             <div class="bg-[#0a0a0a] p-5 mb-6 border border-brand-border text-left">
@@ -176,23 +165,36 @@
         </div>
     </div>
 
-    <!-- CAPA 3: FORMULARIO DE INICIO DE SESIÓN -->
+    <!-- CAPA 3: FORMULARIO DE INICIO DE SESIÓN COMPLETO CON SEXO -->
     <div id="login-form-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
-        <div class="bg-brand-surface border border-brand-gold p-6 sm:p-10 max-w-md w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
+        <div class="bg-brand-surface border border-white/20 p-6 sm:p-10 max-w-md w-full text-center shadow-[0_0_45px_rgba(255,255,255,0.15)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-6 uppercase tracking-widest glow-gold">Credenciales</h2>
             
-            <div class="space-y-4 mb-8">
+            <div class="space-y-4 mb-8 text-left">
                 <input type="text" id="session-name" placeholder="Nombre Completo o Despacho" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
                 <input type="email" id="session-email" placeholder="Correo Electrónico" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
                 <input type="password" id="session-password" placeholder="Contraseña" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
                 <input type="text" id="session-address" placeholder="Dirección / Ciudad (Opcional)" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
+                
+                <!-- SELECTOR DE SEXO AÑADIDO PARA LA BIENVENIDA -->
+                <div class="relative w-full">
+                    <select id="session-gender" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors appearance-none cursor-pointer">
+                        <option value="" disabled selected>Sexo / Género</option>
+                        <option value="H">Hombre</option>
+                        <option value="M">Mujer</option>
+                        <option value="O">Prefiero no decir</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-brand-gold">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                </div>
             </div>
 
             <button onclick="window.processLogin()" class="w-full py-4 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)]">Aceptar y Entrar</button>
         </div>
     </div>
 
-    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS) -->
+    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS - PRECARGA MÁXIMA) -->
     <div id="login-loading-modal" class="init-overlay fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#030303] opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="relative w-40 h-40 mb-12">
             <div class="absolute inset-0 flex items-center justify-center shape-1">
@@ -211,7 +213,7 @@
     <!-- CAPA 5: ANIMACIÓN DE BIENVENIDA PERSONALIZADA -->
     <div id="welcome-animation-overlay" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-none opacity-0 hidden">
         <div id="welcome-letters" class="flex flex-wrap justify-center items-center text-center px-4 max-w-[95%] mb-2 leading-tight">
-            <!-- Letras inyectadas vía JavaScript -->
+            <!-- Letras inyectadas vía JavaScript adaptadas al género -->
         </div>
     </div>
 
@@ -265,7 +267,7 @@
             </div>
 
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- BOTÓN DE INICIAR SESIÓN PARA INVITADOS -->
+                <!-- BOTÓN DE INICIAR SESIÓN PARA INVITADOS (PUERTA VERDE NEÓN) -->
                 <button id="nav-login-btn" onclick="window.showLoginForm()" class="text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 hidden" aria-label="Iniciar Sesión" title="Iniciar Sesión">
                     <svg class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M8 22V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v18"></path>
@@ -275,6 +277,7 @@
                     </svg>
                 </button>
 
+                <!-- ICONO DEL BOT ANIMADO -->
                 <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2" aria-label="Asistente Virtual">
                     <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)] animate-pulse">AI</span>
                 </button>
@@ -294,7 +297,7 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE CON GLOW BLANCO -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-white transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)]">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black relative">
             <div class="flex items-center gap-3">
@@ -304,7 +307,7 @@
                 <h2 class="font-editorial text-xl tracking-wider text-brand-gold glow-gold">DAMASO AI</h2>
             </div>
             <div class="flex items-center gap-4">
-                <!-- Botón de Historial (Solo visible si hay sesión) -->
+                <!-- Botón de Historial (Solo visible para usuarios registrados) -->
                 <button id="bot-history-btn" onclick="window.toggleChatHistory()" class="text-brand-gold hover:text-white transition-colors hidden" title="Historial de Conversaciones">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                 </button>
@@ -319,6 +322,7 @@
             <!-- Mensajes inyectados vía JS -->
         </div>
 
+        <!-- LISTA DE HISTORIAL (OCULTA POR DEFECTO) -->
         <div id="chat-history-view" class="absolute inset-0 top-[89px] bg-[#0a0a0a] z-50 flex-col hidden">
             <div class="p-4 border-b border-brand-border bg-black flex justify-center">
                 <button onclick="window.createNewChat()" class="w-full py-3 bg-transparent border border-brand-gold text-brand-gold text-[10px] uppercase font-bold tracking-widest hover:bg-brand-gold hover:text-black transition-colors shadow-[0_0_10px_rgba(212,175,55,0.2)]">+ Nuevo Chat</button>
@@ -326,7 +330,7 @@
             <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list"></div>
         </div>
 
-        <!-- Z-INDEX elevado para asegurar que el botón siempre sea cliqueable -->
+        <!-- Z-INDEX elevado para el botón enviar, evita bloqueos -->
         <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2 relative z-[100]">
             <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-transparent border border-brand-border rounded-full px-4 py-2 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors" onkeypress="if(event.key === 'Enter') window.sendChatMessage()">
             <button onclick="window.sendChatMessage()" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)] z-[100] relative cursor-pointer">
@@ -336,15 +340,17 @@
     </div>
     <div id="chat-overlay" onclick="window.toggleChatbot()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- MODAL DE ESPECIFICACIONES CON SCROLL MÓVIL REPARADO -->
+    <!-- MODAL DE ESPECIFICACIONES (SCROLL MÓVIL REPARADO) -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-0 sm:p-8">
         <button onclick="window.closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[100] bg-brand-gold text-black p-3 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)] hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
 
+        <!-- Habilitado overflow-y-auto para deslizar libremente en móviles -->
         <div class="bg-[#050505] border border-brand-gold w-full max-w-6xl h-full sm:h-auto max-h-[100dvh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-none sm:rounded-lg overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
                 <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
+                    <!-- Marco y borde eliminados por completo -->
                     <img id="modal-img-element" src="" class="w-full max-h-[50vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
                 </a>
             </div>
@@ -383,7 +389,7 @@
         </div>
     </div>
 
-    <!-- Carrito Lateral -->
+    <!-- Carrito Lateral con Glow Blanco Fotográfico -->
     <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-white transform translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)]">
         <div class="p-8 border-b border-brand-gold flex justify-between items-center">
             <h2 class="font-editorial text-2xl tracking-wider text-brand-gold glow-gold">Mi Selección</h2>
@@ -472,8 +478,8 @@
             
             <!-- DECORACIÓN INTERACTIVA (APAGADA/ENCENDIDA) -->
             <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24" onclick="this.classList.toggle('active')">
-                <img src="imagen_damaso_apagada.png" alt="Decoración DAMASO Apagada" class="w-full h-full object-cover block">
-                <img src="imagen_damaso_encendida.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
+                <img src="imagen_damaso_apagada_3.png" alt="Decoración DAMASO Apagada" class="w-full h-full object-cover block">
+                <img src="imagen_damaso_encendida_3.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
             </div>
         </div>
     </section>
@@ -516,6 +522,13 @@
             </div>
         </div>
     </footer>
+
+    <!-- BOTÓN WHATSAPP FLOTANTE EN ORO PREMIUM -->
+    <a id="whatsapp-float" href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#0a0a0a] border border-brand-gold text-brand-gold p-4 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 hover:bg-brand-gold hover:text-black hover:shadow-[0_0_30px_rgba(212,175,55,0.8)] transition-all duration-300 z-[999] flex items-center justify-center opacity-100 scale-100" aria-label="Contacto WhatsApp">
+        <svg class="w-8 h-8 pointer-events-none drop-shadow-[0_0_5px_rgba(212,175,55,0.6)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="currentColor">
+            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 448l84.5-22.1c32.7 18.1 69.6 27.7 107.5 27.7 122.4 0 222-99.6 222-222 0-59.3-23.1-115.1-65.1-157.1zm-157 298.9c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 316.5l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-103.5 84.3-187.8 187.8-187.8 55.3 0 107.3 21.5 146.3 60.6 39.1 39.1 60.6 91.1 60.6 146.4-.1 103.4-84.4 187.7-187.9 187.7zm102.9-140c-5.6-2.8-33.5-16.5-38.7-18.4-5.2-1.9-9-2.8-12.8 2.8-3.8 5.6-14.6 18.4-17.9 22.2-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.9-8.8-45.5-25.2-16.8-12.8-28.1-28.7-31.4-34.3-3.3-5.6-.4-8.7 2.4-11.5 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.8-17.5-42.2-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47.1 0 27.8 20.3 54.7 23.1 58.5 2.8 3.8 39.9 60.1 96.6 84.4 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.5-13.7 38.2-26.9 4.7-13.2 4.7-24.5 3.3-26.9-1.3-2.5-5.1-4-10.8-6.8z"/>
+        </svg>
+    </a>
 
     <!-- SCRIPT DE LÓGICA PRINCIPAL ÚNICO Y PROTEGIDO -->
     <script>
@@ -606,7 +619,21 @@
                 proyectos: "Proyectos Especiales"
             };
 
-            // LÓGICA DE AUDIO Y OBSERVADOR
+            
+            // EL OBSERVADOR REVEAL - HACE QUE EL CATÁLOGO FLOTE HACIA ARRIBA
+            window.initObserver = function() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.05, rootMargin: "0px 0px 100px 0px" });
+                document.querySelectorAll('.reveal:not(.active)').forEach((el) => observer.observe(el));
+            };
+
+            // LÓGICA DE AUDIO
             window.audioCtx = null;
             window.initAudio = function() {
                 try {
@@ -650,16 +677,16 @@
                 } catch(e) {}
             };
 
-            window.initObserver = function() {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('active');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
-                document.querySelectorAll('.reveal:not(.active)').forEach((el) => observer.observe(el));
+            // LÓGICA DE SCROLL PARA MENÚ MÓVIL
+            window.scrollToSection = function(e, id) {
+                e.preventDefault();
+                window.toggleCategories(null);
+                const el = document.getElementById(id);
+                if(el) {
+                    setTimeout(() => {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
+                }
             };
 
             // LÓGICA DE WA FLOTANTE
@@ -680,7 +707,7 @@
                 }
             };
 
-            // LÓGICA DE COOKIES Y SESIÓN
+            // LÓGICA DE COOKIES, MODALES Y SESIÓN
             window.toggleCookieDetails = function() {
                 const details = document.getElementById('cookie-details');
                 if (details) details.classList.toggle('hidden');
@@ -722,7 +749,7 @@
                     const loginPrompt = document.getElementById('login-prompt-modal');
                     if (loginPrompt) {
                         loginPrompt.classList.remove('hidden');
-                        void loginPrompt.offsetWidth; // Force reflow
+                        void loginPrompt.offsetWidth; // Force reflow para transición suave
                         loginPrompt.classList.remove('opacity-0', 'pointer-events-none');
                     }
                 }
@@ -744,36 +771,46 @@
                 const email = document.getElementById('session-email').value || "cliente@damaso.com";
                 const password = document.getElementById('session-password').value || "";
                 const addr = document.getElementById('session-address').value || "";
+                const gender = document.getElementById('session-gender').value || "O";
                 
-                window.userSession = { name, email, addr };
+                window.userSession = { name, email, addr, gender };
                 localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
                 
                 const loginForm = document.getElementById('login-form-modal');
-                const loadingModal = document.getElementById('login-loading-modal');
                 if (loginForm) loginForm.classList.add('opacity-0', 'pointer-events-none');
                 
+                const navLoginBtn = document.getElementById('nav-login-btn');
+                const botHistoryBtn = document.getElementById('bot-history-btn');
+                if (navLoginBtn) navLoginBtn.classList.add('hidden');
+                if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
+
+                window.showWelcomeAnimation(window.userSession.name, window.userSession.gender);
+            };
+
+            window.showWelcomeAnimation = function(userName, gender) {
+                const loadingModal = document.getElementById('login-loading-modal');
                 if (loadingModal) {
                     loadingModal.classList.remove('hidden');
                     void loadingModal.offsetWidth;
                     loadingModal.classList.remove('opacity-0', 'pointer-events-none');
                 }
 
-                // Actualizar UI
-                const navLoginBtn = document.getElementById('nav-login-btn');
-                const botHistoryBtn = document.getElementById('bot-history-btn');
-                if (navLoginBtn) navLoginBtn.classList.add('hidden');
-                if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
-
-                // 10 Segundos exactos de carga
                 setTimeout(() => {
                     if (loadingModal) loadingModal.classList.add('opacity-0', 'pointer-events-none');
                     
                     const welcomeOverlay = document.getElementById('welcome-animation-overlay');
                     const welcomeLettersContainer = document.getElementById('welcome-letters');
+                    const welcomeStudioText = document.getElementById('welcome-studio-text');
                     
                     if (welcomeOverlay && welcomeLettersContainer) {
                         welcomeLettersContainer.innerHTML = '';
-                        const welcomeText = ("BIENVENIDO " + window.userSession.name).toUpperCase();
+                        
+                        let prefix = "BIENVENIDO";
+                        if(gender === 'M') prefix = "BIENVENIDA";
+                        else if(gender === 'O') prefix = "BIENVENIDO";
+                        
+                        const firstName = userName.split(' ')[0];
+                        const welcomeText = (prefix + " " + firstName).toUpperCase();
                         const words = welcomeText.split(' ');
                         
                         words.forEach((word) => {
@@ -797,6 +834,13 @@
                                     letter.classList.add('opacity-100');
                                 }, index * 100); 
                             });
+                            
+                            if (welcomeStudioText) {
+                                setTimeout(() => {
+                                    welcomeStudioText.classList.remove('opacity-0');
+                                    welcomeStudioText.classList.add('opacity-100');
+                                }, letters.length * 100 + 200);
+                            }
 
                             setTimeout(() => {
                                 welcomeOverlay.style.transform = 'translateY(-100%)';
@@ -809,7 +853,7 @@
                     } else {
                         window.enterSiteDirectly();
                     }
-                }, 10000);
+                }, 10000); 
             };
 
             window.enterSiteDirectly = function() {
@@ -870,49 +914,11 @@
                                 if (entryOverlay) entryOverlay.style.display = 'none';
                                 
                                 if (window.userSession) {
-                                    // SESIÓN INICIADA: Bienvenida Directa
-                                    const welcomeOverlay = document.getElementById('welcome-animation-overlay');
-                                    const welcomeLettersContainer = document.getElementById('welcome-letters');
-                                    
-                                    if (welcomeOverlay && welcomeLettersContainer) {
-                                        welcomeLettersContainer.innerHTML = '';
-                                        const welcomeText = ("BIENVENIDO " + window.userSession.name.split(' ')[0]).toUpperCase();
-                                        const words = welcomeText.split(' ');
-                                        words.forEach((word) => {
-                                            const wordSpan = document.createElement('span');
-                                            wordSpan.className = "inline-block whitespace-nowrap mx-2 sm:mx-4";
-                                            for(let i=0; i<word.length; i++){
-                                                wordSpan.innerHTML += `<span class="welcome-letter opacity-0 transition-opacity duration-500 font-editorial text-4xl sm:text-6xl md:text-8xl text-white tracking-widest glow-text">${word[i]}</span>`;
-                                            }
-                                            welcomeLettersContainer.appendChild(wordSpan);
-                                        });
-
-                                        welcomeOverlay.classList.remove('hidden');
-                                        void welcomeOverlay.offsetWidth;
-                                        welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none');
-
-                                        setTimeout(() => {
-                                            const letters = document.querySelectorAll('.welcome-letter');
-                                            letters.forEach((letter, index) => {
-                                                setTimeout(() => {
-                                                    letter.classList.remove('opacity-0');
-                                                    letter.classList.add('opacity-100');
-                                                }, index * 100); 
-                                            });
-
-                                            setTimeout(() => {
-                                                welcomeOverlay.style.transform = 'translateY(-100%)';
-                                                setTimeout(() => {
-                                                    welcomeOverlay.style.display = 'none';
-                                                    window.enterSiteDirectly();
-                                                }, 1500);
-                                            }, (letters.length * 100) + 1500);
-                                        }, 500);
-                                    }
+                                    window.showWelcomeAnimation(window.userSession.name, window.userSession.gender);
                                 } else {
                                     if (cookieModal) {
                                         cookieModal.classList.remove('hidden');
-                                        void cookieModal.offsetWidth; 
+                                        void cookieModal.offsetWidth; // Smooth fade in
                                         cookieModal.classList.remove('opacity-0', 'pointer-events-none');
                                     }
                                 }
@@ -951,6 +957,7 @@
                             </div>
                         `;
                         catProducts.forEach(p => {
+                            // OPTIMIZACIÓN CLAUDE: loading="lazy", decoding="async", y onload robusto
                             html += `
                                 <div class="group reveal">
                                     <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
@@ -977,8 +984,8 @@
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
-                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. ONERROR REINTENTA HASTA 3 VECES -->
-                                        <img src="${p.img}" loading="lazy" decoding="async" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="var el=this,r=el.dataset.r|0; if(r<3){el.dataset.r=r+1; setTimeout(function(){el.src='${p.img}?r='+Date.now();},800);}" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. CARGA PEREZOSA ASÍNCRONA. -->
+                                        <img src="${p.img}" id="img-${p.id}" loading="lazy" decoding="async" onload="window.imageLoaded(${p.id})" onerror="var el=this,r=el.dataset.r|0; if(r<3){el.dataset.r=r+1; setTimeout(function(){el.src='${p.img}?r='+Date.now();},800);} else { document.getElementById('loader-${p.id}').style.opacity=0; }" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
                                         
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
@@ -998,7 +1005,7 @@
                     }
                 }
                 grid.innerHTML = html;
-                window.initObserver(); // Iniciar animaciones reveal
+                window.initObserver(); // Llamar al observer justo después de renderizar el grid
             };
 
             window.toggleCategories = function(e) {
@@ -1163,6 +1170,7 @@
                     total += itemTotal;
                     itemsCont.innerHTML += `
                         <div class="flex items-center gap-4 border-b border-brand-border pb-4">
+                            <!-- CERO BORDES EN LA IMAGEN DEL CARRITO -->
                             <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
@@ -1199,7 +1207,7 @@
 
             window.chatHistory = JSON.parse(localStorage.getItem('damaso_chat_history')) || [];
             window.currentChatId = localStorage.getItem('damaso_current_chat_id') || Date.now().toString();
-            window.currentMessages = JSON.parse(localStorage.getItem('damaso_current_messages')) || [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?`}];
+            window.currentMessages = JSON.parse(localStorage.getItem('damaso_current_messages')) || [{role: 'bot', text: `Bienvenid${window.userSession ? (window.userSession.gender === 'M' ? 'a' : (window.userSession.gender === 'H' ? 'o' : '@')) : 'o'} a DAMASO Studio, ${getUserFirstName()}. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?`}];
             window.isViewingHistory = false;
 
             const knowledgeBase = {
@@ -1217,13 +1225,14 @@
                 logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón rojo 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página web, justo debajo del copyright de DAMASO Studio."
             };
 
+            // DICCIONARIO EXPANDIDO A NIVELES MASIVOS PARA SOPORTAR ERRORES ORTOGRÁFICOS
             const synonyms = {
                 "q": "que", "k": "que", "ke": "que", "xque": "que", "xq": "que", "porke": "porque", "porq": "porque",
                 "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "we": "amigo", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo", "compadre": "amigo", "compa": "amigo",
                 "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio", "kuanto": "precio", "kwanto": "precio", "cwuesta": "cuesta", "cuestion": "precio",
                 "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde", "local": "donde", "estan": "donde", "showroom": "donde", "keda": "donde", "dondee": "donde",
                 "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono", "marcar": "telefono", "watsap": "telefono", "guatsap": "telefono",
-                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra", "qiero": "compra", "genera": "pdf", "mandame": "pdf",
+                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra", "qiero": "compra",
                 "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo", "focos": "luz", "foco": "luz",
                 "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias", "plz": "porfavor", "porfa": "porfavor",
                 "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
@@ -1234,12 +1243,11 @@
             const intents = {
                 saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo", "hi", "qhubo"],
                 despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia", "inteligente"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia"],
                 ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio", "informacion", "info", "saber"],
                 contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje", "escribir"],
                 ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar", "ir", "encuentran"],
-                compra: ["comprar", "cotizar", "cotizacion", "bolsa", "carrito", "pagar", "adquirir", "pedido", "ordenar", "llevar", "quiero", "interesa"],
-                generar_pdf: ["pdf", "ficha", "documento", "descargar", "catalogo pdf", "archivo", "mandame", "imprimir", "enviame"],
+                compra: ["comprar", "cotizar", "cotizacion", "pdf", "bolsa", "carrito", "pagar", "adquirir", "pedido", "ordenar", "llevar", "quiero", "interesa"],
                 precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "cotiza", "presupuesto", "dinero", "cuestan", "valen", "sale"],
                 tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega", "tardan", "meses", "logistica", "mandan", "tardaria", "mandar"],
                 material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton", "bronce", "onice", "marmol", "limpieza", "limpiar", "cuidados", "mantenimiento", "limpia", "lava", "detergente", "quimicos", "colores", "tonos", "pintura", "dorado", "negro", "blanco", "variantes", "opciones"],
@@ -1303,211 +1311,6 @@
             }
 
             window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
-
-            window.saveChatState = function() {
-                if (!window.userSession) return; 
-
-                localStorage.setItem('damaso_current_messages', JSON.stringify(window.currentMessages));
-                localStorage.setItem('damaso_current_chat_id', window.currentChatId);
-                
-                const existingIndex = window.chatHistory.findIndex(c => c.id === window.currentChatId);
-                let previewText = 'Nuevo Chat';
-                if(window.currentMessages.length > 1) {
-                    previewText = window.currentMessages[1].text.substring(0, 25) + '...';
-                }
-                const chatObj = { id: window.currentChatId, date: new Date().toLocaleDateString(), preview: previewText, messages: window.currentMessages };
-                
-                if(existingIndex >= 0) {
-                    window.chatHistory[existingIndex] = chatObj;
-                } else {
-                    window.chatHistory.unshift(chatObj); 
-                }
-                localStorage.setItem('damaso_chat_history', JSON.stringify(window.chatHistory));
-            };
-
-            window.toggleChatHistory = function() {
-                if (!window.userSession) return; 
-                
-                window.isViewingHistory = !window.isViewingHistory;
-                const messagesView = document.getElementById('chat-messages');
-                const historyView = document.getElementById('chat-history-view');
-                const inputArea = document.getElementById('chat-input').parentElement;
-                
-                if (window.isViewingHistory) {
-                    messagesView.classList.add('hidden');
-                    inputArea.classList.add('hidden');
-                    historyView.classList.remove('hidden');
-                    historyView.classList.add('flex');
-                    window.renderChatHistoryList();
-                } else {
-                    messagesView.classList.remove('hidden');
-                    inputArea.classList.remove('hidden');
-                    historyView.classList.add('hidden');
-                    historyView.classList.remove('flex');
-                    window.renderCurrentMessages();
-                }
-            };
-
-            window.createNewChat = function() {
-                window.currentChatId = Date.now().toString();
-                window.currentMessages = [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?`}];
-                window.saveChatState();
-                window.toggleChatHistory();
-            };
-
-            window.loadChat = function(id) {
-                const chat = window.chatHistory.find(c => c.id === id);
-                if(chat) {
-                    window.currentChatId = chat.id;
-                    window.currentMessages = chat.messages || [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}...`}];
-                    window.saveChatState();
-                    window.toggleChatHistory();
-                }
-            };
-
-            window.renderChatHistoryList = function() {
-                const list = document.getElementById('history-list');
-                if(!list) return;
-                list.innerHTML = '';
-                if(window.chatHistory.length === 0) {
-                    list.innerHTML = '<p class="text-brand-muted text-xs text-center mt-10">No hay chats guardados.</p>';
-                    return;
-                }
-                window.chatHistory.forEach(c => {
-                    list.innerHTML += `
-                        <div onclick="window.loadChat('${c.id}')" class="p-4 bg-[#111] border border-brand-border rounded hover:border-brand-gold cursor-pointer transition-colors group">
-                            <p class="text-xs text-brand-gold font-bold mb-1 group-hover:text-white">${c.date}</p>
-                            <p class="text-[10px] text-brand-muted">${c.preview}</p>
-                        </div>
-                    `;
-                });
-            };
-
-            window.renderCurrentMessages = function() {
-                const chatBox = document.getElementById('chat-messages');
-                if (!chatBox) return;
-                chatBox.innerHTML = '';
-                window.currentMessages.forEach(msg => {
-                    if(msg.role === 'user') {
-                        chatBox.innerHTML += `
-                            <div class="flex flex-col items-end w-full mt-4">
-                                <div class="bg-brand-gold text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%] shadow-[0_0_15px_rgba(212,175,55,0.3)]">${msg.text}</div>
-                            </div>
-                        `;
-                    } else {
-                        chatBox.innerHTML += `
-                            <div class="flex flex-col items-start max-w-[85%] mt-4 w-full">
-                                <div class="bg-[#1a1a1a] text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)] w-full overflow-hidden break-words">${msg.text}</div>
-                            </div>
-                        `;
-                    }
-                });
-                chatBox.scrollTop = chatBox.scrollHeight;
-            };
-
-            // GENERACIÓN DE PDF INDIVIDUAL DESDE EL BOT
-            window.generateSinglePDF = function(id) {
-                const p = window.dbProducts.find(x => x.id === parseInt(id));
-                if(!p) return;
-                
-                try {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
-                    
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(26);
-                    doc.setTextColor(0, 0, 0); 
-                    doc.text("DAMASO", 15, 25);
-
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100); 
-                    doc.text("Alta Iluminación Editorial", 15, 31);
-                    doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
-
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(14);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text("FICHA TÉCNICA", 200, 25, { align: "right" });
-
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text(`Fecha: ${new Date().toLocaleDateString('es-MX')}`, 200, 31, { align: "right" });
-
-                    doc.setDrawColor(212, 175, 55); 
-                    doc.setLineWidth(0.5);
-                    doc.line(15, 42, 200, 42);
-
-                    doc.setFontSize(22);
-                    doc.setTextColor(0, 0, 0);
-                    doc.setFont("helvetica", "bold");
-                    doc.text(p.name, 15, 55);
-
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text("SKU: " + p.sku, 15, 62);
-                    doc.text("Colección: " + p.category.toUpperCase(), 15, 67);
-
-                    doc.setFont("helvetica", "normal");
-                    doc.setTextColor(50, 50, 50);
-                    doc.setFontSize(11);
-                    let splitDesc = doc.splitTextToSize(p.desc, 180);
-                    doc.text(splitDesc, 15, 80);
-
-                    let startY = 85 + (splitDesc.length * 6);
-                    
-                    doc.setDrawColor(200, 200, 200); 
-                    doc.setLineWidth(0.2);
-                    doc.line(15, startY, 200, startY);
-                    
-                    startY += 10;
-
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(12);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text("ESPECIFICACIONES DEL MODELO:", 15, startY);
-                    
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(10);
-                    doc.setTextColor(50, 50, 50);
-                    
-                    startY += 10;
-                    doc.text("Iluminación:", 15, startY); doc.text(p.specsLight, 60, startY);
-                    startY += 8;
-                    doc.text("Voltaje:", 15, startY); doc.text(p.volt, 60, startY);
-                    startY += 8;
-                    doc.text("Cable/Herraje:", 15, startY); doc.text(p.cable, 60, startY);
-                    startY += 8;
-                    doc.text("Dimensiones:", 15, startY); doc.text(`W: ${p.dims.w} | H: ${p.dims.h} | D: ${p.dims.d} | Dia: ${p.dims.dia}`, 60, startY);
-                    startY += 8;
-                    doc.text("Peso Estimado:", 15, startY); doc.text(p.peso, 60, startY);
-                    startY += 8;
-                    doc.text("Materiales:", 15, startY); doc.text(p.mat, 60, startY);
-                    startY += 8;
-                    doc.text("Acabado:", 15, startY); doc.text(p.fin, 60, startY);
-                    startY += 8;
-                    doc.text("Tiempo Fabricación:", 15, startY); doc.text(p.time, 60, startY);
-                    startY += 8;
-                    doc.text("Certificaciones:", 15, startY); doc.text(p.cert, 60, startY);
-
-                    startY += 20;
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(18);
-                    doc.setTextColor(212, 175, 55); 
-                    doc.text("Inversión: $" + Number(p.price).toLocaleString() + " MXN", 15, startY);
-                    
-                    doc.setFont("helvetica", "normal");
-                    doc.setFontSize(8);
-                    doc.setTextColor(150, 150, 150);
-                    doc.text("* Todos los precios incluyen I.V.A.", 15, startY + 6);
-                    doc.text("* Gastos de envío se calculan por separado según logística.", 15, startY + 11);
-
-                    doc.save(`Ficha_Damaso_${p.sku}.pdf`);
-                } catch(e) {
-                    console.error("Fallo al generar PDF", e);
-                }
-            };
 
             window.sendChatMessage = async function() {
                 if(window.isViewingHistory) return;
@@ -1667,7 +1470,7 @@
                                     window.botContext.lastProduct = foundProduct; 
                                     window.botContext.lastIntent = "producto";
                                     
-                                    if (detectedIntents.includes("generar_pdf")) {
+                                    if (detectedIntents.includes("generar_pdf") || text.includes("pdf") || text.includes("ficha") || text.includes("archivo") || text.includes("documento")) {
                                         let pdfId = 'pdf-' + Date.now();
                                         response = `Claro, estoy generando tu documento. En breves estará listo, ${uName}.<br><br>
                                         <div class="bg-white text-black p-5 rounded-sm mt-3 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
@@ -1746,21 +1549,110 @@
                 }, 800); 
             };
 
-            window.toggleChatbot = function() {
-                const drawer = document.getElementById('chatbot-drawer');
-                const overlay = document.getElementById('chat-overlay');
-                if (drawer) drawer.classList.toggle('-translate-x-full');
-                if (overlay) {
-                    overlay.classList.toggle('opacity-0');
-                    overlay.classList.toggle('pointer-events-none');
+            // GENERACIÓN DE PDF INDIVIDUAL DESDE EL BOT
+            window.generateSinglePDF = function(id) {
+                const p = window.dbProducts.find(x => x.id === parseInt(id));
+                if(!p) return;
+                
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
+                    
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(26);
+                    doc.setTextColor(0, 0, 0); 
+                    doc.text("DAMASO", 15, 25);
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100); 
+                    doc.text("Alta Iluminación Editorial", 15, 31);
+                    doc.text("Guadalajara, Jalisco, México | +52 33 3870 3071", 15, 36);
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(14);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text("FICHA TÉCNICA", 200, 25, { align: "right" });
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(`Fecha: ${new Date().toLocaleDateString('es-MX')}`, 200, 31, { align: "right" });
+
+                    doc.setDrawColor(212, 175, 55); 
+                    doc.setLineWidth(0.5);
+                    doc.line(15, 42, 200, 42);
+
+                    doc.setFontSize(22);
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFont("helvetica", "bold");
+                    doc.text(p.name, 15, 55);
+
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text("SKU: " + p.sku, 15, 62);
+                    doc.text("Colección: " + p.category.toUpperCase(), 15, 67);
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setTextColor(50, 50, 50);
+                    doc.setFontSize(11);
+                    let splitDesc = doc.splitTextToSize(p.desc, 180);
+                    doc.text(splitDesc, 15, 80);
+
+                    let startY = 85 + (splitDesc.length * 6);
+                    
+                    doc.setDrawColor(200, 200, 200); 
+                    doc.setLineWidth(0.2);
+                    doc.line(15, startY, 200, startY);
+                    
+                    startY += 10;
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(12);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text("ESPECIFICACIONES DEL MODELO:", 15, startY);
+                    
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(10);
+                    doc.setTextColor(50, 50, 50);
+                    
+                    startY += 10;
+                    doc.text("Iluminación:", 15, startY); doc.text(p.specsLight, 60, startY);
+                    startY += 8;
+                    doc.text("Voltaje:", 15, startY); doc.text(p.volt, 60, startY);
+                    startY += 8;
+                    doc.text("Cable/Herraje:", 15, startY); doc.text(p.cable, 60, startY);
+                    startY += 8;
+                    doc.text("Dimensiones:", 15, startY); doc.text(`W: ${p.dims.w} | H: ${p.dims.h} | D: ${p.dims.d} | Dia: ${p.dims.dia}`, 60, startY);
+                    startY += 8;
+                    doc.text("Peso Estimado:", 15, startY); doc.text(p.peso, 60, startY);
+                    startY += 8;
+                    doc.text("Materiales:", 15, startY); doc.text(p.mat, 60, startY);
+                    startY += 8;
+                    doc.text("Acabado:", 15, startY); doc.text(p.fin, 60, startY);
+                    startY += 8;
+                    doc.text("Tiempo Fabricación:", 15, startY); doc.text(p.time, 60, startY);
+                    startY += 8;
+                    doc.text("Certificaciones:", 15, startY); doc.text(p.cert, 60, startY);
+
+                    startY += 20;
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(18);
+                    doc.setTextColor(212, 175, 55); 
+                    doc.text("Inversión: $" + Number(p.price).toLocaleString() + " MXN", 15, startY);
+                    
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(8);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text("* Todos los precios incluyen I.V.A.", 15, startY + 6);
+                    doc.text("* Gastos de envío se calculan por separado según logística.", 15, startY + 11);
+
+                    doc.save(`Ficha_Damaso_${p.sku}.pdf`);
+                } catch(e) {
+                    console.error("Fallo al generar PDF", e);
                 }
-                setTimeout(() => { 
-                    window.renderCurrentMessages(); 
-                    window.updateWhatsAppVisibility(); 
-                }, 50);
             };
 
-            // GENERACIÓN DE PDF NATIVA CON BLINDAJE DE ERRORES
             window.checkoutPDF = function(event) {
                 if(window.cart.length === 0) { 
                     const btn = document.getElementById('btn-download-pdf');
@@ -1778,11 +1670,6 @@
                     return; 
                 }
                 
-                if (!window.jspdf || !window.jspdf.jsPDF) {
-                    console.error("jsPDF module not loaded correctly.");
-                    return;
-                }
-
                 const btn = document.getElementById('btn-download-pdf');
                 let originalText = "";
                 if(btn) {
@@ -1796,7 +1683,8 @@
 
                 setTimeout(() => {
                     try {
-                        const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
 
                         const clientNameObj = document.getElementById('client-name');
                         const clientEmailObj = document.getElementById('client-email');
@@ -2000,16 +1888,6 @@
                     if(clientNameObj) clientNameObj.value = window.userSession.name;
                     if(clientEmailObj) clientEmailObj.value = window.userSession.email;
                 }
-
-                // Cerrar menú al hacer clic fuera
-                document.addEventListener('click', function(event) {
-                    const menu = document.getElementById('dropdown-menu');
-                    const btn = document.getElementById('btn-menu');
-                    if (menu && btn && !menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) {
-                        menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-                        menu.classList.remove('translate-y-0', 'opacity-100');
-                    }
-                });
             }
 
             // Asegurar que el DOM esté listo antes de arrancar
