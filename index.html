@@ -2027,15 +2027,24 @@
                     });
                 }
 
-                // Autocompletado del PDF con datos de sesión
+                // Autocompletado del PDF con datos de sesión e Iconos Restringidos
+                const navLoginBtn = document.getElementById('nav-login-btn');
+                const botHistoryBtn = document.getElementById('bot-history-btn');
+                
                 if(window.userSession) {
                     const logoutBtn = document.getElementById('logout-btn');
                     if(logoutBtn) logoutBtn.classList.remove('hidden');
+                    
+                    if (navLoginBtn) navLoginBtn.classList.add('hidden');
+                    if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
                     
                     const clientNameObj = document.getElementById('client-name');
                     const clientEmailObj = document.getElementById('client-email');
                     if(clientNameObj) clientNameObj.value = window.userSession.name;
                     if(clientEmailObj) clientEmailObj.value = window.userSession.email;
+                } else {
+                    if (navLoginBtn) navLoginBtn.classList.remove('hidden');
+                    if (botHistoryBtn) botHistoryBtn.classList.add('hidden');
                 }
             }
 
