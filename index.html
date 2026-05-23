@@ -1487,7 +1487,8 @@
                 }
 
                 try {
-                    const apiKey = "gemini-code-APIkey";
+                    // SE ELIMINA LA ESPERA EXTERNA PARA QUE EL BOTÓN FUNCIONE AL INSTANTE
+                    const apiKey = ""; 
                     
                     if(apiKey && !apiKey.includes("TU_API_KEY")) {
                         const catalogInfo = window.dbProducts.map(p => `- ${p.name} (${p.category}): $${p.price} MXN. Entrega: ${p.time}. Materiales: ${p.mat}.`).join('\n');
