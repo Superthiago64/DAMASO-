@@ -47,7 +47,7 @@
         ::-webkit-scrollbar-track { background: #030303; }
         ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         
         .modal-overlay { backdrop-filter: blur(8px); }
@@ -81,7 +81,7 @@
             white-space: normal;
         }
 
-        /* ANIMACIÓN DEL LOADER GEOMÉTRICO INFINITO */
+        /* ANIMACIÓN DEL LOADER GEOMÉTRICO ADAPTABLE */
         @keyframes shapeSwap1 {
             0%, 100% { transform: translate(0px, -35%); }
             33.33% { transform: translate(35%, 35%); }
@@ -119,8 +119,20 @@
         <source src="yellow_umbrellas.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- ANIMACIÓN DE ENTRADA CINETOGRÁFICA PRINCIPAL -->
+    <div id="entry-animation" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-auto">
+        <div id="entry-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
+            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
+            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
+            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">M</span>
+            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
+            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">S</span>
+            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">O</span>
+        </div>
+    </div>
+
     <!-- CAPA 1: MODAL DE COOKIES FLOTANTE -->
-    <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay transition-opacity duration-700 hidden">
+    <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-1000 hidden">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
             <p class="text-brand-muted text-xs font-light leading-relaxed mb-5">
@@ -207,6 +219,19 @@
         </div>
     </div>
 
+    <!-- Animación Cinemática de Transición de Menú -->
+    <div id="category-transition-overlay" class="fixed inset-0 z-[999999] bg-[#030303] flex flex-col items-center justify-center pointer-events-none opacity-0 transition-opacity duration-500">
+        <div id="menu-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
+            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
+            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
+            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">M</span>
+            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
+            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">S</span>
+            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">O</span>
+        </div>
+        <span id="menu-category-text" class="opacity-0 transition-opacity duration-700 font-editorial italic text-3xl sm:text-5xl md:text-6xl text-brand-gold glow-gold mt-4 text-center px-4"></span>
+    </div>
+
     <!-- Navegación Superior -->
     <nav class="fixed w-full z-40 bg-brand-bg/95 backdrop-blur-xl border-b border-brand-border transition-all duration-500 flex flex-col" id="navbar">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
@@ -244,7 +269,7 @@
             </div>
 
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- BOTÓN DE INICIAR SESIÓN (PUERTA VERDE CON FLECHA EN EL SUELO) -->
+                <!-- BOTÓN DE INICIAR SESIÓN (PUERTA VERDE CON FLECHA EN EL SUELO - SOLO VISIBLE PARA INVITADOS) -->
                 <button id="nav-login-btn" onclick="window.showLoginForm()" class="text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 hidden" aria-label="Iniciar Sesión" title="Iniciar Sesión">
                     <svg class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M8 22V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v18"></path>
@@ -254,7 +279,7 @@
                     </svg>
                 </button>
 
-                <!-- ICONO DEL BOT (AI DORADO ANIMADO) -->
+                <!-- ICONO DEL BOT -->
                 <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2 animate-float" aria-label="Asistente Virtual">
                     <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">AI</span>
                 </button>
@@ -269,12 +294,12 @@
         <div class="w-full bg-brand-surface/80 border-t border-brand-border h-14 flex items-center justify-center px-4">
             <div class="w-full max-w-3xl relative flex items-center">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" class="text-brand-gold absolute left-4 pointer-events-none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="search" id="live-search" placeholder="Buscar pieza, modelo o SKU..." class="w-full bg-transparent border-none text-[11px] tracking-widest text-white placeholder-brand-muted focus:outline-none pl-12 py-2 uppercase focus:border-b focus:brand-gold transition-colors">
+                <input type="search" id="live-search" placeholder="Buscar pieza, modelo o SKU..." class="w-full bg-transparent border-none text-[11px] tracking-widest text-white placeholder-brand-muted focus:outline-none pl-12 py-2 uppercase focus:border-b focus:border-brand-gold transition-colors">
             </div>
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE CON GLOW BLANCO INTENSO -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE CON HISTORIAL -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-white transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)]">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black relative">
             <div class="flex items-center gap-3">
@@ -510,7 +535,7 @@
                 { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
                 { id: 2, name: "Candil Media Luna Latón", category: "candiles", price: 14500, img: "lampara_luna.png", sku: "DM-CAN-002", desc: "Elegante candil suspendido en forma de cuarto de luna asimétrico, construido en latón sólido cepillado a mano.", specsLight: "3x G9 LED 5W, 2700K cálida", cable: "Cable transparente y tensores (2m)", dims: { w: "85 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido, difusor de cristal", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
                 { id: 3, name: "Candil Tubos Dorados", category: "candiles", price: 34000, img: "candil_3.png", sku: "DM-CAN-003", desc: "Impresionante candil de techo compuesto por una lluvia de finos cilindros de latón con luz focalizada.", specsLight: "15x GU10 LED 3W cálida", cable: "Cables individuales de suspensión negra", dims: { w: "80 cm", h: "400 cm", d: "80 cm", dia: "N/A" }, peso: "22 kg", volt: "110-240V", mat: "Cilindros de latón sólido", fin: "Dorado pulido brillante", time: "6 a 8 semanas", cert: "NOM" },
-                { id: 4, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "IMG_2010.png", sku: "DM-CAN-004", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto moldeadas en latón.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
+                { id: 4, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "IMG_2010.png", sku: "DM-CAN-004", desc: "Candil escultórico de multiple colgantes en forma de hojas de loto moldeadas en latón.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
 
                 // ARBOTANTES
                 { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Arbotante decorativo que fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino y concreto", fin: "Blanco y gris", time: "3 a 4 semanas", cert: "NOM" },
@@ -561,7 +586,7 @@
                 { id: 42, name: "Plafón Radial Negro", category: "techo", price: 8900, img: "IMG_2068.png", sku: "DM-TEC-006", desc: "Lámpara de techo negra con varillas que se abren como un paraguas, ideal para centros de mesa.", specsLight: "1x E26 LED Edison 12W", cable: "Instalación a plafón", dims: { w: "100 cm", h: "40 cm", d: "100 cm", dia: "100 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Negro electrostático", time: "4 semanas", cert: "NOM" },
                 { id: 43, name: "Colgante Campana Amarilla", category: "techo", price: 3400, img: "IMG_2070.png", sku: "DM-TEC-007", desc: "Colgante en forma de campana color amarillo brillante, ideal para toques de color en cocinas.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Amarillo brillante", time: "2 a 3 semanas", cert: "NOM" },
                 { id: 44, name: "Colgante Campana Verde", category: "techo", price: 3400, img: "IMG_2071.png", sku: "DM-TEC-008", desc: "Colgante en forma de campana color verde bosque, ideal para dar un toque natural y vibrante.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Verde brillante", time: "2 a 3 semanas", cert: "NOM" },
-                { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_techo_1.png", sku: "DM-TEC-009", desc: "Lámpara colgante tejida con un patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
+                { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_ techo_1.png", sku: "DM-TEC-009", desc: "Lámpara colgante tejida con un patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
 
                 // EXTERIOR
                 { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2012.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores, fabricado en acero con cristales transparentes.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero tratado y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
@@ -722,7 +747,6 @@
             window.processLogin = function() {
                 const name = document.getElementById('session-name').value || "Invitado";
                 const email = document.getElementById('session-email').value || "cliente@damaso.com";
-                const password = document.getElementById('session-password').value || "";
                 const addr = document.getElementById('session-address').value || "";
                 
                 window.userSession = { name, email, addr };
@@ -738,7 +762,13 @@
                     loadingModal.classList.remove('opacity-0', 'pointer-events-none');
                 }
 
-                // Esperar 10 segundos exactos (carga de imágenes y pre-renderizado táctico)
+                // Actualizar interfaz para reflejar estado logueado
+                const navLoginBtn = document.getElementById('nav-login-btn');
+                const botHistoryBtn = document.getElementById('bot-history-btn');
+                if (navLoginBtn) navLoginBtn.classList.add('hidden');
+                if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
+
+                // Esperar 10 segundos y mostrar bienvenida interactiva generada con letras
                 setTimeout(() => {
                     if (loadingModal) loadingModal.classList.add('opacity-0', 'pointer-events-none');
                     
@@ -809,12 +839,6 @@
                 if(logoutBtn && window.userSession) {
                     logoutBtn.classList.remove('hidden');
                 }
-                
-                // Actualizar interfaz navbar
-                const navLoginBtn = document.getElementById('nav-login-btn');
-                const botHistoryBtn = document.getElementById('bot-history-btn');
-                if (navLoginBtn) navLoginBtn.classList.add('hidden');
-                if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
 
                 setTimeout(() => { overlays.forEach(o => o.classList.add('hidden')); }, 1000);
             };
@@ -853,13 +877,12 @@
                         
                         setTimeout(() => {
                             if (entryOverlay) {
-                                // ANIMACIÓN CORTINA ARRIBA CORREGIDA (Se desliza hacia arriba)
+                                // ANIMACIÓN CORTINA ARRIBA CORREGIDA
                                 entryOverlay.style.transform = 'translateY(-100%)';
                             }
                             setTimeout(() => {
                                 if (entryOverlay) entryOverlay.style.display = 'none';
                                 
-                                // SI HAY SESION, SALTAR COOKIES E IR A BIENVENIDA AUTO
                                 if (window.userSession) {
                                     window.showWelcomeAnimation(window.userSession.name);
                                 } else {
@@ -876,7 +899,20 @@
                 }, 100);
             };
 
-            // LÓGICA DE CARGA INFINITA (SIN REVEAL CLASS PARA EVITAR PANTALLAS NEGRAS EN SAFARI)
+            // OBSERVER PARA REVEAL (SOLUCIONA EL BUG DE LAS IMÁGENES EN NEGRO)
+            window.initObserver = function() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                document.querySelectorAll('.reveal:not(.active)').forEach((el) => observer.observe(el));
+            };
+
+            // LÓGICA DE CARGA INFINITA CON ARCOÍRIS
             window.imageLoaded = function(id) {
                 const img = document.getElementById('img-' + id);
                 const loader = document.getElementById('loader-' + id);
@@ -905,13 +941,13 @@
                         `;
                         catProducts.forEach(p => {
                             html += `
-                                <div class="group">
-                                    <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
+                                <div class="group reveal">
+                                    <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500">
                                         
                                         <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA CON ARCOÍRIS -->
                                         <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
                                             
-                                            <!-- TEXTO ARCOÍRIS (Forma curvada, colores oro y blanco metálico) -->
+                                            <!-- TEXTO ARCOÍRIS -->
                                             <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
                                                 <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
                                                 <text class="text-[14px] font-editorial fill-brand-gold tracking-[0.2em] uppercase" text-anchor="middle">
@@ -934,8 +970,8 @@
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
-                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. ONERROR REINTENTA INFINITAMENTE CADA 3 SEGUNDOS -->
-                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        <!-- IMAGEN SIN BORDES, ONERROR INFINITO -->
+                                        <img src="${p.img}" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
                                         
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
@@ -955,19 +991,7 @@
                     }
                 }
                 grid.innerHTML = html;
-
-                // REINICIAR REVEAL OBSERVER SOLO PARA SECCIONES PRINCIPALES
-                setTimeout(() => {
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add('active');
-                                observer.unobserve(entry.target);
-                            }
-                        });
-                    }, { threshold: 0.1 });
-                    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-                }, 100);
+                window.initObserver(); // Reiniciar observer para nuevos elementos
             };
 
             window.toggleCategories = function(e) {
@@ -1133,7 +1157,7 @@
                     itemsCont.innerHTML += `
                         <div class="flex items-center gap-4 border-b border-brand-border pb-4">
                             <!-- CERO BORDES EN LA IMAGEN DEL CARRITO -->
-                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
+                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
                                 <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
@@ -1275,7 +1299,7 @@
             window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
 
             window.saveChatState = function() {
-                if (!window.userSession) return; // LOS INVITADOS NO GUARDAN MEMORIA
+                if (!window.userSession) return; 
 
                 localStorage.setItem('damaso_current_messages', JSON.stringify(window.currentMessages));
                 localStorage.setItem('damaso_current_chat_id', window.currentChatId);
@@ -1296,7 +1320,7 @@
             };
 
             window.toggleChatHistory = function() {
-                if (!window.userSession) return; // PROTECCIÓN EXTRA: INVITADOS NO ACCEDEN AL LIBRITO
+                if (!window.userSession) return; 
                 
                 window.isViewingHistory = !window.isViewingHistory;
                 const messagesView = document.getElementById('chat-messages');
@@ -1367,7 +1391,7 @@
                     } else {
                         chatBox.innerHTML += `
                             <div class="flex flex-col items-start max-w-[85%] mt-4 w-full">
-                                <div class="bg-[#1a1a1a] text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)] w-full overflow-hidden">${msg.text}</div>
+                                <div class="bg-[#1a1a1a] text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)] w-full overflow-hidden break-words">${msg.text}</div>
                             </div>
                         `;
                     }
@@ -1516,7 +1540,9 @@
                     statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-muted text-right leading-tight transition-colors duration-300 hidden sm:block";
                 }
 
-                // BYPASS API PARA USAR BOT LOCAL SUPER RÁPIDO
+                // ==========================================
+                // EJECUCIÓN DEL SUPER BOT LOCAL NLP EXTREMO
+                // ==========================================
                 if (statusEl) {
                     statusEl.innerHTML = "⚠️ MOTOR<br>EMERGENCIA";
                     statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-[#ff4444] font-bold text-right leading-tight transition-colors duration-300 hidden sm:block";
@@ -1636,29 +1662,26 @@
                                     window.botContext.lastIntent = "producto";
                                     
                                     if (detectedIntents.includes("generar_pdf")) {
-                                        let pdfId = 'pdf-box-' + Date.now();
+                                        let pdfId = 'pdf-' + Date.now();
                                         response = `Claro, estoy generando tu documento. En breves estará listo, ${uName}.<br><br>
-                                        <div id="${pdfId}" class="bg-white text-black p-5 rounded-sm mt-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                                            <p class="font-bold text-xs uppercase tracking-widest border-b border-gray-300 pb-2 mb-3 truncate text-center">${foundProduct.name}</p>
+                                        <div class="bg-white text-black p-5 rounded-sm mt-3 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                            <p class="font-bold text-xs uppercase tracking-widest border-b border-gray-300 pb-2 mb-3 text-center truncate">${foundProduct.name}</p>
                                             <p class="text-[10px] text-gray-500 mb-4 font-mono text-center">SKU: ${foundProduct.sku}</p>
                                             <div id="loader-${pdfId}" class="flex flex-col items-center justify-center py-4">
                                                 <svg class="animate-spin text-black w-6 h-6 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
                                                 <span class="text-[9px] uppercase tracking-widest text-gray-500">Procesando archivo...</span>
                                             </div>
-                                            <div id="btn-${pdfId}" class="hidden flex justify-center mt-2">
+                                            <div id="btn-container-${pdfId}" class="hidden flex justify-center mt-2">
                                                 <button onclick="window.generateSinglePDF('${foundProduct.id}')" class="w-full bg-black text-white px-4 py-3 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-brand-gold hover:text-black transition-colors shadow-lg">ABRIR PDF</button>
                                             </div>
                                         </div>`;
                                         
-                                        // Activar el botón después de 5 segundos
                                         setTimeout(() => {
-                                            const l = document.getElementById(`loader-${pdfId}`);
-                                            const b = document.getElementById(`btn-${pdfId}`);
-                                            if(l && b) {
-                                                l.classList.add('hidden');
-                                                b.classList.remove('hidden');
-                                                window.playGlowSound(); 
-                                            }
+                                            let l = document.getElementById('loader-' + pdfId);
+                                            let b = document.getElementById('btn-container-' + pdfId);
+                                            if(l) l.classList.add('hidden');
+                                            if(b) b.classList.remove('hidden');
+                                            window.playGlowSound();
                                         }, 5000);
 
                                     } else if (detectedIntents.includes("tiempo")) {
@@ -1731,7 +1754,7 @@
                 }, 50);
             };
 
-            // GENERACIÓN DE PDF NATIVA CON CÁLCULO DE ENVÍO Y SUBTOTAL
+            // GENERACIÓN DE PDF NATIVA CON BLINDAJE DE ERRORES
             window.checkoutPDF = function(event) {
                 if(window.cart.length === 0) { 
                     const btn = document.getElementById('btn-download-pdf');
@@ -1749,6 +1772,11 @@
                     return; 
                 }
                 
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    console.error("jsPDF module not loaded correctly.");
+                    return;
+                }
+
                 const btn = document.getElementById('btn-download-pdf');
                 let originalText = "";
                 if(btn) {
@@ -1762,8 +1790,7 @@
 
                 setTimeout(() => {
                     try {
-                        const { jsPDF } = window.jspdf;
-                        const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
+                        const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
 
                         const clientNameObj = document.getElementById('client-name');
                         const clientEmailObj = document.getElementById('client-email');
@@ -1795,7 +1822,7 @@
                         doc.text(`Fecha: ${date}`, 200, 31, { align: "right" });
                         doc.text(`Folio: ${folio}`, 200, 36, { align: "right" });
 
-                        doc.setDrawColor(212, 175, 55); // Color Dorado
+                        doc.setDrawColor(212, 175, 55); 
                         doc.setLineWidth(0.5);
                         doc.line(15, 42, 200, 42);
 
@@ -1838,7 +1865,7 @@
                         let granTotal = total + envio;
 
                         let finalY = doc.lastAutoTable.finalY + 15;
-                        doc.setDrawColor(212, 175, 55); // Oro
+                        doc.setDrawColor(212, 175, 55); 
                         doc.setLineWidth(1.0);
                         doc.line(120, finalY - 5, 200, finalY - 5);
 
@@ -1967,6 +1994,16 @@
                     if(clientNameObj) clientNameObj.value = window.userSession.name;
                     if(clientEmailObj) clientEmailObj.value = window.userSession.email;
                 }
+
+                // Cerrar menú al hacer clic fuera
+                document.addEventListener('click', function(event) {
+                    const menu = document.getElementById('dropdown-menu');
+                    const btn = document.getElementById('btn-menu');
+                    if (menu && btn && !menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) {
+                        menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                        menu.classList.remove('translate-y-0', 'opacity-100');
+                    }
+                });
             }
 
             // Asegurar que el DOM esté listo antes de arrancar
