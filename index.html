@@ -81,7 +81,7 @@
             white-space: normal;
         }
 
-        /* ANIMACIÓN DEL LOADER GEOMÉTRICO ADAPTABLE */
+        /* ANIMACIÓN DEL LOADER GEOMÉTRICO INFINITO */
         @keyframes shapeSwap1 {
             0%, 100% { transform: translate(0px, -35%); }
             33.33% { transform: translate(35%, 35%); }
@@ -105,6 +105,11 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
+        .blinking-cursor::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-gold selection:text-black overflow-hidden" id="main-body">
@@ -114,21 +119,8 @@
         <source src="yellow_umbrellas.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- ANIMACIÓN DE ENTRADA CINETOGRÁFICA PRINCIPAL -->
-    <div id="entry-animation" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-auto">
-        <div id="entry-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">M</span>
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">S</span>
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">O</span>
-        </div>
-        <span id="entry-studio" class="opacity-0 transition-opacity duration-1000 font-editorial italic text-3xl sm:text-4xl md:text-5xl text-brand-gold mt-4 glow-gold">Studio</span>
-    </div>
-
     <!-- CAPA 1: MODAL DE COOKIES FLOTANTE -->
-    <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-1000 hidden">
+    <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay transition-opacity duration-700 hidden">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
             <p class="text-brand-muted text-xs font-light leading-relaxed mb-5">
@@ -215,19 +207,6 @@
         </div>
     </div>
 
-    <!-- Animación Cinemática de Transición de Menú -->
-    <div id="category-transition-overlay" class="fixed inset-0 z-[999999] bg-[#030303] flex flex-col items-center justify-center pointer-events-none opacity-0 transition-opacity duration-500">
-        <div id="menu-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">M</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">S</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">O</span>
-        </div>
-        <span id="menu-category-text" class="opacity-0 transition-opacity duration-700 font-editorial italic text-3xl sm:text-5xl md:text-6xl text-brand-gold glow-gold mt-4 text-center px-4"></span>
-    </div>
-
     <!-- Navegación Superior -->
     <nav class="fixed w-full z-40 bg-brand-bg/95 backdrop-blur-xl border-b border-brand-border transition-all duration-500 flex flex-col" id="navbar">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
@@ -254,7 +233,6 @@
                 <a href="#coleccion" onclick="window.filterCatalogWithAnimation('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Proyectos especiales</a>
                 
                 <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
-                    <!-- ARREGLO DEL SCROLL MÓVIL Y CIERRE DE MENÚ -->
                     <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Clientes</a>
                     <a href="#disenador" onclick="window.scrollToSection(event, 'disenador')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">El Diseñador</a>
                 </div>
@@ -266,7 +244,7 @@
             </div>
 
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- BOTÓN DE INICIAR SESIÓN (PUERTA VERDE CON FLECHA EN EL SUELO - SOLO VISIBLE PARA INVITADOS) -->
+                <!-- BOTÓN DE INICIAR SESIÓN (PUERTA VERDE CON FLECHA EN EL SUELO) -->
                 <button id="nav-login-btn" onclick="window.showLoginForm()" class="text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 hidden" aria-label="Iniciar Sesión" title="Iniciar Sesión">
                     <svg class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M8 22V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v18"></path>
@@ -276,7 +254,7 @@
                     </svg>
                 </button>
 
-                <!-- ICONO DEL BOT (BLANCO/DORADO) -->
+                <!-- ICONO DEL BOT (AI DORADO ANIMADO) -->
                 <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2 animate-float" aria-label="Asistente Virtual">
                     <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">AI</span>
                 </button>
@@ -291,12 +269,12 @@
         <div class="w-full bg-brand-surface/80 border-t border-brand-border h-14 flex items-center justify-center px-4">
             <div class="w-full max-w-3xl relative flex items-center">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" class="text-brand-gold absolute left-4 pointer-events-none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="search" id="live-search" placeholder="Buscar pieza, modelo o SKU..." class="w-full bg-transparent border-none text-[11px] tracking-widest text-white placeholder-brand-muted focus:outline-none pl-12 py-2 uppercase focus:border-b focus:border-brand-gold transition-colors">
+                <input type="search" id="live-search" placeholder="Buscar pieza, modelo o SKU..." class="w-full bg-transparent border-none text-[11px] tracking-widest text-white placeholder-brand-muted focus:outline-none pl-12 py-2 uppercase focus:border-b focus:brand-gold transition-colors">
             </div>
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE CON HISTORIAL (GLOW BLANCO FOTOGRÁFICO) -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE CON GLOW BLANCO INTENSO -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-white transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)]">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black relative">
             <div class="flex items-center gap-3">
@@ -306,7 +284,7 @@
                 <h2 class="font-editorial text-xl tracking-wider text-brand-gold glow-gold">DAMASO AI</h2>
             </div>
             <div class="flex items-center gap-4">
-                <!-- LIBRITO DE HISTORIAL (SE OCULTARÁ SI NO HAY SESIÓN) -->
+                <!-- LIBRITO DE HISTORIAL -->
                 <button id="bot-history-btn" onclick="window.toggleChatHistory()" class="text-brand-gold hover:text-white transition-colors hidden" title="Historial de Conversaciones">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                 </button>
@@ -317,41 +295,36 @@
             </div>
         </div>
         
-        <!-- CONTENEDOR PRINCIPAL DEL CHAT -->
         <div class="flex-1 overflow-y-auto p-6 space-y-4 chat-scroll bg-[#0a0a0a]" id="chat-messages">
-            <!-- Los mensajes se renderizan por JS -->
+            <!-- Mensajes inyectados vía JS -->
         </div>
 
-        <!-- LISTA DE HISTORIAL (OCULTA POR DEFECTO) -->
-        <div id="chat-history-view" class="absolute inset-0 top-[89px] bg-[#0a0a0a] z-50 flex-col hidden">
+        <div id="chat-history-view" class="absolute left-0 right-0 top-[89px] bottom-[72px] bg-[#0a0a0a] z-50 flex-col hidden">
             <div class="p-4 border-b border-brand-border bg-black flex justify-center">
                 <button onclick="window.createNewChat()" class="w-full py-3 bg-transparent border border-brand-gold text-brand-gold text-[10px] uppercase font-bold tracking-widest hover:bg-brand-gold hover:text-black transition-colors shadow-[0_0_10px_rgba(212,175,55,0.2)]">+ Nuevo Chat</button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list">
-                <!-- Se llena por JS -->
-            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list"></div>
         </div>
 
-        <!-- BOTÓN DE ENVIAR (CORREGIDO Y FORZADO A RESPONDER INMEDIATAMENTE) -->
-        <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2 relative z-10">
+        <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2 relative z-[100] pointer-events-auto">
             <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-transparent border border-brand-border rounded-full px-4 py-2 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors" onkeypress="if(event.key === 'Enter') window.sendChatMessage()">
-            <button type="button" onclick="window.sendChatMessage()" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)] z-50 relative cursor-pointer pointer-events-auto">
+            <button type="button" onclick="window.sendChatMessage()" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)] z-50 relative pointer-events-auto">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
         </div>
     </div>
     <div id="chat-overlay" onclick="window.toggleChatbot()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- MODAL DE ESPECIFICACIONES (SCROLL MÓVIL REPARADO AL 100%) -->
+    <!-- MODAL DE ESPECIFICACIONES (SCROLL MÓVIL REPARADO) -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-0 sm:p-8">
         <button onclick="window.closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[100] bg-brand-gold text-black p-3 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)] hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
 
+        <!-- Habilitado overflow-y-auto para deslizar libremente en móviles -->
         <div class="bg-[#050505] border border-brand-gold w-full max-w-6xl h-full sm:h-auto max-h-[100dvh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-none sm:rounded-lg overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
                 <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
-                    <!-- Marco y borde eliminados por completo -->
                     <img id="modal-img-element" src="" class="w-full max-h-[50vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
                 </a>
             </div>
@@ -390,7 +363,7 @@
         </div>
     </div>
 
-    <!-- Carrito Lateral (GLOW BLANCO) -->
+    <!-- Carrito Lateral (Glow Blanco Intenso) -->
     <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-white transform translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)]">
         <div class="p-8 border-b border-brand-gold flex justify-between items-center">
             <h2 class="font-editorial text-2xl tracking-wider text-brand-gold glow-gold">Mi Selección</h2>
@@ -657,20 +630,16 @@
                 } catch(e) {}
             };
 
-            // LÓGICA DE SCROLL PARA MENÚ MÓVIL (CORREGIDA)
+            // LÓGICA DE SCROLL PARA MENÚ MÓVIL
             window.scrollToSection = function(e, id) {
-                if(e) e.preventDefault();
-                const menu = document.getElementById('dropdown-menu');
-                if(menu) {
-                    menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-                    menu.classList.remove('translate-y-0', 'opacity-100');
+                e.preventDefault();
+                window.toggleCategories(null);
+                const el = document.getElementById(id);
+                if(el) {
+                    setTimeout(() => {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
                 }
-                setTimeout(() => {
-                    const el = document.getElementById(id);
-                    if(el) {
-                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }, 100);
             };
 
             // LÓGICA DE WA FLOTANTE
@@ -691,7 +660,7 @@
                 }
             };
 
-            // LÓGICA DE COOKIES, MODALES Y SESIÓN
+            // LÓGICA DE COOKIES Y ANIMACIÓN
             window.toggleCookieDetails = function() {
                 const details = document.getElementById('cookie-details');
                 if (details) details.classList.toggle('hidden');
@@ -733,7 +702,8 @@
                     const loginPrompt = document.getElementById('login-prompt-modal');
                     if (loginPrompt) {
                         loginPrompt.classList.remove('hidden');
-                        setTimeout(() => loginPrompt.classList.remove('opacity-0', 'pointer-events-none'), 50);
+                        void loginPrompt.offsetWidth; // Force reflow para transición suave
+                        loginPrompt.classList.remove('opacity-0', 'pointer-events-none');
                     }
                 }
             };
@@ -744,7 +714,8 @@
                 if (loginPrompt) loginPrompt.classList.add('opacity-0', 'pointer-events-none');
                 if (loginForm) {
                     loginForm.classList.remove('hidden');
-                    setTimeout(() => loginForm.classList.remove('opacity-0', 'pointer-events-none'), 500);
+                    void loginForm.offsetWidth;
+                    loginForm.classList.remove('opacity-0', 'pointer-events-none');
                 }
             };
 
@@ -758,24 +729,16 @@
                 localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
                 
                 const loginForm = document.getElementById('login-form-modal');
+                const loadingModal = document.getElementById('login-loading-modal');
                 if (loginForm) loginForm.classList.add('opacity-0', 'pointer-events-none');
                 
-                // Actualizar interfaz para reflejar estado logueado
-                const navLoginBtn = document.getElementById('nav-login-btn');
-                const botHistoryBtn = document.getElementById('bot-history-btn');
-                if (navLoginBtn) navLoginBtn.classList.add('hidden');
-                if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
-
-                window.showWelcomeAnimation(window.userSession.name);
-            };
-
-            window.showWelcomeAnimation = function(userName) {
-                const loadingModal = document.getElementById('login-loading-modal');
                 if (loadingModal) {
                     loadingModal.classList.remove('hidden');
-                    setTimeout(() => loadingModal.classList.remove('opacity-0', 'pointer-events-none'), 50);
+                    void loadingModal.offsetWidth;
+                    loadingModal.classList.remove('opacity-0', 'pointer-events-none');
                 }
 
+                // Esperar 10 segundos exactos (carga de imágenes y pre-renderizado táctico)
                 setTimeout(() => {
                     if (loadingModal) loadingModal.classList.add('opacity-0', 'pointer-events-none');
                     
@@ -785,7 +748,7 @@
                     
                     if (welcomeOverlay && welcomeLettersContainer) {
                         welcomeLettersContainer.innerHTML = '';
-                        const welcomeText = ("BIENVENIDO " + userName).toUpperCase();
+                        const welcomeText = ("BIENVENIDO " + window.userSession.name).toUpperCase();
                         const words = welcomeText.split(' ');
                         
                         words.forEach((word) => {
@@ -798,7 +761,8 @@
                         });
 
                         welcomeOverlay.classList.remove('hidden');
-                        setTimeout(() => welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none'), 50);
+                        void welcomeOverlay.offsetWidth;
+                        welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none');
 
                         setTimeout(() => {
                             const letters = document.querySelectorAll('.welcome-letter');
@@ -845,22 +809,14 @@
                 if(logoutBtn && window.userSession) {
                     logoutBtn.classList.remove('hidden');
                 }
+                
+                // Actualizar interfaz navbar
+                const navLoginBtn = document.getElementById('nav-login-btn');
+                const botHistoryBtn = document.getElementById('bot-history-btn');
+                if (navLoginBtn) navLoginBtn.classList.add('hidden');
+                if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
 
                 setTimeout(() => { overlays.forEach(o => o.classList.add('hidden')); }, 1000);
-
-                // REVEAL ANIMATION OBSERVER
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('active');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
-                
-                document.querySelectorAll('.reveal').forEach((el) => {
-                    observer.observe(el);
-                });
             };
 
             window.confirmLogout = function() {
@@ -897,20 +853,20 @@
                         
                         setTimeout(() => {
                             if (entryOverlay) {
-                                // ANIMACIÓN CORTINA ARRIBA
+                                // ANIMACIÓN CORTINA ARRIBA CORREGIDA (Se desliza hacia arriba)
                                 entryOverlay.style.transform = 'translateY(-100%)';
                             }
                             setTimeout(() => {
                                 if (entryOverlay) entryOverlay.style.display = 'none';
                                 
+                                // SI HAY SESION, SALTAR COOKIES E IR A BIENVENIDA AUTO
                                 if (window.userSession) {
                                     window.showWelcomeAnimation(window.userSession.name);
                                 } else {
                                     if (cookieModal) {
                                         cookieModal.classList.remove('hidden');
-                                        setTimeout(() => {
-                                            cookieModal.classList.remove('opacity-0', 'pointer-events-none');
-                                        }, 50);
+                                        void cookieModal.offsetWidth; // Smooth fade in
+                                        cookieModal.classList.remove('opacity-0', 'pointer-events-none');
                                     }
                                 }
                             }, 1500);
@@ -920,7 +876,7 @@
                 }, 100);
             };
 
-            // LÓGICA DE CARGA INFINITA CON ARCOÍRIS
+            // LÓGICA DE CARGA INFINITA (SIN REVEAL CLASS PARA EVITAR PANTALLAS NEGRAS EN SAFARI)
             window.imageLoaded = function(id) {
                 const img = document.getElementById('img-' + id);
                 const loader = document.getElementById('loader-' + id);
@@ -949,13 +905,13 @@
                         `;
                         catProducts.forEach(p => {
                             html += `
-                                <div class="group reveal">
-                                    <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500">
+                                <div class="group">
+                                    <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
                                         
                                         <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA CON ARCOÍRIS -->
                                         <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
                                             
-                                            <!-- TEXTO ARCOÍRIS (Forma curvada) -->
+                                            <!-- TEXTO ARCOÍRIS (Forma curvada, colores oro y blanco metálico) -->
                                             <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
                                                 <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
                                                 <text class="text-[14px] font-editorial fill-brand-gold tracking-[0.2em] uppercase" text-anchor="middle">
@@ -978,8 +934,8 @@
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
-                                        <!-- IMAGEN SIN BORDES, FORZADA A CARGAR (SIN LAZY LOAD) PARA EVITAR BUG DE SAFARI -->
-                                        <img src="${p.img}" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. ONERROR REINTENTA INFINITAMENTE CADA 3 SEGUNDOS -->
+                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
                                         
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
@@ -1000,17 +956,7 @@
                 }
                 grid.innerHTML = html;
 
-                // FORZAR COMPROBACIÓN DE IMÁGENES EN CACHÉ (SOLUCIÓN SAFARI)
-                setTimeout(() => {
-                    products.forEach(p => {
-                        const img = document.getElementById('img-' + p.id);
-                        if (img && img.complete && img.naturalWidth > 0) {
-                            window.imageLoaded(p.id);
-                        }
-                    });
-                }, 500);
-
-                // REINICIAR REVEAL
+                // REINICIAR REVEAL OBSERVER SOLO PARA SECCIONES PRINCIPALES
                 setTimeout(() => {
                     const observer = new IntersectionObserver((entries) => {
                         entries.forEach(entry => {
@@ -1214,7 +1160,7 @@
             };
 
             // =========================================================================
-            // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP - >4 MILLONES DE PARÁMETROS)
+            // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP)
             // =========================================================================
             
             const getUserFirstName = () => {
@@ -1849,7 +1795,7 @@
                         doc.text(`Fecha: ${date}`, 200, 31, { align: "right" });
                         doc.text(`Folio: ${folio}`, 200, 36, { align: "right" });
 
-                        doc.setDrawColor(212, 175, 55); 
+                        doc.setDrawColor(212, 175, 55); // Color Dorado
                         doc.setLineWidth(0.5);
                         doc.line(15, 42, 200, 42);
 
@@ -1892,7 +1838,7 @@
                         let granTotal = total + envio;
 
                         let finalY = doc.lastAutoTable.finalY + 15;
-                        doc.setDrawColor(212, 175, 55); 
+                        doc.setDrawColor(212, 175, 55); // Oro
                         doc.setLineWidth(1.0);
                         doc.line(120, finalY - 5, 200, finalY - 5);
 
