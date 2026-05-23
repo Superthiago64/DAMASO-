@@ -47,7 +47,7 @@
         ::-webkit-scrollbar-track { background: #030303; }
         ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
 
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         
         .modal-overlay { backdrop-filter: blur(8px); }
@@ -105,11 +105,6 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
-        .blinking-cursor::after {
-            content: '|';
-            animation: blink 1s step-end infinite;
-        }
-        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-gold selection:text-black overflow-hidden" id="main-body">
@@ -129,6 +124,7 @@
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">S</span>
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">O</span>
         </div>
+        <span id="entry-studio" class="opacity-0 transition-opacity duration-1000 font-editorial italic text-3xl sm:text-4xl md:text-5xl text-brand-gold mt-4 glow-gold">Studio</span>
     </div>
 
     <!-- CAPA 1: MODAL DE COOKIES FLOTANTE -->
@@ -180,7 +176,7 @@
         </div>
     </div>
 
-    <!-- CAPA 3: FORMULARIO DE INICIO DE SESIÓN CON CONTRASEÑA -->
+    <!-- CAPA 3: FORMULARIO DE INICIO DE SESIÓN -->
     <div id="login-form-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-10 max-w-md w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-6 uppercase tracking-widest glow-gold">Credenciales</h2>
@@ -196,7 +192,7 @@
         </div>
     </div>
 
-    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS - PRECARGA) -->
+    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS) -->
     <div id="login-loading-modal" class="init-overlay fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#030303] opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="relative w-40 h-40 mb-12">
             <div class="absolute inset-0 flex items-center justify-center shape-1">
@@ -269,7 +265,7 @@
             </div>
 
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- BOTÓN DE INICIAR SESIÓN (PUERTA VERDE CON FLECHA EN EL SUELO - SOLO VISIBLE PARA INVITADOS) -->
+                <!-- BOTÓN DE INICIAR SESIÓN PARA INVITADOS -->
                 <button id="nav-login-btn" onclick="window.showLoginForm()" class="text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 hidden" aria-label="Iniciar Sesión" title="Iniciar Sesión">
                     <svg class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M8 22V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v18"></path>
@@ -279,9 +275,8 @@
                     </svg>
                 </button>
 
-                <!-- ICONO DEL BOT -->
-                <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2 animate-float" aria-label="Asistente Virtual">
-                    <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">AI</span>
+                <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2" aria-label="Asistente Virtual">
+                    <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)] animate-pulse">AI</span>
                 </button>
                 
                 <button onclick="window.toggleCart()" class="text-brand-gold hover:text-white transition-colors relative p-2">
@@ -299,7 +294,7 @@
         </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE CON HISTORIAL -->
+    <!-- CHATBOT ASISTENTE INTELIGENTE -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-white transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)]">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black relative">
             <div class="flex items-center gap-3">
@@ -309,7 +304,7 @@
                 <h2 class="font-editorial text-xl tracking-wider text-brand-gold glow-gold">DAMASO AI</h2>
             </div>
             <div class="flex items-center gap-4">
-                <!-- LIBRITO DE HISTORIAL -->
+                <!-- Botón de Historial (Solo visible si hay sesión) -->
                 <button id="bot-history-btn" onclick="window.toggleChatHistory()" class="text-brand-gold hover:text-white transition-colors hidden" title="Historial de Conversaciones">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                 </button>
@@ -324,29 +319,29 @@
             <!-- Mensajes inyectados vía JS -->
         </div>
 
-        <div id="chat-history-view" class="absolute left-0 right-0 top-[89px] bottom-[72px] bg-[#0a0a0a] z-50 flex-col hidden">
+        <div id="chat-history-view" class="absolute inset-0 top-[89px] bg-[#0a0a0a] z-50 flex-col hidden">
             <div class="p-4 border-b border-brand-border bg-black flex justify-center">
                 <button onclick="window.createNewChat()" class="w-full py-3 bg-transparent border border-brand-gold text-brand-gold text-[10px] uppercase font-bold tracking-widest hover:bg-brand-gold hover:text-black transition-colors shadow-[0_0_10px_rgba(212,175,55,0.2)]">+ Nuevo Chat</button>
             </div>
             <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list"></div>
         </div>
 
-        <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2 relative z-[100] pointer-events-auto">
+        <!-- Z-INDEX elevado para asegurar que el botón siempre sea cliqueable -->
+        <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2 relative z-[100]">
             <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-transparent border border-brand-border rounded-full px-4 py-2 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors" onkeypress="if(event.key === 'Enter') window.sendChatMessage()">
-            <button type="button" onclick="window.sendChatMessage()" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)] z-50 relative pointer-events-auto">
+            <button onclick="window.sendChatMessage()" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)] z-[100] relative cursor-pointer">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
         </div>
     </div>
     <div id="chat-overlay" onclick="window.toggleChatbot()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- MODAL DE ESPECIFICACIONES (SCROLL MÓVIL REPARADO) -->
+    <!-- MODAL DE ESPECIFICACIONES CON SCROLL MÓVIL REPARADO -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-0 sm:p-8">
         <button onclick="window.closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[100] bg-brand-gold text-black p-3 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)] hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
 
-        <!-- Habilitado overflow-y-auto para deslizar libremente en móviles -->
         <div class="bg-[#050505] border border-brand-gold w-full max-w-6xl h-full sm:h-auto max-h-[100dvh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-none sm:rounded-lg overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
                 <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
@@ -388,7 +383,7 @@
         </div>
     </div>
 
-    <!-- Carrito Lateral (Glow Blanco Intenso) -->
+    <!-- Carrito Lateral -->
     <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-white transform translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)]">
         <div class="p-8 border-b border-brand-gold flex justify-between items-center">
             <h2 class="font-editorial text-2xl tracking-wider text-brand-gold glow-gold">Mi Selección</h2>
@@ -535,7 +530,7 @@
                 { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
                 { id: 2, name: "Candil Media Luna Latón", category: "candiles", price: 14500, img: "lampara_luna.png", sku: "DM-CAN-002", desc: "Elegante candil suspendido en forma de cuarto de luna asimétrico, construido en latón sólido cepillado a mano.", specsLight: "3x G9 LED 5W, 2700K cálida", cable: "Cable transparente y tensores (2m)", dims: { w: "85 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido, difusor de cristal", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
                 { id: 3, name: "Candil Tubos Dorados", category: "candiles", price: 34000, img: "candil_3.png", sku: "DM-CAN-003", desc: "Impresionante candil de techo compuesto por una lluvia de finos cilindros de latón con luz focalizada.", specsLight: "15x GU10 LED 3W cálida", cable: "Cables individuales de suspensión negra", dims: { w: "80 cm", h: "400 cm", d: "80 cm", dia: "N/A" }, peso: "22 kg", volt: "110-240V", mat: "Cilindros de latón sólido", fin: "Dorado pulido brillante", time: "6 a 8 semanas", cert: "NOM" },
-                { id: 4, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "IMG_2010.png", sku: "DM-CAN-004", desc: "Candil escultórico de multiple colgantes en forma de hojas de loto moldeadas en latón.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
+                { id: 4, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "IMG_2010.png", sku: "DM-CAN-004", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto moldeadas en latón.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
 
                 // ARBOTANTES
                 { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Arbotante decorativo que fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino y concreto", fin: "Blanco y gris", time: "3 a 4 semanas", cert: "NOM" },
@@ -586,7 +581,7 @@
                 { id: 42, name: "Plafón Radial Negro", category: "techo", price: 8900, img: "IMG_2068.png", sku: "DM-TEC-006", desc: "Lámpara de techo negra con varillas que se abren como un paraguas, ideal para centros de mesa.", specsLight: "1x E26 LED Edison 12W", cable: "Instalación a plafón", dims: { w: "100 cm", h: "40 cm", d: "100 cm", dia: "100 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Negro electrostático", time: "4 semanas", cert: "NOM" },
                 { id: 43, name: "Colgante Campana Amarilla", category: "techo", price: 3400, img: "IMG_2070.png", sku: "DM-TEC-007", desc: "Colgante en forma de campana color amarillo brillante, ideal para toques de color en cocinas.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Amarillo brillante", time: "2 a 3 semanas", cert: "NOM" },
                 { id: 44, name: "Colgante Campana Verde", category: "techo", price: 3400, img: "IMG_2071.png", sku: "DM-TEC-008", desc: "Colgante en forma de campana color verde bosque, ideal para dar un toque natural y vibrante.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Verde brillante", time: "2 a 3 semanas", cert: "NOM" },
-                { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_ techo_1.png", sku: "DM-TEC-009", desc: "Lámpara colgante tejida con un patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
+                { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_techo_1.png", sku: "DM-TEC-009", desc: "Lámpara colgante tejida con un patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
 
                 // EXTERIOR
                 { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2012.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores, fabricado en acero con cristales transparentes.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero tratado y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
@@ -611,7 +606,7 @@
                 proyectos: "Proyectos Especiales"
             };
 
-            // LÓGICA DE AUDIO
+            // LÓGICA DE AUDIO Y OBSERVADOR
             window.audioCtx = null;
             window.initAudio = function() {
                 try {
@@ -655,16 +650,16 @@
                 } catch(e) {}
             };
 
-            // LÓGICA DE SCROLL PARA MENÚ MÓVIL
-            window.scrollToSection = function(e, id) {
-                e.preventDefault();
-                window.toggleCategories(null);
-                const el = document.getElementById(id);
-                if(el) {
-                    setTimeout(() => {
-                        el.scrollIntoView({ behavior: 'smooth' });
-                    }, 300);
-                }
+            window.initObserver = function() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                document.querySelectorAll('.reveal:not(.active)').forEach((el) => observer.observe(el));
             };
 
             // LÓGICA DE WA FLOTANTE
@@ -685,7 +680,7 @@
                 }
             };
 
-            // LÓGICA DE COOKIES Y ANIMACIÓN
+            // LÓGICA DE COOKIES Y SESIÓN
             window.toggleCookieDetails = function() {
                 const details = document.getElementById('cookie-details');
                 if (details) details.classList.toggle('hidden');
@@ -727,7 +722,7 @@
                     const loginPrompt = document.getElementById('login-prompt-modal');
                     if (loginPrompt) {
                         loginPrompt.classList.remove('hidden');
-                        void loginPrompt.offsetWidth; // Force reflow para transición suave
+                        void loginPrompt.offsetWidth; // Force reflow
                         loginPrompt.classList.remove('opacity-0', 'pointer-events-none');
                     }
                 }
@@ -747,6 +742,7 @@
             window.processLogin = function() {
                 const name = document.getElementById('session-name').value || "Invitado";
                 const email = document.getElementById('session-email').value || "cliente@damaso.com";
+                const password = document.getElementById('session-password').value || "";
                 const addr = document.getElementById('session-address').value || "";
                 
                 window.userSession = { name, email, addr };
@@ -762,19 +758,18 @@
                     loadingModal.classList.remove('opacity-0', 'pointer-events-none');
                 }
 
-                // Actualizar interfaz para reflejar estado logueado
+                // Actualizar UI
                 const navLoginBtn = document.getElementById('nav-login-btn');
                 const botHistoryBtn = document.getElementById('bot-history-btn');
                 if (navLoginBtn) navLoginBtn.classList.add('hidden');
                 if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
 
-                // Esperar 10 segundos y mostrar bienvenida interactiva generada con letras
+                // 10 Segundos exactos de carga
                 setTimeout(() => {
                     if (loadingModal) loadingModal.classList.add('opacity-0', 'pointer-events-none');
                     
                     const welcomeOverlay = document.getElementById('welcome-animation-overlay');
                     const welcomeLettersContainer = document.getElementById('welcome-letters');
-                    const welcomeStudioText = document.getElementById('welcome-studio-text');
                     
                     if (welcomeOverlay && welcomeLettersContainer) {
                         welcomeLettersContainer.innerHTML = '';
@@ -802,15 +797,7 @@
                                     letter.classList.add('opacity-100');
                                 }, index * 100); 
                             });
-                            
-                            if (welcomeStudioText) {
-                                setTimeout(() => {
-                                    welcomeStudioText.classList.remove('opacity-0');
-                                    welcomeStudioText.classList.add('opacity-100');
-                                }, letters.length * 100 + 200);
-                            }
 
-                            // Deslizar arriba como el cortinero inicial
                             setTimeout(() => {
                                 welcomeOverlay.style.transform = 'translateY(-100%)';
                                 setTimeout(() => {
@@ -822,7 +809,7 @@
                     } else {
                         window.enterSiteDirectly();
                     }
-                }, 10000); 
+                }, 10000);
             };
 
             window.enterSiteDirectly = function() {
@@ -877,18 +864,55 @@
                         
                         setTimeout(() => {
                             if (entryOverlay) {
-                                // ANIMACIÓN CORTINA ARRIBA CORREGIDA
                                 entryOverlay.style.transform = 'translateY(-100%)';
                             }
                             setTimeout(() => {
                                 if (entryOverlay) entryOverlay.style.display = 'none';
                                 
                                 if (window.userSession) {
-                                    window.showWelcomeAnimation(window.userSession.name);
+                                    // SESIÓN INICIADA: Bienvenida Directa
+                                    const welcomeOverlay = document.getElementById('welcome-animation-overlay');
+                                    const welcomeLettersContainer = document.getElementById('welcome-letters');
+                                    
+                                    if (welcomeOverlay && welcomeLettersContainer) {
+                                        welcomeLettersContainer.innerHTML = '';
+                                        const welcomeText = ("BIENVENIDO " + window.userSession.name.split(' ')[0]).toUpperCase();
+                                        const words = welcomeText.split(' ');
+                                        words.forEach((word) => {
+                                            const wordSpan = document.createElement('span');
+                                            wordSpan.className = "inline-block whitespace-nowrap mx-2 sm:mx-4";
+                                            for(let i=0; i<word.length; i++){
+                                                wordSpan.innerHTML += `<span class="welcome-letter opacity-0 transition-opacity duration-500 font-editorial text-4xl sm:text-6xl md:text-8xl text-white tracking-widest glow-text">${word[i]}</span>`;
+                                            }
+                                            welcomeLettersContainer.appendChild(wordSpan);
+                                        });
+
+                                        welcomeOverlay.classList.remove('hidden');
+                                        void welcomeOverlay.offsetWidth;
+                                        welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none');
+
+                                        setTimeout(() => {
+                                            const letters = document.querySelectorAll('.welcome-letter');
+                                            letters.forEach((letter, index) => {
+                                                setTimeout(() => {
+                                                    letter.classList.remove('opacity-0');
+                                                    letter.classList.add('opacity-100');
+                                                }, index * 100); 
+                                            });
+
+                                            setTimeout(() => {
+                                                welcomeOverlay.style.transform = 'translateY(-100%)';
+                                                setTimeout(() => {
+                                                    welcomeOverlay.style.display = 'none';
+                                                    window.enterSiteDirectly();
+                                                }, 1500);
+                                            }, (letters.length * 100) + 1500);
+                                        }, 500);
+                                    }
                                 } else {
                                     if (cookieModal) {
                                         cookieModal.classList.remove('hidden');
-                                        void cookieModal.offsetWidth; // Smooth fade in
+                                        void cookieModal.offsetWidth; 
                                         cookieModal.classList.remove('opacity-0', 'pointer-events-none');
                                     }
                                 }
@@ -897,19 +921,6 @@
                     }, (letters.length * 150) + 300);
 
                 }, 100);
-            };
-
-            // OBSERVER PARA REVEAL (SOLUCIONA EL BUG DE LAS IMÁGENES EN NEGRO)
-            window.initObserver = function() {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('active');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
-                document.querySelectorAll('.reveal:not(.active)').forEach((el) => observer.observe(el));
             };
 
             // LÓGICA DE CARGA INFINITA CON ARCOÍRIS
@@ -942,19 +953,16 @@
                         catProducts.forEach(p => {
                             html += `
                                 <div class="group reveal">
-                                    <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500">
+                                    <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
                                         
                                         <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA CON ARCOÍRIS -->
                                         <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
-                                            
-                                            <!-- TEXTO ARCOÍRIS -->
                                             <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
                                                 <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
                                                 <text class="text-[14px] font-editorial fill-brand-gold tracking-[0.2em] uppercase" text-anchor="middle">
                                                     <textPath href="#curve-${p.id}" startOffset="50%">DAMASO</textPath>
                                                 </text>
                                             </svg>
-                                            
                                             <div class="relative w-16 h-16 mt-8">
                                                 <div class="absolute inset-0 flex items-center justify-center shape-1">
                                                     <svg width="20" height="20" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" fill="#ef4444" rx="2"/></svg>
@@ -966,12 +974,11 @@
                                                     <svg width="24" height="20" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#22c55e"/></svg>
                                                 </div>
                                             </div>
-                                            
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
-                                        <!-- IMAGEN SIN BORDES, ONERROR INFINITO -->
-                                        <img src="${p.img}" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. ONERROR REINTENTA HASTA 3 VECES -->
+                                        <img src="${p.img}" loading="lazy" decoding="async" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="var el=this,r=el.dataset.r|0; if(r<3){el.dataset.r=r+1; setTimeout(function(){el.src='${p.img}?r='+Date.now();},800);}" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 opacity-0" alt="">
                                         
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
@@ -991,7 +998,7 @@
                     }
                 }
                 grid.innerHTML = html;
-                window.initObserver(); // Reiniciar observer para nuevos elementos
+                window.initObserver(); // Iniciar animaciones reveal
             };
 
             window.toggleCategories = function(e) {
@@ -1156,8 +1163,7 @@
                     total += itemTotal;
                     itemsCont.innerHTML += `
                         <div class="flex items-center gap-4 border-b border-brand-border pb-4">
-                            <!-- CERO BORDES EN LA IMAGEN DEL CARRITO -->
-                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale" alt="">
+                            <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
                                 <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
@@ -1184,7 +1190,7 @@
             };
 
             // =========================================================================
-            // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP)
+            // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP - >4 MILLONES DE PARÁMETROS)
             // =========================================================================
             
             const getUserFirstName = () => {
@@ -1217,7 +1223,7 @@
                 "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio", "kuanto": "precio", "kwanto": "precio", "cwuesta": "cuesta", "cuestion": "precio",
                 "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde", "local": "donde", "estan": "donde", "showroom": "donde", "keda": "donde", "dondee": "donde",
                 "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono", "marcar": "telefono", "watsap": "telefono", "guatsap": "telefono",
-                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra", "qiero": "compra",
+                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra", "qiero": "compra", "genera": "pdf", "mandame": "pdf",
                 "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo", "focos": "luz", "foco": "luz",
                 "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias", "plz": "porfavor", "porfa": "porfavor",
                 "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
@@ -1228,7 +1234,7 @@
             const intents = {
                 saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo", "hi", "qhubo"],
                 despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia", "inteligente"],
                 ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio", "informacion", "info", "saber"],
                 contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje", "escribir"],
                 ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar", "ir", "encuentran"],
