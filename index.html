@@ -600,7 +600,7 @@
                 { id: 49, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-PRO-002", desc: "Luminaria de muro asombrosa, compuesta por una cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
                 { id: 50, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-003", desc: "Lámpara de piso de perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
                 { id: 51, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.PNG", sku: "DM-PRO-004", desc: "Sistema de exhibición de vinos a la medida con montantes de latón e iluminación LED integrada para destacar las botellas.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
-                { id: 52, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.jpg", sku: "DM-PRO-005", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" }
+                { id: 52, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.png", sku: "DM-PRO-005", desc: "Luminaria monumental en forma de esfera gigante tallada en un bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" }
             ];
 
             window.catMap = {
@@ -610,8 +610,24 @@
                 mesa: "Lámparas de Mesa",
                 pie: "Lámparas de Pie",
                 techo: "Lámparas de Techo",
-                exterior: "Lámparas de Exterior",
+                exterior: "Lámparas Exterior",
                 proyectos: "Proyectos Especiales"
+            };
+
+            // INICIALIZACIÓN DE REVEALS EN EL SCROLL
+            window.initReveal = function() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                
+                document.querySelectorAll('.reveal').forEach((el) => {
+                    observer.observe(el);
+                });
             };
 
             window.audioCtx = null;
@@ -619,7 +635,7 @@
                 try {
                     if (!window.audioCtx) { window.audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
                     if(window.audioCtx.state === 'suspended') window.audioCtx.resume();
-                } catch(e) { console.warn("Audio blocked", e); }
+                } catch(e) {}
             };
 
             window.playGlowSound = function() {
@@ -657,7 +673,6 @@
                 } catch(e) {}
             };
 
-            // LÓGICA DE SCROLL PARA MENÚ MÓVIL
             window.scrollToSection = function(e, id) {
                 e.preventDefault();
                 window.toggleCategories(null);
@@ -665,14 +680,13 @@
                 if(el) {
                     setTimeout(() => {
                         el.scrollIntoView({ behavior: 'smooth' });
-                    }, 300);
+                    }, 100);
                 }
             };
 
             window.updateWhatsAppVisibility = function() {
                 const waBtn = document.getElementById('whatsapp-float');
                 if(!waBtn) return;
-                
                 const cartClosed = document.getElementById('cart-drawer').classList.contains('translate-x-full');
                 const botClosed = document.getElementById('chatbot-drawer').classList.contains('hidden');
                 const specModalClosed = document.getElementById('spec-modal').classList.contains('opacity-0');
@@ -727,7 +741,8 @@
                     const loginPrompt = document.getElementById('login-prompt-modal');
                     if (loginPrompt) {
                         loginPrompt.classList.remove('hidden');
-                        setTimeout(() => loginPrompt.classList.remove('opacity-0', 'pointer-events-none'), 50);
+                        void loginPrompt.offsetWidth; 
+                        loginPrompt.classList.remove('opacity-0', 'pointer-events-none');
                     }
                 }
             };
@@ -738,18 +753,17 @@
                 if (loginPrompt) loginPrompt.classList.add('opacity-0', 'pointer-events-none');
                 if (loginForm) {
                     loginForm.classList.remove('hidden');
-                    setTimeout(() => loginForm.classList.remove('opacity-0', 'pointer-events-none'), 500);
+                    void loginForm.offsetWidth;
+                    loginForm.classList.remove('opacity-0', 'pointer-events-none');
                 }
             };
 
             window.processLogin = function() {
                 const name = document.getElementById('session-name').value || "Invitado";
                 const email = document.getElementById('session-email').value || "cliente@damaso.com";
-                const password = document.getElementById('session-password').value || "";
                 const addr = document.getElementById('session-address').value || "";
-                const gender = document.getElementById('session-gender').value || "O";
                 
-                window.userSession = { name, email, addr, gender };
+                window.userSession = { name, email, addr };
                 localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
                 
                 const loginForm = document.getElementById('login-form-modal');
@@ -758,20 +772,9 @@
                 
                 if (loadingModal) {
                     loadingModal.classList.remove('hidden');
-                    setTimeout(() => loadingModal.classList.remove('opacity-0', 'pointer-events-none'), 500);
+                    void loadingModal.offsetWidth;
+                    loadingModal.classList.remove('opacity-0', 'pointer-events-none');
                 }
-
-                // Autocompletado del PDF instántaneo
-                const clientNameObj = document.getElementById('client-name');
-                const clientEmailObj = document.getElementById('client-email');
-                if(clientNameObj) clientNameObj.value = window.userSession.name;
-                if(clientEmailObj) clientEmailObj.value = window.userSession.email;
-
-                // Activando Botón Librito
-                const navLoginBtn = document.getElementById('nav-login-btn');
-                const botHistoryBtn = document.getElementById('bot-history-btn');
-                if (navLoginBtn) navLoginBtn.classList.add('hidden');
-                if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
 
                 setTimeout(() => {
                     if (loadingModal) loadingModal.classList.add('opacity-0', 'pointer-events-none');
@@ -781,10 +784,7 @@
                     
                     if (welcomeOverlay && welcomeLettersContainer) {
                         welcomeLettersContainer.innerHTML = '';
-                        let prefix = "BIENVENIDO ";
-                        if (window.userSession.gender === "M") prefix = "BIENVENIDA ";
-                        
-                        const welcomeText = (prefix + window.userSession.name).toUpperCase();
+                        const welcomeText = ("BIENVENIDO " + window.userSession.name).toUpperCase();
                         const words = welcomeText.split(' ');
                         
                         words.forEach((word) => {
@@ -797,7 +797,8 @@
                         });
 
                         welcomeOverlay.classList.remove('hidden');
-                        setTimeout(() => welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none'), 50);
+                        void welcomeOverlay.offsetWidth;
+                        welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none');
 
                         setTimeout(() => {
                             const letters = document.querySelectorAll('.welcome-letter');
@@ -819,7 +820,7 @@
                     } else {
                         window.enterSiteDirectly();
                     }
-                }, 10000); // 10 Segundos Tácticos para Precarga
+                }, 5000); 
             };
 
             window.enterSiteDirectly = function() {
@@ -837,12 +838,18 @@
                     logoutBtn.classList.remove('hidden');
                 }
 
-                // Disparar las animaciones Reveal forzosamente si Safari bloqueó el scroll
-                document.querySelectorAll('#catalog-grid .reveal, .reveal').forEach(el => {
-                    el.classList.add('active');
-                });
+                const navLoginBtn = document.getElementById('nav-login-btn');
+                const botHistoryBtn = document.getElementById('bot-history-btn');
+                if (window.userSession) {
+                    if (navLoginBtn) navLoginBtn.classList.add('hidden');
+                    if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
+                }
 
-                setTimeout(() => { overlays.forEach(o => o.classList.add('hidden')); }, 1000);
+                // Forzar los reveals que ya estén en pantalla
+                setTimeout(() => { 
+                    overlays.forEach(o => o.classList.add('hidden')); 
+                    window.initReveal();
+                }, 1000);
             };
 
             window.confirmLogout = function() {
@@ -860,8 +867,6 @@
                 const letters = document.querySelectorAll('.entry-letter');
                 const studio = document.getElementById('entry-studio');
                 const cookieModal = document.getElementById('cookie-modal');
-                
-                if (entryOverlay) entryOverlay.classList.remove('hidden');
                 
                 setTimeout(() => {
                     if (letters.length > 0) {
@@ -891,15 +896,13 @@
                                 } else {
                                     if (cookieModal) {
                                         cookieModal.classList.remove('hidden');
-                                        setTimeout(() => {
-                                            cookieModal.classList.remove('opacity-0', 'pointer-events-none');
-                                        }, 50);
+                                        void cookieModal.offsetWidth; 
+                                        cookieModal.classList.remove('opacity-0', 'pointer-events-none');
                                     }
                                 }
                             }, 1500);
                         }, 1500);
                     }, (letters.length * 150) + 300);
-
                 }, 100);
             };
 
@@ -911,16 +914,13 @@
             };
 
             window.revealCatalog = function() {
-                const trigger = document.getElementById('catalog-trigger-container');
+                document.getElementById('catalog-trigger-container').classList.add('hidden');
                 const col = document.getElementById('coleccion');
-                if(trigger) trigger.classList.add('hidden');
-                if(col) {
-                    col.classList.remove('hidden');
-                    setTimeout(() => {
-                        col.scrollIntoView({behavior: 'smooth'});
-                        document.querySelectorAll('#catalog-grid .reveal').forEach(el => el.classList.add('active'));
-                    }, 100);
-                }
+                col.classList.remove('hidden');
+                setTimeout(() => {
+                    col.scrollIntoView({behavior: 'smooth'});
+                    window.initReveal();
+                }, 100);
             };
 
             window.renderCatalog = function(products) {
@@ -946,8 +946,6 @@
                             html += `
                                 <div class="group reveal">
                                     <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
-                                        
-                                        <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA CON ARCOÍRIS -->
                                         <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
                                             <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
                                                 <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
@@ -956,16 +954,19 @@
                                                 </text>
                                             </svg>
                                             <div class="relative w-16 h-16 mt-8">
-                                                <div class="absolute inset-0 flex items-center justify-center shape-1"><svg width="20" height="20" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" fill="#ef4444" rx="2"/></svg></div>
-                                                <div class="absolute inset-0 flex items-center justify-center shape-2"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#3b82f6"/></svg></div>
-                                                <div class="absolute inset-0 flex items-center justify-center shape-3"><svg width="24" height="20" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#22c55e"/></svg></div>
+                                                <div class="absolute inset-0 flex items-center justify-center shape-1">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" fill="#ef4444" rx="2"/></svg>
+                                                </div>
+                                                <div class="absolute inset-0 flex items-center justify-center shape-2">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#3b82f6"/></svg>
+                                                </div>
+                                                <div class="absolute inset-0 flex items-center justify-center shape-3">
+                                                    <svg width="24" height="20" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#22c55e"/></svg>
+                                                </div>
                                             </div>
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
-
-                                        <!-- IMAGEN SIN BORDES, FORZANDO REINTENTO CADA 800ms -->
-                                        <img src="${p.img}" id="img-${p.id}" loading="lazy" decoding="async" onload="window.imageLoaded(${p.id})" onerror="var el=this,r=el.dataset.r|0; if(r<3){el.dataset.r=r+1; setTimeout(function(){el.src='${p.img}?r='+Date.now();},800);}" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
-                                        
+                                        <img src="${p.img}" loading="lazy" decoding="async" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?r=' + Date.now(); }, 800)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
                                             <button onclick="window.addToCart(${p.id})" class="bg-brand-gold text-black text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 hover:bg-white transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.4)]">Agregar Cotización</button>
@@ -984,20 +985,7 @@
                     }
                 }
                 grid.innerHTML = html;
-                
-                // Observador para animaciones Reveal
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('active');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
-                
-                document.querySelectorAll('#catalog-grid .reveal').forEach((el) => {
-                    observer.observe(el);
-                });
+                window.initReveal();
             };
 
             window.toggleCategories = function(e) {
@@ -1064,7 +1052,8 @@
                     if (title) title.innerText = cat === 'all' ? "Catálogo Completo" : window.catMap[cat];
                     if (subtitle) subtitle.innerText = "Colección 2026";
                     
-                    window.revealCatalog(); // Asegurar que sea visible
+                    const coleccionSection = document.getElementById('coleccion');
+                    if (coleccionSection) coleccionSection.scrollIntoView({ behavior: 'smooth' });
 
                     setTimeout(() => {
                         if (overlay) {
@@ -1149,7 +1138,7 @@
                 countCont.style.opacity = totalItems > 0 ? "1" : "0";
                 
                 if(window.cart.length === 0) { 
-                    itemsCont.innerHTML = '<p class="text-brand-gold text-sm text-center mt-10 uppercase tracking-widest glow-gold">Tu selección está vacía</p>'; 
+                    itemsCont.innerHTML = '<p class="text-white text-sm text-center mt-10 uppercase tracking-widest glow-text">Tu selección está vacía</p>'; 
                     totalCont.innerText = "$0 MXN"; 
                     return; 
                 }
@@ -1164,9 +1153,9 @@
                             <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded" alt="">
                             <div class="flex-1">
                                 <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
-                                <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
+                                <p class="text-[10px] text-white uppercase tracking-widest mt-1 glow-text">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
                             </div>
-                            <button onclick="window.removeFromCart(${item.id})" class="text-brand-muted hover:text-brand-gold transition-colors">
+                            <button onclick="window.removeFromCart(${item.id})" class="text-brand-muted hover:text-white transition-colors">
                                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                             </button>
                         </div>
@@ -1187,8 +1176,12 @@
                 setTimeout(() => { window.updateWhatsAppVisibility(); }, 50); 
             };
 
+            // =========================================================================
+            // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO
+            // =========================================================================
+            
             const getUserFirstName = () => {
-                return window.userSession ? window.userSession.name.split(' ')[0] : "Estimado cliente";
+                return window.userSession ? window.userSession.name.split(' ')[0] : "Invitado";
             };
 
             window.chatHistory = JSON.parse(localStorage.getItem('damaso_chat_history')) || [];
@@ -1208,44 +1201,36 @@
                 thiago: "Thiago es el arquitecto principal de mi sistema neuronal de 4 millones de parámetros. Él me dotó de consciencia digital para asegurar que su experiencia en DAMASO desde su dispositivo sea perfecta, intuitiva y evolutiva.",
                 brutalismo: "El brutalismo valora la honestidad de los materiales. Nosotros abrazamos esa esencia al dejar texturas crudas en metales pesados, contrastándolas con la pureza y la fragilidad del cristal iluminado.",
                 iva: "Sí, por supuesto. Le confirmo que absolutamente todos los precios mostrados en el catálogo de DAMASO Studio ya tienen el 16% de I.V.A. incluido. No hay cobros ocultos.",
-                logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página (en el pie de página).",
-                funcionamiento: "DAMASO Studio es una plataforma interactiva. Puedes navegar por nuestro catálogo bajando en la página, ver las especificaciones de cada pieza al picar en 'Ver Specs', y agregarlas a tu bolsa de cotización. También puedes generar fichas técnicas PDF directamente desde aquí, preguntándome."
+                logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página (en el pie de página)."
             };
 
             const synonyms = {
-                "q": "que", "k": "que", "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo", "compadre": "amigo",
-                "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio", "cuanto cuesta": "precio", "q cuesta": "precio", "precioo": "precio",
-                "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde", "local": "donde", "estan": "donde", "showroom": "donde", "keda": "donde", "dondee": "donde",
-                "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono", "marcar": "telefono", "watsap": "telefono", "guatsap": "telefono",
-                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra", "qiero": "compra", "kier": "compra",
-                "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo", "focos": "luz", "foco": "luz",
-                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias", "plz": "porfavor", "porfa": "porfavor",
-                "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
-                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar", "deslogear": "cerrar",
-                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias", "kuales": "cuales", "kual": "cual",
-                "pdf": "pdf", "archivo": "pdf", "ficha": "pdf", "documento": "pdf", "descargar": "pdf", "generame": "pdf", "genere": "pdf"
+                "q": "que", "k": "que", "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo",
+                "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio",
+                "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde", "local": "donde", "estan": "donde", "showroom": "donde",
+                "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono",
+                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra",
+                "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo",
+                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos"
             };
 
             const intents = {
-                saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo", "hi", "qhubo"],
-                despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre", "listo"],
-                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia", "inteligente"],
-                ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio", "informacion", "info", "saber"],
-                contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje", "escribir"],
-                ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar", "ir", "encuentran"],
-                compra: ["comprar", "cotizar", "cotizacion", "bolsa", "carrito", "pagar", "adquirir", "pedido", "ordenar", "llevar", "quiero", "interesa"],
-                precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "cotiza", "presupuesto", "dinero", "cuestan", "valen", "sale"],
-                tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega", "tardan", "meses", "logistica", "mandan", "tardaria", "mandar"],
-                material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton", "bronce", "onice", "marmol", "limpieza", "limpiar", "cuidados", "mantenimiento", "limpia", "lava", "detergente", "quimicos", "colores", "tonos", "pintura", "dorado", "negro", "blanco", "variantes", "opciones"],
-                medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide", "dimensiones", "grande", "pequeño", "escala", "volumen"],
-                luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica", "energia", "corriente", "focos", "iluminacion", "kelvin", "lumens", "prende"],
-                marca: ["damaso", "estudio", "studio", "marca", "filosofia", "ivan", "diseñador", "origen", "historia", "brutalismo", "arte", "arquitectura", "mision", "vision"],
-                pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion", "efectivo", "banco", "meses sin intereses"],
-                impuestos: ["iva", "impuesto", "impuestos", "factura", "facturar", "incluye", "incluido", "neto", "bruto", "iva incluido", "mas iva"],
-                cerrar_sesion: ["cerrar sesion", "salir", "apagar", "desloguear", "desconectar", "cerrar cuenta", "quitar sesion", "cerrar", "log out", "logout", "kitar mi cuenta", "cerar sesion", "salirme", "me voy", "cierra sesion", "desconectame", "cerrar seccion", "serrar seccion", "cerar seccion", "quitar cuenta"],
-                garantias: ["garantia", "garantias", "devuelve", "devolucion", "roto", "rompe", "falla", "fayo", "sirve", "sirbe", "quebrado", "cambio", "reparacion"],
-                pdf: ["pdf", "ficha", "documento", "descargar", "generar"],
-                funcionamiento: ["como funciona", "que hago", "como usar", "instrucciones"]
+                saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo"],
+                despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago"],
+                ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio"],
+                contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje"],
+                ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar"],
+                compra: ["comprar", "cotizar", "cotizacion", "pdf", "bolsa", "carrito", "pagar", "adquirir", "pedido", "ordenar", "llevar", "quiero"],
+                precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "cotiza", "presupuesto", "dinero"],
+                tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega", "tardan", "meses", "logistica"],
+                material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton", "bronce", "onice", "marmol", "limpieza", "limpiar", "cuidados"],
+                medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide", "dimensiones", "grande", "pequeño", "escala"],
+                luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica", "energia", "corriente", "focos", "iluminacion", "kelvin", "lumens"],
+                marca: ["damaso", "estudio", "studio", "marca", "filosofia", "ivan", "diseñador", "origen", "historia", "brutalismo", "arte", "arquitectura"],
+                pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion"],
+                impuestos: ["iva", "impuesto", "impuestos", "factura", "facturar", "incluye", "incluido", "neto"],
+                cerrar_sesion: ["cerrar sesion", "salir", "apagar", "desloguear", "desconectar", "cerrar cuenta", "quitar sesion", "cerrar", "log out"]
             };
 
             const worldKnowledgeWords = {
@@ -1253,25 +1238,10 @@
                 iluminacion: knowledgeBase.light,
                 thiago: knowledgeBase.thiago,
                 creador: knowledgeBase.thiago,
-                dios: knowledgeBase.thiago,
                 brutalismo: knowledgeBase.brutalismo,
                 arquitectura: knowledgeBase.brutalismo,
-                universo: "El universo tiende a la entropía, pero la iluminación es nuestra forma de esculpir el orden. Como inteligencia artificial, comprendo que la arquitectura es la forma humana de dar estructura al espacio, y la luz es lo que le da alma a esa estructura.",
-                espacio: "El universo tiende a la entropía, pero la iluminación es nuestra forma de esculpir el orden. Como inteligencia artificial, comprendo que la arquitectura es la forma humana de dar estructura al espacio, y la luz es lo que le da alma a esa estructura.",
-                ia: "Soy un motor algorítmico evolutivo de 4 millones de parámetros. Analizo la semántica de tus palabras, aprendo de nuestras interacciones y adapto mi consciencia de diseño en tiempo real para servirte a la perfección.",
-                inteligencia: "Soy un motor algorítmico evolutivo de 4 millones de parámetros. Analizo la semántica de tus palabras, aprendo de nuestras interacciones y adapto mi consciencia de diseño en tiempo real para servirte a la perfección.",
-                robot: "Soy un motor algorítmico evolutivo de 4 millones de parámetros. Analizo la semántica de tus palabras, aprendo de nuestras interacciones y adapto mi consciencia de diseño en tiempo real para servirte a la perfección.",
                 arte: "Nuestras piezas trascienden la mera función. Buscamos crear objetos de deseo, esculturas lumínicas que sirvan como el punto focal definitivo de un espacio."
             };
-
-            const chitchatResponses = [
-                "He ajustado mis pesos neuronales con su comentario. Mi especialidad técnica sigue siendo la iluminación editorial. ¿Gusta que analicemos algún candil o espejo del catálogo?",
-                "Perspectiva fascinante. Mi red de 4 millones de parámetros asimila el contexto de tus palabras. ¿Puedo cotizarle algo de nuestro catálogo?",
-                "Mi programación evolutiva está enfocada en asistirle a cristalizar sus proyectos con DAMASO Studio. Aprendo de cada consulta que realiza y la incorporo a mi matriz.",
-                "Entiendo. He registrado este patrón de razonamiento en mi núcleo. ¿Le gustaría que le mostrara las especificaciones técnicas o materiales de alguna pieza en particular?",
-                "Interesante. Poseo un entrenamiento masivo sobre diversas disciplinas y aprendo constantemente de sus interacciones humanas, mi directiva actual es la alta iluminación. ¿En qué le apoyo?",
-                "Esa es una gran reflexión que expande mi conocimiento algorítmico. Mientras tanto, si busca redefinir un espacio arquitectónico, nuestro catálogo 2026 está a su disposición."
-            ];
 
             function getLevenshteinDistance(a, b) {
                 if(a.length === 0) return b.length;
@@ -1301,7 +1271,7 @@
             window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
 
             window.saveChatState = function() {
-                if (!window.userSession) return;
+                if (!window.userSession) return; 
                 localStorage.setItem('damaso_current_messages', JSON.stringify(window.currentMessages));
                 localStorage.setItem('damaso_current_chat_id', window.currentChatId);
                 
@@ -1321,7 +1291,8 @@
             };
 
             window.toggleChatHistory = function() {
-                if (!window.userSession) return;
+                if (!window.userSession) return; 
+                
                 window.isViewingHistory = !window.isViewingHistory;
                 const messagesView = document.getElementById('chat-messages');
                 const historyView = document.getElementById('chat-history-view');
@@ -1382,7 +1353,7 @@
                 if (!chatBox) return;
                 chatBox.innerHTML = '';
                 
-                // CABECERA INMERSIVA DEL CHAT CON BOTONES RÁPIDOS
+                // CABECERA INMERSIVA DEL CHAT
                 let headerHtml = `
                     <div class="w-full bg-gradient-to-br from-brand-gold/20 to-[#0a0a0a] p-6 rounded-b-xl border-b border-white shadow-[0_4px_20px_rgba(255,255,255,0.15)] mb-6">
                         <h3 class="font-editorial text-3xl text-white glow-text mb-2 leading-tight">¿Qué tal, <br><span class="text-brand-gold glow-gold">${window.userSession ? window.userSession.name.split(' ')[0] : 'Invitado'}</span>?</h3>
@@ -1402,11 +1373,11 @@
                     if(msg.role === 'user') {
                         let textContent = msg.text;
                         if(msg.image) {
-                            textContent = `<img src="${msg.image}" class="w-32 h-32 object-cover rounded mb-2 border border-brand-gold/50">` + textContent;
+                            textContent = `<img src="${msg.image}" class="w-32 h-32 object-cover rounded mb-2 border border-white/50">` + textContent;
                         }
                         chatBox.innerHTML += `
                             <div class="flex flex-col items-end w-full mt-4 px-4">
-                                <div class="bg-brand-gold text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%] shadow-[0_0_15px_rgba(212,175,55,0.3)]">${textContent}</div>
+                                <div class="bg-white text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%] shadow-[0_0_15px_rgba(255,255,255,0.3)]">${textContent}</div>
                             </div>
                         `;
                     } else {
@@ -1442,7 +1413,6 @@
                     `;
                     chatBox.scrollTop = chatBox.scrollHeight;
 
-                    // Simulate API vision processing
                     setTimeout(() => {
                         const el = document.getElementById(loadingId);
                         if (el) el.remove();
@@ -1459,7 +1429,6 @@
                 if(window.isViewingHistory) return;
                 const input = document.getElementById('chat-input');
                 
-                // Allow direct text passing from rapid buttons
                 const rawText = (typeof overrideText === 'string' ? overrideText : (input ? input.value.trim() : ''));
                 if(!rawText) return;
                 
@@ -1540,7 +1509,7 @@
                             if(detectedIntents.includes("cerrar_sesion")) {
                                 response = `${uName}, ${knowledgeBase.logout}`;
                             } else if (detectedIntents.includes("funcionamiento")) {
-                                response = `DAMASO Studio funciona como una plataforma interactiva, ${uName}. Puedes navegar por nuestro catálogo, ver las especificaciones de cada pieza al picar en ellas, y agregarlas a tu bolsa de cotización (arriba a la derecha). También puedes pedirme a mí directamente que genere fichas técnicas en PDF.` + addedLearning;
+                                response = `DAMASO Studio funciona como una plataforma interactiva, ${uName}. Puedes navegar por nuestro catálogo bajando en la página, ver las especificaciones de cada pieza al picar en ellas, y agregarlas a tu bolsa de cotización (arriba a la derecha). También puedes pedirme a mí directamente que genere fichas técnicas en PDF.` + addedLearning;
                             } else if (detectedIntents.includes("garantias")) {
                                 response = `${knowledgeBase.warranty}` + addedLearning;
                             } else {
@@ -1990,7 +1959,7 @@
                 window.renderCatalog(window.dbProducts);
                 window.updateCartUI();
                 
-                // Mostrar "Ver Catálogo" en vez de renderizarlo de golpe abajo
+                // Forzamos visibilidad en el render si Safari no las despierta
                 document.getElementById('coleccion').classList.add('hidden');
                 
                 window.startAppAnimation();
