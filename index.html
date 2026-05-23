@@ -268,7 +268,7 @@
 
             <div class="flex items-center space-x-4 sm:space-x-6">
                 <!-- BOTÓN DE INICIAR SESIÓN PARA INVITADOS (PUERTA VERDE NEÓN) -->
-                <button id="nav-login-btn" onclick="window.showLoginForm()" class="text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 hidden" aria-label="Iniciar Sesión" title="Iniciar Sesión">
+                <button id="nav-login-btn" onclick="window.showLoginForm()" class="text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 hidden z-[999] relative cursor-pointer" aria-label="Iniciar Sesión" title="Iniciar Sesión">
                     <svg class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M8 22V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v18"></path>
                         <path d="M2 22h20"></path>
@@ -278,11 +278,11 @@
                 </button>
 
                 <!-- ICONO DEL BOT ANIMADO -->
-                <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2" aria-label="Asistente Virtual">
-                    <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)] animate-pulse">AI</span>
+                <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2 z-[999] relative cursor-pointer" aria-label="Asistente Virtual">
+                    <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)] animate-pulse pointer-events-none">AI</span>
                 </button>
                 
-                <button onclick="window.toggleCart()" class="text-brand-gold hover:text-white transition-colors relative p-2">
+                <button onclick="window.toggleCart()" class="text-brand-gold hover:text-white transition-colors relative p-2 z-[999] cursor-pointer">
                     <svg class="pointer-events-none drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                     <span id="cart-count" class="absolute top-0 right-0 bg-brand-gold text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0 transition-opacity pointer-events-none shadow-[0_0_10px_rgba(212,175,55,0.8)]">0</span>
                 </button>
@@ -477,9 +477,9 @@
             </p>
             
             <!-- DECORACIÓN INTERACTIVA (APAGADA/ENCENDIDA) -->
-            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24" onclick="this.classList.toggle('active')">
+            <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24" onmouseenter="document.getElementById('damaso-encendida').classList.remove('opacity-0')" onmouseleave="document.getElementById('damaso-encendida').classList.add('opacity-0')">
                 <img src="imagen_damaso_apagada_3.png" alt="Decoración DAMASO Apagada" class="w-full h-full object-cover block">
-                <img src="imagen_damaso_encendida_3.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
+                <img id="damaso-encendida" src="imagen_damaso_encendida_3.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out pointer-events-none">
             </div>
         </div>
     </section>
@@ -957,7 +957,6 @@
                             </div>
                         `;
                         catProducts.forEach(p => {
-                            // OPTIMIZACIÓN CLAUDE: loading="lazy", decoding="async", y onload robusto
                             html += `
                                 <div class="group reveal">
                                     <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
@@ -984,8 +983,8 @@
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
-                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. CARGA PEREZOSA ASÍNCRONA. -->
-                                        <img src="${p.img}" id="img-${p.id}" loading="lazy" decoding="async" onload="window.imageLoaded(${p.id})" onerror="var el=this,r=el.dataset.r|0; if(r<3){el.dataset.r=r+1; setTimeout(function(){el.src='${p.img}?r='+Date.now();},800);} else { document.getElementById('loader-${p.id}').style.opacity=0; }" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. CARGA INFINITA. -->
+                                        <img src="${p.img}" id="img-${p.id}" loading="lazy" decoding="async" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { var el = document.getElementById('img-${p.id}'); if(el) el.src='${p.img}?r='+Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
                                         
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
@@ -1195,6 +1194,22 @@
                     overlay.classList.toggle('pointer-events-none');
                 }
                 setTimeout(() => { window.updateWhatsAppVisibility(); }, 50); 
+            };
+
+            window.toggleChatbot = function() {
+                try {
+                    window.playClickSound();
+                    const drawer = document.getElementById('chatbot-drawer');
+                    const overlay = document.getElementById('chat-overlay');
+                    if (drawer) drawer.classList.toggle('-translate-x-full');
+                    if (overlay) {
+                        overlay.classList.toggle('opacity-0');
+                        overlay.classList.toggle('pointer-events-none');
+                    }
+                    setTimeout(() => { window.updateWhatsAppVisibility(); }, 50);
+                } catch(e) {
+                    console.error("AI Button toggler:", e);
+                }
             };
 
             // =========================================================================
