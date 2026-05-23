@@ -218,7 +218,6 @@
         <div id="welcome-letters" class="flex flex-wrap justify-center items-center text-center px-4 max-w-[95%] mb-2 leading-tight">
             <!-- Letras inyectadas vía JavaScript -->
         </div>
-        <span class="opacity-0 transition-opacity duration-1000 font-editorial italic text-2xl sm:text-4xl text-brand-gold mt-6 glow-gold" id="welcome-studio-text">Studio</span>
     </div>
 
     <!-- Animación Cinemática de Transición de Menú -->
@@ -780,7 +779,6 @@
                     
                     const welcomeOverlay = document.getElementById('welcome-animation-overlay');
                     const welcomeLettersContainer = document.getElementById('welcome-letters');
-                    const welcomeStudioText = document.getElementById('welcome-studio-text');
                     
                     if (welcomeOverlay && welcomeLettersContainer) {
                         welcomeLettersContainer.innerHTML = '';
@@ -808,13 +806,6 @@
                                     letter.classList.add('opacity-100');
                                 }, index * 100); 
                             });
-                            
-                            if (welcomeStudioText) {
-                                setTimeout(() => {
-                                    welcomeStudioText.classList.remove('opacity-0');
-                                    welcomeStudioText.classList.add('opacity-100');
-                                }, letters.length * 100 + 200);
-                            }
 
                             setTimeout(() => {
                                 welcomeOverlay.style.transform = 'translateY(-100%)';
@@ -1910,3 +1901,4 @@
     </script>
 </body>
 </html>
+
