@@ -47,12 +47,16 @@
         ::-webkit-scrollbar-track { background: #030303; }
         ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
 
-        /* Animación Reveal Optimizada */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1); will-change: opacity, transform; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         
         .modal-overlay { backdrop-filter: blur(8px); }
         input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { display: none; }
+
+        /* PREVIENE EL ZOOM EN IPHONE AL ABRIR EL TECLADO */
+        input[type="text"], input[type="email"], input[type="password"], input[type="search"] {
+            font-size: 16px !important;
+        }
 
         .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; display: flex; background-color: #111; padding: 25px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; }
         .marquee-content { display: flex; animation: marquee 40s linear infinite; }
@@ -74,21 +78,9 @@
         .modal-scroll-container { max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
         /* ANIMACIÓN DEL LOADER GEOMÉTRICO ADAPTABLE */
-        @keyframes shapeSwap1 {
-            0%, 100% { transform: translate(0px, -35%); }
-            33.33% { transform: translate(35%, 35%); }
-            66.66% { transform: translate(-35%, 35%); }
-        }
-        @keyframes shapeSwap2 {
-            0%, 100% { transform: translate(35%, 35%); }
-            33.33% { transform: translate(-35%, 35%); }
-            66.66% { transform: translate(0px, -35%); }
-        }
-        @keyframes shapeSwap3 {
-            0%, 100% { transform: translate(-35%, 35%); }
-            33.33% { transform: translate(0px, -35%); }
-            66.66% { transform: translate(35%, 35%); }
-        }
+        @keyframes shapeSwap1 { 0%, 100% { transform: translate(0px, -35%); } 33.33% { transform: translate(35%, 35%); } 66.66% { transform: translate(-35%, 35%); } }
+        @keyframes shapeSwap2 { 0%, 100% { transform: translate(35%, 35%); } 33.33% { transform: translate(-35%, 35%); } 66.66% { transform: translate(0px, -35%); } }
+        @keyframes shapeSwap3 { 0%, 100% { transform: translate(-35%, 35%); } 33.33% { transform: translate(0px, -35%); } 66.66% { transform: translate(35%, 35%); } }
         .shape-1 { animation: shapeSwap1 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
         .shape-2 { animation: shapeSwap2 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
         .shape-3 { animation: shapeSwap3 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
@@ -103,7 +95,7 @@
         <source src="yellow_umbrellas.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- ANIMACIÓN DE ENTRADA CINETOGRÁFICA PRINCIPAL -->
+    <!-- ANIMACIÓN DE ENTRADA CINETOGRÁFICA -->
     <div id="entry-animation" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-auto">
         <div id="entry-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
             <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
@@ -116,7 +108,7 @@
         <span id="entry-studio" class="opacity-0 transition-opacity duration-1000 font-editorial italic text-3xl sm:text-4xl md:text-5xl text-brand-gold mt-4 glow-gold">Studio</span>
     </div>
 
-    <!-- CAPA 1: MODAL DE COOKIES FLOTANTE -->
+    <!-- MODAL DE COOKIES FLOTANTE -->
     <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-1000 hidden">
         <div class="bg-brand-surface border border-white/20 p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_45px_rgba(255,255,255,0.15)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
@@ -145,7 +137,7 @@
         </div>
     </div>
 
-    <!-- CAPA 2: MODAL DE INICIO DE SESIÓN OPCIONAL -->
+    <!-- MODAL DE INICIO DE SESIÓN OPCIONAL -->
     <div id="login-prompt-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="bg-brand-surface border border-white/20 p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_45px_rgba(255,255,255,0.15)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">¿Desea Iniciar Sesión?</h2>
@@ -165,7 +157,7 @@
         </div>
     </div>
 
-    <!-- CAPA 3: FORMULARIO DE INICIO DE SESIÓN COMPLETO CON SEXO -->
+    <!-- FORMULARIO DE INICIO DE SESIÓN COMPLETO -->
     <div id="login-form-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="bg-brand-surface border border-white/20 p-6 sm:p-10 max-w-md w-full text-center shadow-[0_0_45px_rgba(255,255,255,0.15)] relative rounded-sm transform transition-all">
             <h2 class="font-editorial text-2xl text-brand-gold mb-6 uppercase tracking-widest glow-gold">Credenciales</h2>
@@ -176,7 +168,6 @@
                 <input type="password" id="session-password" placeholder="Contraseña" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
                 <input type="text" id="session-address" placeholder="Dirección / Ciudad (Opcional)" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors">
                 
-                <!-- SELECTOR DE SEXO AÑADIDO PARA LA BIENVENIDA -->
                 <div class="relative w-full">
                     <select id="session-gender" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors appearance-none cursor-pointer">
                         <option value="" disabled selected>Sexo / Género</option>
@@ -194,7 +185,7 @@
         </div>
     </div>
 
-    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS - PRECARGA MÁXIMA) -->
+    <!-- PANTALLA DE CARGA GEOMÉTRICA (10 SEGUNDOS) -->
     <div id="login-loading-modal" class="init-overlay fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#030303] opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="relative w-40 h-40 mb-12">
             <div class="absolute inset-0 flex items-center justify-center shape-1">
@@ -210,32 +201,17 @@
         <p class="font-editorial text-brand-gold text-xl tracking-[0.2em] italic glow-gold">Preparando su experiencia...</p>
     </div>
 
-    <!-- CAPA 5: ANIMACIÓN DE BIENVENIDA PERSONALIZADA -->
+    <!-- ANIMACIÓN DE BIENVENIDA PERSONALIZADA -->
     <div id="welcome-animation-overlay" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-none opacity-0 hidden">
         <div id="welcome-letters" class="flex flex-wrap justify-center items-center text-center px-4 max-w-[95%] mb-2 leading-tight">
-            <!-- Letras inyectadas vía JavaScript adaptadas al género -->
+            <!-- Letras inyectadas vía JavaScript -->
         </div>
-    </div>
-
-    <!-- Animación Cinemática de Transición de Menú -->
-    <div id="category-transition-overlay" class="fixed inset-0 z-[999999] bg-[#030303] flex flex-col items-center justify-center pointer-events-none opacity-0 transition-opacity duration-500">
-        <div id="menu-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">M</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">S</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">O</span>
-        </div>
-        <span id="menu-category-text" class="opacity-0 transition-opacity duration-700 font-editorial italic text-3xl sm:text-5xl md:text-6xl text-brand-gold glow-gold mt-4 text-center px-4"></span>
     </div>
 
     <!-- Navegación Superior -->
     <nav class="fixed w-full z-40 bg-brand-bg/95 backdrop-blur-xl border-b border-brand-border transition-all duration-500 flex flex-col" id="navbar">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
-            
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- Botón de Menú -->
                 <button id="btn-menu" onclick="window.toggleCategories(event)" class="relative z-[999] bg-transparent border border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black transition-colors px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center shadow-[0_0_10px_rgba(212,175,55,0.2)]">
                     MENÚ
                 </button>
@@ -267,17 +243,14 @@
             </div>
 
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <!-- BOTÓN DE INICIAR SESIÓN PARA INVITADOS (PUERTA VERDE NEÓN) -->
+                <!-- PUERTA DE LOGIN INVITADOS -->
                 <button id="nav-login-btn" onclick="window.showLoginForm()" class="text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 hidden z-[999] relative cursor-pointer" aria-label="Iniciar Sesión" title="Iniciar Sesión">
                     <svg class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M8 22V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v18"></path>
-                        <path d="M2 22h20"></path>
-                        <path d="M16 19l-3 3 3 3"></path>
-                        <line x1="22" y1="22" x2="13" y2="22"></line>
+                        <path d="M8 22V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v18"></path><path d="M2 22h20"></path><path d="M16 19l-3 3 3 3"></path><line x1="22" y1="22" x2="13" y2="22"></line>
                     </svg>
                 </button>
 
-                <!-- ICONO DEL BOT ANIMADO -->
+                <!-- BOTÓN AI LUMINOSO -->
                 <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2 z-[999] relative cursor-pointer" aria-label="Asistente Virtual">
                     <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)] animate-pulse pointer-events-none">AI</span>
                 </button>
@@ -288,17 +261,10 @@
                 </button>
             </div>
         </div>
-
-        <div class="w-full bg-brand-surface/80 border-t border-brand-border h-14 flex items-center justify-center px-4">
-            <div class="w-full max-w-3xl relative flex items-center">
-                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" class="text-brand-gold absolute left-4 pointer-events-none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="search" id="live-search" placeholder="Buscar pieza, modelo o SKU..." class="w-full bg-transparent border-none text-[11px] tracking-widest text-white placeholder-brand-muted focus:outline-none pl-12 py-2 uppercase focus:border-b focus:border-brand-gold transition-colors">
-            </div>
-        </div>
     </nav>
 
-    <!-- CHATBOT ASISTENTE INTELIGENTE CON GLOW BLANCO -->
-    <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-white transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)]">
+    <!-- CHATBOT ASISTENTE INTELIGENTE DE ÉLITE (APERTURA INSTANTÁNEA, LUZ BLANCA) -->
+    <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[60] w-full md:w-[380px] bg-brand-surface border-r border-white flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)] hidden">
         <div class="p-6 border-b border-brand-gold flex justify-between items-center bg-black relative">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-brand-gold shadow-[0_0_15px_rgba(212,175,55,0.8)] flex items-center justify-center text-black font-editorial font-bold text-sm tracking-widest">
@@ -307,7 +273,6 @@
                 <h2 class="font-editorial text-xl tracking-wider text-brand-gold glow-gold">DAMASO AI</h2>
             </div>
             <div class="flex items-center gap-4">
-                <!-- Botón de Historial (Solo visible para usuarios registrados) -->
                 <button id="bot-history-btn" onclick="window.toggleChatHistory()" class="text-brand-gold hover:text-white transition-colors hidden z-[100] relative cursor-pointer" title="Historial de Conversaciones">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                 </button>
@@ -318,11 +283,10 @@
             </div>
         </div>
         
-        <div class="flex-1 overflow-y-auto p-6 space-y-4 chat-scroll bg-[#0a0a0a]" id="chat-messages">
-            <!-- Mensajes inyectados vía JS -->
+        <div class="flex-1 overflow-y-auto p-0 space-y-4 chat-scroll bg-[#0a0a0a]" id="chat-messages">
+            <!-- Mensajes y Header Inyectados por JS -->
         </div>
 
-        <!-- LISTA DE HISTORIAL (OCULTA POR DEFECTO) -->
         <div id="chat-history-view" class="absolute inset-0 top-[89px] bg-[#0a0a0a] z-50 flex-col hidden">
             <div class="p-4 border-b border-brand-border bg-black flex justify-center">
                 <button onclick="window.createNewChat()" class="w-full py-3 bg-transparent border border-brand-gold text-brand-gold text-[10px] uppercase font-bold tracking-widest hover:bg-brand-gold hover:text-black transition-colors shadow-[0_0_10px_rgba(212,175,55,0.2)]">+ Nuevo Chat</button>
@@ -330,32 +294,35 @@
             <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list"></div>
         </div>
 
-        <!-- Z-INDEX elevado para el botón enviar, evita bloqueos -->
+        <!-- ENTRADA DE TEXTO CON BOTÓN DE CÁMARA (+) -->
         <div class="p-4 border-t border-brand-gold bg-black flex items-center gap-2 relative z-[100]">
+            <!-- Hidden File Input for Image Upload -->
+            <input type="file" id="chat-file-upload" class="hidden" accept="image/*" onchange="window.handleImageUpload(event)">
+            <button onclick="document.getElementById('chat-file-upload').click()" class="w-10 h-10 rounded-full border border-brand-border text-brand-gold flex items-center justify-center hover:border-brand-gold hover:bg-brand-gold hover:text-black transition-colors shrink-0">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            
             <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-transparent border border-brand-border rounded-full px-4 py-2 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors" onkeypress="if(event.key === 'Enter') window.sendChatMessage()">
-            <button onclick="window.sendChatMessage()" type="button" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)] z-[100] relative cursor-pointer">
+            <button onclick="window.sendChatMessage()" type="button" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)] z-[100] relative cursor-pointer shrink-0">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" class="pointer-events-none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
         </div>
     </div>
-    <div id="chat-overlay" onclick="window.toggleChatbot()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <div id="chat-overlay" onclick="window.toggleChatbot()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm hidden"></div>
 
-    <!-- MODAL DE ESPECIFICACIONES (SCROLL MÓVIL REPARADO) -->
+    <!-- MODAL DE ESPECIFICACIONES -->
     <div id="spec-modal" class="fixed inset-0 z-[70] bg-black/90 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-0 sm:p-8">
         <button onclick="window.closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[100] bg-brand-gold text-black p-3 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)] hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto cursor-pointer">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
 
-        <!-- Habilitado overflow-y-auto para deslizar libremente en móviles -->
         <div class="bg-[#050505] border border-brand-gold w-full max-w-6xl h-full sm:h-auto max-h-[100dvh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.2)] rounded-none sm:rounded-lg overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
                 <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
-                    <!-- Marco y borde eliminados por completo -->
                     <img id="modal-img-element" src="" class="w-full max-h-[50vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
                 </a>
             </div>
 
-            <!-- DETALLE DORADO A LA IZQUIERDA -->
             <div class="w-full md:w-1/2 p-6 sm:p-12 text-sm font-light flex flex-col bg-[#0a0a0a] border-t-4 md:border-t-0 md:border-l-4 border-brand-gold relative shrink-0">
                 <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                     <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20M2 12h20"></path></svg>
@@ -389,7 +356,7 @@
         </div>
     </div>
 
-    <!-- Carrito Lateral con Glow Blanco Fotográfico -->
+    <!-- Carrito Lateral (LUZ BLANCA) -->
     <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] w-full md:w-[450px] bg-brand-surface border-l border-white transform translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_45px_rgba(255,255,255,0.25)]">
         <div class="p-8 border-b border-brand-gold flex justify-between items-center">
             <h2 class="font-editorial text-2xl tracking-wider text-brand-gold glow-gold">Mi Selección</h2>
@@ -479,7 +446,6 @@
             <!-- DECORACIÓN INTERACTIVA (APAGADA/ENCENDIDA) CON CARGA INFINITA -->
             <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24 bg-[#050505]" onmouseenter="document.getElementById('damaso-encendida').classList.remove('opacity-0')" onmouseleave="document.getElementById('damaso-encendida').classList.add('opacity-0')">
                 
-                <!-- ANIMACIÓN DE CARGA GEOMÉTRICA CON ARCOÍRIS -->
                 <div id="loader-disenador" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
                     <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
                         <path id="curve-disenador" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
@@ -498,12 +464,11 @@
                             <svg width="24" height="20" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#22c55e"/></svg>
                         </div>
                     </div>
-                    <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">imagen_damaso_apagada.png</span>
+                    <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">imagen_damaso_apagada_3.png</span>
                 </div>
 
-                <!-- IMÁGENES EXACTAS EN .PNG FORZANDO CARGA ETERNA SI FALLAN -->
-                <img src="imagen_damaso_apagada.png" alt="Decoración DAMASO Apagada" onload="document.getElementById('loader-disenador').classList.add('opacity-0', 'pointer-events-none'); this.classList.remove('opacity-0');" onerror="setTimeout(() => { this.src='imagen_damaso_apagada.png?' + Date.now(); }, 3000)" class="w-full h-full object-cover block opacity-0 transition-opacity duration-700">
-                <img id="damaso-encendida" src="imagen_damaso_encendida.png" alt="Decoración DAMASO Encendida" onerror="setTimeout(() => { this.src='imagen_damaso_encendida.png?' + Date.now(); }, 3000)" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out pointer-events-none">
+                <img src="imagen_damaso_apagada_3.png" alt="Decoración DAMASO Apagada" onload="document.getElementById('loader-disenador').classList.add('opacity-0', 'pointer-events-none'); this.classList.remove('opacity-0');" onerror="setTimeout(() => { this.src='imagen_damaso_apagada_3.png?' + Date.now(); }, 3000)" class="w-full h-full object-cover block opacity-0 transition-opacity duration-700">
+                <img id="damaso-encendida" src="imagen_damaso_encendida_3.png" alt="Decoración DAMASO Encendida" onerror="setTimeout(() => { this.src='imagen_damaso_encendida_3.png?' + Date.now(); }, 3000)" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out pointer-events-none">
             </div>
         </div>
     </section>
@@ -547,21 +512,13 @@
         </div>
     </footer>
 
-    <!-- BOTÓN WHATSAPP FLOTANTE EN ORO PREMIUM -->
-    <a id="whatsapp-float" href="https://wa.me/523338703071" target="_blank" class="fixed bottom-8 right-8 bg-[#0a0a0a] border border-brand-gold text-brand-gold p-4 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 hover:bg-brand-gold hover:text-black hover:shadow-[0_0_30px_rgba(212,175,55,0.8)] transition-all duration-300 z-[999] flex items-center justify-center opacity-100 scale-100" aria-label="Contacto WhatsApp">
-        <svg class="w-8 h-8 pointer-events-none drop-shadow-[0_0_5px_rgba(212,175,55,0.6)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="currentColor">
-            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 448l84.5-22.1c32.7 18.1 69.6 27.7 107.5 27.7 122.4 0 222-99.6 222-222 0-59.3-23.1-115.1-65.1-157.1zm-157 298.9c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 316.5l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-103.5 84.3-187.8 187.8-187.8 55.3 0 107.3 21.5 146.3 60.6 39.1 39.1 60.6 91.1 60.6 146.4-.1 103.4-84.4 187.7-187.9 187.7zm102.9-140c-5.6-2.8-33.5-16.5-38.7-18.4-5.2-1.9-9-2.8-12.8 2.8-3.8 5.6-14.6 18.4-17.9 22.2-3.3 3.8-6.6 4.2-12.2 1.4-5.6-2.8-23.9-8.8-45.5-25.2-16.8-12.8-28.1-28.7-31.4-34.3-3.3-5.6-.4-8.7 2.4-11.5 2.5-2.5 5.6-6.6 8.5-9.9 2.8-3.3 3.8-5.6 5.6-9.4 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.8-17.5-42.2-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-9.9 1.4-15.1 7.1-5.2 5.6-19.8 19.3-19.8 47.1 0 27.8 20.3 54.7 23.1 58.5 2.8 3.8 39.9 60.1 96.6 84.4 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.5-13.7 38.2-26.9 4.7-13.2 4.7-24.5 3.3-26.9-1.3-2.5-5.1-4-10.8-6.8z"/>
-        </svg>
-    </a>
-
     <!-- SCRIPT DE LÓGICA PRINCIPAL ÚNICO Y PROTEGIDO -->
     <script>
         (function() {
-            // LÓGICA DE MEMORIA (SESIÓN Y CARRITO)
             window.cart = JSON.parse(localStorage.getItem('damaso_cart')) || [];
             window.userSession = JSON.parse(localStorage.getItem('damaso_session')) || null;
             
-            // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN (TODOS PNG)
+            // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN
             window.dbProducts = [
                 // CANDILES
                 { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
@@ -595,7 +552,7 @@
                 { id: 25, name: "Espejo Circular Panorama", category: "espejos", price: 15500, img: "IMG_2124.PNG", sku: "DM-ESP-017", desc: "Espejo circular de gran formato con un marco metálico ultra fino en tono bronce. Su pureza geométrica y amplitud visual lo hacen ideal para estudios y recibidores.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "2 cm", dia: "120 cm" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata, marco de acero ligero", fin: "Bronce sutil mate", time: "3 a 4 semanas", cert: "N/A" },
                 { id: 26, name: "Espejo Óvalo Arquitectónico", category: "espejos", price: 18900, img: "IMG_2126.PNG", sku: "DM-ESP-018", desc: "Espejo ovalado con un sofisticado diseño de doble marco flotante en latón avejentado. Una pieza escultural que aporta profundidad a cualquier espacio contemporáneo.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "130 cm", d: "5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata inastillable, marco doble de latón", fin: "Latón cobrizado oscuro", time: "4 semanas", cert: "N/A" },
                 { id: 27, name: "Espejo Reflejo Profundo", category: "espejos", price: 18500, img: "IMG_2029.png", sku: "DM-ESP-019", desc: "Espejo decorativo con profundidad visual inigualable y marco escultural asimétrico.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal inastillable", fin: "Canto pulido", time: "4 semanas", cert: "N/A" },
-                { id: 28, name: "Espejo Vanguardia Luz", category: "espejos", price: 24500, img: "IMG_2149.jpg", sku: "DM-ESP-020", desc: "Espejo monumental con acento vanguardista. Su borde orgánico e iluminación posterior aportan una atmósfera escultural al espacio.", specsLight: "Tira LED 12V 3000K perimetral", cable: "Conexión a registro", dims: { w: "100 cm", h: "180 cm", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "110-120V", mat: "Cristal inastillable, acero", fin: "Negro mate texturizado", time: "4 semanas", cert: "NOM" },
+                { id: 28, name: "Espejo Vanguardia Luz", category: "espejos", price: 24500, img: "IMG_2149.png", sku: "DM-ESP-020", desc: "Espejo monumental con acento vanguardista. Su borde orgánico e iluminación posterior aportan una atmósfera escultural al espacio.", specsLight: "Tira LED 12V 3000K perimetral", cable: "Conexión a registro", dims: { w: "100 cm", h: "180 cm", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "110-120V", mat: "Cristal inastillable, acero", fin: "Negro mate texturizado", time: "4 semanas", cert: "NOM" },
 
                 // LÁMPARAS DE MESA
                 { id: 29, name: "Lámpara Mesa Cilíndrica", category: "mesa", price: 3600, img: "nueva_foto_6.png", sku: "DM-MES-001", desc: "Lámpara de mesa cilíndrica y delgada para iluminación focal en escritorios y burós.", specsLight: "Módulo LED 5W 3000K", cable: "Cable directo con clavija", dims: { w: "8 cm", h: "30 cm", d: "10 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Aluminio inyectado", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
@@ -699,29 +656,13 @@
                 }
             };
 
-            // OBSERVADOR DE REVEAL ANIMATIONS
-            window.initObserver = function() {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('active');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.05, rootMargin: "0px 0px 100px 0px" });
-                
-                document.querySelectorAll('.reveal:not(.active)').forEach((el) => {
-                    observer.observe(el);
-                });
-            };
-
             // LÓGICA DE WA FLOTANTE
             window.updateWhatsAppVisibility = function() {
                 const waBtn = document.getElementById('whatsapp-float');
                 if(!waBtn) return;
                 
                 const cartClosed = document.getElementById('cart-drawer').classList.contains('translate-x-full');
-                const botClosed = document.getElementById('chatbot-drawer').classList.contains('-translate-x-full');
+                const botClosed = document.getElementById('chatbot-drawer').classList.contains('hidden');
                 const specModalClosed = document.getElementById('spec-modal').classList.contains('opacity-0');
                 
                 if (cartClosed && botClosed && specModalClosed) {
@@ -733,7 +674,7 @@
                 }
             };
 
-            // LÓGICA DE COOKIES, MODALES Y SESIÓN
+            // LÓGICA DE COOKIES Y ANIMACIÓN
             window.toggleCookieDetails = function() {
                 const details = document.getElementById('cookie-details');
                 if (details) details.classList.toggle('hidden');
@@ -769,14 +710,11 @@
                 const cookieModal = document.getElementById('cookie-modal');
                 if (cookieModal) cookieModal.classList.add('opacity-0', 'pointer-events-none');
                 
-                if (window.userSession) {
-                    window.enterSiteDirectly();
-                } else {
-                    const loginPrompt = document.getElementById('login-prompt-modal');
-                    if (loginPrompt) {
-                        loginPrompt.classList.remove('hidden');
-                        setTimeout(() => loginPrompt.classList.remove('opacity-0', 'pointer-events-none'), 50);
-                    }
+                const loginPrompt = document.getElementById('login-prompt-modal');
+                if (loginPrompt) {
+                    loginPrompt.classList.remove('hidden');
+                    void loginPrompt.offsetWidth; // Force reflow para transición suave
+                    loginPrompt.classList.remove('opacity-0', 'pointer-events-none');
                 }
             };
 
@@ -786,7 +724,8 @@
                 if (loginPrompt) loginPrompt.classList.add('opacity-0', 'pointer-events-none');
                 if (loginForm) {
                     loginForm.classList.remove('hidden');
-                    setTimeout(() => loginForm.classList.remove('opacity-0', 'pointer-events-none'), 500);
+                    void loginForm.offsetWidth;
+                    loginForm.classList.remove('opacity-0', 'pointer-events-none');
                 }
             };
 
@@ -795,26 +734,30 @@
                 const email = document.getElementById('session-email').value || "cliente@damaso.com";
                 const password = document.getElementById('session-password').value || "";
                 const addr = document.getElementById('session-address').value || "";
-                const gender = document.getElementById('session-gender').value || "O";
                 
-                window.userSession = { name, email, addr, gender };
+                window.userSession = { name, email, addr };
                 localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
                 
                 const loginForm = document.getElementById('login-form-modal');
-                const loadingModal = document.getElementById('login-loading-modal');
                 if (loginForm) loginForm.classList.add('opacity-0', 'pointer-events-none');
                 
-                if (loadingModal) {
-                    loadingModal.classList.remove('hidden');
-                    setTimeout(() => loadingModal.classList.remove('opacity-0', 'pointer-events-none'), 500);
-                }
-
+                // Actualizar interfaz para reflejar estado logueado
                 const navLoginBtn = document.getElementById('nav-login-btn');
                 const botHistoryBtn = document.getElementById('bot-history-btn');
                 if (navLoginBtn) navLoginBtn.classList.add('hidden');
                 if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
 
-                // 10 Segundos de precarga
+                window.showWelcomeAnimation(window.userSession.name);
+            };
+
+            window.showWelcomeAnimation = function(userName) {
+                const loadingModal = document.getElementById('login-loading-modal');
+                if (loadingModal) {
+                    loadingModal.classList.remove('hidden');
+                    void loadingModal.offsetWidth;
+                    loadingModal.classList.remove('opacity-0', 'pointer-events-none');
+                }
+
                 setTimeout(() => {
                     if (loadingModal) loadingModal.classList.add('opacity-0', 'pointer-events-none');
                     
@@ -823,12 +766,7 @@
                     
                     if (welcomeOverlay && welcomeLettersContainer) {
                         welcomeLettersContainer.innerHTML = '';
-                        let prefix = "BIENVENIDO";
-                        if(gender === 'M') prefix = "BIENVENIDA";
-                        else if(gender === 'O') prefix = "BIENVENIDO";
-                        
-                        const firstName = window.userSession.name.split(' ')[0];
-                        const welcomeText = (prefix + " " + firstName).toUpperCase();
+                        const welcomeText = ("BIENVENIDO " + userName).toUpperCase();
                         const words = welcomeText.split(' ');
                         
                         words.forEach((word) => {
@@ -841,7 +779,8 @@
                         });
 
                         welcomeOverlay.classList.remove('hidden');
-                        setTimeout(() => welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none'), 50);
+                        void welcomeOverlay.offsetWidth;
+                        welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none');
 
                         setTimeout(() => {
                             const letters = document.querySelectorAll('.welcome-letter');
@@ -852,6 +791,7 @@
                                 }, index * 100); 
                             });
 
+                            // Deslizar arriba como el cortinero inicial sin el "Studio"
                             setTimeout(() => {
                                 welcomeOverlay.style.transform = 'translateY(-100%)';
                                 setTimeout(() => {
@@ -882,7 +822,6 @@
                 }
 
                 setTimeout(() => { overlays.forEach(o => o.classList.add('hidden')); }, 1000);
-                window.initObserver();
             };
 
             window.confirmLogout = function() {
@@ -900,8 +839,6 @@
                 const letters = document.querySelectorAll('.entry-letter');
                 const studio = document.getElementById('entry-studio');
                 const cookieModal = document.getElementById('cookie-modal');
-                
-                if (entryOverlay) entryOverlay.classList.remove('hidden');
                 
                 setTimeout(() => {
                     if (letters.length > 0) {
@@ -921,71 +858,19 @@
                         
                         setTimeout(() => {
                             if (entryOverlay) {
+                                // ANIMACIÓN CORTINA ARRIBA
                                 entryOverlay.style.transform = 'translateY(-100%)';
                             }
                             setTimeout(() => {
                                 if (entryOverlay) entryOverlay.style.display = 'none';
                                 
                                 if (window.userSession) {
-                                    // Si ya tiene sesión, pasa a animacion
-                                    const loadingModal = document.getElementById('login-loading-modal');
-                                    if (loadingModal) {
-                                        loadingModal.classList.remove('hidden');
-                                        setTimeout(() => loadingModal.classList.remove('opacity-0', 'pointer-events-none'), 50);
-                                    }
-                                    
-                                    setTimeout(() => {
-                                        if (loadingModal) loadingModal.classList.add('opacity-0', 'pointer-events-none');
-                                        const welcomeOverlay = document.getElementById('welcome-animation-overlay');
-                                        const welcomeLettersContainer = document.getElementById('welcome-letters');
-                                        if (welcomeOverlay && welcomeLettersContainer) {
-                                            welcomeLettersContainer.innerHTML = '';
-                                            let prefix = "BIENVENIDO";
-                                            if(window.userSession.gender === 'M') prefix = "BIENVENIDA";
-                                            else if(window.userSession.gender === 'O') prefix = "BIENVENIDO";
-                                            
-                                            const firstName = window.userSession.name.split(' ')[0];
-                                            const welcomeText = (prefix + " " + firstName).toUpperCase();
-                                            const words = welcomeText.split(' ');
-                                            
-                                            words.forEach((word) => {
-                                                const wordSpan = document.createElement('span');
-                                                wordSpan.className = "inline-block whitespace-nowrap mx-2 sm:mx-4";
-                                                for(let i=0; i<word.length; i++){
-                                                    wordSpan.innerHTML += `<span class="welcome-letter opacity-0 transition-opacity duration-500 font-editorial text-4xl sm:text-6xl md:text-8xl text-white tracking-widest glow-text">${word[i]}</span>`;
-                                                }
-                                                welcomeLettersContainer.appendChild(wordSpan);
-                                            });
-
-                                            welcomeOverlay.classList.remove('hidden');
-                                            setTimeout(() => welcomeOverlay.classList.remove('opacity-0', 'pointer-events-none'), 50);
-
-                                            setTimeout(() => {
-                                                const letters = document.querySelectorAll('.welcome-letter');
-                                                letters.forEach((letter, index) => {
-                                                    setTimeout(() => {
-                                                        letter.classList.remove('opacity-0');
-                                                        letter.classList.add('opacity-100');
-                                                    }, index * 100); 
-                                                });
-
-                                                setTimeout(() => {
-                                                    welcomeOverlay.style.transform = 'translateY(-100%)';
-                                                    setTimeout(() => {
-                                                        welcomeOverlay.style.display = 'none';
-                                                        window.enterSiteDirectly();
-                                                    }, 1500);
-                                                }, (letters.length * 100) + 1500);
-                                            }, 500);
-                                        } else {
-                                            window.enterSiteDirectly();
-                                        }
-                                    }, 10000);
-
+                                    window.showWelcomeAnimation(window.userSession.name);
                                 } else {
                                     if (cookieModal) {
                                         cookieModal.classList.remove('hidden');
-                                        setTimeout(() => cookieModal.classList.remove('opacity-0', 'pointer-events-none'), 50);
+                                        void cookieModal.offsetWidth; 
+                                        cookieModal.classList.remove('opacity-0', 'pointer-events-none');
                                     }
                                 }
                             }, 1500);
@@ -1025,16 +910,19 @@
                         catProducts.forEach(p => {
                             html += `
                                 <div class="group reveal">
-                                    <div class="relative overflow-hidden bg-transparent aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500">
+                                    <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
                                         
                                         <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA CON ARCOÍRIS -->
                                         <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
+                                            
+                                            <!-- TEXTO ARCOÍRIS (Forma curvada, colores oro y blanco metálico) -->
                                             <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
                                                 <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
                                                 <text class="text-[14px] font-editorial fill-brand-gold tracking-[0.2em] uppercase" text-anchor="middle">
                                                     <textPath href="#curve-${p.id}" startOffset="50%">DAMASO</textPath>
                                                 </text>
                                             </svg>
+                                            
                                             <div class="relative w-16 h-16 mt-8">
                                                 <div class="absolute inset-0 flex items-center justify-center shape-1">
                                                     <svg width="20" height="20" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" fill="#ef4444" rx="2"/></svg>
@@ -1046,6 +934,7 @@
                                                     <svg width="24" height="20" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#22c55e"/></svg>
                                                 </div>
                                             </div>
+                                            
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
@@ -1070,7 +959,20 @@
                     }
                 }
                 grid.innerHTML = html;
-                window.initObserver(); // Vuelve a vincular las animaciones al nuevo renderizado
+                
+                // OBSERVADOR PARA ANIMACIONES REVEAL AL HACER SCROLL
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                
+                document.querySelectorAll('.reveal').forEach((el) => {
+                    observer.observe(el);
+                });
             };
 
             window.toggleCategories = function(e) {
@@ -1272,7 +1174,7 @@
 
             window.chatHistory = JSON.parse(localStorage.getItem('damaso_chat_history')) || [];
             window.currentChatId = localStorage.getItem('damaso_current_chat_id') || Date.now().toString();
-            window.currentMessages = JSON.parse(localStorage.getItem('damaso_current_messages')) || [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?`}];
+            window.currentMessages = JSON.parse(localStorage.getItem('damaso_current_messages')) || [];
             window.isViewingHistory = false;
 
             const knowledgeBase = {
@@ -1291,7 +1193,7 @@
             };
 
             const synonyms = {
-                "q": "que", "k": "que", "ke": "que", "xque": "que", "xq": "que", "porke": "porque", "porq": "porque",
+                "q": "que", "k": "que", "ke": "que", "xque": "que", "xq": "que", "porke": "porque", "porq": "porque", "pd": "puedes", "pds": "puedes",
                 "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "we": "amigo", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo", "compadre": "amigo", "compa": "amigo",
                 "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio", "kuanto": "precio", "kwanto": "precio", "cwuesta": "cuesta", "cuestion": "precio",
                 "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde", "local": "donde", "estan": "donde", "showroom": "donde", "keda": "donde", "dondee": "donde",
@@ -1301,7 +1203,8 @@
                 "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias", "plz": "porfavor", "porfa": "porfavor",
                 "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
                 "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar", "deslogear": "cerrar",
-                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias"
+                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias",
+                "pdf": "pdf", "ficha": "pdf", "documento": "pdf", "archivo": "pdf", "descargar": "pdf"
             };
 
             const intents = {
@@ -1311,17 +1214,20 @@
                 ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio", "informacion", "info", "saber"],
                 contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje", "escribir"],
                 ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar", "ir", "encuentran"],
-                compra: ["comprar", "cotizar", "cotizacion", "pdf", "bolsa", "carrito", "pagar", "adquirir", "pedido", "ordenar", "llevar", "quiero", "interesa"],
+                compra: ["comprar", "cotizar", "cotizacion", "bolsa", "carrito", "pagar", "adquirir", "pedido", "ordenar", "llevar", "quiero", "interesa"],
                 precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "cotiza", "presupuesto", "dinero", "cuestan", "valen", "sale"],
                 tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega", "tardan", "meses", "logistica", "mandan", "tardaria", "mandar"],
                 material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton", "bronce", "onice", "marmol", "limpieza", "limpiar", "cuidados", "mantenimiento", "limpia", "lava", "detergente", "quimicos", "colores", "tonos", "pintura", "dorado", "negro", "blanco", "variantes", "opciones"],
                 medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide", "dimensiones", "grande", "pequeño", "escala", "volumen"],
+                especificaciones: ["especificaciones", "detalles", "tecnico", "tecnica", "caracteristicas", "info tecnica"],
                 luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica", "energia", "corriente", "focos", "iluminacion", "kelvin", "lumens", "prende"],
                 marca: ["damaso", "estudio", "studio", "marca", "filosofia", "ivan", "diseñador", "origen", "historia", "brutalismo", "arte", "arquitectura", "mision", "vision"],
                 pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion", "efectivo", "banco", "meses sin intereses"],
                 impuestos: ["iva", "impuesto", "impuestos", "factura", "facturar", "incluye", "incluido", "neto", "bruto", "iva incluido", "mas iva"],
                 cerrar_sesion: ["cerrar sesion", "salir", "apagar", "desloguear", "desconectar", "cerrar cuenta", "quitar sesion", "cerrar", "log out", "logout", "kitar mi cuenta", "cerar sesion", "salirme", "me voy", "cierra sesion", "desconectame", "cerrar seccion", "serrar seccion", "cerar seccion", "quitar cuenta"],
-                garantias: ["garantia", "garantias", "devuelve", "devolucion", "roto", "rompe", "falla", "fayo", "sirve", "sirbe", "quebrado", "cambio", "reparacion"]
+                garantias: ["garantia", "garantias", "devuelve", "devolucion", "roto", "rompe", "falla", "fayo", "sirve", "sirbe", "quebrado", "cambio", "reparacion"],
+                pdf: ["pdf", "ficha", "documento", "descargar"],
+                funcionamiento: ["como funciona", "que hago", "como usar", "instrucciones"]
             };
 
             const worldKnowledgeWords = {
@@ -1374,9 +1280,8 @@
                 return normalizedWords.join(" ");
             }
 
-            window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
-
             window.saveChatState = function() {
+                if (!window.userSession) return;
                 localStorage.setItem('damaso_current_messages', JSON.stringify(window.currentMessages));
                 localStorage.setItem('damaso_current_chat_id', window.currentChatId);
                 
@@ -1396,6 +1301,7 @@
             };
 
             window.toggleChatHistory = function() {
+                if (!window.userSession) return;
                 window.isViewingHistory = !window.isViewingHistory;
                 const messagesView = document.getElementById('chat-messages');
                 const historyView = document.getElementById('chat-history-view');
@@ -1418,7 +1324,7 @@
 
             window.createNewChat = function() {
                 window.currentChatId = Date.now().toString();
-                window.currentMessages = [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?`}];
+                window.currentMessages = [];
                 window.saveChatState();
                 window.toggleChatHistory();
             };
@@ -1427,7 +1333,7 @@
                 const chat = window.chatHistory.find(c => c.id === id);
                 if(chat) {
                     window.currentChatId = chat.id;
-                    window.currentMessages = chat.messages || [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}...`}];
+                    window.currentMessages = chat.messages || [];
                     window.saveChatState();
                     window.toggleChatHistory();
                 }
@@ -1455,17 +1361,38 @@
                 const chatBox = document.getElementById('chat-messages');
                 if (!chatBox) return;
                 chatBox.innerHTML = '';
+                
+                // CABECERA Y RECOMENDACIONES (Si no hay mensajes o siempre al principio)
+                let headerHtml = `
+                    <div class="w-full bg-gradient-to-br from-brand-gold/20 to-[#0a0a0a] p-6 rounded-b-xl border-b border-brand-gold mb-6 shadow-[0_4px_20px_rgba(212,175,55,0.15)]">
+                        <h3 class="font-editorial text-3xl text-brand-gold glow-gold mb-2 leading-tight">¿Qué tal, <br><span class="text-white">${window.userSession ? window.userSession.name.split(' ')[0] : 'Invitado'}</span>?</h3>
+                        <p class="text-[10px] text-brand-muted tracking-widest uppercase mb-6">${window.userSession ? 'Asistente IA Activado' : 'Inicia sesión para respuestas más personalizadas'}</p>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="window.sendChatMessage('Generar un PDF')" class="px-3 py-1.5 border border-brand-gold/50 text-brand-gold text-[9px] uppercase tracking-widest hover:bg-brand-gold hover:text-black transition-colors rounded">Generar un PDF</button>
+                            <button onclick="window.sendChatMessage('Dame especificaciones de una pieza')" class="px-3 py-1.5 border border-brand-gold/50 text-brand-gold text-[9px] uppercase tracking-widest hover:bg-brand-gold hover:text-black transition-colors rounded">Especificaciones</button>
+                            <button onclick="window.sendChatMessage('¿Cómo funciona la página?')" class="px-3 py-1.5 border border-brand-gold/50 text-brand-gold text-[9px] uppercase tracking-widest hover:bg-brand-gold hover:text-black transition-colors rounded">Cómo funciona</button>
+                            ${window.userSession ? `<button onclick="window.sendChatMessage('¿Cómo cierro sesión?')" class="px-3 py-1.5 border border-brand-gold/50 text-brand-gold text-[9px] uppercase tracking-widest hover:bg-brand-gold hover:text-black transition-colors rounded">Cerrar sesión</button>` : ''}
+                        </div>
+                    </div>
+                `;
+                chatBox.innerHTML += headerHtml;
+
                 window.currentMessages.forEach(msg => {
                     if(msg.role === 'user') {
+                        let textContent = msg.text;
+                        if(msg.image) {
+                            textContent = `<img src="${msg.image}" class="w-32 h-32 object-cover rounded mb-2 border border-brand-gold/50">` + textContent;
+                        }
                         chatBox.innerHTML += `
-                            <div class="flex flex-col items-end w-full mt-4">
-                                <div class="bg-brand-gold text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%] shadow-[0_0_15px_rgba(212,175,55,0.3)]">${msg.text}</div>
+                            <div class="flex flex-col items-end w-full mt-4 px-4">
+                                <div class="bg-brand-gold text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%] shadow-[0_0_15px_rgba(212,175,55,0.3)]">${textContent}</div>
                             </div>
                         `;
                     } else {
                         chatBox.innerHTML += `
-                            <div class="flex flex-col items-start max-w-[85%] mt-4">
-                                <div class="bg-[#1a1a1a] text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)]">${msg.text}</div>
+                            <div class="flex flex-col items-start max-w-[85%] mt-4 px-4">
+                                <div class="bg-[#1a1a1a] text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)] break-words-custom">${msg.text}</div>
                             </div>
                         `;
                     }
@@ -1473,12 +1400,47 @@
                 chatBox.scrollTop = chatBox.scrollHeight;
             };
 
-            window.sendChatMessage = async function() {
+            window.handleImageUpload = function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    
+                    window.botContext.interactionCount++;
+                    window.currentMessages.push({ role: 'user', text: "Analiza esta imagen por favor.", image: base64Image });
+                    window.saveChatState();
+                    window.renderCurrentMessages();
+                    
+                    const chatBox = document.getElementById('chat-messages');
+                    const loadingId = 'loading-' + Date.now();
+                    chatBox.innerHTML += `
+                        <div id="${loadingId}" class="flex flex-col items-start max-w-[85%] mt-4 px-4">
+                            <div class="bg-[#1a1a1a] text-brand-gold border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light italic glow-gold">Escaneando imagen arquitectónica con IA...</div>
+                        </div>
+                    `;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+
+                    // Simulate API vision processing
+                    setTimeout(() => {
+                        const el = document.getElementById(loadingId);
+                        if (el) el.remove();
+                        const response = `He analizado la imagen proporcionada a través de mis módulos de visión computacional. Parece ser una pieza con una fuerte estética brutalista o minimalista. En DAMASO Studio valoramos mucho ese tipo de texturas y contrastes lumínicos. ¿Te gustaría que busque una pieza similar en nuestro catálogo para generarte un PDF o mostrarte sus especificaciones?`;
+                        window.currentMessages.push({ role: 'bot', text: response });
+                        window.saveChatState();
+                        window.renderCurrentMessages();
+                    }, 2000);
+                };
+                reader.readAsDataURL(file);
+            };
+
+            window.sendChatMessage = function(overrideText) {
                 if(window.isViewingHistory) return;
                 const input = document.getElementById('chat-input');
-                if (!input) return;
+                if (!input && !overrideText) return;
 
-                const rawText = input.value.trim();
+                const rawText = overrideText || input.value.trim();
                 if(!rawText) return;
                 
                 const chatBox = document.getElementById('chat-messages');
@@ -1489,11 +1451,11 @@
                 window.saveChatState();
                 window.renderCurrentMessages();
                 
-                input.value = '';
+                if(input) input.value = '';
 
                 const loadingId = 'loading-' + Date.now();
                 chatBox.innerHTML += `
-                    <div id="${loadingId}" class="flex flex-col items-start max-w-[85%] mt-4">
+                    <div id="${loadingId}" class="flex flex-col items-start max-w-[85%] mt-4 px-4">
                         <div class="bg-[#1a1a1a] text-brand-gold border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light italic glow-gold">Analizando 4 millones de parámetros...</div>
                     </div>
                 `;
@@ -1504,16 +1466,6 @@
                     if (el) el.remove();
                 };
 
-                const statusEl = document.getElementById('bot-status');
-                if (statusEl) {
-                    statusEl.innerHTML = "⚡ BOT CONECTADO";
-                    statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-gold glow-gold font-bold text-right leading-tight transition-colors duration-300 hidden sm:block";
-                }
-
-                // ==========================================
-                // EJECUCIÓN DIRECTA DEL SUPER BOT LOCAL NLP EXTREMO
-                // (Se eliminó la petición a la red para garantizar que NUNCA se trabe el botón)
-                // ==========================================
                 setTimeout(() => {
                     removeLoading();
                     const text = cleanText(rawText);
@@ -1523,13 +1475,11 @@
                     let detectedIntents = [];
                     const uName = getUserFirstName();
 
-                    // Simulación de "Aprendizaje Humano" en tiempo real
                     let addedLearning = "";
                     if (words.length >= 4 && !text.includes("hola") && !text.includes("adios") && !text.includes("pdf")) {
                         addedLearning = `<br><br><span class='text-brand-muted text-[10px] italic block mt-3 border-t border-brand-border pt-2'>*Mi red neuronal ha procesado tu sintaxis, ${uName}, y la ha integrado a mis 4 millones de parámetros para interactuar mejor contigo.*</span>`;
                     }
 
-                    // 1. Motor Matemático Avanzado Integrado
                     let mathString = text.replace(/uno/g, '1').replace(/dos/g, '2').replace(/tres/g, '3').replace(/cuatro/g, '4')
                                          .replace(/cinco/g, '5').replace(/seis/g, '6').replace(/siete/g, '7').replace(/ocho/g, '8')
                                          .replace(/nueve/g, '9').replace(/diez/g, '10').replace(/mas/g, '+').replace(/más/g, '+')
@@ -1553,7 +1503,6 @@
                     } 
                     
                     if (!response) {
-                        // 2. Escaneo de Conocimiento Global
                         for (let [word, knowledge] of Object.entries(worldKnowledgeWords)) {
                             if (words.includes(word)) {
                                 response = knowledge + addedLearning;
@@ -1570,6 +1519,8 @@
 
                             if(detectedIntents.includes("cerrar_sesion")) {
                                 response = `${uName}, ${knowledgeBase.logout}`;
+                            } else if (detectedIntents.includes("funcionamiento")) {
+                                response = `DAMASO Studio funciona como una galería interactiva y plataforma de cotización, ${uName}. Puedes navegar por nuestro catálogo en el fondo, ver las especificaciones técnicas completas de cada pieza al pasar el cursor o dar click sobre ellas, y si deseas, agregarlas a tu bolsa de cotización (ícono de carrito arriba a la derecha) para generar un PDF formal y enviarlo directamente a nuestro equipo.` + addedLearning;
                             } else if (detectedIntents.includes("garantias")) {
                                 response = `${knowledgeBase.warranty}` + addedLearning;
                             } else {
@@ -1577,7 +1528,6 @@
                                 const stopWords = ["el", "la", "los", "las", "un", "una", "de", "del", "a", "ante", "con", "por", "para", "espejo", "candil", "lampara", "sobre", "cual", "cuanto", "como", "tiene"];
                                 let searchWords = words.filter(w => !stopWords.includes(w) && w.length > 2);
 
-                                // Búsqueda de Productos con Motor Lógico Difuso (Fuzzy Matching)
                                 for (let p of window.dbProducts) {
                                     if (text.includes(p.sku.toLowerCase()) || cleanText(p.name).includes(text)) {
                                         foundProduct = p; break;
@@ -1614,30 +1564,28 @@
                                     if(!foundProduct && bestMatch) foundProduct = bestMatch;
                                 }
 
-                                // Memoria de Contexto Evolutiva
                                 if (!foundProduct && window.botContext.lastProduct) {
-                                    const productSpecificIntents = ["precio", "tiempo", "material", "medida", "luz", "impuestos", "generar_pdf"];
+                                    const productSpecificIntents = ["precio", "tiempo", "material", "medida", "luz", "impuestos", "pdf"];
                                     if (detectedIntents.some(i => productSpecificIntents.includes(i))) {
                                         foundProduct = window.botContext.lastProduct;
                                     }
                                 }
 
-                                // Lógica de Respuesta Generativa
                                 if (foundProduct) {
                                     window.botContext.lastProduct = foundProduct; 
                                     window.botContext.lastIntent = "producto";
                                     
-                                    if (detectedIntents.includes("generar_pdf") || text.includes("pdf") || text.includes("ficha") || text.includes("archivo") || text.includes("documento")) {
+                                    if (detectedIntents.includes("pdf")) {
                                         let pdfId = 'pdf-' + Date.now();
                                         response = `Claro, estoy generando tu documento. En breves estará listo, ${uName}.<br><br>
-                                        <div class="bg-white text-black p-5 rounded-sm mt-3 shadow-[0_0_20px_rgba(255,255,255,0.2)] relative z-10">
-                                            <p class="font-bold text-xs uppercase tracking-widest border-b border-gray-300 pb-2 mb-3 text-center truncate">${foundProduct.name}</p>
+                                        <div class="bg-white text-black p-5 rounded-sm mt-3 shadow-[0_0_20px_rgba(255,255,255,0.2)] relative z-10 w-full max-w-full">
+                                            <p class="font-bold text-xs uppercase tracking-widest border-b border-gray-300 pb-2 mb-3 text-center truncate w-full break-words-custom">${foundProduct.name}</p>
                                             <p class="text-[10px] text-gray-500 mb-4 font-mono text-center">SKU: ${foundProduct.sku}</p>
                                             <div id="loader-${pdfId}" class="flex flex-col items-center justify-center py-4">
                                                 <svg class="animate-spin text-black w-6 h-6 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
                                                 <span class="text-[9px] uppercase tracking-widest text-gray-500">Procesando archivo...</span>
                                             </div>
-                                            <div id="btn-container-${pdfId}" class="hidden flex justify-center mt-2">
+                                            <div id="btn-container-${pdfId}" class="hidden flex justify-center mt-2 w-full">
                                                 <button onclick="window.generateSinglePDF('${foundProduct.id}')" class="w-full bg-black text-white px-4 py-3 text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-brand-gold hover:text-black transition-colors shadow-lg cursor-pointer">ABRIR PDF</button>
                                             </div>
                                         </div>`;
@@ -1665,10 +1613,15 @@
                                             response = `Especificaciones del sistema lumínico de <strong class="text-brand-gold glow-gold">${foundProduct.name}</strong>:<br><br>• Luminaria: <span class="text-white">${foundProduct.specsLight}</span><br>• Voltaje soportado: <span class="text-white">${foundProduct.volt}</span><br>• Tipo de Cableado: <span class="text-white">${foundProduct.cable}</span><br>• Certificación: <span class="text-white">${foundProduct.cert}</span>.` + addedLearning;
                                         }
                                     } else {
-                                        response = `Ficha Ejecutiva solicitada, ${uName}: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones, generar PDF o tipo de luz de esta pieza?` + addedLearning;
+                                        response = `Ficha Ejecutiva solicitada, ${uName}: <strong class="text-brand-gold text-lg glow-gold">${foundProduct.name}</strong><br><br>SKU: <span class="text-white">${foundProduct.sku}</span><br>Valor: <strong class="text-white">$${Number(foundProduct.price).toLocaleString()} MXN (IVA Incluido)</strong><br>Manufactura: <span class="text-white">${foundProduct.time}</span><br><br>${foundProduct.desc}<br><br>¿Requiere conocer las dimensiones o generar el PDF de esta pieza?` + addedLearning;
                                     }
                                 } else {
-                                    if (detectedIntents.includes("saludo")) {
+                                    // Aclaraciones cuando piden specs o pdf general sin especificar producto
+                                    if(detectedIntents.includes("pdf")) {
+                                        response = `Claro que sí, ${uName}. ¿Qué pieza en especial quieres que genere en PDF? (Puedes darme su nombre o su SKU)`;
+                                    } else if(detectedIntents.includes("especificaciones") || detectedIntents.includes("medida")) {
+                                        response = `¡Claro, ${uName}! ¿De qué pieza en particular quiere las especificaciones?`;
+                                    } else if (detectedIntents.includes("saludo")) {
                                         response = `¡Qué gusto saludarle de nuevo, ${uName}! Soy el motor de inteligencia de <strong class="text-brand-gold glow-gold">DAMASO Studio</strong>. Analizo sus parámetros desde su dispositivo para optimizar su experiencia. Contamos con 52 piezas exclusivas en el catálogo actual. ¿Desea consultar materiales, medidas o iniciar una cotización formal?`;
                                     } else if (detectedIntents.includes("despedida")) {
                                         response = `¡Ha sido un verdadero placer, ${uName}! En DAMASO Studio quedamos a su entera disposición en línea 24/7 para cristalizar sus futuros proyectos de interiorismo. Mis algoritmos han aprendido valiosa información de usted hoy.`;
@@ -1690,7 +1643,7 @@
                                     } else if (detectedIntents.includes("compra")) {
                                         response = `Para iniciar un protocolo de adquisición, le sugiero navegar por nuestro catálogo en el fondo, pulsar 'Agregar a Cotización' en las luminarias deseadas y posteriormente abrir el ícono dorado del carrito de compras ubicado en la barra superior. Allí podrá generar un documento PDF formal con el cálculo automatizado.` + addedLearning;
                                     } else if (detectedIntents.includes("ayuda")) {
-                                        response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio, ${uName}. Puede solicitarme:<br><br>• Generación de PDFs de fichas técnicas.<br>• Cotizaciones y cálculos matemáticos complejos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Confirmación de precios con IVA.<br>• Protocolos de limpieza o información de manufactura.` + addedLearning;
+                                        response = `Mi matriz neuronal de 4 millones de parámetros abarca todo el conocimiento del estudio, ${uName}. Puede solicitarme:<br><br>• Generar PDFs de cualquier pieza.<br>• Cotizaciones y cálculos matemáticos.<br>• Dimensiones, pesos y física de las piezas.<br>• Especificaciones eléctricas (temperatura Kelvin, voltajes).<br>• Analizar imágenes arquitectónicas (botón +).` + addedLearning;
                                     } else {
                                         let chitChat = chitchatResponses[window.botContext.interactionCount % chitchatResponses.length];
                                         response = `Analizo la complejidad de su comentario, ${uName}. ${chitChat}` + addedLearning;
@@ -1704,6 +1657,18 @@
                     window.saveChatState();
                     window.renderCurrentMessages();
                 }, 800); 
+            };
+
+            window.toggleChatbot = function() {
+                const drawer = document.getElementById('chatbot-drawer');
+                const overlay = document.getElementById('chat-overlay');
+                if (drawer) drawer.classList.toggle('hidden');
+                if (overlay) overlay.classList.toggle('hidden');
+                
+                setTimeout(() => { 
+                    window.renderCurrentMessages(); 
+                    window.updateWhatsAppVisibility(); 
+                }, 50);
             };
 
             window.generateSinglePDF = function(id) {
@@ -1766,7 +1731,7 @@
                     doc.setFont("helvetica", "bold");
                     doc.setFontSize(12);
                     doc.setTextColor(0, 0, 0);
-                    doc.text("ESPECIFICACIONES DEL MODELO:", 15, startY);
+                    doc.text("ESPECIFICACIONES TÉCNICAS:", 15, startY);
                     
                     doc.setFont("helvetica", "normal");
                     doc.setFontSize(10);
@@ -1795,21 +1760,21 @@
                     doc.setFont("helvetica", "bold");
                     doc.setFontSize(18);
                     doc.setTextColor(212, 175, 55); 
-                    doc.text("Inversión: $" + Number(p.price).toLocaleString() + " MXN", 15, startY);
+                    doc.text("Valor de la Pieza: $" + Number(p.price).toLocaleString() + " MXN", 15, startY);
                     
                     doc.setFont("helvetica", "normal");
                     doc.setFontSize(8);
                     doc.setTextColor(150, 150, 150);
-                    doc.text("* Todos los precios incluyen I.V.A.", 15, startY + 6);
-                    doc.text("* Gastos de envío se calculan por separado según logística.", 15, startY + 11);
+                    doc.text("* Precio oficial. Incluye 16% I.V.A.", 15, startY + 6);
+                    doc.text("* Gastos de envío a calcular por separado según logística.", 15, startY + 11);
 
-                    doc.save(`Ficha_Damaso_${p.sku}.pdf`);
+                    doc.save(`Ficha_Tecnica_${p.sku}.pdf`);
                 } catch(e) {
                     console.error("Fallo al generar PDF", e);
                 }
             };
 
-            // GENERACIÓN DE PDF NATIVA CON BLINDAJE DE ERRORES (CARRITO)
+            // GENERACIÓN DE PDF NATIVA CON BLINDAJE DE ERRORES
             window.checkoutPDF = function(event) {
                 if(window.cart.length === 0) { 
                     const btn = document.getElementById('btn-download-pdf');
@@ -2000,11 +1965,22 @@
                 document.body.removeChild(link);
             };
 
-            // Iniciar de forma segura y ejecutar Observer
+            // Iniciar de forma segura
             function initApp() {
                 window.renderCatalog(window.dbProducts);
                 window.updateCartUI();
                 window.startAppAnimation();
+                
+                const navLoginBtn = document.getElementById('nav-login-btn');
+                const botHistoryBtn = document.getElementById('bot-history-btn');
+                
+                if (window.userSession) {
+                    if (navLoginBtn) navLoginBtn.classList.add('hidden');
+                    if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
+                } else {
+                    if (navLoginBtn) navLoginBtn.classList.remove('hidden');
+                    if (botHistoryBtn) botHistoryBtn.classList.add('hidden');
+                }
                 
                 // Configurar barra de búsqueda
                 const liveSearchInput = document.getElementById('live-search');
@@ -2028,25 +2004,26 @@
                     });
                 }
 
-                // Autocompletado del PDF con datos de sesión e Iconos Restringidos
-                const navLoginBtn = document.getElementById('nav-login-btn');
-                const botHistoryBtn = document.getElementById('bot-history-btn');
-                
+                // Autocompletado del PDF con datos de sesión
                 if(window.userSession) {
                     const logoutBtn = document.getElementById('logout-btn');
                     if(logoutBtn) logoutBtn.classList.remove('hidden');
-                    
-                    if (navLoginBtn) navLoginBtn.classList.add('hidden');
-                    if (botHistoryBtn) botHistoryBtn.classList.remove('hidden');
                     
                     const clientNameObj = document.getElementById('client-name');
                     const clientEmailObj = document.getElementById('client-email');
                     if(clientNameObj) clientNameObj.value = window.userSession.name;
                     if(clientEmailObj) clientEmailObj.value = window.userSession.email;
-                } else {
-                    if (navLoginBtn) navLoginBtn.classList.remove('hidden');
-                    if (botHistoryBtn) botHistoryBtn.classList.add('hidden');
                 }
+
+                // Cerrar menú al hacer clic fuera
+                document.addEventListener('click', function(event) {
+                    const menu = document.getElementById('dropdown-menu');
+                    const btn = document.getElementById('btn-menu');
+                    if (menu && btn && !menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('opacity-0')) {
+                        menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                        menu.classList.remove('translate-y-0', 'opacity-100');
+                    }
+                });
             }
 
             // Asegurar que el DOM esté listo antes de arrancar
