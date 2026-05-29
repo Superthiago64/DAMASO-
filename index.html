@@ -361,6 +361,9 @@
                     <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20M2 12h20"></path></svg>
                 </div>
                 
+                <!-- NUEVO ELEMENTO PARA EL NOMBRE DE LA IMAGEN -->
+                <span id="modal-img-name" class="text-[9px] tracking-[0.2em] text-brand-muted uppercase mb-1 relative z-10 block font-bold"></span>
+
                 <h2 id="modal-title" class="font-editorial text-3xl sm:text-4xl text-brand-gold glow-gold mb-2 uppercase break-words-custom leading-tight relative z-10"></h2>
                 <p id="modal-desc" class="text-brand-muted mb-8 italic relative z-10"></p>
                 <div class="space-y-4 text-brand-muted flex-1 relative z-10 pb-8">
@@ -1092,6 +1095,7 @@
                 
                 document.getElementById('modal-img-link').href = p.img;
                 document.getElementById('modal-img-element').src = p.img;
+                document.getElementById('modal-img-name').innerText = p.img;
                 document.getElementById('modal-title').innerText = p.name;
                 document.getElementById('modal-desc').innerText = p.desc;
                 document.getElementById('modal-sku').innerText = p.sku;
@@ -1934,4 +1938,3 @@
     </script>
 </body>
 </html>
-
