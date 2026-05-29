@@ -53,9 +53,9 @@
         .modal-overlay { backdrop-filter: blur(8px); }
         input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { display: none; }
 
-        .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; display: flex; background-color: #111; padding: 25px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; }
+        .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; display: flex; background-color: #111; padding: 25px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; user-select: none; -webkit-user-select: none; touch-action: pan-y; }
         .marquee-content { display: flex; animation: marquee 40s linear infinite; }
-        .marquee-content:hover { animation-play-state: paused; }
+        .marquee-container:hover .marquee-content, .marquee-content.is-paused { animation-play-state: paused !important; }
         @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
         
         .client-group { margin: 0 30px; display: inline-flex; align-items: center; }
@@ -1930,6 +1930,18 @@
                     const clientEmailObj = document.getElementById('client-email');
                     if(clientNameObj) clientNameObj.value = window.userSession.name;
                     if(clientEmailObj) clientEmailObj.value = window.userSession.email;
+                }
+
+                // Lógica de pausa exacta para la marquesina de clientes (Escritorio y Móvil)
+                const marqueeContainer = document.querySelector('.marquee-container');
+                const marqueeContent = document.querySelector('.marquee-content');
+                if (marqueeContainer && marqueeContent) {
+                    const pauseMarquee = () => marqueeContent.classList.add('is-paused');
+                    const playMarquee = () => marqueeContent.classList.remove('is-paused');
+                    
+                    marqueeContainer.addEventListener('touchstart', pauseMarquee, {passive: true});
+                    marqueeContainer.addEventListener('touchend', playMarquee);
+                    marqueeContainer.addEventListener('touchcancel', playMarquee);
                 }
             }
 
