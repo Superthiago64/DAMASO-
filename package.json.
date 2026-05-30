@@ -2,6 +2,7 @@
   "name": "damaso-catalog",
   "version": "1.0.0",
   "dependencies": {
-    "firebase": "^10.0.0"
+    "firebase": "^10.0.0",
+    "@google/generative-ai": "^0.1.0"
   }
 }
