@@ -197,7 +197,7 @@
         </div>
     </div>
 
-    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS - PRECARGA Y FORZADO DE IMÁGENES) -->
+    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS - PRECARGA) -->
     <div id="login-loading-modal" class="init-overlay fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#030303] opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="relative w-40 h-40 mb-12">
             <div class="absolute inset-0 flex items-center justify-center shape-1">
@@ -280,8 +280,8 @@
                     </svg>
                 </button>
 
-                <!-- ICONO DEL BOT PROTEGIDO -->
-                <button onclick="window.toggleChatbot(event)" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2 cursor-pointer pointer-events-auto" aria-label="Asistente Virtual">
+                <!-- ICONO DEL BOT -->
+                <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2" aria-label="Asistente Virtual">
                     <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">AI</span>
                 </button>
                 
@@ -361,8 +361,17 @@
                     <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20M2 12h20"></path></svg>
                 </div>
                 
-                <!-- NOMBRE DE LA IMAGEN EN PEQUEÑO -->
-                <span id="modal-img-name" class="text-[9px] tracking-[0.2em] text-brand-muted uppercase mb-1 relative z-10 block font-bold"></span>
+                <!-- NUEVO CONTENEDOR PARA EL NOMBRE, COPIAR Y DESCARGAR -->
+                <div class="flex items-center gap-3 mb-2 relative z-10">
+                    <span id="modal-img-name" class="text-[9px] tracking-[0.2em] text-brand-gold uppercase font-bold bg-brand-gold/10 px-2 py-1 rounded-sm border border-brand-gold/30"></span>
+                    <button id="modal-copy-btn" onclick="window.copyImageName()" class="text-brand-muted hover:text-white transition-colors p-1.5 bg-[#111] border border-brand-border rounded-sm shadow-sm" title="Copiar nombre">
+                        <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                    <button onclick="window.downloadWatermarkedImage()" class="text-brand-gold hover:text-black hover:bg-brand-gold transition-colors p-1.5 px-3 flex items-center gap-2 text-[8px] uppercase tracking-widest border border-brand-gold rounded-sm shadow-[0_0_10px_rgba(212,175,55,0.2)]" title="Descargar Imagen con Marca de Agua">
+                        <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Descargar
+                    </button>
+                </div>
 
                 <h2 id="modal-title" class="font-editorial text-3xl sm:text-4xl text-brand-gold glow-gold mb-2 uppercase break-words-custom leading-tight relative z-10"></h2>
                 <p id="modal-desc" class="text-brand-muted mb-8 italic relative z-10"></p>
@@ -529,12 +538,9 @@
     <!-- SCRIPT DE LÓGICA PRINCIPAL ÚNICO Y PROTEGIDO -->
     <script>
         (function() {
-            // LÓGICA DE MEMORIA SEGURA (SESIÓN Y CARRITO)
-            window.cart = [];
-            try { window.cart = JSON.parse(localStorage.getItem('damaso_cart')) || []; } catch(e) {}
-            
-            window.userSession = null;
-            try { window.userSession = JSON.parse(localStorage.getItem('damaso_session')) || null; } catch(e) {}
+            // LÓGICA DE MEMORIA (SESIÓN Y CARRITO)
+            window.cart = JSON.parse(localStorage.getItem('damaso_cart')) || [];
+            window.userSession = JSON.parse(localStorage.getItem('damaso_session')) || null;
             
             // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN (TODOS PNG)
             window.dbProducts = [
@@ -967,7 +973,6 @@
                             </div>
                         `;
                         catProducts.forEach(p => {
-                            // IMAGEN FORZADA (SIN LAZY LOADING)
                             html += `
                                 <div class="group">
                                     <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
@@ -975,7 +980,7 @@
                                         <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA CON ARCOÍRIS -->
                                         <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
                                             
-                                            <!-- TEXTO ARCOÍRIS -->
+                                            <!-- TEXTO ARCOÍRIS (Forma curvada, colores oro y blanco metálico) -->
                                             <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
                                                 <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
                                                 <text class="text-[14px] font-editorial fill-brand-gold tracking-[0.2em] uppercase" text-anchor="middle">
@@ -998,7 +1003,8 @@
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
-                                        <img src="${p.img}" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="this.onerror=null; setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 1000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. ONERROR REINTENTA INFINITAMENTE CADA 3 SEGUNDOS -->
+                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
                                         
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
@@ -1249,8 +1255,7 @@
                 "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias", "plz": "porfavor", "porfa": "porfavor",
                 "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
                 "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar", "deslogear": "cerrar",
-                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias",
-                "descargar": "pdf", "imprimir": "pdf", "documento": "pdf", "ficha": "pdf"
+                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias"
             };
 
             const intents = {
@@ -1322,6 +1327,8 @@
                 let normalizedWords = words.map(w => synonyms[w] || w);
                 return normalizedWords.join(" ");
             }
+
+            window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
 
             window.saveChatState = function() {
                 if (!window.userSession) return; // LOS INVITADOS NO GUARDAN MEMORIA
@@ -1678,7 +1685,6 @@
                 }, 800); 
             };
 
-            // REPARACIÓN DEL BOTÓN CHAT:
             window.toggleChatbot = function(e) {
                 if(e) e.preventDefault();
                 const drawer = document.getElementById('chatbot-drawer');
@@ -1695,7 +1701,6 @@
             };
 
             window.checkoutPDF = function(event) {
-                // ... (mantiene la lógica del checkout de PDF anterior igual)
                 if(window.cart.length === 0) { 
                     const btn = document.getElementById('btn-download-pdf');
                     if(btn) {
@@ -1887,9 +1892,6 @@
 
             // Iniciar de forma segura
             function initApp() {
-                // FORZAR LA DESCARGA DE LAS IMÁGENES EN CACHÉ PARA TODOS LOS NAVEGADORES
-                window.preloadAllImages();
-                
                 window.renderCatalog(window.dbProducts);
                 window.updateCartUI();
                 window.startAppAnimation();
@@ -1958,8 +1960,71 @@
                 initApp();
             }
 
+            // NUEVAS FUNCIONES DE UTILIDAD (AÑADIDAS AQUÍ ABAJO)
+            window.copyImageName = function() {
+                const text = document.getElementById('modal-img-name').innerText;
+                if(text) {
+                    let textArea = document.createElement("textarea");
+                    textArea.value = text;
+                    // Prevenir scroll en móviles
+                    textArea.style.top = "0";
+                    textArea.style.left = "0";
+                    textArea.style.position = "fixed";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try { 
+                        document.execCommand('copy'); 
+                        const btn = document.getElementById('modal-copy-btn');
+                        const origHtml = btn.innerHTML;
+                        btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="#22c55e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                        setTimeout(() => { btn.innerHTML = origHtml; }, 2000);
+                    } catch (err) {}
+                    document.body.removeChild(textArea);
+                }
+            };
+
+            window.downloadWatermarkedImage = function() {
+                const imgEl = document.getElementById('modal-img-element');
+                const imgNameText = document.getElementById('modal-img-name').innerText || 'damaso_image.png';
+                if (!imgEl || !imgEl.src) return;
+
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    
+                    ctx.drawImage(img, 0, 0);
+                    
+                    // Configurar la fuente de la marca de agua
+                    ctx.font = `italic bold ${Math.max(20, canvas.width * 0.035)}px "Playfair Display", serif`;
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+                    ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
+                    ctx.shadowBlur = 8;
+                    ctx.shadowOffsetX = 2;
+                    ctx.shadowOffsetY = 2;
+                    
+                    // Dibujar el texto en la esquina inferior izquierda
+                    const text = "DAMASO Studio";
+                    const padding = Math.max(15, canvas.width * 0.02);
+                    ctx.fillText(text, padding, canvas.height - padding);
+                    
+                    // Descargar
+                    const link = document.createElement('a');
+                    link.download = imgNameText.replace('.png', '') + '_watermark.png';
+                    link.href = canvas.toDataURL('image/png');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                };
+                img.src = imgEl.src;
+            };
+
         })(); // Fin del entorno protegido
     </script>
 </body>
 </html>
-
