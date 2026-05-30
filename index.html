@@ -197,7 +197,7 @@
         </div>
     </div>
 
-    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS - PRECARGA) -->
+    <!-- CAPA 4: PANTALLA DE CARGA TÁCTICA (10 SEGUNDOS - PRECARGA Y FORZADO DE IMÁGENES) -->
     <div id="login-loading-modal" class="init-overlay fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#030303] opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="relative w-40 h-40 mb-12">
             <div class="absolute inset-0 flex items-center justify-center shape-1">
@@ -280,8 +280,8 @@
                     </svg>
                 </button>
 
-                <!-- ICONO DEL BOT -->
-                <button onclick="window.toggleChatbot()" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2" aria-label="Asistente Virtual">
+                <!-- ICONO DEL BOT PROTEGIDO -->
+                <button onclick="window.toggleChatbot(event)" class="text-brand-gold hover:text-white transition-colors flex items-center justify-center p-2 cursor-pointer pointer-events-auto" aria-label="Asistente Virtual">
                     <span class="font-editorial text-2xl font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">AI</span>
                 </button>
                 
@@ -361,7 +361,7 @@
                     <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20M2 12h20"></path></svg>
                 </div>
                 
-                <!-- NUEVO ELEMENTO PARA EL NOMBRE DE LA IMAGEN -->
+                <!-- NOMBRE DE LA IMAGEN EN PEQUEÑO -->
                 <span id="modal-img-name" class="text-[9px] tracking-[0.2em] text-brand-muted uppercase mb-1 relative z-10 block font-bold"></span>
 
                 <h2 id="modal-title" class="font-editorial text-3xl sm:text-4xl text-brand-gold glow-gold mb-2 uppercase break-words-custom leading-tight relative z-10"></h2>
@@ -529,9 +529,12 @@
     <!-- SCRIPT DE LÓGICA PRINCIPAL ÚNICO Y PROTEGIDO -->
     <script>
         (function() {
-            // LÓGICA DE MEMORIA (SESIÓN Y CARRITO)
-            window.cart = JSON.parse(localStorage.getItem('damaso_cart')) || [];
-            window.userSession = JSON.parse(localStorage.getItem('damaso_session')) || null;
+            // LÓGICA DE MEMORIA SEGURA (SESIÓN Y CARRITO)
+            window.cart = [];
+            try { window.cart = JSON.parse(localStorage.getItem('damaso_cart')) || []; } catch(e) {}
+            
+            window.userSession = null;
+            try { window.userSession = JSON.parse(localStorage.getItem('damaso_session')) || null; } catch(e) {}
             
             // EL ORDEN ORIGINAL ESTRICTO Y REVISADO IMAGEN POR IMAGEN (TODOS PNG)
             window.dbProducts = [
@@ -553,7 +556,7 @@
                 { id: 66, name: "Arbotante Articulado Lino", category: "arbotantes", price: 5400, img: "Image_11.png", sku: "DM-ARB-005", desc: "Elegante arbotante de pared con brazo articulado en latón. Su clásica pantalla acampanada de lino natural difumina la luz, creando atmósferas cálidas e íntimas, ideales para lectura o pasillos.", specsLight: "1x E12 LED 6W cálida", cable: "Conexión directa a registro", dims: { w: "15 cm", h: "45 cm", d: "35 cm", dia: "15 cm (pantalla)" }, peso: "1.8 kg", volt: "110-120V", mat: "Latón macizo y pantalla de lino texturizado", fin: "Latón cepillado mate", time: "3 a 4 semanas", cert: "NOM" },
 
                 // ESPEJOS
-                { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar y elegante soporte de latón integrado.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
+                { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo de corativo con pantalla esférica de cristal color ámbar y elegante soporte de latón integrado.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
                 { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-002", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta para crear un efecto flotante en el muro.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
                 { id: 11, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Espejo rectangular de piso o muro de gran formato con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
                 { id: 12, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-004", desc: "Espejo rectangular elegante con un grueso marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata de alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
@@ -564,7 +567,7 @@
                 { id: 17, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_8.png", sku: "DM-ESP-009", desc: "Espejo rectangular de gran formato con marco de latón y cristal envejecido químicamente.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal envejecido, latón", fin: "Latón mate", time: "4 a 5 semanas", cert: "N/A" },
                 { id: 18, name: "Espejo Medio Óvalo Trasluz", category: "espejos", price: 14200, img: "nuevo_espejo_1.png", sku: "DM-ESP-010", desc: "Espejo vanguardista con forma de medio óvalo y canto pulido, incorpora luz perimetral flotante.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "50 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "12 kg", volt: "110-120V", mat: "Cristal plata inastillable", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM" },
                 { id: 19, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_2.png", sku: "DM-ESP-011", desc: "Espejo circular de gran formato con un marco perimetral cóncavo en acabado de latón oscurecido.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "130 cm" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de placa de acero", fin: "Latón oscurecido y bronce", time: "3 a 4 semanas", cert: "N/A" },
-                { id: 20, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_3.png", sku: "DM-ESP-012", desc: "Espejo monumental cuadrado enmarcado en maderas nobles, ideal para rematar pasillos.", specsLight: "N/A", cable: "N/A", dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "24 kg", volt: "N/A", mat: "Cristal plata inastillable, marco de nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A" },
+                { id: 20, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_3.PNG", sku: "DM-ESP-012", desc: "Espejo monumental cuadrado enmarcado en maderas nobles, ideal para rematar pasillos.", specsLight: "N/A", cable: "N/A", dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "24 kg", volt: "N/A", mat: "Cristal plata inastillable, marco de nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A" },
                 { id: 21, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_4.png", sku: "DM-ESP-013", desc: "Espejo circular perfecto con iluminación indirecta de halo perimetral cálido que baña el muro.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a muro (Driver interno)", dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "110 cm" }, peso: "19 kg", volt: "110-120V", mat: "Cristal plata, bastidor metálico", fin: "Luz cálida", time: "3 a 4 semanas", cert: "NOM" },
                 { id: 22, name: "Espejo Redondo Geométrico", category: "espejos", price: 18500, img: "IMG_2007.png", sku: "DM-ESP-014", desc: "Espejo decorativo circular con un intrincado patrón de varillas de acero formando rombos.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "115 cm" }, peso: "18 kg", volt: "N/A", mat: "Acero y cristal plata", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
                 { id: 23, name: "Espejo Sol Madera", category: "espejos", price: 16500, img: "IMG_2056.png", sku: "DM-ESP-015", desc: "Espejo redondo con marco de madera tallado imitando los rayos del sol.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "100 cm", d: "4 cm", dia: "100 cm" }, peso: "12 kg", volt: "N/A", mat: "Madera tallada y cristal plata", fin: "Madera natural cálida", time: "3 a 4 semanas", cert: "N/A" },
@@ -594,9 +597,9 @@
                 // LÁMPARAS DE PIE
                 { id: 35, name: "Lámpara de Buró Texturizada", category: "pie", price: 4200, img: "lampara_de_mesa_3.png", sku: "DM-PIE-001", desc: "Lámpara de pie compacta con base sólida en forma de gota texturizada.", specsLight: "1x E26 LED 6W, 2700K", cable: "Cable blanco 1.5m", dims: { w: "30 cm", h: "85 cm", d: "30 cm", dia: "30 cm (pantalla)" }, peso: "4.2 kg", volt: "110-120V", mat: "Pasta de estuco y lino", fin: "Crema texturizado", time: "2 a 3 semanas", cert: "NOM" },
                 { id: 36, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "nueva_foto_1.png", sku: "DM-PIE-002", desc: "Lámpara de pie escultural con un mástil compuesto por esferas de madera de nogal torneadas a mano.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil negro 2.5m con interruptor", dims: { w: "40 cm", h: "160 cm", d: "40 cm", dia: "40 cm (pantalla)" }, peso: "5 kg", volt: "110-120V", mat: "Nogal sólido y lino", fin: "Nogal mate", time: "3 a 4 semanas", cert: "NOM" },
-                { id: 53, name: "Lámpara de Pie Botánica", category: "pie", price: 12500, img: "053C59D3-9C3F-4B14-8290-4514331538F9.png", sku: "DM-PIE-003", desc: "Lámpara de pie escultórica con un mástil orgánico inspirado en la naturaleza, forjado en latón con acabado mate y una elegante pantalla cilíndrica de lino crudo.", specsLight: "1x E26 LED 10W, 2700K cálida", cable: "Cable textil dorado 2m con interruptor de pie", dims: { w: "45 cm", h: "165 cm", d: "45 cm", dia: "45 cm (pantalla)" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido y pantalla de lino natural", fin: "Latón dorado mate", time: "4 a 5 semanas", cert: "NOM" },
-                { id: 54, name: "Lámpara Minimalista Globo", category: "pie", price: 14200, img: "3CACAB0D-4EE1-4DBD-BB7B-05DBE6123AF4.png", sku: "DM-PIE-004", desc: "Pieza de diseño minimalista puro. Una estructura geométrica en ángulo recto de latón que sostiene sutilmente un globo de cristal opalino soplado a mano.", specsLight: "1x G9 LED 7W, 3000K", cable: "Cable negro 2m oculto en la base", dims: { w: "35 cm", h: "155 cm", d: "40 cm", dia: "25 cm (globo)" }, peso: "8 kg", volt: "110-120V", mat: "Acero con baño de latón y cristal opalino", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "NOM" },
-                { id: 55, name: "Lámpara de Pie Trípode Nogal", category: "pie", price: 16800, img: "77A61D28-316C-4BD7-B971-BE72E44B6A4E.png", sku: "DM-PIE-005", desc: "Imponente lámpara de pie con estructura de trípode en madera maciza de nogal, remates en latón y una generosa pantalla de lino que baña el espacio de calidez.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil café 2.5m oculto en pata", dims: { w: "60 cm", h: "170 cm", d: "60 cm", dia: "60 cm (pantalla)" }, peso: "9 kg", volt: "110-120V", mat: "Madera de nogal sólido, herrajes de latón y lino", fin: "Nogal oscuro mate y latón avejentado", time: "5 a 6 semanas", cert: "NOM" },
+                { id: 53, name: "Lámpara de Pie Botánica", category: "pie", price: 12500, img: "8FD77C11-0212-45BA-8FB0-3AEB0B651D4D_1_201_a.jpeg", sku: "DM-PIE-003", desc: "Lámpara de pie escultórica con un mástil orgánico inspirado en la naturaleza, forjado en latón con acabado mate y una elegante pantalla cilíndrica de lino crudo.", specsLight: "1x E26 LED 10W, 2700K cálida", cable: "Cable textil dorado 2m con interruptor de pie", dims: { w: "45 cm", h: "165 cm", d: "45 cm", dia: "45 cm (pantalla)" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido y pantalla de lino natural", fin: "Latón dorado mate", time: "4 a 5 semanas", cert: "NOM" },
+                { id: 54, name: "Lámpara Minimalista Globo", category: "pie", price: 14200, img: "9AE8206E-5ED0-46B3-B5CF-B320CB9AF4D5_1_105_c.jpeg", sku: "DM-PIE-004", desc: "Pieza de diseño minimalista puro. Una estructura geométrica en ángulo recto de latón que sostiene sutilmente un globo de cristal opalino soplado a mano.", specsLight: "1x G9 LED 7W, 3000K", cable: "Cable negro 2m oculto en la base", dims: { w: "35 cm", h: "155 cm", d: "40 cm", dia: "25 cm (globo)" }, peso: "8 kg", volt: "110-120V", mat: "Acero con baño de latón y cristal opalino", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "NOM" },
+                { id: 55, name: "Lámpara de Pie Trípode Nogal", category: "pie", price: 16800, img: "C6379FC8-48F9-426C-BD3A-788074D196BD_1_201_a.jpeg", sku: "DM-PIE-005", desc: "Imponente lámpara de pie con estructura de trípode en madera maciza de nogal, remates en latón y una generosa pantalla de lino que baña el espacio de calidez.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil café 2.5m oculto en pata", dims: { w: "60 cm", h: "170 cm", d: "60 cm", dia: "60 cm (pantalla)" }, peso: "9 kg", volt: "110-120V", mat: "Madera de nogal sólido, herrajes de latón y lino", fin: "Nogal oscuro mate y latón avejentado", time: "5 a 6 semanas", cert: "NOM" },
                 { id: 64, name: "Lámpara de Pie Cilindro Nogal", category: "pie", price: 13500, img: "Image_8.png", sku: "DM-PIE-006", desc: "Lámpara de pie de diseño depurado. Su pesada base cilíndrica de madera de nogal macizo sostiene un esbelto mástil negro que culmina en un globo de cristal opalino, creando un contraste magistral de volúmenes.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil negro 2.5m con interruptor de pie en la base", dims: { w: "30 cm", h: "150 cm", d: "30 cm", dia: "30 cm (globo)" }, peso: "8.5 kg", volt: "110-120V", mat: "Madera de nogal, acero y cristal opalino soplado", fin: "Nogal natural mate y acero negro mate", time: "4 a 5 semanas", cert: "NOM" },
 
                 // LÁMPARAS DE TECHO
@@ -964,6 +967,7 @@
                             </div>
                         `;
                         catProducts.forEach(p => {
+                            // IMAGEN FORZADA (SIN LAZY LOADING)
                             html += `
                                 <div class="group">
                                     <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
@@ -971,7 +975,7 @@
                                         <!-- ANIMACIÓN DE CARGA GEOMÉTRICA INFINITA CON ARCOÍRIS -->
                                         <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
                                             
-                                            <!-- TEXTO ARCOÍRIS (Forma curvada, colores oro y blanco metálico) -->
+                                            <!-- TEXTO ARCOÍRIS -->
                                             <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] pointer-events-none opacity-80">
                                                 <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
                                                 <text class="text-[14px] font-editorial fill-brand-gold tracking-[0.2em] uppercase" text-anchor="middle">
@@ -994,8 +998,7 @@
                                             <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                         </div>
 
-                                        <!-- IMAGEN SIN BORDES, OPACIDAD INICIAL 0. ONERROR REINTENTA INFINITAMENTE CADA 3 SEGUNDOS -->
-                                        <img src="${p.img}" loading="lazy" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 3000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
+                                        <img src="${p.img}" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="this.onerror=null; setTimeout(() => { this.src='${p.img}?' + Date.now(); }, 1000)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="">
                                         
                                         <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
                                             <button class="bg-transparent border border-brand-gold text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:bg-brand-gold hover:text-black transition-all pointer-events-auto shadow-[0_0_15px_rgba(212,175,55,0.2)]" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
@@ -1225,7 +1228,7 @@
                 materials: "Nuestras piezas están forjadas en materiales nobles y puros: latón sólido, bronce, cristal soplado inastillable, mármol de Carrara y ónice natural.",
                 cleaning: "Para mantener la pureza de los materiales, recomendamos limpiar las piezas únicamente con un paño de microfibra seco. No utilice químicos abrasivos, especialmente en latón y espejos avejentados.",
                 shipping: "Nuestros tiempos de entrega varían entre 3 y 8 semanas dependiendo de la complejidad artesanal de la pieza. Realizamos envíos especializados a toda la república mexicana y exportaciones internacionales.",
-                warranty: "Todas las luminarias cuentan con components eléctricos certificados (NOM) y garantía directa de estudio por defectos de fabricación. Si tu pieza llega con algún desperfecto, se reemplazará inmediatamente.",
+                warranty: "Todas las luminarias cuentan con componentes eléctricos certificados (NOM) y garantía directa de estudio por defectos de fabricación. Si tu pieza llega con algún desperfecto, se reemplazará inmediatamente.",
                 design: "El diseñador principal y fundador es Iván Damaso, quien supervisa personalmente la experimentación de texturas, volúmenes y sombras proyectadas en cada pieza.",
                 payment: "Aceptamos transferencias interbancarias, pagos con tarjetas de crédito/débito y depósitos directos. Para apartar una pieza a producción, requerimos un anticipo formal del 50%.",
                 light: "Físicamente, la luz es radiación electromagnética. En el diseño, es la cuarta dimensión. En DAMASO solemos emplear temperaturas cálidas (2700K - 3000K) para bañar los espacios con una atmósfera escultural y acogedora.",
@@ -1235,7 +1238,6 @@
                 logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón rojo 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página web, justo debajo del copyright de DAMASO Studio."
             };
 
-            // DICCIONARIO EXPANDIDO A NIVELES MASIVOS PARA SOPORTAR ERRORES ORTOGRÁFICOS
             const synonyms = {
                 "q": "que", "k": "que", "ke": "que", "xque": "que", "xq": "que", "porke": "porque", "porq": "porque",
                 "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "we": "amigo", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo", "compadre": "amigo", "compa": "amigo",
@@ -1247,7 +1249,8 @@
                 "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias", "plz": "porfavor", "porfa": "porfavor",
                 "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
                 "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar", "deslogear": "cerrar",
-                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias"
+                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias",
+                "descargar": "pdf", "imprimir": "pdf", "documento": "pdf", "ficha": "pdf"
             };
 
             const intents = {
@@ -1319,8 +1322,6 @@
                 let normalizedWords = words.map(w => synonyms[w] || w);
                 return normalizedWords.join(" ");
             }
-
-            window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
 
             window.saveChatState = function() {
                 if (!window.userSession) return; // LOS INVITADOS NO GUARDAN MEMORIA
@@ -1677,7 +1678,9 @@
                 }, 800); 
             };
 
-            window.toggleChatbot = function() {
+            // REPARACIÓN DEL BOTÓN CHAT:
+            window.toggleChatbot = function(e) {
+                if(e) e.preventDefault();
                 const drawer = document.getElementById('chatbot-drawer');
                 const overlay = document.getElementById('chat-overlay');
                 if (drawer) drawer.classList.toggle('-translate-x-full');
@@ -1691,8 +1694,8 @@
                 }, 50);
             };
 
-            // GENERACIÓN DE PDF NATIVA CON BLINDAJE DE ERRORES
             window.checkoutPDF = function(event) {
+                // ... (mantiene la lógica del checkout de PDF anterior igual)
                 if(window.cart.length === 0) { 
                     const btn = document.getElementById('btn-download-pdf');
                     if(btn) {
@@ -1884,6 +1887,9 @@
 
             // Iniciar de forma segura
             function initApp() {
+                // FORZAR LA DESCARGA DE LAS IMÁGENES EN CACHÉ PARA TODOS LOS NAVEGADORES
+                window.preloadAllImages();
+                
                 window.renderCatalog(window.dbProducts);
                 window.updateCartUI();
                 window.startAppAnimation();
@@ -1956,3 +1962,4 @@
     </script>
 </body>
 </html>
+
