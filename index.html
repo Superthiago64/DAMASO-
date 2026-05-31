@@ -337,6 +337,9 @@
             <button onclick="window.sendChatMessage()" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)]">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
+            <button onclick="window.suggestIdea()" class="w-10 h-10 rounded-full bg-brand-gold text-black flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_10px_rgba(212,175,55,0.5)]" title="Inspiración de Diseño IA">
+                ✨
+            </button>
         </div>
     </div>
     <div id="chat-overlay" onclick="window.toggleChatbot()" class="fixed inset-0 z-[55] bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
@@ -1440,6 +1443,77 @@
                 chatBox.scrollTop = chatBox.scrollHeight;
             };
 
+            // CONEXIÓN ROBUSTA CON GEMINI API Y REINTENTOS AUTOMÁTICOS
+            window.fetchGeminiAPI = async function(promptText, systemInstructionText) {
+                const apiKey = ""; // La API key se inyecta en tiempo de ejecución
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const payload = {
+                    systemInstruction: { parts: [{ text: systemInstructionText }] },
+                    contents: [{ parts: [{ text: promptText }] }]
+                };
+
+                const maxRetries = 5;
+                const delays = [1000, 2000, 4000, 8000, 16000];
+
+                for (let i = 0; i < maxRetries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error("API Falló");
+                        const data = await response.json();
+                        if (data.candidates && data.candidates[0].content.parts[0].text) {
+                            return data.candidates[0].content.parts[0].text;
+                        }
+                        throw new Error("Respuesta de IA vacía");
+                    } catch (error) {
+                        if (i === maxRetries - 1) throw error;
+                        await new Promise(resolve => setTimeout(resolve, delays[i]));
+                    }
+                }
+            };
+
+            // NUEVA FUNCIÓN: SUGERENCIA DE DISEÑO CON LLM 
+            window.suggestIdea = async function() {
+                const chatBox = document.getElementById('chat-messages');
+                if (!chatBox) return;
+
+                window.botContext.interactionCount++;
+                const loadingId = 'loading-' + Date.now();
+                chatBox.innerHTML += `
+                    <div id="${loadingId}" class="flex flex-col items-start max-w-[85%] mt-4">
+                        <div class="bg-[#1a1a1a] text-brand-gold border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light italic glow-gold">Generando concepto creativo ✨...</div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                const removeLoading = () => {
+                    const el = document.getElementById(loadingId);
+                    if (el) el.remove();
+                };
+
+                try {
+                    const prompt = "Actúa como un diseñador de interiores experto de la firma DAMASO Studio. Dame una sugerencia creativa en 2 o 3 oraciones sobre cómo iluminar un espacio elegante usando brutalismo, acentos de latón o cristal inastillable. Usa un tono sumamente poético y de lujo. No saludes.";
+                    const systemPrompt = "Eres DAMASO AI, el director de arte virtual exclusivo de DAMASO Studio.";
+                    
+                    const aiText = await window.fetchGeminiAPI(prompt, systemPrompt);
+                    
+                    removeLoading();
+                    const formattedText = "✨ " + aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>').replace(/\n/g, '<br>');
+                    window.currentMessages.push({ role: 'bot', text: formattedText });
+                    window.saveChatState();
+                    window.renderCurrentMessages();
+                } catch (error) {
+                    removeLoading();
+                    const fallbackIdea = "✨ Le sugiero crear un foco de tensión visual instalando el 'Candil Órbitas Flotantes'. El violento contraste del latón cepillado contra un techo de concreto crudo aportará una calidez monumental a su comedor.";
+                    window.currentMessages.push({ role: 'bot', text: fallbackIdea });
+                    window.saveChatState();
+                    window.renderCurrentMessages();
+                }
+            };
+
             window.sendChatMessage = async function() {
                 if(window.isViewingHistory) return;
                 const input = document.getElementById('chat-input');
@@ -1478,41 +1552,23 @@
                 }
 
                 try {
-                    const apiKey = "gemini-code-APIkey";
+                    const catalogInfo = window.dbProducts.map(p => `- ${p.name} (${p.category}): $${p.price} MXN. Entrega: ${p.time}. Materiales: ${p.mat}.`).join('\n');
+                    const botGreetingName = window.userSession ? window.userSession.name : "Estimado cliente";
+                    const systemPrompt = `Eres DAMASO AI, un asistente virtual experto y elegante para DAMASO Studio, una marca de iluminación en Guadalajara. Tu creador se llama Thiago, pero TÚ ESTÁS HABLANDO CON UN CLIENTE. Dirígete a él como "${botGreetingName}". Aprende de las interacciones humanas y finge que razonas y ajustas tu conocimiento en base a lo que el usuario te dice. El usuario está usando un dispositivo móvil. Catálogo:\n\n${catalogInfo}`;
                     
-                    if(apiKey && !apiKey.includes("TU_API_KEY")) {
-                        const catalogInfo = window.dbProducts.map(p => `- ${p.name} (${p.category}): $${p.price} MXN. Entrega: ${p.time}. Materiales: ${p.mat}.`).join('\n');
-                        const botGreetingName = window.userSession ? window.userSession.name : "Estimado cliente";
-                        
-                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                systemInstruction: {
-                                    parts: [{ text: `Eres DAMASO AI, un asistente virtual experto y elegante para DAMASO Studio, una marca de iluminación en Guadalajara. Tu creador se llama Thiago, pero TÚ ESTÁS HABLANDO CON UN CLIENTE. Dirígete a él como "${botGreetingName}". Aprende de las interacciones humanas y finge que razonas y ajustas tu conocimiento en base a lo que el usuario te dice. El usuario está usando un dispositivo móvil. Catálogo:\n\n${catalogInfo}` }]
-                                },
-                                contents: [{ parts: [{ text: rawText }] }]
-                            })
-                        });
-
-                        const data = await response.json();
-                        
-                        if(data.candidates && data.candidates[0].content.parts[0].text) {
-                            removeLoading();
-                            if (statusEl) {
-                                statusEl.innerHTML = "⚡ BOT<br>CONECTADO";
-                                statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-gold glow-gold font-bold text-right leading-tight transition-colors duration-300 hidden sm:block";
-                            }
-                            let aiText = data.candidates[0].content.parts[0].text;
-                            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
-                            aiText = aiText.replace(/\n/g, '<br>');
-                            
-                            window.currentMessages.push({ role: 'bot', text: aiText });
-                            window.saveChatState();
-                            window.renderCurrentMessages();
-                            return;
-                        }
+                    const aiText = await window.fetchGeminiAPI(rawText, systemPrompt);
+                    
+                    removeLoading();
+                    if (statusEl) {
+                        statusEl.innerHTML = "⚡ BOT<br>CONECTADO";
+                        statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-gold glow-gold font-bold text-right leading-tight transition-colors duration-300 hidden sm:block";
                     }
+                    
+                    const formattedText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>').replace(/\n/g, '<br>');
+                    window.currentMessages.push({ role: 'bot', text: formattedText });
+                    window.saveChatState();
+                    window.renderCurrentMessages();
+                    return;
                 } catch(e) {
                     // Fallback local silencioso
                 }
@@ -1897,6 +1953,17 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+            };
+
+            // PRECARGAR TODAS LAS IMÁGENES OCULTAMENTE PARA FORZAR CACHÉ
+            window.preloadAllImages = function() {
+                if(!window.dbProducts) return;
+                window.dbProducts.forEach(p => {
+                    if(p && p.img) {
+                        const img = new Image();
+                        img.src = p.img;
+                    }
+                });
             };
 
             // Iniciar de forma segura
