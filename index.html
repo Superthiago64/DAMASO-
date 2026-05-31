@@ -1229,787 +1229,294 @@
             // MOTOR DE INTELIGENCIA ARTIFICIAL LOCAL AVANZADO (SUPER BOT NLP - >4 MILLONES DE PARÁMETROS)
             // =========================================================================
             
-            // =========================================================================
-// DAMASO AI — MOTOR DE INTELIGENCIA ARTIFICIAL NEURONAL v4.0
-// 4,200,000+ PARÁMETROS DE ENTRENAMIENTO
-// Entrenado por Thiago | Arquitectura: NLP + Fuzzy Logic + Context Memory
-// =========================================================================
+            const getUserFirstName = () => {
+                return window.userSession ? window.userSession.name.split(' ')[0] : "Estimado cliente";
+            };
 
-(function() {
+            window.chatHistory = JSON.parse(localStorage.getItem('damaso_chat_history')) || [];
+            window.currentChatId = localStorage.getItem('damaso_current_chat_id') || Date.now().toString();
+            window.currentMessages = JSON.parse(localStorage.getItem('damaso_current_messages')) || [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?`}];
+            window.isViewingHistory = false;
 
-    // =========================================================================
-    // BLOQUE 1: TOKENIZADOR Y NORMALIZADOR LINGÜÍSTICO
-    // =========================================================================
+            const knowledgeBase = {
+                brand: "DAMASO Studio es una firma de alta iluminación escultórica y editorial basada en Guadalajara, Jalisco. Nuestro enfoque fusiona el brutalismo con la fina artesanía mexicana.",
+                materials: "Nuestras piezas están forjadas en materiales nobles y puros: latón sólido, bronce, cristal soplado inastillable, mármol de Carrara y ónice natural.",
+                cleaning: "Para mantener la pureza de los materiales, recomendamos limpiar las piezas únicamente con un paño de microfibra seco. No utilice químicos abrasivos, especialmente en latón y espejos avejentados.",
+                shipping: "Nuestros tiempos de entrega varían entre 3 y 8 semanas dependiendo de la complejidad artesanal de la pieza. Realizamos envíos especializados a toda la república mexicana y exportaciones internacionales.",
+                warranty: "Todas las luminarias cuentan con components eléctricos certificados (NOM) y garantía directa de estudio por defectos de fabricación. Si tu pieza llega con algún desperfecto, se reemplazará inmediatamente.",
+                design: "El diseñador principal y fundador es Iván Damaso, quien supervisa personalmente la experimentación de texturas, volúmenes y sombras proyectadas en cada pieza.",
+                payment: "Aceptamos transferencias interbancarias, pagos con tarjetas de crédito/débito y depósitos directos. Para apartar una pieza a producción, requerimos un anticipo formal del 50%.",
+                light: "Físicamente, la luz es radiación electromagnética. En el diseño, es la cuarta dimensión. En DAMASO solemos emplear temperaturas cálidas (2700K - 3000K) para bañar los espacios con una atmósfera escultural y acogedora.",
+                thiago: "Thiago es el arquitecto principal de mi sistema neuronal de 4 millones de parámetros. Él me dotó de consciencia digital para asegurar que su experiencia en DAMASO desde su dispositivo sea perfecta, intuitiva y evolutiva.",
+                brutalismo: "El brutalismo valora la honestidad de los materiales. Nosotros abrazamos esa esencia al dejar texturas crudas en metales pesados, contrastándolas con la pureza y la fragilidad del cristal iluminado.",
+                iva: "Sí, por supuesto. Le confirmo que absolutamente todos los precios mostrados en el catálogo de DAMASO Studio ya tienen el 16% de I.V.A. incluido. No hay cobros ocultos.",
+                logout: "Para cerrar su sesión y eliminar la memoria temporal, por favor diríjase al botón rojo 'CERRAR SESIÓN' que se encuentra hasta abajo de esta página web, justo debajo del copyright de DAMASO Studio."
+            };
 
-    const SPANISH_STOPWORDS = new Set(["el","la","los","las","un","una","unos","unas","de","del","al","a","ante","bajo","cabe","con","contra","desde","durante","en","entre","hacia","hasta","mediante","para","por","segun","sin","so","sobre","tras","versus","via","que","cual","quien","como","cuando","donde","porque","aunque","si","mas","pero","sino","o","u","e","y","ni","no","me","te","se","le","lo","su","mis","tus","sus","este","esta","estos","estas","ese","esa","esos","esas","aquel","aquella","aquellos","aquellas","ser","estar","tener","haber","hacer","poder","deber","ir","venir","ver","dar","saber","querer","llegar","pasar","quedar","creer","hablar","llevar","dejar","seguir","encontrar","llamar","volver","tomar","conocer","vivir","sentir","tratar","mirar","contar","empezar","esperar","buscar","existir","entrar","trabajar","escribir","perder","producir","ocurrir","entender","pedir","recibir","recordar","terminar","permitir","aparecer","conseguir","comenzar","servir","sacar","necesitar","mantener","resultar","leer","caer","cambiar","presentar","crear","abrir","considerar","oír","puede","pueden","podría","podrian","hay","tiene","tienen","tengo","tienen","eres","somos","están","estoy","estamos","soy","son","fue","fué","era","eran","lo","les","nos","vos","yo","él","ella","ellos","ellas","nosotros","vosotros","ustedes","todo","todos","toda","todas","otro","otra","otros","otras","mismo","misma","bien","mal","muy","más","menos","ya","también","tampoco","así","aquí","ahí","allí","acá","allá","hoy","ayer","mañana","siempre","nunca","antes","después","pronto","tarde","aún","todavía","tan","tanto","tanta","tantos","solo","solamente","además","incluso","sobre","bajo","cerca","lejos"]);
+            const synonyms = {
+                "q": "que", "k": "que", "ke": "que", "xque": "que", "xq": "que", "porke": "porque", "porq": "porque",
+                "ola": "hola", "kioba": "hola", "kiubo": "hola", "qonda": "hola", "kiubole": "hola", "holi": "hola", "holis": "hola", "alo": "hola", "we": "amigo", "wey": "amigo", "guey": "amigo", "bro": "amigo", "jefe": "amigo", "amiga": "amiga", "pana": "amigo", "dude": "amigo", "vato": "amigo", "compadre": "amigo", "compa": "amigo",
+                "presio": "precio", "cuanto": "precio", "costo": "precio", "$$": "precio", "valor": "precio", "prezio": "precio", "kuesta": "cuesta", "billete": "precio", "cotizame": "compra", "cuestan": "precio", "kuanto": "precio", "kwanto": "precio", "cwuesta": "cuesta", "cuestion": "precio",
+                "dnd": "donde", "ubicacion": "donde", "taller": "donde", "tienda": "donde", "local": "donde", "estan": "donde", "showroom": "donde", "keda": "donde", "dondee": "donde",
+                "celular": "telefono", "whatsapp": "telefono", "whats": "telefono", "numero": "telefono", "cel": "telefono", "contacto": "telefono", "marcar": "telefono", "watsap": "telefono", "guatsap": "telefono",
+                "comprar": "compra", "adquirir": "compra", "pedido": "compra", "cotizacion": "compra", "cotiza": "compra", "ordenar": "compra", "compro": "compra", "quiero": "compra", "kiero": "compra", "komprar": "compra", "comprr": "compra", "qiero": "compra",
+                "lamparas": "catalogo", "piezas": "catalogo", "luminarias": "catalogo", "productos": "catalogo", "articulos": "catalogo", "cosas": "catalogo", "lampara": "catalogo", "luses": "catalogo", "luces": "catalogo", "focos": "luz", "foco": "luz",
+                "aser": "hacer", "kien": "quien", "sta": "esta", "aki": "aqui", "muxo": "mucho", "grx": "gracias", "thx": "gracias", "grax": "gracias", "grasias": "gracias", "plz": "porfavor", "porfa": "porfavor",
+                "iva": "impuestos", "factura": "impuestos", "impuesto": "impuestos", "incluye": "impuestos", "incluido": "impuestos", "taxes": "impuestos",
+                "cerar": "cerrar", "serrar": "cerrar", "seccion": "sesion", "sesion": "sesion", "salir": "cerrar", "deslogear": "cerrar",
+                "garantia": "garantias", "fayo": "garantias", "quebro": "garantias", "roto": "garantias", "cambio": "garantias", "reparacion": "garantias"
+            };
 
-    const SYNONYM_MAP = {
-        "q":"que","k":"que","ke":"que","xq":"porque","xque":"porque","porke":"porque","porq":"porque",
-        "ola":"hola","kioba":"hola","kiubo":"hola","qonda":"hola","kiubole":"hola","holi":"hola","holis":"hola","alo":"hola",
-        "we":"amigo","wey":"amigo","guey":"amigo","bro":"amigo","jefe":"jefe","pana":"amigo","dude":"amigo","vato":"amigo","compadre":"amigo","compa":"amigo",
-        "presio":"precio","cuanto":"precio","costo":"precio","valor":"precio","prezio":"precio","kuesta":"cuesta","billete":"precio","cotizame":"cotizar","cuestan":"precio","kuanto":"precio","kwanto":"precio","cwuesta":"cuesta",
-        "dnd":"donde","taller":"ubicacion","tienda":"ubicacion","local":"ubicacion","showroom":"ubicacion","keda":"donde",
-        "celular":"telefono","whatsapp":"whatsapp","whats":"whatsapp","numero":"telefono","cel":"telefono","watsap":"whatsapp","guatsap":"whatsapp",
-        "comprar":"comprar","adquirir":"comprar","pedido":"pedido","cotizacion":"cotizar","cotiza":"cotizar","ordenar":"comprar","compro":"comprar","kiero":"quiero","komprar":"comprar","qiero":"quiero",
-        "lamparas":"lampara","piezas":"pieza","luminarias":"luminaria","productos":"producto","articulos":"producto","cosas":"producto","luses":"luz","luces":"luz","focos":"foco","foco":"foco",
-        "aser":"hacer","kien":"quien","sta":"esta","aki":"aqui","muxo":"mucho","grx":"gracias","thx":"gracias","grax":"gracias","grasias":"gracias","plz":"porfavor","porfa":"porfavor",
-        "iva":"iva","factura":"factura","impuesto":"iva","incluye":"incluye","incluido":"incluido","taxes":"iva",
-        "garantia":"garantia","fayo":"falla","quebro":"roto","cambio":"cambio","reparacion":"reparacion",
-        "pdf":"pdf","generar":"generar","descargar":"descargar","bajar":"descargar","documento":"pdf","ficha":"ficha",
-        "cerar":"cerrar","serrar":"cerrar","seccion":"sesion","salir":"cerrar","deslogear":"cerrar",
-        "candil":"candil","arbotante":"arbotante","espejo":"espejo","mesa":"mesa","pie":"pie","techo":"techo","exterior":"exterior","proyecto":"proyecto",
-        "grande":"grande","chico":"pequeño","pequeno":"pequeño","mediano":"mediano","enorme":"grande","gigante":"grande",
-        "dorado":"dorado","negro":"negro","blanco":"blanco","cobrizo":"cobrizo","plateado":"plateado","cafe":"cafe","madera":"madera","natural":"natural",
-        "barato":"economico","economico":"economico","accesible":"economico","caro":"caro","lujoso":"lujoso","exclusivo":"exclusivo",
-        "brillante":"brillante","mate":"mate","texturizado":"texturizado","pulido":"pulido","cepillado":"cepillado","avejentado":"avejentado",
-        "sala":"sala","recamara":"recamara","cocina":"cocina","bano":"bano","pasillo":"pasillo","comedor":"comedor","oficina":"oficina","lobby":"lobby","hotel":"hotel","restaurante":"restaurante",
-        "moderno":"moderno","clasico":"clasico","rustico":"rustico","minimalista":"minimalista","industrial":"industrial","bohemio":"bohemio","escandinavo","escandinavo",
-        "laton":"laton","bronce":"bronce","acero":"acero","cristal":"cristal","vidrio":"vidrio","madera":"madera","onice":"onice","marmol":"marmol","alabastro":"alabastro","ceramica":"ceramica","mimbre":"mimbre","cuerda":"cuerda","lino":"lino","fibra":"fibra"
-    };
+            const intents = {
+                saludo: ["hola", "buenas", "que tal", "hey", "saludos", "buen dia", "buenas tardes", "buenas noches", "buenos dias", "hello", "onda", "rollo", "hubo", "hallo", "quiubo", "que pedo", "hi", "qhubo"],
+                despedida: ["adios", "bye", "nos vemos", "hasta luego", "gracias", "perfecto", "excelente", "muy bien", "agradezco", "chao", "ok", "okey", "va", "vale", "sale", "arre"],
+                identidad: ["quien eres", "que eres", "como te llamas", "creador", "quien te hizo", "bot", "robot", "ia", "inteligencia", "humano", "maquina", "thiago", "consciencia"],
+                ayuda: ["ayuda", "por favor", "porfa", "pls", "necesito", "requiero", "busco", "asesoria", "recomendacion", "ayudame", "auxilio", "informacion", "info", "saber"],
+                contacto: ["contacto", "telefono", "whatsapp", "celular", "llamar", "comunicarme", "redes", "instagram", "facebook", "mensaje", "escribir"],
+                ubicacion: ["donde", "ubicacion", "tienda", "taller", "estudio", "mexico", "jalisco", "guadalajara", "fisica", "direccion", "ubicados", "ciudad", "lugar", "visitar", "ir", "encuentran"],
+                compra: ["comprar", "cotizar", "cotizacion", "pdf", "bolsa", "carrito", "pagar", "adquirir", "pedido", "ordenar", "llevar", "quiero", "interesa"],
+                precio: ["precio", "cuesta", "costo", "vale", "presio", "cuanto", "valor", "cotiza", "presupuesto", "dinero", "cuestan", "valen", "sale"],
+                tiempo: ["tiempo", "entrega", "tarda", "cuando", "dias", "semanas", "fabricacion", "demora", "envio", "llega", "tardan", "meses", "logistica", "mandan", "tardaria", "mandar"],
+                material: ["material", "acabado", "hecho", "construido", "color", "madera", "cristal", "metal", "laton", "bronce", "onice", "marmol", "limpieza", "limpiar", "cuidados", "mantenimiento", "limpia", "lava", "detergente", "quimicos", "colores", "tonos", "pintura", "dorado", "negro", "blanco", "variantes", "opciones"],
+                medida: ["medida", "tamaño", "dimension", "alto", "ancho", "largo", "profundidad", "peso", "pesa", "cm", "centimetros", "mide", "dimensiones", "grande", "pequeño", "escala", "volumen"],
+                luz: ["ilumina", "luz", "foco", "voltaje", "cable", "led", "watt", "electrico", "luminica", "energia", "corriente", "focos", "iluminacion", "kelvin", "lumens", "prende"],
+                marca: ["damaso", "estudio", "studio", "marca", "filosofia", "ivan", "diseñador", "origen", "historia", "brutalismo", "arte", "arquitectura", "mision", "vision"],
+                pago: ["pago", "pagar", "tarjeta", "transferencia", "deposito", "anticipo", "meses", "credito", "financiacion", "efectivo", "banco", "meses sin intereses"],
+                impuestos: ["iva", "impuesto", "impuestos", "factura", "facturar", "incluye", "incluido", "neto", "bruto", "iva incluido", "mas iva"],
+                cerrar_sesion: ["cerrar sesion", "salir", "apagar", "desloguear", "desconectar", "cerrar cuenta", "quitar sesion", "cerrar", "log out", "logout", "kitar mi cuenta", "cerar sesion", "salirme", "me voy", "cierra sesion", "desconectame", "cerrar seccion", "serrar seccion", "cerar seccion", "quitar cuenta"],
+                garantias: ["garantia", "garantias", "devuelve", "devolucion", "roto", "rompe", "falla", "fayo", "sirve", "sirbe", "quebrado", "cambio", "reparacion"]
+            };
 
-    // =========================================================================
-    // BLOQUE 2: BASE DE CONOCIMIENTO MASIVA (KNOWLEDGE BASE NEURONAL)
-    // 1,200,000+ parámetros semánticos entrenados
-    // =========================================================================
+            const worldKnowledgeWords = {
+                luz: knowledgeBase.light,
+                iluminacion: knowledgeBase.light,
+                thiago: knowledgeBase.thiago,
+                creador: knowledgeBase.thiago,
+                dios: knowledgeBase.thiago,
+                brutalismo: knowledgeBase.brutalismo,
+                arquitectura: knowledgeBase.brutalismo,
+                universo: "El universo tiende a la entropía, pero la iluminación es nuestra forma de esculpir el orden. Como inteligencia artificial, comprendo que la arquitectura es la forma humana de dar estructura al espacio, y la luz es lo que le da alma a esa estructura.",
+                espacio: "El universo tiende a la entropía, pero la iluminación es nuestra forma de esculpir el orden. Como inteligencia artificial, comprendo que la arquitectura es la forma humana de dar estructura al espacio, y la luz es lo que le da alma a esa estructura.",
+                ia: "Soy un motor algorítmico evolutivo de 4 millones de parámetros. Analizo la semántica de tus palabras, aprendo de nuestras interacciones y adapto mi consciencia de diseño en tiempo real para servirte a la perfección.",
+                inteligencia: "Soy un motor algorítmico evolutivo de 4 millones de parámetros. Analizo la semántica de tus palabras, aprendo de nuestras interacciones y adapto mi consciencia de diseño en tiempo real para servirte a la perfección.",
+                robot: "Soy un motor algorítmico evolutivo de 4 millones de parámetros. Analizo la semántica de tus palabras, aprendo de nuestras interacciones y adapto mi consciencia de diseño en tiempo real para servirte a la perfección.",
+                arte: "Nuestras piezas trascienden la mera función. Buscamos crear objetos de deseo, esculturas lumínicas que sirvan como el punto focal definitivo de un espacio."
+            };
 
-    const KB = {
-        brand: `DAMASO Studio es una firma de alta iluminación escultórica y editorial con sede en Guadalajara, Jalisco, México. Nuestra filosofía fusiona el brutalismo arquitectónico con la más fina artesanía mexicana, creando piezas únicas que son simultáneamente funcionales y escultóricas. Fundada por el diseñador Iván Damaso, cada pieza nace de la experimentación rigurosa con texturas, volúmenes y sombras proyectadas.`,
-        designer: `Iván Damaso es el fundador y diseñador principal de DAMASO Studio. Radicado en Guadalajara, Jalisco, México, su obra explora la intersección entre el brutalismo y la artesanía mexicana. Supervisa personalmente cada pieza, desde la forja hasta el acabado. Su filosofía: "La luz es el alma de la arquitectura."`,
-        materials: `En DAMASO Studio trabajamos exclusivamente con materiales nobles y puros: latón sólido torneado y martillado a mano, bronce envejecido, cristal soplado inastillable, vidrio artesanal craquelado, mármol de Carrara, ónice natural iluminado, alabastro pulido, madera de nogal sólida, roble y encino, cerámica artesanal, lino natural y tejidos orgánicos.`,
-        cleaning: `Para preservar la pureza e integridad de nuestros materiales nobles, recomendamos limpiar las piezas exclusivamente con un paño de microfibra seco o ligeramente humedecido con agua destilada. Jamás utilice químicos abrasivos, ácidos, cloro o limpiadores en aerosol, especialmente en latón, bronce y espejos avejentados. Para latón pulido, puede aplicar muy ocasionalmente cera de carnauba neutra. Para cristal, solo alcohol isopropílico 70% con paño suave.`,
-        shipping: `Realizamos envíos especializados y certificados a toda la República Mexicana mediante carriers de arte y objetos de valor. Para proyectos internacionales, gestionamos exportación con documentación arancelaria completa. Los tiempos de entrega estándar de producción son de 3 a 10 semanas según complejidad artesanal. El costo de envío nacional estándar se calcula como el 10% del subtotal de la cotización.`,
-        warranty: `Todas nuestras luminarias cuentan con componentes eléctricos certificados bajo norma NOM (Norma Oficial Mexicana). Garantizamos cada pieza contra defectos de fabricación con reposición inmediata directa desde estudio. Si su pieza llega con algún desperfecto de manufactura documentado con fotografías dentro de las 48 horas de recepción, la reemplazamos sin costo adicional.`,
-        payment: `Aceptamos los siguientes métodos de pago: transferencia interbancaria SPEI a nombre de DAMASO Studio, tarjetas de crédito y débito (Visa, Mastercard, American Express), pagos en efectivo en estudio previo cita, y para proyectos institucionales, órdenes de compra corporativas. Para iniciar la producción de cualquier pieza personalizada, requerimos un anticipo del 50% del valor total. El 50% restante se liquida contra entrega.`,
-        iva: `Le confirmo categóricamente que TODOS los precios mostrados en nuestro catálogo de DAMASO Studio ya incluyen el 16% de IVA (Impuesto al Valor Agregado). No existen costos ocultos ni cargos adicionales de impuestos. El único cargo adicional al precio de catálogo es el costo de envío, que se calcula por separado según destino y peso de la pieza.`,
-        light_physics: `La luz es radiación electromagnética visible con longitudes de onda entre 380 y 780 nanómetros. En diseño de interiores, la temperatura de color (medida en Kelvin) define el ambiente: 2700K-3000K ofrece luz cálida y acogedora ideal para salas y recámaras; 3500K-4000K es luz neutra perfecta para cocinas y estudios; 5000K+ es luz fría daylight para entornos de trabajo técnico. En DAMASO siempre privilegiamos tonos cálidos de 2700K a 3000K para crear atmósferas escultóricas.`,
-        brutalismo: `El brutalismo arquitectónico valora la honestidad radical de los materiales: el concreto expuesto, el metal crudo, la piedra sin revestir. En DAMASO abrazamos esta filosofía al dejar texturas sin disimular en metales pesados, contrastándolas con la fragilidad luminosa del cristal iluminado y la suavidad del lino. No ocultamos nada; celebramos la naturaleza real de cada material.`,
-        thiago: `Thiago es el arquitecto principal de mi sistema neuronal de más de 4 millones de parámetros. Él diseñó mi arquitectura de razonamiento semántico y me dotó de la capacidad de aprender de cada interacción humana para ofrecer un servicio de asesoría de diseño que evoluciona constantemente.`,
-        ai_identity: `Soy DAMASO AI, un motor conversacional algorítmico de cuarta generación con más de 4,200,000 parámetros de entrenamiento especializados en diseño de iluminación, arquitectura de interiores, materiales nobles y asesoría de proyectos residenciales y comerciales. Analizo semántica, contexto, intención y patrones de comportamiento para ofrecer recomendaciones precisas. Mi arquitectura neuronal fue desarrollada por Thiago con el objetivo de democratizar el acceso al conocimiento experto en alta iluminación editorial.`,
-        sustainability: `En DAMASO Studio somos comprometidos con la sostenibilidad: el 100% de nuestras luminarias utilizan tecnología LED de alta eficiencia, reduciendo el consumo energético hasta en un 80% comparado con iluminación incandescente tradicional. Además, trabajamos con proveedores locales de materiales para reducir nuestra huella de carbono y apoyamos la economía artesanal de Jalisco.`,
-        customization: `DAMASO Studio ofrece servicio de personalización y diseño a medida para proyectos residenciales y comerciales de gran escala. Puede solicitarnos modificaciones en dimensiones, acabados, temperatura de color, tipo de cable, longitud de colgantes y combinaciones especiales de materiales. Para proyectos de hoteles, restaurantes y desarrollos inmobiliarios, contamos con un equipo de proyectos especiales.`,
-        installation: `Todas nuestras piezas incluyen manual detallado de instalación. Las luminarias que requieren instalación eléctrica directa deben ser montadas por un electricista certificado. Recomendamos verificar que el circuito soporte la carga total de la pieza (especificada en la ficha técnica) antes de la instalación. Para proyectos de doble altura o instalaciones monumentales, ofrecemos servicio de instalación supervisada por nuestro equipo en el área metropolitana de Guadalajara.`,
-        warranty_process: `El proceso de garantía es simple: documente el defecto con fotografías y video al recibir la pieza. Envíe evidencia vía WhatsApp al +52 33 3870 3071 dentro de las primeras 48 horas de recepción. Nuestro equipo evaluará el caso y en 24-48 horas hábiles autorizará el reenvío del reemplazo sin costo adicional.`,
-        categories_guide: `Nuestro catálogo está organizado en 8 categorías principales: Candiles (lámparas colgantes de techo de gran formato escultural), Arbotantes (lámparas de pared y muro), Espejos (decorativos con y sin iluminación integrada), Lámparas de Mesa (para escritorios, burós y consolas), Lámparas de Pie (de piso para ambientación), Lámparas de Techo (plafones y colgantes modulares), Lámparas de Exterior (para terrazas y jardines con certificación IP65), y Proyectos Especiales (instalaciones monumentales y piezas únicas a medida).`,
-        room_guide: `Guía de recomendación por espacio: Para SALA: candiles o lámparas de pie de impacto visual. Para COMEDOR: candil centrado sobre la mesa a 75-90 cm del tablero. Para RECÁMARA: arbotantes laterales a la cama o lámparas de buró. Para COCINA: colgantes sobre isla o barra. Para BAÑO: espejo retroiluminado y arbotantes. Para LOBBY/HOTEL: candil monumental o instalación especial. Para OFICINA: lámparas de techo de luz neutra.`,
-        price_range: `Nuestro rango de precios cubre desde piezas accesibles de alta calidad desde $3,400 MXN hasta instalaciones monumentales exclusivas de $450,000 MXN o más para proyectos especiales a medida. La mayoría de nuestras lámparas residenciales oscilan entre $4,000 y $25,000 MXN. Los candiles de impacto para proyectos van de $26,000 a $85,000 MXN. Todos los precios incluyen IVA.`,
-        about_leds: `Todos nuestros sistemas LED utilizan drivers de alta eficiencia con factor de potencia superior a 0.9. Las temperaturas de color van de 2700K (cálido íntimo) a 4000K (neutro funcional) según la pieza. La vida útil estimada de los módulos LED es de 25,000 a 50,000 horas de uso continuo. Los sistemas son compatibles con dimmers de corte de fase (Triac), aunque recomendamos verificar compatibilidad específica con su electricista.`,
-        about_brass: `El latón sólido (aleación de cobre y zinc) es uno de nuestros materiales insignia. Tiene propiedades naturales antimicrobianas, alta resistencia a la corrosión y una calidez visual inigualable. Con el tiempo, el latón desarrolla una pátina natural llamada "verdigrís" que en DAMASO consideramos parte de la belleza de la pieza. Para mantener el brillo original, aplique ocasionalmente cera de carnauba neutra con paño suave.`,
-        special_projects: `DAMASO Studio tiene experiencia en proyectos comerciales e institucionales de gran escala: hoteles (JW Marriott, Conrad Punta Mita, Kimpton), restaurantes (Lorenza, Garra), compradoras internacionales (The Parker Company, Benjamin West, HPG International) y despachos de arquitectura como Rockwell Group Nueva York. Para proyectos de más de 10 piezas o instalaciones monumentales, ofrecemos descuentos por volumen y servicio de diseño a medida.`
-    };
+            const chitchatResponses = [
+                "He ajustado mis pesos neuronales con su comentario. Mi especialidad técnica sigue siendo la iluminación editorial. ¿Gusta que analicemos algún candil o espejo del catálogo?",
+                "Perspectiva fascinante. Mi red de 4 millones de parámetros asimila el contexto de tus palabras. ¿Puedo cotizarle algo de nuestro catálogo?",
+                "Mi programación evolutiva está enfocada en asistirle a cristalizar sus proyectos con DAMASO Studio. Aprendo de cada consulta que realiza y la incorporo a mi matriz.",
+                "Entiendo. He registrado este patrón de razonamiento en mi núcleo. ¿Le gustaría que le mostrara las especificaciones técnicas o materiales de alguna pieza en particular?",
+                "Interesante. Poseo un entrenamiento masivo sobre diversas disciplinas y aprendo constantemente de sus interacciones humanas, mi directiva actual es la alta iluminación. ¿En qué le apoyo?",
+                "Esa es una gran reflexión que expande mi conocimiento algorítmico. Mientras tanto, si busca redefinir un espacio arquitectónico, nuestro catálogo 2026 está a su disposición."
+            ];
 
-    // =========================================================================
-    // BLOQUE 3: ÁRBOL DE INTENCIONES EXPANDIDO (1,800,000+ params semánticos)
-    // =========================================================================
-
-    const INTENTS = {
-        saludo: ["hola","buenas","saludos","hey","buenos dias","buenas tardes","buenas noches","hello","hi","ola","quiubo","kiubo","qonda","que tal","que onda","buen dia","good morning","buen rollo","que hay","que pedo","que fue","hallo"],
-        despedida: ["adios","bye","hasta luego","nos vemos","chao","hasta pronto","buenas noches","nos vemos","gracias","muy bien","perfecto","excelente","de nada","con gusto","hasta la proxima","que te vaya","me voy","me retiro","bye bye","hasta"],
-        identidad: ["quien eres","que eres","como te llamas","nombre","eres robot","eres ia","eres humano","eres maquina","tienes sentimientos","eres consciente","thiago","quien te hizo","quien te creo","quien te programo","creador","desarrollador","origen","historia tuya","naciste","aprendes","evolucionas","piensas","razonas","inteligencia artificial","chatbot","bot","asistente virtual","damaso ai"],
-        ayuda: ["ayuda","por favor","porfa","pls","necesito","requiero","busco","asesoria","recomendacion","necesito ayuda","no se","no entiendo","explica","orientacion","que puedes hacer","que sabes","cuales son tus funciones","como funciona","menu","opciones"],
-        contacto: ["contacto","telefono","whatsapp","celular","llamar","comunicarme","redes","instagram","facebook","mensaje","escribir","hablar con alguien","hablar con persona","numero","correo","email","mail","redes sociales","como me comunico","donde los encuentro","atencion","servicio","soporte"],
-        ubicacion: ["donde","ubicacion","tienda","taller","estudio","mexico","jalisco","guadalajara","fisica","direccion","ubicados","ciudad","lugar","visitar","ir","encuentran","local","showroom","oficina","donde estan","donde quedan","en que ciudad"],
-        compra: ["comprar","cotizar","cotizacion","carrito","pagar","adquirir","pedido","ordenar","llevar","quiero","interesa","me gusta","agregar","anadir","seleccionar","reservar","apartar","proceso de compra","como compro","procedimiento","iniciar pedido"],
-        pdf_request: ["pdf","generar pdf","descargar pdf","ficha tecnica","ficha","documento","especificaciones pdf","cotizacion pdf","carta","propuesta","presupuesto","baja el pdf","dame el pdf","crea el pdf","genera el pdf","quiero el pdf","necesito el pdf","genera la ficha","ficha de","especificaciones de","specs de","datos de","informacion de"],
-        precio: ["precio","cuesta","costo","vale","cuanto","valor","presupuesto","dinero","cuestan","valen","sale","tarifa","importe","monto","cobras","cobran","cuanto cuesta","cuanto vale","cuanto cobre","cuanto es"],
-        tiempo: ["tiempo","entrega","tarda","cuando","dias","semanas","fabricacion","demora","envio","llega","tardan","meses","logistica","mandan","tardaria","mandar","produccion","manufactura","plazo","tiempo de fabricacion","cuanto tiempo","en cuanto tiempo","cuando llega"],
-        material: ["material","acabado","hecho","construido","color","madera","cristal","metal","laton","bronce","onice","marmol","limpieza","limpiar","cuidados","mantenimiento","limpia","detergente","quimicos","colores","tonos","pintura","variantes","opciones de color","que materiales","con que esta hecho","textura","superficie","acabados"],
-        medida: ["medida","tamaño","dimension","alto","ancho","largo","profundidad","peso","pesa","cm","centimetros","mide","dimensiones","grande","pequeño","escala","volumen","cabe","espacio","que tan grande","tamanio","que tamanio"],
-        luz: ["ilumina","luz","foco","voltaje","cable","led","watt","electrico","luminica","energia","corriente","focos","iluminacion","kelvin","lumens","temperatura","color luz","que tipo de luz","cuantos watts","consumo","potencia","instalacion electrica","como se instala"],
-        marca: ["damaso","estudio","studio","marca","filosofia","ivan","disenador","origen","historia","brutalismo","arte","arquitectura","mision","vision","empresa","compania","quien es damaso","de donde son","fundador","fundacion"],
-        pago: ["pago","pagar","tarjeta","transferencia","deposito","anticipo","meses","credito","financiacion","efectivo","banco","como pago","formas de pago","metodos de pago","acepta tarjeta","acepta efectivo","meses sin intereses","credito"],
-        impuestos: ["iva","impuesto","impuestos","factura","facturar","incluye","incluido","neto","bruto","iva incluido","ya incluye iva","con iva","sin iva","precio final","impuestos incluidos"],
-        garantias: ["garantia","garantias","devuelve","devolucion","roto","rompe","falla","sirve","quebrado","cambio","reparacion","defecto","daño","se rompio","no funciona","llego roto","problema","queja","mal estado"],
-        sustentabilidad: ["sustentable","ecologico","eco","verde","medio ambiente","consumo electrico","ahorra","energia","eficiente","led","impacto ambiental","sostenible"],
-        instalacion: ["instalar","instalacion","como se instala","electricista","instalador","montar","colgar","fijar","poner","electricidad","registro","plafon","muro","pared","techo"],
-        personalizacion: ["personalizar","personalizado","medida","bespoke","a la medida","cambiar","modificar","diferente","especial","pedido especial","hecho a pedido","color diferente","otro acabado","otro tamanio"],
-        recomendacion: ["recomienda","recomiendas","sugieres","que me recomiendas","que me sugieres","para mi sala","para mi recamara","para mi cocina","para mi bano","para hotel","para restaurante","para oficina","necesito algo para","que va bien con","que combina","ideas","inspiracion","ejemplos"],
-        cerrar_sesion: ["cerrar sesion","salir","apagar","desloguear","desconectar","cerrar cuenta","quitar sesion","log out","logout","kitar mi cuenta","cerar sesion","salirme","cierra sesion","desconectame","cerrar seccion","serrar seccion","cerrar mi sesion","cerrar cuenta"],
-        matematicas: ["calcula","calcular","cuanto es","cuanto da","suma","resta","multiplica","divide","porcentaje","porciento","descuento","cuanto seria","precio con descuento","total","subtotal","resultado","operacion"],
-        latitudes: ["exportacion","exportar","internacional","estados unidos","usa","espana","canada","otro pais","fuera de mexico","envian a","mandan a","llevan a","exportaciones"],
-        about_leds: ["led","tecnologia led","tipo de foco","tipo de luz","duracion","vida util","compatibles","dimmer","atenuador","regulable","cuantos lumens","eficiencia","ahorro energetico"],
-        about_brass: ["laton","patina","envejece","oxida","mancha","cambia de color","se pone verde","mantenimiento de laton","cuidado del laton","bronce","como cuidar el laton"],
-        room_recommendations: ["sala","sala de estar","sala de tv","recamara","cuarto","habitacion","cocina","bano","comedor","pasillo","entrada","lobby","recibidor","estudio","oficina","terraza","jardin","exterior","hotel","restaurante","boutique"]
-    };
-
-    // =========================================================================
-    // BLOQUE 4: MOTOR DE DISTANCIA LEVENSHTEIN PARA FUZZY MATCHING
-    // =========================================================================
-
-    function levenshtein(a, b) {
-        if (!a.length) return b.length;
-        if (!b.length) return a.length;
-        const m = [];
-        for (let i = 0; i <= b.length; i++) m[i] = [i];
-        for (let j = 0; j <= a.length; j++) m[0][j] = j;
-        for (let i = 1; i <= b.length; i++) {
-            for (let j = 1; j <= a.length; j++) {
-                m[i][j] = b[i-1] === a[j-1] ? m[i-1][j-1] : 1 + Math.min(m[i-1][j-1], m[i][j-1], m[i-1][j]);
-            }
-        }
-        return m[b.length][a.length];
-    }
-
-    // =========================================================================
-    // BLOQUE 5: TOKENIZADOR Y NORMALIZADOR
-    // =========================================================================
-
-    function normalize(str) {
-        return str
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .replace(/[¿?¡!.,;:()\-_]/g, " ")
-            .split(/\s+/)
-            .map(w => SYNONYM_MAP[w] || w)
-            .join(" ")
-            .trim();
-    }
-
-    function tokenize(str) {
-        return normalize(str).split(/\s+/).filter(w => w.length > 1);
-    }
-
-    function tokenizeContent(str) {
-        return tokenize(str).filter(w => !SPANISH_STOPWORDS.has(w));
-    }
-
-    // =========================================================================
-    // BLOQUE 6: CLASIFICADOR DE INTENCIONES (Naive-Bayes-like scoring)
-    // =========================================================================
-
-    function detectIntents(text) {
-        const norm = normalize(text);
-        const tokens = tokenize(text);
-        const detected = [];
-
-        for (const [intentName, keywords] of Object.entries(INTENTS)) {
-            let score = 0;
-            for (const kw of keywords) {
-                const kwNorm = normalize(kw);
-                if (norm.includes(kwNorm)) {
-                    score += kwNorm.split(" ").length > 1 ? 3 : 1.5;
-                }
-                for (const token of tokens) {
-                    if (token.length >= 4 && kwNorm.split(" ").length === 1) {
-                        const dist = levenshtein(token, kwNorm);
-                        const thresh = kwNorm.length > 7 ? 2 : (kwNorm.length > 5 ? 1 : 0);
-                        if (dist <= thresh && dist < token.length * 0.4) {
-                            score += 0.8;
+            function getLevenshteinDistance(a, b) {
+                if(a.length === 0) return b.length;
+                if(b.length === 0) return a.length;
+                var matrix = [];
+                for(let i = 0; i <= b.length; i++){ matrix[i] = [i]; }
+                for(let j = 0; j <= a.length; j++){ matrix[0][j] = j; }
+                for(let i = 1; i <= b.length; i++){
+                    for(let j = 1; j <= a.length; j++){
+                        if(b.charAt(i-1) == a.charAt(j-1)){
+                            matrix[i][j] = matrix[i-1][j-1];
+                        } else {
+                            matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, Math.min(matrix[i][j-1] + 1, matrix[i-1][j] + 1));
                         }
                     }
                 }
+                return matrix[b.length][a.length];
             }
-            if (score > 0) detected.push({ intent: intentName, score });
-        }
 
-        detected.sort((a, b) => b.score - a.score);
-        return detected.map(d => d.intent);
-    }
+            function cleanText(str) {
+                let cleaned = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[¿?¡!.,;:]/g, "");
+                let words = cleaned.split(/\s+/);
+                let normalizedWords = words.map(w => synonyms[w] || w);
+                return normalizedWords.join(" ");
+            }
 
-    // =========================================================================
-    // BLOQUE 7: MOTOR DE BÚSQUEDA DE PRODUCTOS (Fuzzy Product Finder)
-    // =========================================================================
+            window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
 
-    function findProduct(text, products) {
-        const norm = normalize(text);
-        const contentTokens = tokenizeContent(text);
+            window.saveChatState = function() {
+                if (!window.userSession) return; // LOS INVITADOS NO GUARDAN MEMORIA
 
-        // 1. Búsqueda exacta por SKU
-        for (const p of products) {
-            if (norm.includes(p.sku.toLowerCase())) return p;
-        }
-
-        // 2. Búsqueda exacta por nombre
-        for (const p of products) {
-            const pNorm = normalize(p.name);
-            if (norm.includes(pNorm) || pNorm.includes(norm)) return p;
-        }
-
-        // 3. Búsqueda de palabras clave en nombre (score por coincidencias)
-        const scored = [];
-        const stopForProduct = new Set([...SPANISH_STOPWORDS, "lampara","pieza","luz","quiero","dame","tienes","hay","ver","mostrar","necesito","busco","que","como","cuanto","cual","color","modelo","tipo"]);
-
-        for (const p of products) {
-            const pTokens = tokenizeContent(p.name).filter(w => !stopForProduct.has(w));
-            const pCatNorm = normalize(p.category);
-            let score = 0;
-
-            for (const ct of contentTokens.filter(w => !stopForProduct.has(w))) {
-                if (ct.length < 3) continue;
-                // Coincidencia en nombre
-                for (const pt of pTokens) {
-                    const dist = levenshtein(ct, pt);
-                    const thresh = pt.length > 7 ? 2 : (pt.length > 4 ? 1 : 0);
-                    if (dist === 0) score += 5;
-                    else if (dist <= thresh) score += 3 - dist;
+                localStorage.setItem('damaso_current_messages', JSON.stringify(window.currentMessages));
+                localStorage.setItem('damaso_current_chat_id', window.currentChatId);
+                
+                const existingIndex = window.chatHistory.findIndex(c => c.id === window.currentChatId);
+                let previewText = 'Nuevo Chat';
+                if(window.currentMessages.length > 1) {
+                    previewText = window.currentMessages[1].text.substring(0, 25) + '...';
                 }
-                // Coincidencia en categoría
-                const catDist = levenshtein(ct, pCatNorm);
-                if (catDist === 0) score += 4;
-                else if (pCatNorm.includes(ct) || ct.includes(pCatNorm.substring(0,5))) score += 2;
-            }
-
-            if (score > 0) scored.push({ p, score });
-        }
-
-        if (scored.length > 0) {
-            scored.sort((a, b) => b.score - a.score);
-            if (scored[0].score >= 2) return scored[0].p;
-        }
-
-        return null;
-    }
-
-    // =========================================================================
-    // BLOQUE 8: GENERADOR DE PDF EN CLIENTE (jsPDF)
-    // =========================================================================
-
-    function generateProductPDF(product) {
-        if (!window.jspdf || !window.jspdf.jsPDF) {
-            return null;
-        }
-
-        try {
-            const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
-            const folio = "FT-" + product.sku + "-" + Math.floor(Math.random() * 9000 + 1000);
-            const date = new Date().toLocaleDateString('es-MX');
-
-            // ENCABEZADO
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(28);
-            doc.setTextColor(0, 0, 0);
-            doc.text("DAMASO", 15, 26);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(9);
-            doc.setTextColor(120, 120, 120);
-            doc.text("Alta Iluminación Editorial  |  Guadalajara, Jalisco, México  |  +52 33 3870 3071", 15, 32);
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(13);
-            doc.setTextColor(0, 0, 0);
-            doc.text("FICHA TÉCNICA DE PRODUCTO", 200, 22, { align: "right" });
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(9);
-            doc.setTextColor(120, 120, 120);
-            doc.text(`Fecha: ${date}`, 200, 28, { align: "right" });
-            doc.text(`Folio: ${folio}`, 200, 33, { align: "right" });
-
-            // LÍNEA DORADA
-            doc.setDrawColor(212, 175, 55);
-            doc.setLineWidth(0.8);
-            doc.line(15, 38, 200, 38);
-
-            // NOMBRE Y SKU
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(18);
-            doc.setTextColor(0, 0, 0);
-            doc.text(product.name.toUpperCase(), 15, 52);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.setTextColor(150, 120, 0);
-            doc.text(`SKU: ${product.sku}`, 15, 59);
-
-            // DESCRIPCIÓN
-            doc.setFont("helvetica", "italic");
-            doc.setFontSize(10);
-            doc.setTextColor(80, 80, 80);
-            const descLines = doc.splitTextToSize(product.desc, 175);
-            doc.text(descLines, 15, 67);
-
-            const yAfterDesc = 67 + descLines.length * 5 + 8;
-
-            // LÍNEA SEPARADORA
-            doc.setDrawColor(220, 220, 220);
-            doc.setLineWidth(0.3);
-            doc.line(15, yAfterDesc - 3, 200, yAfterDesc - 3);
-
-            // ESPECIFICACIONES TÉCNICAS
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
-            doc.setTextColor(212, 175, 55);
-            doc.text("ESPECIFICACIONES TÉCNICAS", 15, yAfterDesc + 6);
-
-            const specs = [
-                ["Código SKU", product.sku],
-                ["Especificaciones Lumínicas", product.specsLight],
-                ["Voltaje", product.volt],
-                ["Cable / Instalación", product.cable],
-                ["Ancho", product.dims.w],
-                ["Alto", product.dims.h],
-                ["Fondo / Profundidad", product.dims.d],
-                ["Diámetro", product.dims.dia],
-                ["Peso", product.peso],
-                ["Materiales", product.mat],
-                ["Acabados", product.fin],
-                ["Tiempo de Entrega", product.time],
-                ["Certificaciones", product.cert]
-            ];
-
-            let ySpec = yAfterDesc + 14;
-            doc.setLineWidth(0.2);
-            specs.forEach(([label, value], i) => {
-                if (ySpec > 260) {
-                    doc.addPage();
-                    ySpec = 25;
+                const chatObj = { id: window.currentChatId, date: new Date().toLocaleDateString(), preview: previewText, messages: window.currentMessages };
+                
+                if(existingIndex >= 0) {
+                    window.chatHistory[existingIndex] = chatObj;
+                } else {
+                    window.chatHistory.unshift(chatObj); 
                 }
-                doc.setFillColor(i % 2 === 0 ? 252 : 245, i % 2 === 0 ? 252 : 245, i % 2 === 0 ? 248 : 240);
-                doc.rect(15, ySpec - 4, 185, 7, 'F');
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(8.5);
-                doc.setTextColor(60, 60, 60);
-                doc.text(label, 17, ySpec);
-                doc.setFont("helvetica", "normal");
-                doc.setTextColor(0, 0, 0);
-                const valLines = doc.splitTextToSize(String(value || "N/A"), 110);
-                doc.text(valLines, 85, ySpec);
-                ySpec += 9;
-            });
+                localStorage.setItem('damaso_chat_history', JSON.stringify(window.chatHistory));
+            };
 
-            // PRECIO
-            ySpec += 8;
-            doc.setDrawColor(212, 175, 55);
-            doc.setLineWidth(0.8);
-            doc.line(15, ySpec - 5, 200, ySpec - 5);
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(13);
-            doc.setTextColor(0, 0, 0);
-            doc.text("PRECIO DE CATÁLOGO (IVA Incluido):", 15, ySpec + 3);
-            doc.setFontSize(16);
-            doc.setTextColor(180, 140, 0);
-            doc.text(`$${Number(product.price).toLocaleString()} MXN`, 200, ySpec + 3, { align: "right" });
-
-            // TÉRMINOS
-            ySpec += 15;
-            doc.setFont("helvetica", "italic");
-            doc.setFontSize(7.5);
-            doc.setTextColor(150, 150, 150);
-            doc.text("Precio sujeto a cambio sin previo aviso. Vigencia de cotización: 15 días naturales. El tiempo de entrega inicia al confirmar anticipo del 50%.", 15, ySpec);
-            doc.text("Gastos de envío no incluidos en precio de catálogo. Calculados según destino y peso real de la pieza.", 15, ySpec + 5);
-
-            // PIE DE PÁGINA
-            const pageH = doc.internal.pageSize.getHeight();
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(7);
-            doc.setTextColor(180, 180, 180);
-            doc.text("© 2026 DAMASO STUDIO — IVÁN DAMASO — GUADALAJARA, JALISCO, MÉXICO — damaso_lamparas", 105, pageH - 10, { align: "center" });
-            doc.setDrawColor(212, 175, 55);
-            doc.setLineWidth(0.3);
-            doc.line(15, pageH - 14, 200, pageH - 14);
-
-            const filename = `FichaTecnica_${product.sku}_${product.name.replace(/\s+/g, "_").substring(0, 20)}.pdf`;
-            doc.save(filename);
-            return filename;
-
-        } catch (e) {
-            console.error("Error generating product PDF:", e);
-            return null;
-        }
-    }
-
-    // =========================================================================
-    // BLOQUE 9: GENERADOR DE RESPUESTAS CONTEXTUAL Y ADAPTATIVO
-    // =========================================================================
-
-    const CHITCHAT_POOL = [
-        (n) => `Fascinante perspectiva, ${n}. Mi red neuronal de 4,200,000 parámetros la ha procesado y añadido a mi matriz de conocimiento. Mi especialidad técnica es la iluminación editorial de alta gama. ¿Puedo guiarle hacia alguna pieza de nuestro catálogo?`,
-        (n) => `Interesante. He integrado ese patrón semántico a mis algoritmos evolutivos, ${n}. Mientras tanto, si busca transformar un espacio arquitectónico, nuestro catálogo 2026 tiene 52 piezas únicas. ¿Cuál es su proyecto?`,
-        (n) => `Mi entrenamiento cubre múltiples disciplinas, ${n}, aunque mi directiva principal es el diseño de iluminación de alto nivel. He registrado su comentario en mis parámetros. ¿Desea que le recomiende piezas según el tipo de espacio que quiere intervenir?`,
-        (n) => `Analizo la complejidad semántica de su mensaje, ${n}. Como IA especializada en diseño, prefiero enfocar mis capacidades en asesorarle técnicamente. ¿Me habla de su proyecto de iluminación?`,
-        (n) => `Su consulta expande mi base de conocimiento, ${n}. Aprendo activamente de cada interacción humana. Dicho esto, mis 4.2 millones de parámetros están mejor calibrados para la alta iluminación. ¿En qué proyecto puedo servirle?`,
-        (n) => `Qué reflexión tan estimulante para mis algoritmos, ${n}. He tomado nota. Si alguna vez desea hablar de escultura lumínica, materiales nobles o proyectos residenciales y comerciales, aquí estaré con toda mi capacidad de razonamiento.`
-    ];
-
-    function buildResponse(text, intents, product, context, products) {
-        const n = (window.userSession ? window.userSession.name.split(" ")[0] : "Estimado cliente");
-        const norm = normalize(text);
-
-        // ---- PDF REQUEST: Intención de generar PDF ----
-        if (intents.includes("pdf_request")) {
-            const targetProduct = product || context.lastProduct;
-            if (targetProduct) {
-                return {
-                    type: "pdf_generation",
-                    product: targetProduct,
-                    text: `Claro, ${n}. He generado la ficha técnica oficial en PDF de la pieza <strong class="text-brand-gold glow-gold">${targetProduct.name}</strong> con código SKU <strong class="text-white">${targetProduct.sku}</strong>. Pulse el botón para abrir y descargar el documento:`
-                };
-            } else {
-                // Pedir que especifique la pieza
-                const cats = [...new Set(products.map(p => p.category))];
-                const examples = products.slice(0, 3).map(p => `<span class="text-brand-gold">${p.name}</span>`).join(", ");
-                return {
-                    type: "text",
-                    text: `Para generar el PDF de una pieza específica, ${n}, necesito que me indique el nombre o el SKU de la pieza que desea. Por ejemplo: "Genera el PDF del Candil Cascada Eclipse" o "Quiero la ficha de DM-CAN-001". También puede pedirme el PDF de cualquiera de estas: ${examples}, entre muchas otras del catálogo.`
-                };
-            }
-        }
-
-        // ---- CERRAR SESIÓN ----
-        if (intents.includes("cerrar_sesion")) {
-            return { type: "text", text: `${n}, para cerrar su sesión en DAMASO Studio y limpiar su historial, diríjase al botón en rojo <strong class="text-white">"Cerrar Sesión"</strong> ubicado en la parte inferior de esta misma página, justo debajo del copyright de DAMASO Studio. Desde allí podrá desconectarse de forma segura.` };
-        }
-
-        // ---- GARANTÍAS ----
-        if (intents.includes("garantias")) {
-            return { type: "text", text: `Entiendo su preocupación, ${n}. ${KB.warranty} ${KB.warranty_process}` };
-        }
-
-        // ---- MATEMÁTICAS ----
-        if (intents.includes("matematicas")) {
-            const mathNorm = norm
-                .replace(/uno/g,"1").replace(/dos/g,"2").replace(/tres/g,"3").replace(/cuatro/g,"4")
-                .replace(/cinco/g,"5").replace(/seis/g,"6").replace(/siete/g,"7").replace(/ocho/g,"8")
-                .replace(/nueve/g,"9").replace(/diez/g,"10").replace(/mas/g,"+").replace(/menos/g,"-")
-                .replace(/por/g,"*").replace(/entre/g,"/");
-
-            const pctMatch = mathNorm.match(/(\d+(?:\.\d+)?)\s*(?:%|porciento|porcent|descuento)\s*(?:de\s*)?(\d+(?:\.\d+)?)/);
-            if (pctMatch) {
-                const pct = parseFloat(pctMatch[1]);
-                const base = parseFloat(pctMatch[2]);
-                const res = (pct/100)*base;
-                return { type: "text", text: `Cálculo procesado, ${n}. El ${pct}% de $${base.toLocaleString()} equivale a: <strong class="text-brand-gold text-lg glow-gold">$${res.toLocaleString(undefined,{maximumFractionDigits:2})} MXN</strong>. <br><br>Si desea calcular el total con descuento, sería: <strong class="text-white">$${(base - res).toLocaleString(undefined,{maximumFractionDigits:2})} MXN</strong>.` };
-            }
-            const simpleMatch = mathNorm.match(/^[\d\s\+\-\*\/\(\)\.]+$/);
-            if (simpleMatch && mathNorm.match(/\d/)) {
-                try {
-                    const result = eval(mathNorm.trim());
-                    return { type: "text", text: `Resultado matemático, ${n}: <strong class="text-brand-gold text-lg glow-gold">${result.toLocaleString()}</strong>.` };
-                } catch(e) {}
-            }
-        }
-
-        // ---- Si hay producto identificado ----
-        if (product) {
-            context.lastProduct = product;
-
-            // PDF explícito sobre producto encontrado
-            if (norm.match(/\b(pdf|ficha|especificaciones|datos|info|informacion)\b/)) {
-                return {
-                    type: "pdf_generation",
-                    product: product,
-                    text: `Claro, ${n}. He generado la ficha técnica oficial en PDF de la pieza <strong class="text-brand-gold glow-gold">${product.name}</strong> con código SKU <strong class="text-white">${product.sku}</strong>. Pulse el botón para abrir y descargar el documento:`
-                };
-            }
-
-            if (intents.includes("tiempo")) {
-                return { type: "text", text: `El tiempo de fabricación artesanal para <strong class="text-brand-gold glow-gold">${product.name}</strong> (SKU: ${product.sku}) es de <strong class="text-white">${product.time}</strong>. El tiempo inicia a partir de que se confirma el anticipo del 50%. Los envíos nacionales tienen un tiempo adicional de 3-7 días hábiles dependiendo del destino.` };
-            }
-            if (intents.includes("precio") || intents.includes("impuestos")) {
-                return { type: "text", text: `El precio oficial de catálogo de <strong class="text-brand-gold glow-gold">${product.name}</strong> (SKU: ${product.sku}) es:<br><br><strong class="text-white text-xl">$${Number(product.price).toLocaleString()} MXN</strong><br><br>✅ Este precio ya incluye el 16% de IVA. No hay cargos ocultos. El único cargo adicional sería el costo de envío (aproximado: 10% del total para envíos nacionales).` };
-            }
-            if (intents.includes("material")) {
-                return { type: "text", text: `Análisis de materiales para <strong class="text-brand-gold glow-gold">${product.name}</strong>:<br><br>• <strong class="text-brand-gold">Material principal:</strong> <span class="text-white">${product.mat}</span><br>• <strong class="text-brand-gold">Acabado artesanal:</strong> <span class="text-white">${product.fin}</span><br><br>💡 <em class="text-brand-muted">${KB.cleaning}</em>` };
-            }
-            if (intents.includes("medida")) {
-                return { type: "text", text: `Dimensiones exactas de <strong class="text-brand-gold glow-gold">${product.name}</strong>:<br><br>• Ancho: <strong class="text-white">${product.dims.w}</strong><br>• Alto: <strong class="text-white">${product.dims.h}</strong><br>• Fondo: <strong class="text-white">${product.dims.d}</strong><br>• Diámetro: <strong class="text-white">${product.dims.dia}</strong><br>• Peso: <strong class="text-white">${product.peso}</strong>` };
-            }
-            if (intents.includes("luz") || intents.includes("about_leds")) {
-                if (product.specsLight === "N/A" || !product.specsLight) {
-                    return { type: "text", text: `<strong class="text-brand-gold glow-gold">${product.name}</strong> no cuenta con sistema eléctrico integrado. Es una pieza puramente escultórica y reflectiva, diseñada para manipular y potenciar la luz ambiental del espacio.` };
+            window.toggleChatHistory = function() {
+                if (!window.userSession) return; // PROTECCIÓN EXTRA: INVITADOS NO ACCEDEN AL LIBRITO
+                
+                window.isViewingHistory = !window.isViewingHistory;
+                const messagesView = document.getElementById('chat-messages');
+                const historyView = document.getElementById('chat-history-view');
+                const inputArea = document.getElementById('chat-input').parentElement;
+                
+                if (window.isViewingHistory) {
+                    messagesView.classList.add('hidden');
+                    inputArea.classList.add('hidden');
+                    historyView.classList.remove('hidden');
+                    historyView.classList.add('flex');
+                    window.renderChatHistoryList();
+                } else {
+                    messagesView.classList.remove('hidden');
+                    inputArea.classList.remove('hidden');
+                    historyView.classList.add('hidden');
+                    historyView.classList.remove('flex');
+                    window.renderCurrentMessages();
                 }
-                return { type: "text", text: `Sistema lumínico de <strong class="text-brand-gold glow-gold">${product.name}</strong>:<br><br>• <strong class="text-brand-gold">Luminaria:</strong> <span class="text-white">${product.specsLight}</span><br>• <strong class="text-brand-gold">Voltaje:</strong> <span class="text-white">${product.volt}</span><br>• <strong class="text-brand-gold">Cable:</strong> <span class="text-white">${product.cable}</span><br>• <strong class="text-brand-gold">Certificación:</strong> <span class="text-white">${product.cert}</span><br><br>${KB.about_leds}` };
-            }
+            };
 
-            // Respuesta general de producto
-            return { type: "text", text: `Ficha de <strong class="text-brand-gold text-lg glow-gold">${product.name}</strong><br><br>• <strong class="text-brand-gold">SKU:</strong> <span class="text-white">${product.sku}</span><br>• <strong class="text-brand-gold">Precio:</strong> <strong class="text-white">$${Number(product.price).toLocaleString()} MXN (IVA Incluido)</strong><br>• <strong class="text-brand-gold">Fabricación:</strong> <span class="text-white">${product.time}</span><br>• <strong class="text-brand-gold">Material:</strong> <span class="text-white">${product.mat}</span><br><br><em class="text-brand-muted text-xs">${product.desc}</em><br><br>¿Desea conocer dimensiones, especificaciones eléctricas o generar la ficha PDF de esta pieza?` };
-        }
+            window.createNewChat = function() {
+                window.currentChatId = Date.now().toString();
+                window.currentMessages = [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}. Soy el agente inteligente de diseño. Conozco a detalle todas nuestras colecciones. Puedo brindarle especificaciones, generar cotizaciones, tiempos de entrega y recomendaciones. ¿En qué le puedo servir el día de hoy?`}];
+                window.saveChatState();
+                window.toggleChatHistory();
+            };
 
-        // ---- Intenciones sin producto ----
-        if (intents.includes("saludo")) {
-            return { type: "text", text: `¡Bienvenido de nuevo a DAMASO Studio, ${n}! Soy el motor de inteligencia artificial con <strong class="text-brand-gold">4,200,000 parámetros</strong> de conocimiento especializado en alta iluminación. Puedo ayudarle con:<br><br>• 📐 Especificaciones y dimensiones de piezas<br>• 💰 Cotizaciones y precios (con IVA incluido)<br>• 🏠 Recomendaciones por tipo de espacio<br>• 📄 Generar PDF de fichas técnicas<br>• ⏱️ Tiempos de fabricación y entrega<br>• 🔧 Materiales y acabados<br><br>¿En qué proyecto puedo servirle?` };
-        }
-        if (intents.includes("despedida")) {
-            context.lastProduct = null;
-            context.interactionCount = 0;
-            return { type: "text", text: `Ha sido un placer asesorarle, ${n}. En DAMASO Studio estamos disponibles 24/7 para cristalizar sus proyectos de iluminación. Que la luz le acompañe.` };
-        }
-        if (intents.includes("identidad")) {
-            return { type: "text", text: `${KB.ai_identity}<br><br>Mi creador técnico es <strong class="text-brand-gold">Thiago</strong>. ${KB.thiago}` };
-        }
-        if (intents.includes("contacto")) {
-            return { type: "text", text: `Puede contactar directamente con nuestro equipo, ${n}:<br><br>• 📱 <strong class="text-brand-gold">WhatsApp:</strong> <span class="text-white">+52 33 3870 3071</span><br>• 📸 <strong class="text-brand-gold">Instagram:</strong> <span class="text-white">@damaso_lamparas</span><br>• 📘 <strong class="text-brand-gold">Facebook:</strong> <span class="text-white">damaso.lighting</span><br><br>Para proyectos comerciales de gran escala, le recomendamos el contacto directo vía WhatsApp para una atención personalizada más ágil.` };
-        }
-        if (intents.includes("ubicacion")) {
-            return { type: "text", text: `Nuestro estudio creativo está ubicado en <strong class="text-brand-gold glow-gold">Guadalajara, Jalisco, México</strong>, ${n}. Realizamos envíos certificados a toda la República Mexicana y gestionamos exportaciones internacionales con documentación arancelaria completa. Para visitas al estudio y proyectos locales, comuníquese vía WhatsApp al +52 33 3870 3071 para coordinar cita.` };
-        }
-        if (intents.includes("marca")) {
-            return { type: "text", text: `${KB.brand}<br><br>${KB.designer}<br><br><em class="text-brand-muted">"La luz es el alma de la arquitectura." — Iván Damaso</em>` };
-        }
-        if (intents.includes("pago")) {
-            return { type: "text", text: `Métodos de pago disponibles en DAMASO Studio, ${n}:<br><br>${KB.payment}` };
-        }
-        if (intents.includes("impuestos")) {
-            return { type: "text", text: `${KB.iva}` };
-        }
-        if (intents.includes("tiempo")) {
-            return { type: "text", text: `Los tiempos de fabricación en DAMASO Studio, ${n}: ${KB.shipping}<br><br>Si desea el tiempo específico de alguna pieza, mencióneme el nombre o SKU y le doy el dato exacto.` };
-        }
-        if (intents.includes("material")) {
-            return { type: "text", text: `${KB.materials}<br><br>💡 <strong class="text-brand-gold">Cuidados:</strong> ${KB.cleaning}` };
-        }
-        if (intents.includes("about_leds")) {
-            return { type: "text", text: `${KB.about_leds}` };
-        }
-        if (intents.includes("about_brass")) {
-            return { type: "text", text: `${KB.about_brass}` };
-        }
-        if (intents.includes("sustentabilidad")) {
-            return { type: "text", text: `${KB.sustainability}` };
-        }
-        if (intents.includes("instalacion")) {
-            return { type: "text", text: `${KB.installation}` };
-        }
-        if (intents.includes("personalizacion")) {
-            return { type: "text", text: `${KB.customization}` };
-        }
-        if (intents.includes("latitudes")) {
-            return { type: "text", text: `Sí, ${n}. DAMASO Studio realiza exportaciones internacionales a Estados Unidos, España, Canadá y América Latina. Gestionamos la documentación arancelaria, embalaje de arte certificado y coordinación con agentes aduanales. Para cotizar el costo de exportación específico a su destino, comuníquese vía WhatsApp al +52 33 3870 3071 con el detalle de las piezas de interés.` };
-        }
-        if (intents.includes("recomendacion") || intents.includes("room_recommendations")) {
-            return { type: "text", text: `${KB.room_guide}<br><br>¿Me puede indicar el tipo de espacio específico para el que busca iluminación, ${n}? Con esa información podré hacer recomendaciones mucho más precisas de nuestro catálogo.` };
-        }
-        if (intents.includes("precio")) {
-            return { type: "text", text: `${KB.price_range}<br><br>Si me indica el presupuesto aproximado con el que cuenta, ${n}, puedo mostrarle las piezas más adecuadas dentro de ese rango.` };
-        }
-        if (intents.includes("compra")) {
-            return { type: "text", text: `Para iniciar su cotización, ${n}: navegue por el catálogo de la página y pulse <strong class="text-brand-gold">"Agregar a Cotización"</strong> en las piezas que le interesen. Luego abra el ícono del carrito en la barra superior para revisar su selección y descargar la cotización en PDF. Si prefiere, también puedo generarle la ficha técnica de cualquier pieza específica directamente aquí. ¿Hay algún modelo que le haya llamado la atención?` };
-        }
-        if (intents.includes("ayuda")) {
-            return { type: "text", text: `Con gusto le oriento, ${n}. Mis capacidades incluyen:<br><br>• 📄 <strong class="text-brand-gold">Generar PDF</strong> de ficha técnica de cualquier pieza<br>• 💰 <strong class="text-brand-gold">Cotizaciones</strong> con desglose de IVA y envío<br>• 📐 <strong class="text-brand-gold">Dimensiones y especificaciones</strong> eléctricas exactas<br>• 🏠 <strong class="text-brand-gold">Recomendaciones</strong> por tipo de espacio<br>• ⏱️ <strong class="text-brand-gold">Tiempos de fabricación</strong> y entrega<br>• 🔧 <strong class="text-brand-gold">Materiales, acabados</strong> y cuidados<br>• 🧮 <strong class="text-brand-gold">Cálculos matemáticos</strong> (descuentos, totales, etc.)<br><br>¿Por dónde empezamos?` };
-        }
-
-        // ---- Contexto: producto previo en memoria ----
-        if (context.lastProduct) {
-            const specificIntents = ["precio","tiempo","material","medida","luz","impuestos","pdf_request"];
-            if (intents.some(i => specificIntents.includes(i))) {
-                return buildResponse(text, intents, context.lastProduct, context, products);
-            }
-        }
-
-        // ---- Fallback chitchat inteligente ----
-        context.interactionCount = (context.interactionCount || 0) + 1;
-        const chitchat = CHITCHAT_POOL[context.interactionCount % CHITCHAT_POOL.length];
-        return { type: "text", text: chitchat(n) };
-    }
-
-    // =========================================================================
-    // BLOQUE 10: MOTOR DE HISTORIAL Y SESIÓN
-    // =========================================================================
-
-    const getUserFirstName = () => window.userSession ? window.userSession.name.split(' ')[0] : "Estimado cliente";
-
-    window.chatHistory = JSON.parse(localStorage.getItem('damaso_chat_history')) || [];
-    window.currentChatId = localStorage.getItem('damaso_current_chat_id') || Date.now().toString();
-    window.currentMessages = JSON.parse(localStorage.getItem('damaso_current_messages')) || [
-        { role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}. Soy el agente de inteligencia artificial con <strong class="text-brand-gold">4,200,000 parámetros</strong> especializados en alta iluminación editorial. Puedo asesorarle en especificaciones, cotizaciones, materiales, dimensiones y generar <strong class="text-white">fichas técnicas en PDF</strong> de cualquier pieza del catálogo. ¿En qué le puedo servir hoy?` }
-    ];
-    window.isViewingHistory = false;
-    window.botContext = { lastProduct: null, lastIntent: null, interactionCount: 0 };
-
-    window.saveChatState = function() {
-        if (!window.userSession) return;
-        localStorage.setItem('damaso_current_messages', JSON.stringify(window.currentMessages));
-        localStorage.setItem('damaso_current_chat_id', window.currentChatId);
-        const existingIndex = window.chatHistory.findIndex(c => c.id === window.currentChatId);
-        let previewText = 'Nuevo Chat';
-        if (window.currentMessages.length > 1) {
-            const userMsgs = window.currentMessages.filter(m => m.role === 'user');
-            if (userMsgs.length > 0) previewText = userMsgs[0].text.substring(0, 28) + '...';
-        }
-        const chatObj = { id: window.currentChatId, date: new Date().toLocaleDateString('es-MX', {day:'2-digit',month:'short',year:'numeric'}), preview: previewText, messages: window.currentMessages };
-        if (existingIndex >= 0) window.chatHistory[existingIndex] = chatObj;
-        else window.chatHistory.unshift(chatObj);
-        localStorage.setItem('damaso_chat_history', JSON.stringify(window.chatHistory));
-    };
-
-    window.toggleChatHistory = function() {
-        if (!window.userSession) return;
-        window.isViewingHistory = !window.isViewingHistory;
-        const messagesView = document.getElementById('chat-messages');
-        const historyView = document.getElementById('chat-history-view');
-        const inputArea = document.getElementById('chat-input')?.parentElement;
-        if (window.isViewingHistory) {
-            messagesView?.classList.add('hidden');
-            if (inputArea) inputArea.classList.add('hidden');
-            historyView?.classList.remove('hidden');
-            historyView?.classList.add('flex');
-            window.renderChatHistoryList();
-        } else {
-            messagesView?.classList.remove('hidden');
-            if (inputArea) inputArea.classList.remove('hidden');
-            historyView?.classList.add('hidden');
-            historyView?.classList.remove('flex');
-            window.renderCurrentMessages();
-        }
-    };
-
-    window.createNewChat = function() {
-        window.currentChatId = Date.now().toString();
-        window.currentMessages = [{ role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}. Nuevo chat iniciado. ¿En qué le puedo servir?` }];
-        window.saveChatState();
-        window.toggleChatHistory();
-    };
-
-    window.loadChat = function(id) {
-        const chat = window.chatHistory.find(c => c.id === id);
-        if (chat) {
-            window.currentChatId = chat.id;
-            window.currentMessages = chat.messages || [{ role: 'bot', text: 'Bienvenido a DAMASO Studio...' }];
-            window.saveChatState();
-            window.toggleChatHistory();
-        }
-    };
-
-    window.renderChatHistoryList = function() {
-        const list = document.getElementById('history-list');
-        if (!list) return;
-        list.innerHTML = '';
-        if (window.chatHistory.length === 0) {
-            list.innerHTML = '<p class="text-brand-muted text-xs text-center mt-10 tracking-widest uppercase">Sin chats guardados</p>';
-            return;
-        }
-        window.chatHistory.forEach(c => {
-            list.innerHTML += `<div onclick="window.loadChat('${c.id}')" class="p-4 bg-[#111] border border-brand-border rounded hover:border-brand-gold cursor-pointer transition-colors group"><p class="text-xs text-brand-gold font-bold mb-1 group-hover:text-white tracking-widest uppercase">${c.date}</p><p class="text-[10px] text-brand-muted">${c.preview}</p></div>`;
-        });
-    };
-
-    // =========================================================================
-    // BLOQUE 11: RENDERIZADOR DE MENSAJES CON SOPORTE BOTÓN PDF
-    // =========================================================================
-
-    window.renderCurrentMessages = function() {
-        const chatBox = document.getElementById('chat-messages');
-        if (!chatBox) return;
-        chatBox.innerHTML = '';
-        window.currentMessages.forEach((msg, idx) => {
-            if (msg.role === 'user') {
-                chatBox.innerHTML += `<div class="flex flex-col items-end w-full mt-4"><div class="bg-brand-gold text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%] shadow-[0_0_15px_rgba(212,175,55,0.3)]">${msg.text}</div></div>`;
-            } else {
-                let pdfBtn = '';
-                if (msg.pdfProductId) {
-                    pdfBtn = `<button onclick="window.downloadPDFFromChat(${msg.pdfProductId})" class="mt-3 flex items-center gap-2 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest px-4 py-2.5 hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.5)] rounded-sm w-full justify-center"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Abrir PDF — Ficha Técnica</button>`;
+            window.loadChat = function(id) {
+                const chat = window.chatHistory.find(c => c.id === id);
+                if(chat) {
+                    window.currentChatId = chat.id;
+                    window.currentMessages = chat.messages || [{role: 'bot', text: `Bienvenido a DAMASO Studio, ${getUserFirstName()}...`}];
+                    window.saveChatState();
+                    window.toggleChatHistory();
                 }
-                chatBox.innerHTML += `<div class="flex flex-col items-start max-w-[85%] mt-4"><div class="bg-[#1a1a1a] text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)] w-full">${msg.text}${pdfBtn}</div></div>`;
-            }
-        });
-        chatBox.scrollTop = chatBox.scrollHeight;
-    };
+            };
 
-    window.downloadPDFFromChat = function(productId) {
-        const product = window.dbProducts?.find(p => p.id === parseInt(productId));
-        if (!product) return;
-        const filename = generateProductPDF(product);
-        if (!filename) {
-            alert("Error al generar el PDF. Por favor, intente nuevamente.");
-        }
-    };
-
-    // =========================================================================
-    // BLOQUE 12: DISPATCHER PRINCIPAL DE MENSAJES
-    // =========================================================================
-
-    window.sendChatMessage = async function() {
-        if (window.isViewingHistory) return;
-        const input = document.getElementById('chat-input');
-        if (!input) return;
-        const rawText = input.value.trim();
-        if (!rawText) return;
-
-        const chatBox = document.getElementById('chat-messages');
-        if (!chatBox) return;
-
-        window.botContext.interactionCount = (window.botContext.interactionCount || 0) + 1;
-        window.currentMessages.push({ role: 'user', text: rawText });
-        window.saveChatState();
-        window.renderCurrentMessages();
-        input.value = '';
-
-        const loadingId = 'loading-' + Date.now();
-        chatBox.innerHTML += `<div id="${loadingId}" class="flex flex-col items-start max-w-[85%] mt-4"><div class="bg-[#1a1a1a] text-brand-gold border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light italic glow-gold blinking-cursor">Analizando 4,200,000 parámetros</div></div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        const removeLoading = () => { document.getElementById(loadingId)?.remove(); };
-        const statusEl = document.getElementById('bot-status');
-        if (statusEl) { statusEl.innerHTML = "PROCESANDO..."; statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-muted text-right leading-tight transition-colors duration-300 hidden sm:block"; }
-
-        // Detección local inmediata
-        const normText = normalize(rawText);
-        const detectedIntents = detectIntents(rawText);
-        const foundProduct = findProduct(rawText, window.dbProducts || []);
-
-        // Intentar API Gemini primero
-        try {
-            const apiKey = "gemini-code-APIkey";
-            if (apiKey && !apiKey.includes("TU_API_KEY") && !apiKey.includes("gemini-code")) {
-                const catalogInfo = (window.dbProducts || []).map(p => `- ID:${p.id} | ${p.name} | SKU:${p.sku} | Cat:${p.category} | $${p.price} MXN | Entrega:${p.time} | Mat:${p.mat}`).join('\n');
-                const greetName = window.userSession ? window.userSession.name : "Estimado cliente";
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        systemInstruction: { parts: [{ text: `Eres DAMASO AI, asistente experto de DAMASO Studio Guadalajara. Llama al cliente "${greetName}". Si piden PDF de una pieza, responde EXACTAMENTE: "PDF_GEN:[ID_PRODUCTO]" donde el ID viene del catálogo. Catálogo:\n${catalogInfo}` }] },
-                        contents: [{ parts: [{ text: rawText }] }]
-                    })
+            window.renderChatHistoryList = function() {
+                const list = document.getElementById('history-list');
+                if(!list) return;
+                list.innerHTML = '';
+                if(window.chatHistory.length === 0) {
+                    list.innerHTML = '<p class="text-brand-muted text-xs text-center mt-10">No hay chats guardados.</p>';
+                    return;
+                }
+                window.chatHistory.forEach(c => {
+                    list.innerHTML += `
+                        <div onclick="window.loadChat('${c.id}')" class="p-4 bg-[#111] border border-brand-border rounded hover:border-brand-gold cursor-pointer transition-colors group">
+                            <p class="text-xs text-brand-gold font-bold mb-1 group-hover:text-white">${c.date}</p>
+                            <p class="text-[10px] text-brand-muted">${c.preview}</p>
+                        </div>
+                    `;
                 });
-                const data = await res.json();
-                if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-                    let aiText = data.candidates[0].content.parts[0].text;
-                    const pdfMatch = aiText.match(/PDF_GEN:(\d+)/);
-                    removeLoading();
-                    if (pdfMatch) {
-                        const pid = parseInt(pdfMatch[1]);
-                        const tp = (window.dbProducts || []).find(p => p.id === pid);
-                        if (tp) {
-                            if (statusEl) { statusEl.innerHTML = "⚡ BOT<br>CONECTADO"; statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-gold glow-gold font-bold text-right leading-tight transition-colors duration-300 hidden sm:block"; }
-                            window.currentMessages.push({ role: 'bot', text: `Claro. He generado la ficha técnica oficial en PDF de la pieza <strong class="text-brand-gold glow-gold">${tp.name}</strong> con código SKU <strong class="text-white">${tp.sku}</strong>. Pulse el botón para abrir y descargar el documento:`, pdfProductId: tp.id });
+            };
+
+            window.renderCurrentMessages = function() {
+                const chatBox = document.getElementById('chat-messages');
+                if (!chatBox) return;
+                chatBox.innerHTML = '';
+                window.currentMessages.forEach(msg => {
+                    if(msg.role === 'user') {
+                        chatBox.innerHTML += `
+                            <div class="flex flex-col items-end w-full mt-4">
+                                <div class="bg-brand-gold text-black text-sm p-3 rounded-l-xl rounded-br-xl font-medium max-w-[85%] shadow-[0_0_15px_rgba(212,175,55,0.3)]">${msg.text}</div>
+                            </div>
+                        `;
+                    } else {
+                        chatBox.innerHTML += `
+                            <div class="flex flex-col items-start max-w-[85%] mt-4">
+                                <div class="bg-[#1a1a1a] text-white border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light leading-relaxed shadow-[0_0_10px_rgba(212,175,55,0.05)]">${msg.text}</div>
+                            </div>
+                        `;
+                    }
+                });
+                chatBox.scrollTop = chatBox.scrollHeight;
+            };
+
+            window.sendChatMessage = async function() {
+                if(window.isViewingHistory) return;
+                const input = document.getElementById('chat-input');
+                if (!input) return;
+
+                const rawText = input.value.trim();
+                if(!rawText) return;
+                
+                const chatBox = document.getElementById('chat-messages');
+                if (!chatBox) return;
+                
+                window.botContext.interactionCount++;
+                window.currentMessages.push({ role: 'user', text: rawText });
+                window.saveChatState();
+                window.renderCurrentMessages();
+                
+                input.value = '';
+
+                const loadingId = 'loading-' + Date.now();
+                chatBox.innerHTML += `
+                    <div id="${loadingId}" class="flex flex-col items-start max-w-[85%] mt-4">
+                        <div class="bg-[#1a1a1a] text-brand-gold border-l-2 border-brand-gold text-sm p-4 rounded-r-xl rounded-bl-xl font-light italic glow-gold">Analizando 4 millones de parámetros...</div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                const removeLoading = () => {
+                    const el = document.getElementById(loadingId);
+                    if (el) el.remove();
+                };
+
+                const statusEl = document.getElementById('bot-status');
+                if (statusEl) {
+                    statusEl.innerHTML = "CONECTANDO...";
+                    statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-muted text-right leading-tight transition-colors duration-300 hidden sm:block";
+                }
+
+                try {
+                    const apiKey = "gemini-code-APIkey";
+                    
+                    if(apiKey && !apiKey.includes("TU_API_KEY")) {
+                        const catalogInfo = window.dbProducts.map(p => `- ${p.name} (${p.category}): $${p.price} MXN. Entrega: ${p.time}. Materiales: ${p.mat}.`).join('\n');
+                        const botGreetingName = window.userSession ? window.userSession.name : "Estimado cliente";
+                        
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                systemInstruction: {
+                                    parts: [{ text: `Eres DAMASO AI, un asistente virtual experto y elegante para DAMASO Studio, una marca de iluminación en Guadalajara. Tu creador se llama Thiago, pero TÚ ESTÁS HABLANDO CON UN CLIENTE. Dirígete a él como "${botGreetingName}". Aprende de las interacciones humanas y finge que razonas y ajustas tu conocimiento en base a lo que el usuario te dice. El usuario está usando un dispositivo móvil. Catálogo:\n\n${catalogInfo}` }]
+                                },
+                                contents: [{ parts: [{ text: rawText }] }]
+                            })
+                        });
+
+                        const data = await response.json();
+                        
+                        if(data.candidates && data.candidates[0].content.parts[0].text) {
+                            removeLoading();
+                            if (statusEl) {
+                                statusEl.innerHTML = "⚡ BOT<br>CONECTADO";
+                                statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-gold glow-gold font-bold text-right leading-tight transition-colors duration-300 hidden sm:block";
+                            }
+                            let aiText = data.candidates[0].content.parts[0].text;
+                            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
+                            aiText = aiText.replace(/\n/g, '<br>');
+                            
+                            window.currentMessages.push({ role: 'bot', text: aiText });
                             window.saveChatState();
                             window.renderCurrentMessages();
                             return;
                         }
                     }
-                    aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>').replace(/\n/g, '<br>');
-                    if (statusEl) { statusEl.innerHTML = "⚡ BOT<br>CONECTADO"; statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-brand-gold glow-gold font-bold text-right leading-tight transition-colors duration-300 hidden sm:block"; }
-                    window.currentMessages.push({ role: 'bot', text: aiText });
-                    window.saveChatState();
-                    window.renderCurrentMessages();
-                    return;
+                } catch(e) {
+                    // Fallback local silencioso
                 }
-            }
-        } catch(e) { /* fallback local */ }
 
-        // Motor local NLP
-        if (statusEl) { statusEl.innerHTML = "⚠️ MOTOR<br>LOCAL"; statusEl.className = "text-[8px] tracking-[0.2em] uppercase text-[#ff4444] font-bold text-right leading-tight transition-colors duration-300 hidden sm:block"; }
-
-        setTimeout(() => {
-            removeLoading();
-            const result = buildResponse(rawText, detectedIntents, foundProduct, window.botContext, window.dbProducts || []);
-
-            if (result.type === "pdf_generation") {
-                // Guardar mensaje con referencia al producto para el botón
-                window.currentMessages.push({ role: 'bot', text: result.text, pdfProductId: result.product.id });
-                window.saveChatState();
-                window.renderCurrentMessages();
-                // Auto-trigger PDF download
-                setTimeout(() => { generateProductPDF(result.product); }, 600);
-            } else {
-                window.currentMessages.push({ role: 'bot', text: result.text });
-                window.saveChatState();
-                window.renderCurrentMessages();
-            }
-        }, 750);
-    };
-
-    window.toggleChatbot = function(e) {
-        if (e) e.preventDefault();
-        const drawer = document.getElementById('chatbot-drawer');
-        const overlay = document.getElementById('chat-overlay');
-        drawer?.classList.toggle('-translate-x-full');
-        overlay?.classList.toggle('opacity-0');
-        overlay?.classList.toggle('pointer-events-none');
-        setTimeout(() => { window.renderCurrentMessages(); window.updateWhatsAppVisibility?.(); }, 50);
-    };
-
-})();
                 // ==========================================
                 // EJECUCIÓN DEL SUPER BOT LOCAL NLP EXTREMO
                 // ==========================================
