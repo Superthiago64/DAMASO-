@@ -1446,7 +1446,7 @@
             // CONEXIÓN ROBUSTA CON GEMINI API Y REINTENTOS AUTOMÁTICOS
             window.fetchGeminiAPI = async function(promptText, systemInstructionText) {
                 const apiKey = ""; // La API key se inyecta en tiempo de ejecución
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const url = `generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
                 const payload = {
                     systemInstruction: { parts: [{ text: systemInstructionText }] },
                     contents: [{ parts: [{ text: promptText }] }]
