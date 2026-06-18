@@ -1443,15 +1443,39 @@
                 chatBox.scrollTop = chatBox.scrollHeight;
             };
 
-            // CONEXIÓN ROBUSTA CON GEMINI API Y REINTENTOS AUTOMÁTICOS
-            window.fetchGeminiAPI = async function(promptText, systemInstructionText) {
-                const apiKey = ""; // La API key se inyecta en tiempo de ejecución
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-                const payload = {
-                    systemInstruction: { parts: [{ text: systemInstructionText }] },
-                    contents: [{ parts: [{ text: promptText }] }]
-                };
+            // CONEXIÓN SEGURA A TRAVÉS DE NETLIFY FUNCTIONS (BACKEND)
+window.fetchGeminiAPI = async function(promptText, systemInstructionText) {
+    // Apuntamos a nuestra función serverless interna de Netlify
+    const url = `/.netlify/functions/gemini`;
+    
+    const payload = {
+        systemInstruction: systemInstructionText,
+        prompt: promptText
+    };
 
+    const maxRetries = 5;
+    const delays = [1000, 2000, 4000, 8000, 16000];
+
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) throw new Error("API Falló");
+            const data = await response.json();
+            
+            if (data.text) {
+                return data.text;
+            }
+            throw new Error("Respuesta de IA vacía");
+        } catch (error) {
+            if (i === maxRetries - 1) throw error;
+            await new Promise(resolve => setTimeout(resolve, delays[i]));
+        }
+    }
+};
                 const maxRetries = 5;
                 const delays = [1000, 2000, 4000, 8000, 16000];
 
