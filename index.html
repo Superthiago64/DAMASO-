@@ -208,14 +208,12 @@
             /* CRÍTICO: position fixed escapa COMPLETAMENTE del flujo del documento
                incluyendo el padding de safe areas del body */
             position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            /* width/height en vw/vh para ignorar el box model del padre */
-            width: 100vw !important;
-            height: 100vh !important;
-            min-height: 100dvh;
+            /* inset:0 (sin width/height explícitos) ancla los 4 lados al viewport
+               REAL y visible en cada instante — se adapta solo cuando la barra de
+               direcciones del navegador móvil aparece/desaparece. Si en cambio se
+               fija un width/height en vw/vh, ese valor queda congelado y puede
+               dejar franjas sin cubrir cuando el viewport visible cambia. */
+            inset: 0 !important;
             /* Forzar que cubra el notch y el home indicator */
             margin: 0 !important;
             padding: 0 !important;
@@ -1197,7 +1195,7 @@
             if (divider) divider.style.width = '0';
 
             // MOSTRAR OVERLAY FULL SCREEN — forzar estilos inline para máxima compatibilidad
-            overlay.style.cssText = 'position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;min-height:100dvh;margin:0!important;padding:0!important;z-index:2147483647!important;background:#030303!important;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:none!important;overflow:hidden;';
+            overlay.style.cssText = 'position:fixed!important;inset:0!important;margin:0!important;padding:0!important;z-index:2147483647!important;background:#030303!important;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:none!important;overflow:hidden;';
             overlay.classList.add('overlay-visible');
             // Bloquear scroll durante la transición (evita artefactos en iOS)
             document.body.style.overflow = 'hidden';
@@ -1898,10 +1896,7 @@ REGLAS:
                 
                 // Asegurar estilos base correctos
                 overlay.style.position = 'fixed';
-                overlay.style.top = '0';
-                overlay.style.left = '0';
-                overlay.style.width = '100vw';
-                overlay.style.height = '100vh';
+                overlay.style.inset = '0';
                 overlay.style.zIndex = '2147483647';
                 overlay.style.background = '#030303';
                 overlay.style.margin = '0';
