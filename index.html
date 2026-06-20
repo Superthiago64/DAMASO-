@@ -2,7 +2,6 @@
 <html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <!-- viewport-fit=cover elimina franjas negras en dispositivos como iPhone -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <title>DAMASO | Alta Iluminación Editorial</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -24,107 +23,360 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        /* ── FIX CONTORNOS MÓVILES Y FRANJAS NEGRAS ── */
+        /* ── RESET TOTAL PARA MÓVIL SIN FRANJAS ── */
         * {
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        *:focus {
-            outline: none !important;
+        *:focus { outline: none !important; }
+
+        /* Forzar fondo negro en TODO el dispositivo incluyendo safe areas */
+        :root {
+            --brand-bg: #030303;
+            --brand-gold: #d4af37;
+            --brand-surface: #111111;
+            --brand-border: #333333;
+            --brand-muted: #a1a1a1;
         }
 
-        html, body { 
-            background-color: #030303; 
-            color: #f2f2f2; 
-            max-width: 100vw; 
-            overflow-x: hidden; 
-            width: 100%; 
-            min-height: 100vh; 
-            min-height: 100dvh;
-            position: relative; 
-            margin: 0; 
-            padding: 0; 
-            /* Se elimina padding-bottom forzado que causa franjas en iOS */
+        html {
+            background-color: #030303;
+            /* Rellenar safe areas con el mismo color de fondo */
+            background-attachment: fixed;
         }
-        
+
+        body {
+            background-color: #030303;
+            color: #f2f2f2;
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+            min-height: -webkit-fill-available;
+            overflow-x: hidden;
+            /* Padding para safe areas en iOS (notch / home indicator) */
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            /* Quitar padding-top si el navbar ya lo maneja */
+            padding-top: 0;
+        }
+
+        /* Fondo negro en toda la barra de estado iOS / Android */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: env(safe-area-inset-top);
+                background: #030303;
+                z-index: 99999;
+            }
+        }
+
+        /* Fondo negro en la parte inferior (home indicator iOS) */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            body::after {
+                content: '';
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: env(safe-area-inset-bottom);
+                background: #030303;
+                z-index: 99999;
+                pointer-events: none;
+            }
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #030303; }
         ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .modal-overlay { backdrop-filter: blur(8px); }
-        input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { display: none; }
-        .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; display: flex; background-color: #111; padding: 25px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; user-select: none; -webkit-user-select: none; touch-action: pan-y; }
+        .modal-overlay { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+
+        input[type="search"]::-webkit-search-decoration,
+        input[type="search"]::-webkit-search-cancel-button { display: none; }
+
+        /* ── MARQUEE ── */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            display: flex;
+            background-color: #111;
+            padding: 25px 0;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: pan-y;
+        }
         .marquee-content { display: flex; animation: marquee 40s linear infinite; }
-        .marquee-container:hover .marquee-content, .marquee-content.is-paused { animation-play-state: paused !important; }
+        .marquee-container:hover .marquee-content,
+        .marquee-content.is-paused { animation-play-state: paused !important; }
         @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
         .client-group { margin: 0 30px; display: inline-flex; align-items: center; }
         .client-title { font-family: 'Playfair Display', serif; font-style: italic; color: #d4af37; margin-right: 15px; font-size: 1.1rem; }
         .client-names { font-family: 'Inter', sans-serif; color: #a1a1a1; font-weight: 300; letter-spacing: 1px; font-size: 0.80rem; text-transform: uppercase; }
         .dot { margin: 0 10px; color: #d4af37; }
+
         .chat-scroll::-webkit-scrollbar { width: 4px; }
         .chat-scroll::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
-        .glow-text { text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 50px rgba(255, 255, 255, 0.3); }
+
+        .glow-text { text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.5), 0 0 50px rgba(255,255,255,0.3); }
         .glow-gold { text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4), 0 0 30px rgba(212,175,55,0.2); }
         .break-words-custom { word-wrap: break-word; word-break: break-word; hyphens: auto; white-space: normal; }
 
         /* ── LIQUID GLASS ── */
         .glass-btn {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.08);
             backdrop-filter: blur(16px) saturate(180%);
             -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255,255,255,0.15);
             box-shadow: 0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.12);
             transition: all 0.3s ease;
         }
         .glass-btn:hover {
-            background: rgba(255, 255, 255, 0.14);
-            border-color: rgba(212, 175, 55, 0.5);
+            background: rgba(255,255,255,0.14);
+            border-color: rgba(212,175,55,0.5);
             box-shadow: 0 4px 32px rgba(212,175,55,0.2), inset 0 1px 0 rgba(255,255,255,0.18);
         }
         .glass-gold {
-            background: rgba(212, 175, 55, 0.15);
+            background: rgba(212,175,55,0.15);
             backdrop-filter: blur(16px) saturate(200%);
             -webkit-backdrop-filter: blur(16px) saturate(200%);
-            border: 1px solid rgba(212, 175, 55, 0.4);
+            border: 1px solid rgba(212,175,55,0.4);
             box-shadow: 0 4px 24px rgba(212,175,55,0.15), inset 0 1px 0 rgba(212,175,55,0.2);
             transition: all 0.3s ease;
             color: #d4af37;
         }
         .glass-gold:hover {
-            background: rgba(212, 175, 55, 0.28);
-            border-color: rgba(212, 175, 55, 0.7);
+            background: rgba(212,175,55,0.28);
+            border-color: rgba(212,175,55,0.7);
             box-shadow: 0 6px 36px rgba(212,175,55,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
             color: #fff;
         }
         .glass-nav {
-            background: rgba(3, 3, 3, 0.7);
+            background: rgba(3,3,3,0.85);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
             border-bottom: 1px solid rgba(212,175,55,0.18);
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+            /* Compensar el notch de iPhone */
+            padding-top: env(safe-area-inset-top);
         }
 
-        /* ── LOADER ANIMACIONES ── */
-        @keyframes shapeSwap1 { 0%, 100% { transform: translate(0px, -35%); } 33.33% { transform: translate(35%, 35%); } 66.66% { transform: translate(-35%, 35%); } }
-        @keyframes shapeSwap2 { 0%, 100% { transform: translate(35%, 35%); } 33.33% { transform: translate(-35%, 35%); } 66.66% { transform: translate(0px, -35%); } }
-        @keyframes shapeSwap3 { 0%, 100% { transform: translate(-35%, 35%); } 33.33% { transform: translate(0px, -35%); } 66.66% { transform: translate(35%, 35%); } }
-        .shape-1 { animation: shapeSwap1 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-        .shape-2 { animation: shapeSwap2 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-        .shape-3 { animation: shapeSwap3 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        /* ── NAVBAR: SAFE AREA SUPERIOR ── */
+        #navbar {
+            /* Empujar el navbar debajo del notch en iOS */
+            padding-top: env(safe-area-inset-top);
+        }
+
+        /* ── ANIMACIONES LOADER ── */
+        @keyframes shapeSwap1 { 0%,100% { transform: translate(0px,-35%); } 33.33% { transform: translate(35%,35%); } 66.66% { transform: translate(-35%,35%); } }
+        @keyframes shapeSwap2 { 0%,100% { transform: translate(35%,35%); } 33.33% { transform: translate(-35%,35%); } 66.66% { transform: translate(0px,-35%); } }
+        @keyframes shapeSwap3 { 0%,100% { transform: translate(-35%,35%); } 33.33% { transform: translate(0px,-35%); } 66.66% { transform: translate(35%,35%); } }
+        .shape-1 { animation: shapeSwap1 2s cubic-bezier(0.4,0,0.2,1) infinite; }
+        .shape-2 { animation: shapeSwap2 2s cubic-bezier(0.4,0,0.2,1) infinite; }
+        .shape-3 { animation: shapeSwap3 2s cubic-bezier(0.4,0,0.2,1) infinite; }
+
         .init-modal-overlay { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
         @keyframes blink { 50% { opacity: 0; } }
         .blinking-cursor::after { content: '|'; animation: blink 1s step-end infinite; }
 
-        /* Chat typing indicator */
-        @keyframes dotPulse { 0%,80%,100% { transform:scale(0); opacity:.3 } 40% { transform:scale(1); opacity:1 } }
-        .dot-typing span { display:inline-block; width:6px; height:6px; border-radius:50%; background:#d4af37; margin:0 2px; animation:dotPulse 1.4s ease-in-out infinite; }
-        .dot-typing span:nth-child(2) { animation-delay:.2s; }
-        .dot-typing span:nth-child(3) { animation-delay:.4s; }
-        
-        .pb-safe { padding-bottom: max(2rem, env(safe-area-inset-bottom)); }
-        
-        /* Motor Respaldo Style */
+        /* ── CHAT TYPING ── */
+        @keyframes dotPulse { 0%,80%,100% { transform: scale(0); opacity: .3; } 40% { transform: scale(1); opacity: 1; } }
+        .dot-typing span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #d4af37; margin: 0 2px; animation: dotPulse 1.4s ease-in-out infinite; }
+        .dot-typing span:nth-child(2) { animation-delay: .2s; }
+        .dot-typing span:nth-child(3) { animation-delay: .4s; }
+
+        /* ── SAFE AREA PARA INPUTS FLOTANTES (bottom drawers) ── */
+        .pb-safe-input {
+            padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+        }
+        .pb-safe {
+            padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+        }
+
+        /* ── ANIMACIÓN DE CATEGORÍA — PANTALLA COMPLETA REAL ── */
+        #category-transition-overlay {
+            /* CRÍTICO: position fixed escapa COMPLETAMENTE del flujo del documento
+               incluyendo el padding de safe areas del body */
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            /* width/height en vw/vh para ignorar el box model del padre */
+            width: 100vw !important;
+            height: 100vh !important;
+            min-height: 100dvh;
+            /* Forzar que cubra el notch y el home indicator */
+            margin: 0 !important;
+            padding: 0 !important;
+            /* Colores y layout */
+            background: #030303 !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* z-index máximo — encima de TODO */
+            z-index: 2147483647 !important;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            /* Sobreescribir cualquier transform heredado */
+            transform: none !important;
+            /* Evitar overflow que recorte el overlay */
+            overflow: hidden;
+        }
+        #category-transition-overlay.overlay-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* ── ANIMACIÓN DE LETRAS MEJORADA ── */
+        @keyframes letterSlideIn {
+            0% { opacity: 0; transform: translateY(40px) scale(0.8); filter: blur(8px); }
+            60% { opacity: 1; transform: translateY(-4px) scale(1.02); filter: blur(0); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+        @keyframes letterSlideOut {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40px) scale(0.8); filter: blur(8px); }
+        }
+        @keyframes categoryFadeIn {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); letter-spacing: 0.1em; }
+            100% { opacity: 1; transform: translateY(0) scale(1); letter-spacing: 0.05em; }
+        }
+
+        .menu-letter {
+            opacity: 0;
+            display: inline-block;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 9rem);
+            color: white;
+            letter-spacing: 0.15em;
+            text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.5), 0 0 50px rgba(255,255,255,0.3);
+        }
+        .menu-letter.letter-animate-in {
+            animation: letterSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .menu-letter.letter-animate-out {
+            animation: letterSlideOut 0.3s ease-in forwards;
+        }
+
+        #menu-category-text {
+            opacity: 0;
+        }
+        #menu-category-text.category-animate-in {
+            animation: categoryFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Línea decorativa bajo las letras */
+        #menu-damaso-letters {
+            display: flex;
+            gap: clamp(0.5rem, 2vw, 1.5rem);
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ── ENTRY ANIMATION — también pantalla completa ── */
+        #entry-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            min-height: 100dvh;
+            margin: 0;
+            padding: 0;
+            z-index: 9999999;
+            background: #030303;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .entry-letter {
+            display: inline-block;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 9rem);
+            color: white;
+            letter-spacing: 0.15em;
+            opacity: 0;
+            text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.5), 0 0 50px rgba(255,255,255,0.3);
+        }
+
+        @keyframes entryLetterIn {
+            0% { opacity: 0; transform: translateY(50px) scale(0.7); filter: blur(12px); }
+            70% { opacity: 1; transform: translateY(-5px) scale(1.03); filter: blur(0); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .entry-letter.animate-in {
+            animation: entryLetterIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* ── LOADING MODAL — pantalla completa ── */
+        #login-loading-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            min-height: 100dvh;
+            margin: 0; padding: 0;
+            overflow: hidden;
+        }
+
+        /* ── WELCOME ANIMATION — pantalla completa ── */
+        #welcome-animation-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            min-height: 100dvh;
+            margin: 0; padding: 0;
+            overflow: hidden;
+        }
+
         .fallback-active-text { color: #ff4444; text-shadow: 0 0 10px rgba(255,68,68,0.5); }
+
+        /* ── LÍNEA DORADA BAJO LAS LETRAS EN TRANSICIÓN ── */
+        .category-divider {
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 1rem auto;
+            transition: width 0.8s ease 0.5s;
+        }
+        .category-divider.expand {
+            width: 200px;
+        }
+
+        /* ── PARTÍCULAS DORADAS ── */
+        @keyframes particleFloat {
+            0% { opacity: 0; transform: translateY(0) translateX(0) scale(0); }
+            20% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-80px) translateX(var(--tx)) scale(1.5); }
+        }
+        .particle {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: #d4af37;
+            border-radius: 50%;
+            animation: particleFloat 1.5s ease-out forwards;
+            box-shadow: 0 0 6px rgba(212,175,55,0.8);
+        }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-gold selection:text-black" id="main-body">
@@ -133,19 +385,21 @@
         <source src="yellow_umbrellas.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="entry-animation" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-auto">
-        <div id="entry-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">M</span>
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">S</span>
-            <span class="entry-letter opacity-0 transition-opacity duration-500 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">O</span>
+    <!-- ── ENTRY ANIMATION ── -->
+    <div id="entry-animation" class="transition-transform duration-[1500ms] ease-in-out pointer-events-auto">
+        <div id="entry-damaso-letters" class="flex items-center justify-center mb-2" style="gap: clamp(0.5rem, 2vw, 1.5rem);">
+            <span class="entry-letter">D</span>
+            <span class="entry-letter">A</span>
+            <span class="entry-letter">M</span>
+            <span class="entry-letter">A</span>
+            <span class="entry-letter">S</span>
+            <span class="entry-letter">O</span>
         </div>
-        <span id="entry-studio" class="opacity-0 transition-opacity duration-1000 font-editorial italic text-3xl sm:text-4xl md:text-5xl text-brand-gold mt-4 glow-gold">Studio</span>
+        <div class="category-divider" id="entry-divider"></div>
+        <span id="entry-studio" class="opacity-0 transition-all duration-1000 font-editorial italic text-brand-gold mt-2 glow-gold" style="font-size: clamp(1.8rem, 5vw, 4rem);">Studio</span>
     </div>
 
-    <!-- Modales de Inicio Omitidos por brevedad pero presentes en el flujo -->
+    <!-- ── MODALES INICIO ── -->
     <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-1000 hidden">
         <div class="glass-btn bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm">
             <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
@@ -207,23 +461,27 @@
         <p class="font-editorial text-brand-gold text-xl tracking-[0.2em] italic glow-gold">Preparando su experiencia...</p>
     </div>
 
-    <div id="welcome-animation-overlay" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out pointer-events-none opacity-0 hidden">
+    <div id="welcome-animation-overlay" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center pointer-events-none opacity-0 hidden">
         <div id="welcome-letters" class="flex flex-wrap justify-center items-center text-center px-4 max-w-[95%] mb-2 leading-tight"></div>
     </div>
 
-    <div id="category-transition-overlay" class="fixed inset-0 z-[999999] bg-[#030303] flex flex-col items-center justify-center pointer-events-none opacity-0 transition-opacity duration-500">
-        <div id="menu-damaso-letters" class="flex space-x-3 sm:space-x-6 mb-2">
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">D</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">M</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">A</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">S</span>
-            <span class="menu-letter opacity-0 transition-opacity duration-300 font-editorial text-5xl sm:text-7xl md:text-9xl text-white tracking-widest glow-text">O</span>
+    <!-- ── TRANSICIÓN DE CATEGORÍA — PANTALLA COMPLETA ── -->
+    <div id="category-transition-overlay">
+        <div id="menu-damaso-letters" class="mb-3">
+            <span class="menu-letter">D</span>
+            <span class="menu-letter">A</span>
+            <span class="menu-letter">M</span>
+            <span class="menu-letter">A</span>
+            <span class="menu-letter">S</span>
+            <span class="menu-letter">O</span>
         </div>
-        <span id="menu-category-text" class="opacity-0 transition-opacity duration-700 font-editorial italic text-3xl sm:text-5xl md:text-6xl text-brand-gold glow-gold mt-4 text-center px-4"></span>
+        <div class="category-divider" id="cat-divider"></div>
+        <span id="menu-category-text" class="font-editorial italic text-brand-gold glow-gold text-center px-6" style="font-size: clamp(1.5rem, 5vw, 5rem);"></span>
+        <!-- Partículas decorativas -->
+        <div id="cat-particles" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
     </div>
 
-    <!-- NAVBAR (ahora con ocultamiento dinámico) -->
+    <!-- ── NAVBAR ── -->
     <nav class="fixed top-0 left-0 right-0 w-full z-[100] glass-nav flex flex-col" id="navbar" style="transform: translateY(0);">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div class="flex items-center space-x-4 sm:space-x-6">
@@ -254,7 +512,7 @@
             </div>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
-                <button id="nav-login-btn" onclick="window.showLoginForm()" class="glass-btn hidden text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 rounded-full" aria-label="Iniciar Sesión" title="Iniciar Sesión">
+                <button id="nav-login-btn" onclick="window.showLoginForm()" class="glass-btn hidden text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 rounded-full" aria-label="Iniciar Sesión">
                     <svg class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line>
                     </svg>
@@ -278,9 +536,9 @@
         </div>
     </nav>
 
-    <!-- CHATBOT DRAWER (con flecha de retroceso) -->
+    <!-- ── CHATBOT DRAWER ── -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[110] w-full md:w-[400px] bg-brand-surface/95 backdrop-blur-xl border-r border-brand-gold/30 transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[15px_0_40px_rgba(212,175,55,0.1)]">
-        <div class="p-6 border-b border-brand-gold/30 flex justify-between items-center bg-black/60 relative">
+        <div class="p-6 border-b border-brand-gold/30 flex justify-between items-center bg-black/60 relative" style="padding-top: calc(1.5rem + env(safe-area-inset-top));">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-brand-gold shadow-[0_0_15px_rgba(212,175,55,0.8)] flex items-center justify-center text-black font-editorial font-bold text-sm tracking-widest">AI</div>
                 <div>
@@ -297,23 +555,19 @@
                 </button>
             </div>
         </div>
-
         <div class="flex-1 overflow-y-auto p-4 space-y-3 chat-scroll bg-[#080808]" id="chat-messages"></div>
-
         <div id="chat-suggestions" class="px-4 pb-2 flex gap-2 flex-wrap">
             <button onclick="window.quickAsk('¿Cuáles son sus candiles más populares?')" class="glass-btn text-[9px] text-brand-gold px-3 py-1.5 rounded-full whitespace-nowrap">Candiles populares</button>
             <button onclick="window.quickAsk('¿Cuánto tiempo tarda la entrega?')" class="glass-btn text-[9px] text-brand-gold px-3 py-1.5 rounded-full whitespace-nowrap">Tiempos de entrega</button>
             <button onclick="window.quickAsk('¿Hacen proyectos a medida?')" class="glass-btn text-[9px] text-brand-gold px-3 py-1.5 rounded-full whitespace-nowrap">Proyectos especiales</button>
         </div>
-
         <div id="chat-history-view" class="absolute inset-0 top-[89px] bg-[#080808] z-50 flex-col hidden">
             <div class="p-4 border-b border-brand-border bg-black/60 flex justify-center">
                 <button onclick="window.createNewChat()" class="w-full py-3 glass-gold text-[10px] uppercase font-bold tracking-widest rounded-sm">+ Nuevo Chat</button>
             </div>
             <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list"></div>
         </div>
-
-        <div class="p-4 border-t border-brand-gold/30 bg-black/60 flex items-center gap-2 pb-safe">
+        <div class="p-4 border-t border-brand-gold/30 bg-black/60 flex items-center gap-2 pb-safe-input">
             <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-black/30 backdrop-blur-sm border border-brand-border/50 rounded-full px-4 py-2.5 text-xs text-brand-gold focus:outline-none focus:border-brand-gold/50 transition-colors placeholder-brand-muted/60" onkeypress="if(event.key==='Enter') window.sendChatMessage()">
             <button onclick="window.sendChatMessage()" class="glass-gold w-10 h-10 rounded-full flex items-center justify-center shrink-0">
                 <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
@@ -323,18 +577,18 @@
     </div>
     <div id="chat-overlay" onclick="window.toggleChatbot(event)" class="fixed inset-0 z-[105] bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <!-- SPEC MODAL (con flecha de retroceso que ya tiene, pero mejorada) -->
+    <!-- ── SPEC MODAL ── -->
     <div id="spec-modal" class="fixed inset-0 z-[110] bg-black/95 modal-overlay opacity-0 pointer-events-none flex justify-center items-center transition-opacity duration-300 p-0 sm:p-8">
-        <button onclick="window.closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[120] glass-gold text-brand-gold p-3 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto" title="Volver al catálogo">
+        <button onclick="window.closeSpecModal()" class="fixed top-4 left-4 md:top-8 md:left-8 z-[120] glass-gold text-brand-gold p-3 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 transition-transform flex items-center justify-center pointer-events-auto" style="top: calc(1rem + env(safe-area-inset-top));" title="Volver al catálogo">
             <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </button>
-        <button id="modal-ai-btn" onclick="window.openModalAI()" class="fixed bottom-6 left-6 md:bottom-10 md:left-10 z-[120] w-12 h-12 rounded-full glass-gold flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 transition-transform pointer-events-auto" title="Consultar a DAMASO AI sobre esta pieza">
+        <button id="modal-ai-btn" onclick="window.openModalAI()" class="fixed bottom-6 left-6 md:bottom-10 md:left-10 z-[120] w-12 h-12 rounded-full glass-gold flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 transition-transform pointer-events-auto" style="bottom: calc(1.5rem + env(safe-area-inset-bottom));" title="Consultar a DAMASO AI sobre esta pieza">
             <span class="font-editorial font-bold text-lg">AI</span>
         </button>
 
-        <div id="modal-ai-chat" class="fixed bottom-6 left-6 md:bottom-10 md:left-10 z-[121] w-[calc(100%-3rem)] sm:w-96 max-h-[70vh] bg-black/90 backdrop-blur-xl border border-brand-gold/30 rounded-xl shadow-2xl flex flex-col opacity-0 pointer-events-none transition-opacity duration-300 hidden">
+        <div id="modal-ai-chat" class="fixed bottom-6 left-6 md:bottom-10 md:left-10 z-[121] w-[calc(100%-3rem)] sm:w-96 max-h-[70vh] bg-black/90 backdrop-blur-xl border border-brand-gold/30 rounded-xl shadow-2xl flex flex-col opacity-0 pointer-events-none transition-opacity duration-300 hidden" style="bottom: calc(1.5rem + env(safe-area-inset-bottom));">
             <div class="flex justify-between items-center p-3 border-b border-brand-gold/20">
-                <button onclick="window.closeModalAI()" class="glass-btn p-1.5 rounded-full text-brand-gold hover:text-white transition-colors" title="Cerrar Chat IA">
+                <button onclick="window.closeModalAI()" class="glass-btn p-1.5 rounded-full text-brand-gold hover:text-white transition-colors">
                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><polyline points="12 19 5 12 12 5"></polyline></svg>
                 </button>
                 <span class="text-[9px] tracking-widest text-brand-gold uppercase font-bold">Asistente de Pieza · DAMASO AI</span>
@@ -361,10 +615,10 @@
                 </div>
                 <div class="flex items-center gap-3 mb-2 relative z-10 flex-wrap">
                     <span id="modal-img-name" class="text-[9px] tracking-[0.2em] text-brand-gold uppercase font-bold bg-brand-gold/10 px-2 py-1 rounded-sm border border-brand-gold/30"></span>
-                    <button id="modal-copy-btn" onclick="window.copyToClipboardSafe('modal-img-name', 'modal-copy-btn')" class="glass-btn text-brand-muted hover:text-white transition-colors p-1.5 rounded-sm" title="Copiar nombre de imagen">
+                    <button id="modal-copy-btn" onclick="window.copyToClipboardSafe('modal-img-name', 'modal-copy-btn')" class="glass-btn text-brand-muted hover:text-white transition-colors p-1.5 rounded-sm" title="Copiar nombre">
                         <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                     </button>
-                    <button onclick="window.downloadWatermarkedImage()" class="glass-gold transition-colors p-1.5 px-3 flex items-center gap-2 text-[8px] uppercase tracking-widest rounded-sm" title="Descargar con Marca de Agua">
+                    <button onclick="window.downloadWatermarkedImage()" class="glass-gold transition-colors p-1.5 px-3 flex items-center gap-2 text-[8px] uppercase tracking-widest rounded-sm">
                         <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                         Descargar
                     </button>
@@ -376,7 +630,7 @@
                         <span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Código SKU:</span>
                         <div class="col-span-2 flex items-center gap-2">
                             <span class="text-white" id="modal-sku"></span>
-                            <button id="modal-copy-sku-btn" onclick="window.copyToClipboardSafe('modal-sku', 'modal-copy-sku-btn')" class="glass-btn text-brand-muted hover:text-white transition-colors p-1 rounded-sm" title="Copiar SKU">
+                            <button id="modal-copy-sku-btn" onclick="window.copyToClipboardSafe('modal-sku', 'modal-copy-sku-btn')" class="glass-btn text-brand-muted hover:text-white transition-colors p-1 rounded-sm">
                                 <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             </button>
                         </div>
@@ -405,11 +659,11 @@
         </div>
     </div>
 
-    <!-- CART DRAWER (con flecha de retroceso) -->
+    <!-- ── CART DRAWER ── -->
     <div id="cart-drawer" class="fixed inset-y-0 right-0 z-[110] w-full md:w-[450px] bg-brand-surface/95 backdrop-blur-xl border-l border-brand-gold/30 transform translate-x-full transition-transform duration-500 flex flex-col shadow-[-15px_0_40px_rgba(212,175,55,0.1)]">
-        <div class="p-8 border-b border-brand-gold/30 flex justify-between items-center">
+        <div class="p-8 border-b border-brand-gold/30 flex justify-between items-center" style="padding-top: calc(2rem + env(safe-area-inset-top));">
             <h2 class="font-editorial text-2xl tracking-wider text-brand-gold glow-gold">Mi Selección</h2>
-            <button onclick="window.toggleCart()" class="glass-btn p-2 rounded-full text-brand-gold hover:text-white" title="Volver al catálogo">
+            <button onclick="window.toggleCart()" class="glass-btn p-2 rounded-full text-brand-gold hover:text-white">
                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
         </div>
@@ -419,8 +673,6 @@
                 <input type="text" id="client-name" placeholder="Nombre del Cliente / Proyecto" class="w-full bg-brand-surface/80 border border-brand-border p-3 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
                 <input type="email" id="client-email" placeholder="Correo Electrónico" class="w-full bg-brand-surface/80 border border-brand-border p-3 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
             </div>
-            
-            <!-- Nueva Sección de Propuesta AI -->
             <div id="ai-proposal-container" class="hidden mb-4 p-4 glass-gold border border-brand-gold/30 rounded-sm relative">
                 <button onclick="document.getElementById('ai-proposal-container').classList.add('hidden')" class="absolute top-2 right-2 text-brand-gold hover:text-white text-xs">✕</button>
                 <h4 class="text-[10px] text-brand-gold uppercase tracking-widest mb-2 font-bold flex items-center gap-1">✨ Concepto de Diseño AI</h4>
@@ -430,7 +682,6 @@
             <button id="btn-ai-proposal" onclick="window.generateAIProposal()" class="w-full glass-btn py-3 text-[9px] tracking-[0.2em] text-brand-gold uppercase font-bold flex justify-center items-center gap-2 rounded-sm mb-3 hover:border-brand-gold/50 transition-all">
                 ✨ Generar Concepto de Diseño
             </button>
-            
             <div class="flex justify-between text-brand-gold font-editorial text-xl mb-6 glow-gold"><span>Subtotal Estimado</span><span id="cart-total">$0 MXN</span></div>
             <button id="btn-download-pdf" onclick="window.checkoutPDF(event)" class="w-full glass-gold py-4 text-[10px] tracking-[0.2em] uppercase font-bold flex justify-center items-center gap-2 rounded-sm">
                 <svg class="pointer-events-none" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Descargar PDF
@@ -439,7 +690,8 @@
     </div>
     <div id="cart-overlay" onclick="window.toggleCart()" class="fixed inset-0 z-[105] bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-    <header class="relative min-h-[100vh] min-h-[100dvh] flex items-center justify-center pt-24 overflow-hidden bg-black">
+    <!-- ── HERO ── -->
+    <header class="relative min-h-[100vh] min-h-[100dvh] flex items-center justify-center pt-36 overflow-hidden bg-black">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2574&auto=format&fit=crop" alt="Damaso Hero" class="w-full h-full object-cover opacity-60 brightness-110">
             <div class="absolute inset-0 bg-gradient-to-b from-brand-bg/40 via-transparent to-brand-bg"></div>
@@ -455,6 +707,7 @@
         </div>
     </header>
 
+    <!-- ── CATÁLOGO ── -->
     <section id="coleccion" class="py-32 bg-brand-bg">
         <div class="max-w-[95%] mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16">
@@ -467,7 +720,7 @@
         </div>
     </section>
 
-    <!-- Secciones adicionales (Clientes, Diseñador, Manifiesto, Footer) permanecen intactas -->
+    <!-- ── CLIENTES ── -->
     <section id="clientes" class="pt-32 pb-16 bg-black border-t border-brand-gold">
         <div class="max-w-[95%] mx-auto px-4 mb-12 text-center">
             <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-4 glow-gold">Confianza que ilumina</p>
@@ -479,7 +732,6 @@
                 <div class="client-group"><span class="client-title">RESTAURANTES</span><span class="client-names">Lorenza <span class="dot">•</span> Casa de Leo <span class="dot">•</span> Garra <span class="dot">•</span> Los Arcos <span class="dot">•</span> Cabana <span class="dot">•</span> Madelina <span class="dot">•</span> Tequila Orendain</span></div>
                 <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
                 <div class="client-group"><span class="client-title">DESPACHOS</span><span class="client-names">AHA Internacional <span class="dot">•</span> Arquitectura de Interiores <span class="dot">•</span> Rockwell Group Nueva York</span></div>
-                
                 <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín</span></div>
                 <div class="client-group"><span class="client-title">RESTAURANTES</span><span class="client-names">Lorenza <span class="dot">•</span> Casa de Leo <span class="dot">•</span> Garra <span class="dot">•</span> Los Arcos <span class="dot">•</span> Cabana <span class="dot">•</span> Madelina <span class="dot">•</span> Tequila Orendain</span></div>
                 <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
@@ -488,6 +740,7 @@
         </div>
     </section>
 
+    <!-- ── DISEÑADOR ── -->
     <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex flex-col items-center justify-center">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold mb-12">Iván<br>Damaso</h2>
@@ -500,6 +753,7 @@
         </div>
     </section>
 
+    <!-- ── MANIFIESTO ── -->
     <section id="manifiesto" class="py-40 bg-black text-center">
         <div class="max-w-4xl mx-auto px-6">
             <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-12 glow-gold">Filosofía de marca</p>
@@ -507,7 +761,8 @@
         </div>
     </section>
 
-    <footer id="contacto" class="bg-brand-surface pt-32 pb-safe border-t border-brand-gold">
+    <!-- ── FOOTER ── -->
+    <footer id="contacto" class="bg-brand-surface pt-32 border-t border-brand-gold" style="padding-bottom: calc(2rem + env(safe-area-inset-bottom));">
         <div class="max-w-[95%] mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-16">
                 <div class="md:col-span-2">
@@ -538,153 +793,140 @@
     (function() {
         'use strict';
 
-        // ── CONFIGURACIÓN API (Invisible al frontend, sólo motor lógico) ──
-        const GEMINI_API_KEY = "AIzaSyBuH4-Ydh2j4OAQaQSPrqO56PqHTfs-w-U"; // Entorno injecta la API key dinámicamente
+        const GEMINI_API_KEY = "AIzaSyBuH4-Ydh2j4OAQaQSPrqO56PqHTfs-w-U";
         const GEMINI_MODEL = "gemini-2.5-flash";
 
         window.cart = [];
         try { window.cart = JSON.parse(localStorage.getItem('damaso_cart')) || []; } catch(e) { window.cart = []; }
-        
         window.userSession = null;
         try { window.userSession = JSON.parse(localStorage.getItem('damaso_session')) || null; } catch(e) { window.userSession = null; }
-        
         window.currentMessages = [];
-        try { 
-            const savedMsgs = JSON.parse(localStorage.getItem('damaso_current_messages'));
-            window.currentMessages = Array.isArray(savedMsgs) ? savedMsgs : []; 
-        } catch(e) { window.currentMessages = []; }
-        
+        try { const s = JSON.parse(localStorage.getItem('damaso_current_messages')); window.currentMessages = Array.isArray(s) ? s : []; } catch(e) { window.currentMessages = []; }
         window.currentModalProduct = null;
         window.cookieAccepted = false;
-        
-        window.botIsFallback = false; // Estado del Motor
+        window.botIsFallback = false;
+        window._catAnimating = false; // lock para evitar doble-click
 
-        // ── NAVEGACIÓN STICKY AUTO-HIDE ──
+        // ── NAVBAR HIDE/SHOW ──
         window.toggleNavbarState = function(show) {
             const nav = document.getElementById('navbar');
-            if(!nav) return;
-            if(show) {
-                nav.style.transform = 'translateY(0)';
-            } else {
-                nav.style.transform = 'translateY(-100%)';
-            }
+            if (!nav) return;
+            nav.style.transform = show ? 'translateY(0)' : 'translateY(-100%)';
+            nav.style.opacity = show ? '1' : '0';
         };
 
         window.getUserFirstName = function() {
-            if (window.userSession && window.userSession.name) {
-                return window.userSession.name.split(' ')[0];
-            }
-            return 'Estimado cliente';
+            return (window.userSession && window.userSession.name) ? window.userSession.name.split(' ')[0] : 'Estimado cliente';
         };
 
         window.saveChatState = function() {
             try {
                 if (!Array.isArray(window.currentMessages)) window.currentMessages = [];
-                const toSave = window.currentMessages.slice(-60);
-                localStorage.setItem('damaso_current_messages', JSON.stringify(toSave));
+                localStorage.setItem('damaso_current_messages', JSON.stringify(window.currentMessages.slice(-60)));
             } catch(e) {}
         };
 
+        // ── BASE DE DATOS ──
         window.dbProducts = [
             { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
-            { id: 2, name: "Candil Media Luna Latón", category: "candiles", price: 14500, img: "lampara_luna.png", sku: "DM-CAN-002", desc: "Elegante candil suspendido en forma de cuarto de luna asimétrico, construido en latón sólido cepillado a mano.", specsLight: "3x G9 LED 5W, 2700K cálida", cable: "Cable transparente y tensores (2m)", dims: { w: "85 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido, difusor de cristal", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 3, name: "Candil Tubos Dorados", category: "candiles", price: 34000, img: "candil_3.png", sku: "DM-CAN-003", desc: "Impresionante candil de techo compuesto por una lluvia de finos cilindros de latón con luz focalizada.", specsLight: "15x GU10 LED 3W cálida", cable: "Cables individuales de suspensión negra", dims: { w: "80 cm", h: "400 cm", d: "80 cm", dia: "N/A" }, peso: "22 kg", volt: "110-240V", mat: "Cilindros de latón sólido", fin: "Dorado pulido brillante", time: "6 a 8 semanas", cert: "NOM" },
-            { id: 4, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "IMG_2010.png", sku: "DM-CAN-004", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto moldeadas en latón.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
-            { id: 82, name: "Candil Sputnik Nova", category: "candiles", price: 32000, img: "20191224_104820.png", sku: "DM-CAN-005", desc: "Un estallido lumínico de diseño atemporal. Múltiples varillas de latón oscurecido emergen de un núcleo central.", specsLight: "18x G9 LED 3W cálida", cable: "Tubo rígido ajustable a techo", dims: { w: "90 cm", h: "90 cm", d: "90 cm", dia: "90 cm" }, peso: "12 kg", volt: "110-120V", mat: "Latón sólido e insertos de cristal", fin: "Latón avejentado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 83, name: "Candil Cintas Lumínicas", category: "candiles", price: 26500, img: "20200121_085437.png", sku: "DM-CAN-006", desc: "Escultura suspendida de iluminación continua. Aros de aluminio extruido se entrelazan de manera fluida y orgánica.", specsLight: "Tira LED Integrada de Alta Densidad 45W, 3000K", cable: "Tensores invisibles de acero", dims: { w: "85 cm", h: "120 cm", d: "85 cm", dia: "N/A" }, peso: "8.5 kg", volt: "110-240V", mat: "Aluminio extruido y difusor acrílico", fin: "Cromo mate", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 84, name: "Candil Pérgola Rústica", category: "candiles", price: 65000, img: "20200121_085904.png", sku: "DM-CAN-007", desc: "Una obra monumental para proyectos comerciales o residenciales a gran escala.", specsLight: "12x GU10 LED 5W directos + luz ambiental", cable: "Cadenas de acero pesado", dims: { w: "250 cm", h: "100 cm", d: "150 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Madera sólida tratada y acero al carbón", fin: "Madera rústica y acero patinado", time: "8 a 10 semanas", cert: "NOM" },
-            { id: 85, name: "Candil Órbitas Flotantes", category: "candiles", price: 48000, img: "Image_7.png", sku: "DM-CAN-008", desc: "Aros monumentales suspendidos en diferentes ejes y alturas.", specsLight: "Sistema LED Integrado perimetral 60W, 3000K", cable: "Tensores de acero de 3 metros ajustables", dims: { w: "150 cm", h: "200 cm", d: "150 cm", dia: "150 cm (aro mayor)" }, peso: "16 kg", volt: "110-240V", mat: "Aleación de aluminio y latón", fin: "Dorado champán cepillado", time: "5 a 6 semanas", cert: "NOM" },
-            { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Arbotante decorativo que fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino y concreto", fin: "Blanco y gris", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 2, name: "Candil Media Luna Latón", category: "candiles", price: 14500, img: "lampara_luna.png", sku: "DM-CAN-002", desc: "Elegante candil suspendido en forma de cuarto de luna asimétrico.", specsLight: "3x G9 LED 5W, 2700K cálida", cable: "Cable transparente y tensores (2m)", dims: { w: "85 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido, difusor de cristal", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 3, name: "Candil Tubos Dorados", category: "candiles", price: 34000, img: "candil_3.png", sku: "DM-CAN-003", desc: "Impresionante candil de techo compuesto por una lluvia de finos cilindros de latón.", specsLight: "15x GU10 LED 3W cálida", cable: "Cables individuales de suspensión negra", dims: { w: "80 cm", h: "400 cm", d: "80 cm", dia: "N/A" }, peso: "22 kg", volt: "110-240V", mat: "Cilindros de latón sólido", fin: "Dorado pulido brillante", time: "6 a 8 semanas", cert: "NOM" },
+            { id: 4, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "IMG_2010.png", sku: "DM-CAN-004", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
+            { id: 82, name: "Candil Sputnik Nova", category: "candiles", price: 32000, img: "20191224_104820.png", sku: "DM-CAN-005", desc: "Un estallido lumínico de diseño atemporal.", specsLight: "18x G9 LED 3W cálida", cable: "Tubo rígido ajustable a techo", dims: { w: "90 cm", h: "90 cm", d: "90 cm", dia: "90 cm" }, peso: "12 kg", volt: "110-120V", mat: "Latón sólido e insertos de cristal", fin: "Latón avejentado", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 83, name: "Candil Cintas Lumínicas", category: "candiles", price: 26500, img: "20200121_085437.png", sku: "DM-CAN-006", desc: "Escultura suspendida de iluminación continua.", specsLight: "Tira LED Integrada de Alta Densidad 45W, 3000K", cable: "Tensores invisibles de acero", dims: { w: "85 cm", h: "120 cm", d: "85 cm", dia: "N/A" }, peso: "8.5 kg", volt: "110-240V", mat: "Aluminio extruido y difusor acrílico", fin: "Cromo mate", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 84, name: "Candil Pérgola Rústica", category: "candiles", price: 65000, img: "20200121_085904.png", sku: "DM-CAN-007", desc: "Una obra monumental para proyectos a gran escala.", specsLight: "12x GU10 LED 5W + luz ambiental", cable: "Cadenas de acero pesado", dims: { w: "250 cm", h: "100 cm", d: "150 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Madera sólida tratada y acero al carbón", fin: "Madera rústica y acero patinado", time: "8 a 10 semanas", cert: "NOM" },
+            { id: 85, name: "Candil Órbitas Flotantes", category: "candiles", price: 48000, img: "Image_7.png", sku: "DM-CAN-008", desc: "Aros monumentales suspendidos en diferentes ejes.", specsLight: "Sistema LED Integrado perimetral 60W, 3000K", cable: "Tensores de acero de 3 metros ajustables", dims: { w: "150 cm", h: "200 cm", d: "150 cm", dia: "150 cm (aro mayor)" }, peso: "16 kg", volt: "110-240V", mat: "Aleación de aluminio y latón", fin: "Dorado champán cepillado", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 98, name: "Candil Starburst Radiante", category: "candiles", price: 38500, img: "Unknown-2.png", sku: "DM-CAN-009", desc: "Candil monumental starburst en latón brillante con esferas de cristal soplado.", specsLight: "24x E12 LED 4W cálida", cable: "Tubo rígido de latón a techo", dims: { w: "110 cm", h: "110 cm", d: "110 cm", dia: "110 cm" }, peso: "18 kg", volt: "110-120V", mat: "Latón macizo y cristal transparente", fin: "Latón pulido brillante", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino y concreto", fin: "Blanco y gris", time: "3 a 4 semanas", cert: "NOM" },
             { id: 6, name: "Arbotante Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-002", desc: "Arbotante de muro minimalista con aro perimetral luminoso trasero.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" }, peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
             { id: 7, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-003", desc: "Arbotante elegante con cilindros de vidrio transparente.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 8, name: "Espejo Doble Eclipse Trasero", category: "arbotantes", price: 26800, img: "candil_2.png", sku: "DM-ARB-004", desc: "Espejo monumental compuesto de dos círculos excéntricos.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
-            { id: 66, name: "Arbotante Articulado Lino", category: "arbotantes", price: 5400, img: "Image_11.png", sku: "DM-ARB-005", desc: "Elegante arbotante de pared con brazo articulado en latón.", specsLight: "1x E12 LED 6W cálida", cable: "Conexión directa a registro", dims: { w: "15 cm", h: "45 cm", d: "35 cm", dia: "15 cm (pantalla)" }, peso: "1.8 kg", volt: "110-120V", mat: "Latón macizo y pantalla de lino texturizado", fin: "Latón cepillado mate", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 92, name: "Arbotante Cilindro Minimalista", category: "arbotantes", price: 6500, img: "Unknown-5.png", sku: "DM-ARB-006", desc: "Arbotante cilíndrico de diseño minimalista con iluminación direccional.", specsLight: "LED integrado 10W", cable: "Directo a muro", dims: { w: "10 cm", h: "35 cm", d: "12 cm", dia: "10 cm" }, peso: "2.1 kg", volt: "110-240V", mat: "Aluminio fundido", fin: "Marrón oscuro texturizado", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 93, name: "Arbotante Piramidal Bidireccional", category: "arbotantes", price: 5800, img: "Unknown-7.png", sku: "DM-ARB-007", desc: "Arbotante de líneas geométricas con emisión de luz superior e inferior.", specsLight: "2x LED 5W", cable: "Directo a muro", dims: { w: "15 cm", h: "25 cm", d: "10 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-240V", mat: "Acero pintado", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 94, name: "Arbotante Óvalo Alabastro", category: "arbotantes", price: 9200, img: "Image 19.png", sku: "DM-ARB-008", desc: "Elegante luminaria de muro con placa de alabastro translúcido.", specsLight: "Tira LED cálida trasera", cable: "Directo a muro", dims: { w: "45 cm", h: "15 cm", d: "8 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Alabastro natural y latón", fin: "Alabastro pulido y latón brillante", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 8, name: "Espejo Doble Eclipse Trasero", category: "arbotantes", price: 26800, img: "candil_2.png", sku: "DM-ARB-004", desc: "Espejo monumental de dos círculos excéntricos con LED trasero.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
+            { id: 66, name: "Arbotante Articulado Lino", category: "arbotantes", price: 5400, img: "Image_11.png", sku: "DM-ARB-005", desc: "Elegante arbotante con brazo articulado en latón.", specsLight: "1x E12 LED 6W cálida", cable: "Conexión directa a registro", dims: { w: "15 cm", h: "45 cm", d: "35 cm", dia: "15 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Latón macizo y pantalla de lino", fin: "Latón cepillado mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 92, name: "Arbotante Cilindro Minimalista", category: "arbotantes", price: 6500, img: "Unknown-5.png", sku: "DM-ARB-006", desc: "Arbotante cilíndrico minimalista con iluminación direccional.", specsLight: "LED integrado 10W", cable: "Directo a muro", dims: { w: "10 cm", h: "35 cm", d: "12 cm", dia: "10 cm" }, peso: "2.1 kg", volt: "110-240V", mat: "Aluminio fundido", fin: "Marrón oscuro texturizado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 93, name: "Arbotante Piramidal Bidireccional", category: "arbotantes", price: 5800, img: "Unknown-7.png", sku: "DM-ARB-007", desc: "Líneas geométricas con emisión superior e inferior.", specsLight: "2x LED 5W", cable: "Directo a muro", dims: { w: "15 cm", h: "25 cm", d: "10 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-240V", mat: "Acero pintado", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 94, name: "Arbotante Óvalo Alabastro", category: "arbotantes", price: 9200, img: "Image 19.png", sku: "DM-ARB-008", desc: "Placa de alabastro translúcido con luz cálida trasera.", specsLight: "Tira LED cálida trasera", cable: "Directo a muro", dims: { w: "45 cm", h: "15 cm", d: "8 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Alabastro natural y latón", fin: "Alabastro pulido y latón brillante", time: "4 a 5 semanas", cert: "NOM" },
             { id: 95, name: "Arbotante Vela Cristal", category: "arbotantes", price: 7500, img: "Image 20.png", sku: "DM-ARB-009", desc: "Reinterpretación contemporánea de una vela de muro.", specsLight: "1x E26 LED Edison 4W", cable: "Directo a muro", dims: { w: "12 cm", h: "50 cm", d: "18 cm", dia: "8 cm" }, peso: "2.4 kg", volt: "110-120V", mat: "Latón sólido y cristal", fin: "Latón cepillado y cristal transparente", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 96, name: "Arbotante Doble Texturizado", category: "arbotantes", price: 8900, img: "Screenshot_Gallery.jpg", sku: "DM-ARB-010", desc: "Luminaria doble con cilindros de cristal craquelado en tono esmeralda.", specsLight: "2x E12 LED 4W", cable: "Directo a muro", dims: { w: "30 cm", h: "40 cm", d: "15 cm", dia: "N/A" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal texturizado y acero", fin: "Latón mate y esmeralda", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 96, name: "Arbotante Doble Texturizado", category: "arbotantes", price: 8900, img: "Screenshot_Gallery.jpg", sku: "DM-ARB-010", desc: "Cilindros de cristal craquelado en tono esmeralda.", specsLight: "2x E12 LED 4W", cable: "Directo a muro", dims: { w: "30 cm", h: "40 cm", d: "15 cm", dia: "N/A" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal texturizado y acero", fin: "Latón mate y esmeralda", time: "4 a 5 semanas", cert: "NOM" },
             { id: 97, name: "Arbotante Lino Articulado", category: "arbotantes", price: 5600, img: "Unknown-3.png", sku: "DM-ARB-011", desc: "Clásico arbotante de lectura con brazo articulado.", specsLight: "1x E26 LED 8W", cable: "Directo a muro", dims: { w: "20 cm", h: "35 cm", d: "40 cm", dia: "20 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Latón y pantalla de lino", fin: "Latón cepillado mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
-            { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-002", desc: "Espejo alto en forma de cápsula con sistema de retroiluminación LED indirecta.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante, luz fría", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 11, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Espejo rectangular de piso o muro con cristal envejecido artesanalmente.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido artesanal, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 12, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-004", desc: "Espejo rectangular con marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata de alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 13, name: "Espejo Píldora Nogal", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-005", desc: "Espejo de cuerpo entero en forma ovalada alargada.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "180 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata 6mm, marco en chapa de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
-            { id: 14, name: "Espejo Piso Orgánico", category: "espejos", price: 17800, img: "espejo_5.png", sku: "DM-ESP-006", desc: "Imponente espejo de piso en forma de gota alargada.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "190 cm", d: "4 cm", dia: "N/A" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata, nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
-            { id: 15, name: "Espejo Óvalo Lisse", category: "espejos", price: 13500, img: "espejo_6.png", sku: "DM-ESP-007", desc: "Espejo ovalado de diseño escandinavo con marco de encino natural.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "14 kg", volt: "N/A", mat: "Cristal plata, madera encino", fin: "Madera mate", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 16, name: "Espejo Óvalo Contour", category: "espejos", price: 15200, img: "espejo_7.png", sku: "DM-ESP-008", desc: "Elegante espejo ovalado con perfil ultra delgado de latón cobrizado.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "160 cm", d: "2.5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata, herraje de latón macizo", fin: "Latón cobrizado", time: "4 semanas", cert: "N/A" },
-            { id: 17, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_8.png", sku: "DM-ESP-009", desc: "Espejo rectangular con marco de latón y cristal envejecido químicamente.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal envejecido, latón", fin: "Latón mate", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 18, name: "Espejo Medio Óvalo Trasluz", category: "espejos", price: 14200, img: "nuevo_espejo_1.png", sku: "DM-ESP-010", desc: "Espejo vanguardista con forma de medio óvalo y luz perimetral flotante.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "50 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "12 kg", volt: "110-120V", mat: "Cristal plata inastillable", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 19, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_2.png", sku: "DM-ESP-011", desc: "Espejo circular con marco perimetral cóncavo en latón oscurecido.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "130 cm" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de placa de acero", fin: "Latón oscurecido y bronce", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 20, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_3.PNG", sku: "DM-ESP-012", desc: "Espejo monumental cuadrado enmarcado en maderas nobles.", specsLight: "N/A", cable: "N/A", dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "24 kg", volt: "N/A", mat: "Cristal plata inastillable, marco de nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A" },
-            { id: 21, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_4.png", sku: "DM-ESP-013", desc: "Espejo circular con iluminación indirecta de halo perimetral cálido.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a muro (Driver interno)", dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "110 cm" }, peso: "19 kg", volt: "110-120V", mat: "Cristal plata, bastidor metálico", fin: "Luz cálida", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 22, name: "Espejo Redondo Geométrico", category: "espejos", price: 18500, img: "IMG_2007.png", sku: "DM-ESP-014", desc: "Espejo decorativo circular con patrón de varillas de acero formando rombos.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "115 cm" }, peso: "18 kg", volt: "N/A", mat: "Acero y cristal plata", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 23, name: "Espejo Sol Madera", category: "espejos", price: 16500, img: "IMG_2056.png", sku: "DM-ESP-015", desc: "Espejo redondo con marco de madera tallado imitando rayos del sol.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "100 cm", d: "4 cm", dia: "100 cm" }, peso: "12 kg", volt: "N/A", mat: "Madera tallada y cristal plata", fin: "Madera natural cálida", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 24, name: "Espejo Hexagonal Trasluz", category: "espejos", price: 19500, img: "IMG_2069.png", sku: "DM-ESP-016", desc: "Espejo iluminado por detrás con forma irregular hexagonal.", specsLight: "Tira LED 12V 4000K", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "110 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "110-120V", mat: "Cristal inastillable", fin: "Luz neutra", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 25, name: "Espejo Circular Panorama", category: "espejos", price: 15500, img: "IMG_2124.PNG", sku: "DM-ESP-017", desc: "Espejo circular de gran formato con marco metálico ultra fino en tono bronce.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "2 cm", dia: "120 cm" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata, marco de acero ligero", fin: "Bronce sutil mate", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 26, name: "Espejo Óvalo Arquitectónico", category: "espejos", price: 18900, img: "IMG_2126.PNG", sku: "DM-ESP-018", desc: "Espejo ovalado con diseño de doble marco flotante en latón avejentado.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "130 cm", d: "5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata inastillable, marco doble de latón", fin: "Latón cobrizado oscuro", time: "4 semanas", cert: "N/A" },
-            { id: 27, name: "Espejo Reflejo Profundo", category: "espejos", price: 18500, img: "IMG_2029.png", sku: "DM-ESP-019", desc: "Espejo decorativo con profundidad visual inigualable.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal inastillable", fin: "Canto pulido", time: "4 semanas", cert: "N/A" },
-            { id: 28, name: "Espejo Vanguardia Luz", category: "espejos", price: 24500, img: "IMG_2149.png", sku: "DM-ESP-020", desc: "Espejo monumental con acento vanguardista e iluminación posterior.", specsLight: "Tira LED 12V 3000K perimetral", cable: "Conexión a registro", dims: { w: "100 cm", h: "180 cm", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "110-120V", mat: "Cristal inastillable, acero", fin: "Negro mate texturizado", time: "4 semanas", cert: "NOM" },
-            { id: 29, name: "Lámpara Mesa Cilíndrica", category: "mesa", price: 3600, img: "nueva_foto_6.png", sku: "DM-MES-001", desc: "Lámpara de mesa cilíndrica y delgada para iluminación focal.", specsLight: "Módulo LED 5W 3000K", cable: "Cable directo con clavija", dims: { w: "8 cm", h: "30 cm", d: "10 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Aluminio inyectado", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
-            { id: 30, name: "Lámpara Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", sku: "DM-MES-002", desc: "Lámpara de mesa minimalista con base cónica de alabastro natural translúcido.", specsLight: "1x E26 LED 8W, 3000K", cable: "Cable transparente 1.8m", dims: { w: "30 cm", h: "50 cm", d: "30 cm", dia: "30 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Alabastro pulido y lino", fin: "Blanco veteado natural", time: "3 semanas", cert: "NOM" },
-            { id: 31, name: "Lámpara de Mesa Varillas", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png", sku: "DM-MES-003", desc: "Lámpara arquitectónica con varillas metálicas y base de madera noble.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro con interruptor", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "30 cm" }, peso: "3 kg", volt: "110-120V", mat: "Acero, madera y lino", fin: "Metal plateado", time: "3 semanas", cert: "NOM" },
-            { id: 32, name: "Lámpara de Mesa Cerámica", category: "mesa", price: 4800, img: "nueva_foto_4.png", sku: "DM-MES-004", desc: "Lámpara de mesa con base de cerámica artesanal en forma de gota.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable transparente 1.8m", dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm (pantalla)" }, peso: "3 kg", volt: "110-120V", mat: "Cerámica y lino", fin: "Beige crudo", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 33, name: "Lámpara Mesa Madera Tallada", category: "mesa", price: 5400, img: "IMG_2057.png", sku: "DM-MES-005", desc: "Lámpara de mesa con base de madera oscura texturizada.", specsLight: "1x E26 LED 8W", cable: "Cable transparente 1.5m", dims: { w: "28 cm", h: "50 cm", d: "28 cm", dia: "28 cm" }, peso: "3 kg", volt: "110-120V", mat: "Madera oscura tallada", fin: "Texturizada", time: "3 semanas", cert: "NOM" },
-            { id: 34, name: "Lámpara Mesa Cono Madera", category: "mesa", price: 5100, img: "IMG_2061.png", sku: "DM-MES-006", desc: "Lámpara de mesa con base cónica de madera que resalta la veta natural.", specsLight: "1x E26 LED 8W", cable: "Cable negro 1.5m", dims: { w: "32 cm", h: "55 cm", d: "32 cm", dia: "32 cm" }, peso: "2.8 kg", volt: "110-120V", mat: "Madera sólida y lino", fin: "Madera natural pulida", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 56, name: "Lámpara Esfera Craquelada", category: "mesa", price: 6500, img: "12D91B70-6DC7-45C3-9DDD-0A1C07FD6D91.png", sku: "DM-MES-007", desc: "Gruesa esfera de cristal soplado craquelado en tono azul hielo sobre disco de latón.", specsLight: "1x G9 LED 5W, 3000K", cable: "Cable textil dorado 1.5m", dims: { w: "25 cm", h: "32 cm", d: "25 cm", dia: "25 cm (esfera)" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal soplado craquelado y latón macizo", fin: "Azul hielo translúcido y latón mate", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 57, name: "Lámpara Monolito Martillado", category: "mesa", price: 8900, img: "20200121_085513.png", sku: "DM-MES-008", desc: "Base rectangular forjada en placa de latón martillado a mano, estética brutalista.", specsLight: "2x E26 LED 10W cálida", cable: "Cable negro con interruptor oculto", dims: { w: "40 cm", h: "75 cm", d: "25 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-240V", mat: "Placa de latón, base de piedra negra y lino", fin: "Latón martillado brillante", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 58, name: "Lámpara Órbita Latón", category: "mesa", price: 7200, img: "20200121_085546.png", sku: "DM-MES-009", desc: "Globo perfecto de cristal opalino atravesado por un anillo diagonal de latón.", specsLight: "Módulo LED interno 8W, 2700K", cable: "Cable textil negro 1.5m", dims: { w: "30 cm", h: "35 cm", d: "30 cm", dia: "30 cm" }, peso: "2.8 kg", volt: "110-120V", mat: "Cristal opalino inastillable y latón torneado", fin: "Latón cobrizado mate", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 59, name: "Lámpara Cilindro Acero", category: "mesa", price: 5600, img: "20200121_085725.png", sku: "DM-MES-010", desc: "Pilar pesado de acero pulido con pantalla circular clásica.", specsLight: "1x E26 LED 8W", cable: "Cable transparente 1.8m", dims: { w: "30 cm", h: "55 cm", d: "30 cm", dia: "30 cm" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero inoxidable pulido y lino claro", fin: "Acero cepillado brillante", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 60, name: "Lámpara Botella Esmeralda", category: "mesa", price: 6800, img: "73DC916E-91D3-4153-BBE2-1BF617E61D2B.png", sku: "DM-MES-011", desc: "Gran botella de vidrio soplado artesanal en tono esmeralda con detalles de latón.", specsLight: "1x E26 LED 10W cálida", cable: "Cable interno recubierto en tubo metálico", dims: { w: "35 cm", h: "65 cm", d: "35 cm", dia: "35 cm" }, peso: "4.1 kg", volt: "110-120V", mat: "Vidrio soplado y herraje de latón", fin: "Verde translúcido y latón mate", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 61, name: "Lámpara Esfera Menta", category: "mesa", price: 6100, img: "979237CD-F886-4DEE-A64D-9B776C2A6EDC.png", sku: "DM-MES-012", desc: "Pedestal cilíndrico de latón con globo de cristal esmerilado en verde menta.", specsLight: "1x G9 LED 5W, 3000K", cable: "Cable textil retorcido negro 1.5m", dims: { w: "22 cm", h: "38 cm", d: "22 cm", dia: "22 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal esmerilado texturizado y latón", fin: "Menta mate y latón pulido", time: "3 semanas", cert: "NOM" },
-            { id: 62, name: "Lámpara Reloj Metálica", category: "mesa", price: 7500, img: "B4D8B9D8-27FB-43DF-8733-E049E71C0F6F.png", sku: "DM-MES-013", desc: "Base de silueta sinuosa con esmalte reactivo metálico de pátina moteada única.", specsLight: "1x E26 LED 12W", cable: "Cable textil negro 2m", dims: { w: "35 cm", h: "70 cm", d: "35 cm", dia: "35 cm" }, peso: "5.2 kg", volt: "110-240V", mat: "Cerámica gruesa con esmalte metálico y lino oscuro", fin: "Plata oxidada avejentada", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 63, name: "Lámpara Terrazo y Latón", category: "mesa", price: 8200, img: "C8B0A570-48B0-4133-ACCC-A9913665556D.png", sku: "DM-MES-014", desc: "Pilar cilíndrico con mitad en terrazo blanco y mitad de puro latón.", specsLight: "2x E26 LED 10W cálida", cable: "Cable transparente 1.8m", dims: { w: "38 cm", h: "68 cm", d: "38 cm", dia: "38 cm" }, peso: "7.8 kg", volt: "110-120V", mat: "Terrazo vaciado, cilindro de latón y lino texturizado", fin: "Terrazo blanco mate y latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 65, name: "Lámpara Mesa Campana Latón", category: "mesa", price: 5800, img: "Image_14.png", sku: "DM-MES-015", desc: "Base y mástil de latón pulido con amplia pantalla acampanada de cristal blanco.", specsLight: "2x E12 LED 5W cálida", cable: "Cable textil negro 1.8m con interruptor", dims: { w: "40 cm", h: "55 cm", d: "40 cm", dia: "40 cm (pantalla)" }, peso: "3.2 kg", volt: "110-120V", mat: "Latón macizo y cristal blanco opalino", fin: "Latón pulido brillante", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 35, name: "Lámpara de Buró Texturizada", category: "pie", price: 4200, img: "lampara_de_mesa_3.png", sku: "DM-PIE-001", desc: "Lámpara de pie compacta con base sólida en forma de gota texturizada.", specsLight: "1x E26 LED 6W, 2700K", cable: "Cable blanco 1.5m", dims: { w: "30 cm", h: "85 cm", d: "30 cm", dia: "30 cm (pantalla)" }, peso: "4.2 kg", volt: "110-120V", mat: "Pasta de estuco y lino", fin: "Crema texturizado", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 36, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "nueva_foto_1.png", sku: "DM-PIE-002", desc: "Mástil compuesto por esferas de madera de nogal torneadas a mano.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil negro 2.5m con interruptor", dims: { w: "40 cm", h: "160 cm", d: "40 cm", dia: "40 cm (pantalla)" }, peso: "5 kg", volt: "110-120V", mat: "Nogal sólido y lino", fin: "Nogal mate", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 53, name: "Lámpara de Pie Botánica", category: "pie", price: 12500, img: "053C59D3-9C3F-4B14-8290-4514331538F9.png", sku: "DM-PIE-003", desc: "Mástil orgánico inspirado en la naturaleza, forjado en latón mate.", specsLight: "1x E26 LED 10W, 2700K cálida", cable: "Cable textil dorado 2m con interruptor de pie", dims: { w: "45 cm", h: "165 cm", d: "45 cm", dia: "45 cm (pantalla)" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido y pantalla de lino natural", fin: "Latón dorado mate", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 54, name: "Lámpara Minimalista Globo", category: "pie", price: 14200, img: "3CACAB0D-4EE1-4DBD-BB7B-05DBE6123AF4.png", sku: "DM-PIE-004", desc: "Estructura geométrica en ángulo recto de latón sosteniendo globo de cristal opalino.", specsLight: "1x G9 LED 7W, 3000K", cable: "Cable negro 2m oculto en la base", dims: { w: "35 cm", h: "155 cm", d: "40 cm", dia: "25 cm (globo)" }, peso: "8 kg", volt: "110-120V", mat: "Acero con baño de latón y cristal opalino", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 55, name: "Lámpara de Pie Trípode Nogal", category: "pie", price: 16800, img: "77A61D28-316C-4BD7-B971-BE72E44B6A4E.png", sku: "DM-PIE-005", desc: "Trípode en madera maciza de nogal con remates en latón y pantalla de lino.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil café 2.5m oculto en pata", dims: { w: "60 cm", h: "170 cm", d: "60 cm", dia: "60 cm (pantalla)" }, peso: "9 kg", volt: "110-120V", mat: "Madera de nogal sólido, herrajes de latón y lino", fin: "Nogal oscuro mate y latón avejentado", time: "5 a 6 semanas", cert: "NOM" },
-            { id: 64, name: "Lámpara de Pie Cilindro Nogal", category: "pie", price: 13500, img: "Image_8.png", sku: "DM-PIE-006", desc: "Base cilíndrica de nogal macizo con mástil negro y globo de cristal opalino.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil negro 2.5m con interruptor de pie en la base", dims: { w: "30 cm", h: "150 cm", d: "30 cm", dia: "30 cm (globo)" }, peso: "8.5 kg", volt: "110-120V", mat: "Madera de nogal, acero y cristal opalino soplado", fin: "Nogal natural mate y acero negro mate", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "espejo_1.png", sku: "DM-ESP-002", desc: "Espejo cápsula con retroiluminación LED perimetral.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 11, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Cristal envejecido artesanalmente con marco de acero.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 12, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-004", desc: "Marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 13, name: "Espejo Píldora Nogal", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-005", desc: "Espejo de cuerpo entero ovalado en chapa de nogal.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "180 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata 6mm, chapa de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
+            { id: 14, name: "Espejo Piso Orgánico", category: "espejos", price: 17800, img: "espejo_5.png", sku: "DM-ESP-006", desc: "Espejo de piso en forma de gota alargada en nogal.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "190 cm", d: "4 cm", dia: "N/A" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata, nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
+            { id: 15, name: "Espejo Óvalo Lisse", category: "espejos", price: 13500, img: "espejo_6.png", sku: "DM-ESP-007", desc: "Marco de encino natural estilo escandinavo.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "14 kg", volt: "N/A", mat: "Cristal plata, madera encino", fin: "Madera mate", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 16, name: "Espejo Óvalo Contour", category: "espejos", price: 15200, img: "espejo_7.png", sku: "DM-ESP-008", desc: "Perfil ultra delgado de latón cobrizado.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "160 cm", d: "2.5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata, herraje de latón macizo", fin: "Latón cobrizado", time: "4 semanas", cert: "N/A" },
+            { id: 17, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_8.png", sku: "DM-ESP-009", desc: "Marco de latón y cristal envejecido químicamente.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal envejecido, latón", fin: "Latón mate", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 18, name: "Espejo Medio Óvalo Trasluz", category: "espejos", price: 14200, img: "nuevo_espejo_1.png", sku: "DM-ESP-010", desc: "Medio óvalo con luz perimetral flotante.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "50 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "12 kg", volt: "110-120V", mat: "Cristal plata inastillable", fin: "Canto pulido, luz cálida", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 19, name: "Espejo Circular Bronze", category: "espejos", price: 16800, img: "nuevo_espejo_2.png", sku: "DM-ESP-011", desc: "Marco perimetral cóncavo en latón oscurecido.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "8 cm", dia: "130 cm" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata 6mm, marco de acero", fin: "Latón oscurecido y bronce", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 20, name: "Espejo Zenith Angular", category: "espejos", price: 17200, img: "nuevo_espejo_3.PNG", sku: "DM-ESP-012", desc: "Espejo cuadrado monumental en nogal sólido.", specsLight: "N/A", cable: "N/A", dims: { w: "120 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "24 kg", volt: "N/A", mat: "Cristal plata, marco de nogal sólido", fin: "Nogal oscuro mate", time: "4 semanas", cert: "N/A" },
+            { id: 21, name: "Espejo Lunar Retroiluminado", category: "espejos", price: 19800, img: "nuevo_espejo_4.png", sku: "DM-ESP-013", desc: "Circular con halo LED perimetral cálido.", specsLight: "Tira LED 12V 3000K perimetral oculta", cable: "Conexión directa a muro", dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "110 cm" }, peso: "19 kg", volt: "110-120V", mat: "Cristal plata, bastidor metálico", fin: "Luz cálida", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 22, name: "Espejo Redondo Geométrico", category: "espejos", price: 18500, img: "IMG_2007.png", sku: "DM-ESP-014", desc: "Patrón de varillas de acero formando rombos.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "115 cm" }, peso: "18 kg", volt: "N/A", mat: "Acero y cristal plata", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 23, name: "Espejo Sol Madera", category: "espejos", price: 16500, img: "IMG_2056.png", sku: "DM-ESP-015", desc: "Marco tallado imitando rayos del sol.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "100 cm", d: "4 cm", dia: "100 cm" }, peso: "12 kg", volt: "N/A", mat: "Madera tallada y cristal plata", fin: "Madera natural cálida", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 24, name: "Espejo Hexagonal Trasluz", category: "espejos", price: 19500, img: "IMG_2069.png", sku: "DM-ESP-016", desc: "Forma hexagonal irregular con retroiluminación.", specsLight: "Tira LED 12V 4000K", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "110 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "110-120V", mat: "Cristal inastillable", fin: "Luz neutra", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 25, name: "Espejo Circular Panorama", category: "espejos", price: 15500, img: "IMG_2124.PNG", sku: "DM-ESP-017", desc: "Gran formato con marco metálico ultra fino en bronce.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "2 cm", dia: "120 cm" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata, marco de acero", fin: "Bronce sutil mate", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 26, name: "Espejo Óvalo Arquitectónico", category: "espejos", price: 18900, img: "IMG_2126.PNG", sku: "DM-ESP-018", desc: "Doble marco flotante en latón avejentado.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "130 cm", d: "5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata, marco doble de latón", fin: "Latón cobrizado oscuro", time: "4 semanas", cert: "N/A" },
+            { id: 27, name: "Espejo Reflejo Profundo", category: "espejos", price: 18500, img: "IMG_2029.png", sku: "DM-ESP-019", desc: "Profundidad visual inigualable en cristal inastillable.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal inastillable", fin: "Canto pulido", time: "4 semanas", cert: "N/A" },
+            { id: 28, name: "Espejo Vanguardia Luz", category: "espejos", price: 24500, img: "IMG_2149.png", sku: "DM-ESP-020", desc: "Monumental con iluminación posterior y acento negro.", specsLight: "Tira LED 12V 3000K perimetral", cable: "Conexión a registro", dims: { w: "100 cm", h: "180 cm", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "110-120V", mat: "Cristal inastillable, acero", fin: "Negro mate texturizado", time: "4 semanas", cert: "NOM" },
+            { id: 29, name: "Lámpara Mesa Cilíndrica", category: "mesa", price: 3600, img: "nueva_foto_6.png", sku: "DM-MES-001", desc: "Cilíndrica y delgada para iluminación focal.", specsLight: "Módulo LED 5W 3000K", cable: "Cable directo con clavija", dims: { w: "8 cm", h: "30 cm", d: "10 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Aluminio inyectado", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
+            { id: 30, name: "Lámpara Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", sku: "DM-MES-002", desc: "Base cónica de alabastro natural translúcido.", specsLight: "1x E26 LED 8W, 3000K", cable: "Cable transparente 1.8m", dims: { w: "30 cm", h: "50 cm", d: "30 cm", dia: "30 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Alabastro pulido y lino", fin: "Blanco veteado natural", time: "3 semanas", cert: "NOM" },
+            { id: 31, name: "Lámpara de Mesa Varillas", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png", sku: "DM-MES-003", desc: "Varillas metálicas y base de madera noble.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable negro con interruptor", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "30 cm" }, peso: "3 kg", volt: "110-120V", mat: "Acero, madera y lino", fin: "Metal plateado", time: "3 semanas", cert: "NOM" },
+            { id: 32, name: "Lámpara de Mesa Cerámica", category: "mesa", price: 4800, img: "nueva_foto_4.png", sku: "DM-MES-004", desc: "Base de cerámica artesanal en forma de gota.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable transparente 1.8m", dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm" }, peso: "3 kg", volt: "110-120V", mat: "Cerámica y lino", fin: "Beige crudo", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 33, name: "Lámpara Mesa Madera Tallada", category: "mesa", price: 5400, img: "IMG_2057.png", sku: "DM-MES-005", desc: "Base de madera oscura texturizada.", specsLight: "1x E26 LED 8W", cable: "Cable transparente 1.5m", dims: { w: "28 cm", h: "50 cm", d: "28 cm", dia: "28 cm" }, peso: "3 kg", volt: "110-120V", mat: "Madera oscura tallada", fin: "Texturizada", time: "3 semanas", cert: "NOM" },
+            { id: 34, name: "Lámpara Mesa Cono Madera", category: "mesa", price: 5100, img: "IMG_2061.png", sku: "DM-MES-006", desc: "Base cónica que resalta la veta natural.", specsLight: "1x E26 LED 8W", cable: "Cable negro 1.5m", dims: { w: "32 cm", h: "55 cm", d: "32 cm", dia: "32 cm" }, peso: "2.8 kg", volt: "110-120V", mat: "Madera sólida y lino", fin: "Madera natural pulida", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 56, name: "Lámpara Esfera Craquelada", category: "mesa", price: 6500, img: "12D91B70-6DC7-45C3-9DDD-0A1C07FD6D91.png", sku: "DM-MES-007", desc: "Esfera de cristal soplado craquelado azul hielo sobre disco de latón.", specsLight: "1x G9 LED 5W, 3000K", cable: "Cable textil dorado 1.5m", dims: { w: "25 cm", h: "32 cm", d: "25 cm", dia: "25 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal soplado craquelado y latón macizo", fin: "Azul hielo translúcido y latón mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 57, name: "Lámpara Monolito Martillado", category: "mesa", price: 8900, img: "20200121_085513.png", sku: "DM-MES-008", desc: "Placa de latón martillado a mano, estética brutalista.", specsLight: "2x E26 LED 10W cálida", cable: "Cable negro con interruptor oculto", dims: { w: "40 cm", h: "75 cm", d: "25 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-240V", mat: "Placa de latón, base de piedra negra y lino", fin: "Latón martillado brillante", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 58, name: "Lámpara Órbita Latón", category: "mesa", price: 7200, img: "20200121_085546.png", sku: "DM-MES-009", desc: "Globo de cristal opalino con anillo diagonal de latón.", specsLight: "Módulo LED interno 8W, 2700K", cable: "Cable textil negro 1.5m", dims: { w: "30 cm", h: "35 cm", d: "30 cm", dia: "30 cm" }, peso: "2.8 kg", volt: "110-120V", mat: "Cristal opalino y latón torneado", fin: "Latón cobrizado mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 59, name: "Lámpara Cilindro Acero", category: "mesa", price: 5600, img: "20200121_085725.png", sku: "DM-MES-010", desc: "Pilar de acero pulido con pantalla circular clásica.", specsLight: "1x E26 LED 8W", cable: "Cable transparente 1.8m", dims: { w: "30 cm", h: "55 cm", d: "30 cm", dia: "30 cm" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero inoxidable pulido y lino", fin: "Acero cepillado brillante", time: "2 a 3 semanas", cert: "NOM" },
+            { id: 60, name: "Lámpara Botella Esmeralda", category: "mesa", price: 6800, img: "73DC916E-91D3-4153-BBE2-1BF617E61D2B.png", sku: "DM-MES-011", desc: "Botella de vidrio soplado artesanal en tono esmeralda.", specsLight: "1x E26 LED 10W cálida", cable: "Cable interno en tubo metálico", dims: { w: "35 cm", h: "65 cm", d: "35 cm", dia: "35 cm" }, peso: "4.1 kg", volt: "110-120V", mat: "Vidrio soplado y herraje de latón", fin: "Verde translúcido y latón mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 61, name: "Lámpara Esfera Menta", category: "mesa", price: 6100, img: "979237CD-F886-4DEE-A64D-9B776C2A6EDC.png", sku: "DM-MES-012", desc: "Pedestal de latón con globo esmerilado verde menta.", specsLight: "1x G9 LED 5W, 3000K", cable: "Cable textil negro 1.5m", dims: { w: "22 cm", h: "38 cm", d: "22 cm", dia: "22 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal esmerilado y latón", fin: "Menta mate y latón pulido", time: "3 semanas", cert: "NOM" },
+            { id: 62, name: "Lámpara Reloj Metálica", category: "mesa", price: 7500, img: "B4D8B9D8-27FB-43DF-8733-E049E71C0F6F.png", sku: "DM-MES-013", desc: "Esmalte reactivo metálico de pátina moteada única.", specsLight: "1x E26 LED 12W", cable: "Cable textil negro 2m", dims: { w: "35 cm", h: "70 cm", d: "35 cm", dia: "35 cm" }, peso: "5.2 kg", volt: "110-240V", mat: "Cerámica gruesa con esmalte metálico y lino oscuro", fin: "Plata oxidada avejentada", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 63, name: "Lámpara Terrazo y Latón", category: "mesa", price: 8200, img: "C8B0A570-48B0-4133-ACCC-A9913665556D.png", sku: "DM-MES-014", desc: "Mitad terrazo blanco y mitad latón.", specsLight: "2x E26 LED 10W cálida", cable: "Cable transparente 1.8m", dims: { w: "38 cm", h: "68 cm", d: "38 cm", dia: "38 cm" }, peso: "7.8 kg", volt: "110-120V", mat: "Terrazo vaciado, cilindro de latón y lino", fin: "Terrazo blanco mate y latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 65, name: "Lámpara Mesa Campana Latón", category: "mesa", price: 5800, img: "Image_14.png", sku: "DM-MES-015", desc: "Base de latón pulido con pantalla acampanada de cristal blanco.", specsLight: "2x E12 LED 5W cálida", cable: "Cable textil negro 1.8m", dims: { w: "40 cm", h: "55 cm", d: "40 cm", dia: "40 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Latón macizo y cristal blanco opalino", fin: "Latón pulido brillante", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 35, name: "Lámpara de Buró Texturizada", category: "pie", price: 4200, img: "lampara_de_mesa_3.png", sku: "DM-PIE-001", desc: "Base sólida en forma de gota texturizada.", specsLight: "1x E26 LED 6W, 2700K", cable: "Cable blanco 1.5m", dims: { w: "30 cm", h: "85 cm", d: "30 cm", dia: "30 cm" }, peso: "4.2 kg", volt: "110-120V", mat: "Pasta de estuco y lino", fin: "Crema texturizado", time: "2 a 3 semanas", cert: "NOM" },
+            { id: 36, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "nueva_foto_1.png", sku: "DM-PIE-002", desc: "Mástil de esferas de madera de nogal torneadas a mano.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil negro 2.5m", dims: { w: "40 cm", h: "160 cm", d: "40 cm", dia: "40 cm" }, peso: "5 kg", volt: "110-120V", mat: "Nogal sólido y lino", fin: "Nogal mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 53, name: "Lámpara de Pie Botánica", category: "pie", price: 12500, img: "053C59D3-9C3F-4B14-8290-4514331538F9.png", sku: "DM-PIE-003", desc: "Mástil orgánico inspirado en la naturaleza, forjado en latón mate.", specsLight: "1x E26 LED 10W, 2700K cálida", cable: "Cable textil dorado 2m", dims: { w: "45 cm", h: "165 cm", d: "45 cm", dia: "45 cm" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido y pantalla de lino natural", fin: "Latón dorado mate", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 54, name: "Lámpara Minimalista Globo", category: "pie", price: 14200, img: "3CACAB0D-4EE1-4DBD-BB7B-05DBE6123AF4.png", sku: "DM-PIE-004", desc: "Estructura geométrica en ángulo recto con globo de cristal.", specsLight: "1x G9 LED 7W, 3000K", cable: "Cable negro 2m oculto en la base", dims: { w: "35 cm", h: "155 cm", d: "40 cm", dia: "25 cm" }, peso: "8 kg", volt: "110-120V", mat: "Acero con baño de latón y cristal opalino", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 55, name: "Lámpara de Pie Trípode Nogal", category: "pie", price: 16800, img: "77A61D28-316C-4BD7-B971-BE72E44B6A4E.png", sku: "DM-PIE-005", desc: "Trípode de nogal macizo con remates en latón.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil café 2.5m", dims: { w: "60 cm", h: "170 cm", d: "60 cm", dia: "60 cm" }, peso: "9 kg", volt: "110-120V", mat: "Madera de nogal, latón y lino", fin: "Nogal oscuro mate y latón avejentado", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 64, name: "Lámpara de Pie Cilindro Nogal", category: "pie", price: 13500, img: "Image_8.png", sku: "DM-PIE-006", desc: "Base cilíndrica de nogal con mástil negro y globo de cristal.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil negro 2.5m", dims: { w: "30 cm", h: "150 cm", d: "30 cm", dia: "30 cm" }, peso: "8.5 kg", volt: "110-120V", mat: "Madera de nogal, acero y cristal opalino", fin: "Nogal natural mate y acero negro mate", time: "4 a 5 semanas", cert: "NOM" },
             { id: 37, name: "Colgante Nido Mimbre", category: "techo", price: 4200, img: "IMG_2006.png", sku: "DM-TEC-001", desc: "Luminaria de techo tejida en mimbre natural.", specsLight: "1x E26 LED Edison 8W", cable: "Cable textil café 1.5m", dims: { w: "50 cm", h: "40 cm", d: "50 cm", dia: "50 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Mimbre y herraje de acero", fin: "Mimbre natural tostado", time: "3 semanas", cert: "NOM" },
             { id: 38, name: "Colgante Jaula Blanca", category: "techo", price: 4100, img: "IMG_2008.png", sku: "DM-TEC-002", desc: "Lámpara estilo jaula abierta en color blanco.", specsLight: "1x E26 LED 8W cálida", cable: "Cable textil blanco 1.5m", dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 39, name: "Colgante Plisado Blanco", category: "techo", price: 5400, img: "IMG_2016.png", sku: "DM-TEC-003", desc: "Pantalla acampanada ondulada que proyecta luz directa.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil blanco 1.5m", dims: { w: "45 cm", h: "35 cm", d: "45 cm", dia: "45 cm" }, peso: "2.8 kg", volt: "110-240V", mat: "Material compuesto y herraje de latón", fin: "Blanco mate estriado", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 40, name: "Colgante Cuerda Vintage", category: "techo", price: 3800, img: "IMG_2017.png", sku: "DM-TEC-004", desc: "Múltiples focos vintage Edison envueltos en cuerda naval rústica.", specsLight: "8x E26 LED Edison 6W", cable: "Cuerda de henequén natural y base de madera", dims: { w: "120 cm", h: "150 cm", d: "15 cm", dia: "N/A" }, peso: "5.2 kg", volt: "110-120V", mat: "Cuerda naval, madera y herraje metálico", fin: "Cuerda natural", time: "3 semanas", cert: "NOM" },
-            { id: 41, name: "Suspensión Óvalos Negros", category: "techo", price: 9200, img: "IMG_2060.png", sku: "DM-TEC-005", desc: "Lámparas colgantes en forma de óvalo de acero negro contemporáneo.", specsLight: "2x Módulo LED Integrado 5W", cable: "Cable y cadena negra", dims: { w: "20 cm", h: "60 cm", d: "20 cm", dia: "N/A" }, peso: "3 kg", volt: "110-240V", mat: "Acero y cristal difusor", fin: "Negro mate", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 42, name: "Plafón Radial Negro", category: "techo", price: 8900, img: "IMG_2068.png", sku: "DM-TEC-006", desc: "Varillas que se abren como un paraguas, ideal para centros de mesa.", specsLight: "1x E26 LED Edison 12W", cable: "Instalación a plafón", dims: { w: "100 cm", h: "40 cm", d: "100 cm", dia: "100 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Negro electrostático", time: "4 semanas", cert: "NOM" },
-            { id: 43, name: "Colgante Campana Amarilla", category: "techo", price: 3400, img: "IMG_2070.png", sku: "DM-TEC-007", desc: "Campana color amarillo brillante, ideal para toques de color en cocinas.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Amarillo brillante", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 44, name: "Colgante Campana Verde", category: "techo", price: 3400, img: "IMG_2071.png", sku: "DM-TEC-008", desc: "Campana color verde bosque para un toque natural y vibrante.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Verde brillante", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_techo_1.png", sku: "DM-TEC-009", desc: "Tejido con patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
-            { id: 67, name: "Colgante Gota Tejida", category: "techo", price: 5200, img: "Image_16.png", sku: "DM-TEC-010", desc: "Silueta orgánica con tejido artesanal que crea sombras inigualables.", specsLight: "1x E26 LED 10W, 2700K", cable: "Cable textil natural 2m", dims: { w: "45 cm", h: "70 cm", d: "45 cm", dia: "45 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Fibras naturales y herraje de acero", fin: "Tejido crudo claro", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 68, name: "Candil Galaxia Soplada", category: "techo", price: 38500, img: "20200121_090103.png", sku: "DM-TEC-011", desc: "Instalación majestuosa de múltiples esferas de vidrio soplado emulando una constelación.", specsLight: "12x G9 LED 5W, 3000K", cable: "Tensores de acero ajustables", dims: { w: "120 cm", h: "80 cm", d: "120 cm", dia: "N/A" }, peso: "18 kg", volt: "110-240V", mat: "Vidrio soplado y latón", fin: "Cristal transparente y latón cepillado", time: "6 a 8 semanas", cert: "NOM" },
-            { id: 69, name: "Colgantes Domo Brutalista", category: "techo", price: 12400, img: "20190905_103103.png", sku: "DM-TEC-012", desc: "Robustos domos con acabado mate exterior e interior cálido amplificador.", specsLight: "1x E26 LED 15W", cable: "Cable de acero y cable eléctrico 2m", dims: { w: "60 cm", h: "40 cm", d: "60 cm", dia: "60 cm" }, peso: "6.5 kg", volt: "110-120V", mat: "Aluminio fundido", fin: "Gris oscuro exterior, cobre interior", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 70, name: "Candil Rueda Herrero", category: "techo", price: 24000, img: "Image.png", sku: "DM-TEC-013", desc: "Imponente aro de acero con cilindros de luz, perfecto para comedores monumentales.", specsLight: "8x E12 LED 5W", cable: "Cadenas de acero rústico", dims: { w: "100 cm", h: "85 cm", d: "100 cm", dia: "100 cm" }, peso: "15 kg", volt: "110-240V", mat: "Acero al carbón y lino", fin: "Negro forja", time: "5 a 6 semanas", cert: "NOM" },
-            { id: 71, name: "Plafón Malla Metálica", category: "techo", price: 8900, img: "20200624_170510.png", sku: "DM-TEC-014", desc: "Bóveda ligera de fina malla metálica negra de acento industrial.", specsLight: "1x E26 LED Edison 8W", cable: "Cable textil negro 1.5m", dims: { w: "65 cm", h: "45 cm", d: "65 cm", dia: "65 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Malla de acero", fin: "Negro mate electrostático", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 72, name: "Colgante Tambor Dual", category: "techo", price: 6500, img: "20200121_085455.png", sku: "DM-TEC-015", desc: "Pantalla cilíndrica de tela con acentos metálicos para luz ambiental elegante.", specsLight: "3x E26 LED 8W", cable: "Tubo rígido ajustable", dims: { w: "50 cm", h: "30 cm", d: "50 cm", dia: "50 cm" }, peso: "4 kg", volt: "110-120V", mat: "Lino de alta densidad y latón", fin: "Rosa empolvado y bordes cobrizos", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 73, name: "Colgante Eclipse Bicolor", category: "techo", price: 5800, img: "lampara_de_techo_casa.png", sku: "DM-TEC-016", desc: "Mitad superior en metal oscuro mate encerrando un difusor opalino.", specsLight: "Módulo LED Integrado 12W, 3000K", cable: "Cable textil negro 2m", dims: { w: "35 cm", h: "35 cm", d: "35 cm", dia: "35 cm" }, peso: "2.8 kg", volt: "110-240V", mat: "Aluminio y cristal opalino", fin: "Negro mate y blanco", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 74, name: "Set Colgantes Jaula Óvalo", category: "techo", price: 11200, img: "20200624_170750.png", sku: "DM-TEC-017", desc: "Tres piezas esculturales en alambre negro de forma ovalada.", specsLight: "3x E26 LED 6W cálida", cable: "Cables individuales ajustables", dims: { w: "60 cm", h: "120 cm", d: "60 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero curvado", fin: "Negro texturizado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 75, name: "Colgante Suite Clásica", category: "techo", price: 7100, img: "20200121_085532.png", sku: "DM-TEC-018", desc: "Colgante de recámara con luz suave y diseño texturizado.", specsLight: "2x E26 LED 10W", cable: "Instalación directa a registro", dims: { w: "45 cm", h: "25 cm", d: "45 cm", dia: "45 cm" }, peso: "3.5 kg", volt: "110-120V", mat: "Tela cruda y herrajes bronce", fin: "Blanco roto", time: "3 semanas", cert: "NOM" },
-            { id: 76, name: "Composición Prismas Oro", category: "techo", price: 15600, img: "Image_2.png", sku: "DM-TEC-019", desc: "Racimo de colgantes con geometrías poliédricas forjadas en latón.", specsLight: "5x E12 LED 4W Edison", cable: "Cordones textiles negros en cascada", dims: { w: "50 cm", h: "150 cm", d: "50 cm", dia: "N/A" }, peso: "6 kg", volt: "110-120V", mat: "Latón sólido", fin: "Dorado cepillado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 77, name: "Cilindros Cénit Suspendidos", category: "techo", price: 18000, img: "20200121_085709.png", sku: "DM-TEC-020", desc: "Tubos monolíticos que caen dramáticamente desde dobles alturas.", specsLight: "Módulos LED Integrados 5W x tubo", cable: "Cables ultrafinos transparentes", dims: { w: "40 cm", h: "300 cm", d: "40 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Acero texturizado", fin: "Oro viejo mate", time: "5 a 6 semanas", cert: "NOM" },
-            { id: 78, name: "Candil Cascada Macramé", category: "techo", price: 14500, img: "Image_6.png", sku: "DM-TEC-021", desc: "Niveles concéntricos de tejido artesanal de algodón natural.", specsLight: "3x E26 LED 10W", cable: "Cadena metálica oculta", dims: { w: "80 cm", h: "140 cm", d: "80 cm", dia: "80 cm" }, peso: "7 kg", volt: "110-120V", mat: "Algodón natural y bastidor de acero", fin: "Crudo natural", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 79, name: "Campanas Cobre Pulido", category: "techo", price: 13800, img: "20200121_085741.png", sku: "DM-TEC-022", desc: "Campanas metálicas con pulido brillante que refleja la arquitectura.", specsLight: "3x E26 LED 8W", cable: "Cables individuales 1.5m", dims: { w: "120 cm", h: "40 cm", d: "35 cm", dia: "35 cm (cada campana)" }, peso: "8.5 kg", volt: "110-120V", mat: "Acero cobrizado", fin: "Cobre brillante espejo", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 80, name: "Colgante Campana Loft", category: "techo", price: 5900, img: "Image_15.png", sku: "DM-TEC-023", desc: "Campana de acero patinado de inspiración industrial.", specsLight: "1x E26 LED 15W", cable: "Cadena de eslabones pesados 1.5m", dims: { w: "50 cm", h: "45 cm", d: "50 cm", dia: "50 cm" }, peso: "4.2 kg", volt: "110-120V", mat: "Acero avejentado", fin: "Gris acero rústico", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 81, name: "Set Hexágono Alambre", category: "techo", price: 9500, img: "20200121_085825.png", sku: "DM-TEC-024", desc: "Clúster de pantallas alámbricas con formas de diamante hexagonal.", specsLight: "3x E26 LED Edison 6W", cable: "Cables textiles individuales", dims: { w: "80 cm", h: "60 cm", d: "25 cm", dia: "N/A" }, peso: "3 kg", volt: "110-120V", mat: "Acero de alta resistencia", fin: "Dorado cobrizo mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 39, name: "Colgante Plisado Blanco", category: "techo", price: 5400, img: "IMG_2016.png", sku: "DM-TEC-003", desc: "Pantalla acampanada ondulada con luz directa.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil blanco 1.5m", dims: { w: "45 cm", h: "35 cm", d: "45 cm", dia: "45 cm" }, peso: "2.8 kg", volt: "110-240V", mat: "Material compuesto y herraje de latón", fin: "Blanco mate estriado", time: "2 a 3 semanas", cert: "NOM" },
+            { id: 40, name: "Colgante Cuerda Vintage", category: "techo", price: 3800, img: "IMG_2017.png", sku: "DM-TEC-004", desc: "Focos vintage Edison envueltos en cuerda naval rústica.", specsLight: "8x E26 LED Edison 6W", cable: "Cuerda de henequén natural y base de madera", dims: { w: "120 cm", h: "150 cm", d: "15 cm", dia: "N/A" }, peso: "5.2 kg", volt: "110-120V", mat: "Cuerda naval, madera y herraje metálico", fin: "Cuerda natural", time: "3 semanas", cert: "NOM" },
+            { id: 41, name: "Suspensión Óvalos Negros", category: "techo", price: 9200, img: "IMG_2060.png", sku: "DM-TEC-005", desc: "Óvalos de acero negro contemporáneo.", specsLight: "2x Módulo LED Integrado 5W", cable: "Cable y cadena negra", dims: { w: "20 cm", h: "60 cm", d: "20 cm", dia: "N/A" }, peso: "3 kg", volt: "110-240V", mat: "Acero y cristal difusor", fin: "Negro mate", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 42, name: "Plafón Radial Negro", category: "techo", price: 8900, img: "IMG_2068.png", sku: "DM-TEC-006", desc: "Varillas que se abren como un paraguas.", specsLight: "1x E26 LED Edison 12W", cable: "Instalación a plafón", dims: { w: "100 cm", h: "40 cm", d: "100 cm", dia: "100 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Negro electrostático", time: "4 semanas", cert: "NOM" },
+            { id: 43, name: "Colgante Campana Amarilla", category: "techo", price: 3400, img: "IMG_2070.png", sku: "DM-TEC-007", desc: "Campana color amarillo brillante para cocinas.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Amarillo brillante", time: "2 a 3 semanas", cert: "NOM" },
+            { id: 44, name: "Colgante Campana Verde", category: "techo", price: 3400, img: "IMG_2071.png", sku: "DM-TEC-008", desc: "Campana verde bosque para un toque natural.", specsLight: "1x E26 LED 8W", cable: "Cable textil extensible", dims: { w: "25 cm", h: "30 cm", d: "25 cm", dia: "25 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Aluminio repujado", fin: "Verde brillante", time: "2 a 3 semanas", cert: "NOM" },
+            { id: 45, name: "Colgante Tejido Blanco", category: "techo", price: 4600, img: "lampara_de_techo_1.png", sku: "DM-TEC-009", desc: "Patrón abierto que genera sombras decorativas.", specsLight: "1x E26 LED 8W", cable: "Cable textil 1.5m", dims: { w: "40 cm", h: "40 cm", d: "40 cm", dia: "40 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
+            { id: 67, name: "Colgante Gota Tejida", category: "techo", price: 5200, img: "Image_16.png", sku: "DM-TEC-010", desc: "Silueta orgánica con tejido artesanal.", specsLight: "1x E26 LED 10W, 2700K", cable: "Cable textil natural 2m", dims: { w: "45 cm", h: "70 cm", d: "45 cm", dia: "45 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Fibras naturales y herraje de acero", fin: "Tejido crudo claro", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 68, name: "Candil Galaxia Soplada", category: "techo", price: 38500, img: "20200121_090103.png", sku: "DM-TEC-011", desc: "Instalación majestuosa de esferas de vidrio soplado.", specsLight: "12x G9 LED 5W, 3000K", cable: "Tensores de acero ajustables", dims: { w: "120 cm", h: "80 cm", d: "120 cm", dia: "N/A" }, peso: "18 kg", volt: "110-240V", mat: "Vidrio soplado y latón", fin: "Cristal transparente y latón cepillado", time: "6 a 8 semanas", cert: "NOM" },
+            { id: 69, name: "Colgantes Domo Brutalista", category: "techo", price: 12400, img: "20190905_103103.png", sku: "DM-TEC-012", desc: "Domos con acabado mate exterior e interior cálido.", specsLight: "1x E26 LED 15W", cable: "Cable de acero y cable eléctrico 2m", dims: { w: "60 cm", h: "40 cm", d: "60 cm", dia: "60 cm" }, peso: "6.5 kg", volt: "110-120V", mat: "Aluminio fundido", fin: "Gris oscuro exterior, cobre interior", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 70, name: "Candil Rueda Herrero", category: "techo", price: 24000, img: "Image.png", sku: "DM-TEC-013", desc: "Aro de acero con cilindros de luz para comedores monumentales.", specsLight: "8x E12 LED 5W", cable: "Cadenas de acero rústico", dims: { w: "100 cm", h: "85 cm", d: "100 cm", dia: "100 cm" }, peso: "15 kg", volt: "110-240V", mat: "Acero al carbón y lino", fin: "Negro forja", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 71, name: "Plafón Malla Metálica", category: "techo", price: 8900, img: "20200624_170510.png", sku: "DM-TEC-014", desc: "Bóveda de fina malla metálica negra industrial.", specsLight: "1x E26 LED Edison 8W", cable: "Cable textil negro 1.5m", dims: { w: "65 cm", h: "45 cm", d: "65 cm", dia: "65 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Malla de acero", fin: "Negro mate electrostático", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 72, name: "Colgante Tambor Dual", category: "techo", price: 6500, img: "20200121_085455.png", sku: "DM-TEC-015", desc: "Pantalla cilíndrica de tela con acentos metálicos.", specsLight: "3x E26 LED 8W", cable: "Tubo rígido ajustable", dims: { w: "50 cm", h: "30 cm", d: "50 cm", dia: "50 cm" }, peso: "4 kg", volt: "110-120V", mat: "Lino de alta densidad y latón", fin: "Rosa empolvado y bordes cobrizos", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 73, name: "Colgante Eclipse Bicolor", category: "techo", price: 5800, img: "lampara_de_techo_casa.png", sku: "DM-TEC-016", desc: "Metal oscuro mate con difusor opalino.", specsLight: "Módulo LED Integrado 12W, 3000K", cable: "Cable textil negro 2m", dims: { w: "35 cm", h: "35 cm", d: "35 cm", dia: "35 cm" }, peso: "2.8 kg", volt: "110-240V", mat: "Aluminio y cristal opalino", fin: "Negro mate y blanco", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 74, name: "Set Colgantes Jaula Óvalo", category: "techo", price: 11200, img: "20200624_170750.png", sku: "DM-TEC-017", desc: "Tres piezas esculturales en alambre negro ovalado.", specsLight: "3x E26 LED 6W cálida", cable: "Cables individuales ajustables", dims: { w: "60 cm", h: "120 cm", d: "60 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero curvado", fin: "Negro texturizado", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 75, name: "Colgante Suite Clásica", category: "techo", price: 7100, img: "20200121_085532.png", sku: "DM-TEC-018", desc: "Luz suave con diseño texturizado para recámara.", specsLight: "2x E26 LED 10W", cable: "Instalación directa a registro", dims: { w: "45 cm", h: "25 cm", d: "45 cm", dia: "45 cm" }, peso: "3.5 kg", volt: "110-120V", mat: "Tela cruda y herrajes bronce", fin: "Blanco roto", time: "3 semanas", cert: "NOM" },
+            { id: 76, name: "Composición Prismas Oro", category: "techo", price: 15600, img: "Image_2.png", sku: "DM-TEC-019", desc: "Racimo de colgantes con geometrías poliédricas en latón.", specsLight: "5x E12 LED 4W Edison", cable: "Cordones textiles negros en cascada", dims: { w: "50 cm", h: "150 cm", d: "50 cm", dia: "N/A" }, peso: "6 kg", volt: "110-120V", mat: "Latón sólido", fin: "Dorado cepillado", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 77, name: "Cilindros Cénit Suspendidos", category: "techo", price: 18000, img: "20200121_085709.png", sku: "DM-TEC-020", desc: "Tubos monolíticos que caen dramáticamente.", specsLight: "Módulos LED Integrados 5W x tubo", cable: "Cables ultrafinos transparentes", dims: { w: "40 cm", h: "300 cm", d: "40 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Acero texturizado", fin: "Oro viejo mate", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 78, name: "Candil Cascada Macramé", category: "techo", price: 14500, img: "Image_6.png", sku: "DM-TEC-021", desc: "Niveles concéntricos de tejido artesanal de algodón.", specsLight: "3x E26 LED 10W", cable: "Cadena metálica oculta", dims: { w: "80 cm", h: "140 cm", d: "80 cm", dia: "80 cm" }, peso: "7 kg", volt: "110-120V", mat: "Algodón natural y bastidor de acero", fin: "Crudo natural", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 79, name: "Campanas Cobre Pulido", category: "techo", price: 13800, img: "20200121_085741.png", sku: "DM-TEC-022", desc: "Campanas con pulido brillante que refleja la arquitectura.", specsLight: "3x E26 LED 8W", cable: "Cables individuales 1.5m", dims: { w: "120 cm", h: "40 cm", d: "35 cm", dia: "35 cm" }, peso: "8.5 kg", volt: "110-120V", mat: "Acero cobrizado", fin: "Cobre brillante espejo", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 80, name: "Colgante Campana Loft", category: "techo", price: 5900, img: "Image_15.png", sku: "DM-TEC-023", desc: "Campana de acero patinado industrial.", specsLight: "1x E26 LED 15W", cable: "Cadena de eslabones pesados 1.5m", dims: { w: "50 cm", h: "45 cm", d: "50 cm", dia: "50 cm" }, peso: "4.2 kg", volt: "110-120V", mat: "Acero avejentado", fin: "Gris acero rústico", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 81, name: "Set Hexágono Alambre", category: "techo", price: 9500, img: "20200121_085825.png", sku: "DM-TEC-024", desc: "Clúster de pantallas alámbricas con forma de diamante.", specsLight: "3x E26 LED Edison 6W", cable: "Cables textiles individuales", dims: { w: "80 cm", h: "60 cm", d: "25 cm", dia: "N/A" }, peso: "3 kg", volt: "110-120V", mat: "Acero de alta resistencia", fin: "Dorado cobrizo mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 99, name: "Domo Cobre Bicolor", category: "techo", price: 11500, img: "Unknown.png", sku: "DM-TEC-025", desc: "Semiesfera con exterior neutro e interior cobrizado amplificador.", specsLight: "1x E26 LED Globo 12W cálida", cable: "Cable textil y tensor de acero", dims: { w: "60 cm", h: "35 cm", d: "60 cm", dia: "60 cm" }, peso: "4.5 kg", volt: "110-240V", mat: "Aluminio repujado", fin: "Blanco mate exterior, cobre cepillado interior", time: "3 a 4 semanas", cert: "NOM" },
             { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2012.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero treated y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
             { id: 47, name: "Lámpara Exterior Rústica Cuerda", category: "exterior", price: 3600, img: "IMG_2020.png", sku: "DM-EXT-002", desc: "Luminaria exterior con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
-            { id: 86, name: "Farol Linterna Latón", category: "exterior", price: 6800, img: "image_exterior.png", sku: "DM-EXT-003", desc: "Elegante farol con estructura negro mate y corona de latón pulido.", specsLight: "1x E26 LED 8W cálida", cable: "Cable de uso rudo 3m con clavija", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero tratado, latón macizo y cristal templado", fin: "Negro mate exterior y latón brillante", time: "3 a 4 semanas", cert: "NOM, IP65" },
-            { id: 48, name: "Instalación Globos Vidrio", category: "proyectos", price: 85000, img: "IMG_2013.png", sku: "DM-PRO-001", desc: "Instalación artística de decenas de esferas de vidrio soplado de colores.", specsLight: "Módulos LED 3W internos x 15", cable: "Instalación a plafón oculto", dims: { w: "200 cm", h: "100 cm", d: "200 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Vidrio soplado artesanal", fin: "Colores translúcidos variados", time: "8 a 10 semanas", cert: "NOM" },
-            { id: 49, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-PRO-002", desc: "Cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro eléctrico", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
+            { id: 86, name: "Farol Linterna Latón", category: "exterior", price: 6800, img: "image_exterior.png", sku: "DM-EXT-003", desc: "Farol negro mate con corona de latón pulido.", specsLight: "1x E26 LED 8W cálida", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero tratado, latón macizo y cristal templado", fin: "Negro mate exterior y latón brillante", time: "3 a 4 semanas", cert: "NOM, IP65" },
+            { id: 48, name: "Instalación Globos Vidrio", category: "proyectos", price: 85000, img: "IMG_2013.png", sku: "DM-PRO-001", desc: "Instalación artística de esferas de vidrio soplado de colores.", specsLight: "Módulos LED 3W internos x 15", cable: "Instalación a plafón oculto", dims: { w: "200 cm", h: "100 cm", d: "200 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Vidrio soplado artesanal", fin: "Colores translúcidos variados", time: "8 a 10 semanas", cert: "NOM" },
+            { id: 49, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-PRO-002", desc: "Cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
             { id: 50, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-003", desc: "Perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
-            { id: 51, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.png", sku: "DM-PRO-004", desc: "Sistema de exhibición de vinos con montantes de latón e iluminación LED integrada.", specsLight: "Módulos LED Integrados 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg (vacía)", volt: "110-240V", mat: "Latón sólido, madera de nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
-            { id: 52, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.png", sku: "DM-PRO-005", desc: "Esfera gigante tallada en bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" },
-            { id: 87, name: "Pedestal Dispensador Lumínico", category: "proyectos", price: 12500, img: "proyecto_dispensador_1.png", sku: "DM-PRO-006", desc: "Pedestal de acero negro mate con iluminación focal y módulo dispensador.", specsLight: "Módulo LED Integrado 5W cálida", cable: "Cable oculto 2m con conexión a piso", dims: { w: "30 cm", h: "140 cm", d: "30 cm", dia: "N/A" }, peso: "15 kg", volt: "110-120V", mat: "Acero al carbón tratado", fin: "Negro mate texturizado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 88, name: "Tótem Dispensador Noir", category: "proyectos", price: 13200, img: "proyecto_dispensador.png", sku: "DM-PRO-007", desc: "Estructura monolítica negro absoluto con iluminación de cortesía brutalista.", specsLight: "Módulo LED Integrado 5W cálida", cable: "Cable oculto 2m", dims: { w: "35 cm", h: "150 cm", d: "35 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Acero macizo", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 89, name: "Túnel Arquitectónico Bóveda", category: "proyectos", price: 450000, img: "proyecto_especial_1.png", sku: "DM-PRO-008", desc: "Instalación monumental de arcos entrelazados para entradas de ultra lujo.", specsLight: "Sistema complejo de 300+ puntos LED cálidos", cable: "Cableado estructurado perimetral", dims: { w: "A medida", h: "A medida", d: "A medida", dia: "N/A" }, peso: "Variable", volt: "110-240V", mat: "Madera sólida tratada y acero", fin: "Madera cálida natural", time: "10 a 12 semanas", cert: "NOM" },
-            { id: 90, name: "Cielo Estrellado Constelación", category: "proyectos", price: 120000, img: "proyecto_especial_2.png", sku: "DM-PRO-009", desc: "Intervención en plafón con cientos de puntos de luz que emulan una galaxia.", specsLight: "Fibra óptica y emisores LED de alta eficiencia", cable: "Instalación a plafón falso", dims: { w: "A medida", h: "A medida", d: "A medida", dia: "N/A" }, peso: "Variable", volt: "110-240V", mat: "Fibra óptica y remates de cristal", fin: "Iluminación cálida estelar", time: "8 a 10 semanas", cert: "NOM" },
-            { id: 91, name: "Celosía Lumínica de Muro", category: "proyectos", price: 28000, img: "proyecto_especial_pared.png", sku: "DM-PRO-010", desc: "Mural escultórico retroiluminado con celosía metálica que proyecta sombras.", specsLight: "Tiras LED perimetrales 12V 3000K", cable: "Conexión directa a registro de muro", dims: { w: "120 cm", h: "80 cm", d: "10 cm", dia: "N/A" }, peso: "22 kg", volt: "110-120V", mat: "Placa de acero cortada y difusores", fin: "Acero crudo mate", time: "6 a 8 semanas", cert: "NOM" },
-            { id: 98, name: "Candil Starburst Radiante", category: "candiles", price: 38500, img: "Unknown-2.png", sku: "DM-CAN-009", desc: "Candil monumental de diseño starburst forjado en latón brillante, intercalado con esferas de cristal soplado para un impacto visual deslumbrante.", specsLight: "24x E12 LED 4W cálida", cable: "Tubo rígido de latón a techo", dims: { w: "110 cm", h: "110 cm", d: "110 cm", dia: "110 cm" }, peso: "18 kg", volt: "110-120V", mat: "Latón macizo y cristal transparente", fin: "Latón pulido brillante", time: "5 a 6 semanas", cert: "NOM" },
-            { id: 99, name: "Domo Cobre Bicolor", category: "techo", price: 11500, img: "Unknown.png", sku: "DM-TEC-025", desc: "Colgante minimalista en forma de media esfera. Su exterior neutro contrasta con un cálido interior cobrizado que amplifica y tiñe la luz.", specsLight: "1x E26 LED Globo 12W cálida", cable: "Cable textil y tensor de acero", dims: { w: "60 cm", h: "35 cm", d: "60 cm", dia: "60 cm" }, peso: "4.5 kg", volt: "110-240V", mat: "Aluminio repujado", fin: "Blanco mate exterior, cobre cepillado interior", time: "3 a 4 semanas", cert: "NOM" }
+            { id: 51, name: "Cava Iluminada Bespoke", category: "proyectos", price: 68000, img: "proyecto_1.png", sku: "DM-PRO-004", desc: "Sistema de exhibición de vinos con latón e iluminación integrada.", specsLight: "Módulos LED 2W cálidos por repisa", cable: "Sistema oculto en panel trasero", dims: { w: "120 cm", h: "240 cm", d: "40 cm", dia: "N/A" }, peso: "85 kg", volt: "110-240V", mat: "Latón sólido, nogal, acero", fin: "Latón natural y madera barnizada", time: "8 a 10 semanas", cert: "NOM" },
+            { id: 52, name: "Esfera Ónice Monumental", category: "proyectos", price: 55000, img: "IMG_2142.png", sku: "DM-PRO-005", desc: "Bloque de ónice iluminado desde su interior.", specsLight: "Sistema LED alta potencia 40W", cable: "Estructura interna oculta", dims: { w: "N/A", h: "N/A", d: "N/A", dia: "80 cm" }, peso: "75 kg", volt: "110-240V", mat: "Ónice natural", fin: "Piedra natural amarilla", time: "8 semanas", cert: "NOM" },
+            { id: 87, name: "Pedestal Dispensador Lumínico", category: "proyectos", price: 12500, img: "proyecto_dispensador_1.png", sku: "DM-PRO-006", desc: "Pedestal de acero negro con iluminación focal.", specsLight: "Módulo LED 5W cálida", cable: "Cable oculto 2m", dims: { w: "30 cm", h: "140 cm", d: "30 cm", dia: "N/A" }, peso: "15 kg", volt: "110-120V", mat: "Acero al carbón tratado", fin: "Negro mate texturizado", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 88, name: "Tótem Dispensador Noir", category: "proyectos", price: 13200, img: "proyecto_dispensador.png", sku: "DM-PRO-007", desc: "Monolítico negro absoluto con iluminación de cortesía.", specsLight: "Módulo LED 5W cálida", cable: "Cable oculto 2m", dims: { w: "35 cm", h: "150 cm", d: "35 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Acero macizo", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 89, name: "Túnel Arquitectónico Bóveda", category: "proyectos", price: 450000, img: "proyecto_especial_1.png", sku: "DM-PRO-008", desc: "Instalación de arcos entrelazados para entradas de ultra lujo.", specsLight: "Sistema complejo de 300+ puntos LED", cable: "Cableado estructurado perimetral", dims: { w: "A medida", h: "A medida", d: "A medida", dia: "N/A" }, peso: "Variable", volt: "110-240V", mat: "Madera sólida tratada y acero", fin: "Madera cálida natural", time: "10 a 12 semanas", cert: "NOM" },
+            { id: 90, name: "Cielo Estrellado Constelación", category: "proyectos", price: 120000, img: "proyecto_especial_2.png", sku: "DM-PRO-009", desc: "Cientos de puntos de luz que emulan una galaxia en el plafón.", specsLight: "Fibra óptica y emisores LED de alta eficiencia", cable: "Instalación a plafón falso", dims: { w: "A medida", h: "A medida", d: "A medida", dia: "N/A" }, peso: "Variable", volt: "110-240V", mat: "Fibra óptica y remates de cristal", fin: "Iluminación cálida estelar", time: "8 a 10 semanas", cert: "NOM" },
+            { id: 91, name: "Celosía Lumínica de Muro", category: "proyectos", price: 28000, img: "proyecto_especial_pared.png", sku: "DM-PRO-010", desc: "Mural escultórico retroiluminado con celosía metálica.", specsLight: "Tiras LED perimetrales 12V 3000K", cable: "Conexión directa a registro", dims: { w: "120 cm", h: "80 cm", d: "10 cm", dia: "N/A" }, peso: "22 kg", volt: "110-120V", mat: "Placa de acero cortada y difusores", fin: "Acero crudo mate", time: "6 a 8 semanas", cert: "NOM" }
         ];
 
         window.catMap = {
@@ -693,12 +935,12 @@
             exterior: "Lámparas de Exterior", proyectos: "Proyectos Especiales"
         };
 
-        // ── AUDIO ─────────────────────────────────────────────────────────────────
+        // ── AUDIO ──
         window.audioCtx = null;
         window.initAudio = function() {
             try {
-                if (!window.audioCtx) { window.audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-                if(window.audioCtx.state === 'suspended') window.audioCtx.resume();
+                if (!window.audioCtx) window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (window.audioCtx.state === 'suspended') window.audioCtx.resume();
             } catch(e) {}
         };
         window.playGlowSound = function() {
@@ -706,7 +948,8 @@
                 if (!window.audioCtx) return;
                 const osc = window.audioCtx.createOscillator();
                 const gain = window.audioCtx.createGain();
-                osc.type = 'sine'; osc.frequency.setValueAtTime(150, window.audioCtx.currentTime);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(150, window.audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(600, window.audioCtx.currentTime + 1.5);
                 gain.gain.setValueAtTime(0, window.audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0.2, window.audioCtx.currentTime + 0.5);
@@ -720,7 +963,8 @@
                 if (!window.audioCtx) return;
                 const osc = window.audioCtx.createOscillator();
                 const gain = window.audioCtx.createGain();
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(600, window.audioCtx.currentTime);
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, window.audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(1200, window.audioCtx.currentTime + 0.1);
                 gain.gain.setValueAtTime(0.05, window.audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.1);
@@ -729,20 +973,16 @@
             } catch(e) {}
         };
 
-        // ── SCROLL ────────────────────────────────────────────────────────
+        // ── SCROLL ──
         window.scrollToSection = function(e, id) {
             if (e) e.preventDefault();
             const menu = document.getElementById('dropdown-menu');
-            if (menu) {
-                menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-                menu.classList.remove('translate-y-0', 'opacity-100');
-            }
-            setTimeout(() => { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); }, 300);
+            if (menu) { menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2'); menu.classList.remove('translate-y-0', 'opacity-100'); }
+            setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 300);
         };
 
-        // ── COOKIES / SESSION ─────────────────────────────────────────────────────
+        // ── COOKIES ──
         window.toggleCookieDetails = function() { document.getElementById('cookie-details')?.classList.toggle('hidden'); };
-
         window.toggleCookieCheck = function() {
             window.cookieAccepted = !window.cookieAccepted;
             const checkIcon = document.getElementById('cookie-check');
@@ -760,23 +1000,20 @@
                 checkIcon.classList.replace('text-black', 'text-brand-gold');
             }
         };
-
         window.acceptCookiesNext = function() {
             window.initAudio();
-            const cookieModal = document.getElementById('cookie-modal');
-            if (cookieModal) cookieModal.classList.add('opacity-0', 'pointer-events-none');
-            if (window.userSession) { window.enterSiteDirectly(); } else {
+            document.getElementById('cookie-modal')?.classList.add('opacity-0', 'pointer-events-none');
+            if (window.userSession) { window.enterSiteDirectly(); }
+            else {
                 const lp = document.getElementById('login-prompt-modal');
                 if (lp) { lp.classList.remove('hidden'); void lp.offsetWidth; lp.classList.remove('opacity-0', 'pointer-events-none'); }
             }
         };
-
         window.showLoginForm = function() {
             document.getElementById('login-prompt-modal')?.classList.add('opacity-0', 'pointer-events-none');
             const lf = document.getElementById('login-form-modal');
             if (lf) { lf.classList.remove('hidden'); void lf.offsetWidth; lf.classList.remove('opacity-0', 'pointer-events-none'); }
         };
-
         window.processLogin = function() {
             const name = document.getElementById('session-name')?.value || 'Thiago';
             const email = document.getElementById('session-email')?.value || '';
@@ -787,7 +1024,6 @@
             document.getElementById('nav-login-btn')?.classList.add('hidden');
             window.showWelcomeAnimation(name);
         };
-
         window.showWelcomeAnimation = function(userName) {
             const loading = document.getElementById('login-loading-modal');
             if (loading) { loading.classList.remove('hidden', 'opacity-0', 'pointer-events-none'); }
@@ -797,19 +1033,23 @@
                 const container = document.getElementById('welcome-letters');
                 if (!overlay || !container) { window.enterSiteDirectly(); return; }
                 const text = ('BIENVENIDO ' + userName).toUpperCase();
-                container.innerHTML = text.split(' ').map(word => `<span class="inline-block whitespace-nowrap mx-2 sm:mx-4">${word.split('').map(c => `<span class="welcome-letter opacity-0 transition-opacity duration-500 font-editorial text-4xl sm:text-6xl md:text-8xl text-white tracking-widest glow-text">${c}</span>`).join('')}</span>`).join('');
+                container.innerHTML = text.split(' ').map(word =>
+                    `<span class="inline-block whitespace-nowrap mx-2 sm:mx-4">${word.split('').map(c =>
+                        `<span class="welcome-letter opacity-0 transition-opacity duration-500 font-editorial text-4xl sm:text-6xl md:text-8xl text-white tracking-widest glow-text inline-block">${c}</span>`
+                    ).join('')}</span>`
+                ).join('');
                 overlay.classList.remove('hidden', 'opacity-0');
                 setTimeout(() => {
                     const letters = overlay.querySelectorAll('.welcome-letter');
                     letters.forEach((l, i) => setTimeout(() => { l.classList.remove('opacity-0'); l.classList.add('opacity-100'); }, i * 80));
                     setTimeout(() => {
                         overlay.style.transform = 'translateY(-100%)';
+                        overlay.style.transition = 'transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
                         setTimeout(() => { overlay.style.display = 'none'; window.enterSiteDirectly(); }, 1500);
                     }, letters.length * 80 + 1200);
                 }, 300);
             }, 8000);
         };
-
         window.enterSiteDirectly = function() {
             document.querySelectorAll('.init-overlay').forEach(o => o.classList.add('opacity-0', 'pointer-events-none'));
             document.getElementById('main-body')?.classList.remove('overflow-hidden');
@@ -821,9 +1061,8 @@
                 if (cn && window.userSession.name) cn.value = window.userSession.name;
                 if (ce && window.userSession.email) ce.value = window.userSession.email;
             }
-            setTimeout(() => { document.querySelectorAll('.init-overlay').forEach(o => o.classList.add('hidden')); }, 1000);
+            setTimeout(() => document.querySelectorAll('.init-overlay').forEach(o => o.classList.add('hidden')), 1000);
         };
-
         window.confirmLogout = function() {
             if (confirm('¿Cerrar sesión en DAMASO Studio? Se borrará tu información local.')) {
                 ['damaso_session','damaso_cart','damaso_chat_history','damaso_current_messages'].forEach(k => localStorage.removeItem(k));
@@ -831,40 +1070,58 @@
             }
         };
 
+        // ── ANIMACIÓN DE ENTRADA MEJORADA ──
         window.startAppAnimation = function() {
             const entry = document.getElementById('entry-animation');
-            const letters = document.querySelectorAll('.entry-letter');
+            const letters = Array.from(document.querySelectorAll('#entry-damaso-letters .entry-letter'));
             const studio = document.getElementById('entry-studio');
+            const divider = document.getElementById('entry-divider');
             const cookieModal = document.getElementById('cookie-modal');
+
+            // Animar letras con stagger
             setTimeout(() => {
-                letters.forEach((l, i) => setTimeout(() => { l.classList.remove('opacity-0'); l.classList.add('opacity-100'); }, i * 150));
+                letters.forEach((l, i) => {
+                    setTimeout(() => l.classList.add('animate-in'), i * 120);
+                });
+                // Línea dorada
+                setTimeout(() => { if(divider) divider.classList.add('expand'); }, letters.length * 120 + 100);
+                // Studio
                 setTimeout(() => {
-                    if (studio) { studio.classList.remove('opacity-0'); studio.classList.add('opacity-100'); }
+                    if (studio) {
+                        studio.style.opacity = '1';
+                        studio.style.transform = 'translateY(0)';
+                        studio.style.filter = 'blur(0)';
+                    }
+                }, letters.length * 120 + 300);
+                // Salida
+                setTimeout(() => {
+                    entry.style.transition = 'transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    entry.style.transform = 'translateY(-100%)';
                     setTimeout(() => {
-                        if (entry) entry.style.transform = 'translateY(-100%)';
-                        setTimeout(() => {
-                            if (entry) entry.style.display = 'none';
-                            if (window.userSession) { window.showWelcomeAnimation(window.userSession.name); } 
-                            else { if (cookieModal) { cookieModal.classList.remove('hidden'); void cookieModal.offsetWidth; cookieModal.classList.remove('opacity-0', 'pointer-events-none'); } }
-                        }, 1500);
+                        entry.style.display = 'none';
+                        if (window.userSession) { window.showWelcomeAnimation(window.userSession.name); }
+                        else {
+                            if (cookieModal) { cookieModal.classList.remove('hidden'); void cookieModal.offsetWidth; cookieModal.classList.remove('opacity-0', 'pointer-events-none'); }
+                        }
                     }, 1500);
-                }, letters.length * 150 + 300);
-            }, 100);
+                }, letters.length * 120 + 2500);
+            }, 300);
         };
 
-        // ── CATALOG RENDER ───────────────────────────────────────────────────────
+        // ── CATÁLOGO ──
         window.imageLoaded = function(id) {
-            const img = document.getElementById('img-' + id);
+            document.getElementById('img-' + id)?.classList.remove('opacity-0');
             const loader = document.getElementById('loader-' + id);
-            if (img) img.classList.remove('opacity-0');
             if (loader) loader.classList.add('opacity-0', 'pointer-events-none');
         };
 
         window.renderCatalog = function(products) {
             const grid = document.getElementById('catalog-grid');
             if (!grid || !products) return;
-            if (products.length === 0) { grid.innerHTML = '<p class="text-brand-gold col-span-full glow-gold text-center py-20">No se encontraron piezas.</p>'; return; }
-
+            if (products.length === 0) {
+                grid.innerHTML = '<p class="text-brand-gold col-span-full glow-gold text-center py-20">No se encontraron piezas.</p>';
+                return;
+            }
             let html = '';
             for (const [catKey, catTitle] of Object.entries(window.catMap)) {
                 const catProducts = products.filter(p => p.category === catKey);
@@ -906,67 +1163,119 @@
         };
 
         window.toggleCategories = function(e) {
-            if(e) { e.preventDefault(); e.stopPropagation(); }
+            if (e) { e.preventDefault(); e.stopPropagation(); }
             const menu = document.getElementById('dropdown-menu');
-            if(menu) {
-                const isHidden = menu.classList.contains('opacity-0');
-                if (isHidden) {
-                    menu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
-                    menu.classList.add('translate-y-0', 'opacity-100');
-                } else {
-                    menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-                    menu.classList.remove('translate-y-0', 'opacity-100');
-                }
+            if (!menu) return;
+            const isHidden = menu.classList.contains('opacity-0');
+            if (isHidden) {
+                menu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+                menu.classList.add('translate-y-0', 'opacity-100');
+            } else {
+                menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                menu.classList.remove('translate-y-0', 'opacity-100');
             }
         };
 
+        // ── ANIMACIÓN DE CATEGORÍA MEJORADA — PANTALLA COMPLETA ──
         window.filterCatalogWithAnimation = function(cat) {
+            // Evitar doble-click
+            if (window._catAnimating) return;
+            window._catAnimating = true;
+
+            // Cerrar menú
             const menu = document.getElementById('dropdown-menu');
             if (menu) { menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2'); menu.classList.remove('translate-y-0', 'opacity-100'); }
 
             const overlay = document.getElementById('category-transition-overlay');
-            const letters = document.querySelectorAll('.menu-letter');
+            const letters = Array.from(document.querySelectorAll('#menu-damaso-letters .menu-letter'));
             const categoryText = document.getElementById('menu-category-text');
-            const displayName = cat === 'all' ? 'Colección Completa' : window.catMap[cat];
-            if (categoryText) categoryText.innerText = displayName;
+            const divider = document.getElementById('cat-divider');
+            const displayName = cat === 'all' ? 'Colección Completa' : (window.catMap[cat] || cat);
 
-            if (overlay) { overlay.classList.remove('opacity-0', 'pointer-events-none'); overlay.classList.add('opacity-100', 'pointer-events-auto'); }
-            window.playGlowSound(); 
-            letters.forEach(l => { l.classList.remove('opacity-100'); l.classList.add('opacity-0'); });
-            if (categoryText) { categoryText.classList.remove('opacity-100'); categoryText.classList.add('opacity-0'); }
+            if (!overlay) { window._catAnimating = false; return; }
 
+            // Resetear estado de letras
+            letters.forEach(l => { l.classList.remove('letter-animate-in', 'letter-animate-out'); l.style.opacity = '0'; });
+            if (categoryText) { categoryText.classList.remove('category-animate-in'); categoryText.style.opacity = '0'; categoryText.innerText = displayName; }
+            if (divider) divider.style.width = '0';
+
+            // MOSTRAR OVERLAY FULL SCREEN — forzar estilos inline para máxima compatibilidad
+            overlay.style.cssText = 'position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;min-height:100dvh;margin:0!important;padding:0!important;z-index:2147483647!important;background:#030303!important;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:none!important;overflow:hidden;';
+            overlay.classList.add('overlay-visible');
+            // Bloquear scroll durante la transición (evita artefactos en iOS)
+            document.body.style.overflow = 'hidden';
+
+            window.playGlowSound();
+
+            // Crear partículas doradas decorativas
+            const particleContainer = document.getElementById('cat-particles');
+            if (particleContainer) {
+                particleContainer.innerHTML = '';
+                for (let i = 0; i < 12; i++) {
+                    setTimeout(() => {
+                        const p = document.createElement('div');
+                        p.className = 'particle';
+                        p.style.left = Math.random() * 100 + '%';
+                        p.style.top = (40 + Math.random() * 30) + '%';
+                        p.style.setProperty('--tx', (Math.random() * 60 - 30) + 'px');
+                        p.style.animationDelay = (Math.random() * 0.5) + 's';
+                        particleContainer.appendChild(p);
+                        setTimeout(() => p.remove(), 2000);
+                    }, i * 100);
+                }
+            }
+
+            // Animar letras con stagger
             setTimeout(() => {
-                letters.forEach((l, i) => setTimeout(() => { l.classList.remove('opacity-0'); l.classList.add('opacity-100'); }, i * 150));
-                if (categoryText) setTimeout(() => { categoryText.classList.remove('opacity-0'); categoryText.classList.add('opacity-100'); }, letters.length * 150 + 200);
-            }, 300);
+                letters.forEach((l, i) => {
+                    setTimeout(() => l.classList.add('letter-animate-in'), i * 100);
+                });
+            }, 150);
 
+            // Línea dorada
+            setTimeout(() => { if (divider) divider.style.width = '200px'; }, letters.length * 100 + 200);
+
+            // Nombre de categoría
+            setTimeout(() => {
+                if (categoryText) categoryText.classList.add('category-animate-in');
+            }, letters.length * 100 + 350);
+
+            // Actualizar catálogo y ocultar overlay
             setTimeout(() => {
                 const searchInput = document.getElementById('live-search');
                 if (searchInput) searchInput.value = '';
                 const filtered = cat === 'all' ? window.dbProducts : window.dbProducts.filter(p => p.category === cat);
                 window.renderCatalog(filtered);
-                document.getElementById('catalog-title').innerText = cat === 'all' ? "Catálogo Completo" : window.catMap[cat];
+                document.getElementById('catalog-title').innerText = cat === 'all' ? "Catálogo Completo" : (window.catMap[cat] || cat);
                 document.getElementById('catalog-subtitle').innerText = "Colección 2026";
                 document.getElementById('coleccion')?.scrollIntoView({ behavior: 'smooth' });
-                setTimeout(() => { if (overlay) { overlay.classList.remove('opacity-100', 'pointer-events-auto'); overlay.classList.add('opacity-0', 'pointer-events-none'); } }, 800);
-            }, 1800); 
+
+                // Ocultar overlay suavemente
+                setTimeout(() => {
+                    overlay.classList.remove('overlay-visible');
+                    overlay.style.opacity = '0';
+                    overlay.style.pointerEvents = 'none';
+                    setTimeout(() => { 
+                        window._catAnimating = false;
+                        // Limpiar inline styles para que CSS tome control en próxima activación
+                        overlay.style.cssText = '';
+                    }, 500);
+                }, 600);
+            }, 2000);
         };
 
-        window.currentModalProduct = null;
-
+        // ── SPEC MODAL ──
         window.openSpecModal = function(id) {
             window.playClickSound();
             const p = window.dbProducts.find(x => x.id === parseInt(id));
             if (!p) return;
             window.currentModalProduct = p;
-
-            // Ocultar Navbar
             window.toggleNavbarState(false);
 
             document.getElementById('modal-img-link').href = p.img;
             document.getElementById('modal-img-element').src = p.img;
             const nSpn = document.getElementById('modal-img-name');
-            if(nSpn) nSpn.innerText = p.img;
+            if (nSpn) nSpn.innerText = p.img;
             document.getElementById('modal-title').innerText = p.name;
             document.getElementById('modal-desc').innerText = p.desc;
             document.getElementById('modal-sku').innerText = p.sku;
@@ -983,13 +1292,10 @@
             document.getElementById('modal-time').innerText = p.time;
             document.getElementById('modal-cert').innerText = p.cert;
             document.getElementById('modal-price').innerText = '$' + Number(p.price).toLocaleString() + ' MXN';
-            
             const btn = document.getElementById('modal-add-btn');
             if (btn) btn.onclick = () => { window.addToCart(p.id); window.closeSpecModal(); };
-
             const modalMsgs = document.getElementById('modal-ai-messages');
             if (modalMsgs) modalMsgs.innerHTML = '';
-
             const modal = document.getElementById('spec-modal');
             if (modal) { modal.classList.remove('opacity-0', 'pointer-events-none'); document.body.style.overflow = 'hidden'; }
         };
@@ -999,11 +1305,10 @@
             if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
             document.body.style.overflow = '';
             window.closeModalAI();
-            // Mostrar Navbar nuevamente
             window.toggleNavbarState(true);
         };
 
-        // ── CART ─────────────────────────────────────────────────────────────────
+        // ── CART ──
         window.addToCart = function(id) {
             window.playClickSound();
             const product = window.dbProducts.find(p => p.id === parseInt(id));
@@ -1026,16 +1331,13 @@
             const totalCont = document.getElementById('cart-total');
             const countCont = document.getElementById('cart-count');
             if (!itemsCont || !totalCont || !countCont) return;
-
             const totalItems = window.cart.reduce((s, i) => s + i.qty, 0);
             countCont.innerText = totalItems;
             countCont.style.opacity = totalItems > 0 ? '1' : '0';
-
             if (window.cart.length === 0) {
                 itemsCont.innerHTML = '<p class="text-brand-gold text-sm text-center mt-10 uppercase tracking-widest glow-gold">Tu selección está vacía</p>';
                 totalCont.innerText = '$0 MXN'; return;
             }
-
             let total = 0;
             itemsCont.innerHTML = '';
             window.cart.forEach(item => {
@@ -1061,25 +1363,22 @@
             const overlay = document.getElementById('cart-overlay');
             if (!drawer) return;
             const isOpen = !drawer.classList.contains('translate-x-full');
-            
             if (isOpen) {
                 drawer.classList.add('translate-x-full');
                 overlay.classList.add('opacity-0', 'pointer-events-none');
-                window.toggleNavbarState(true); // Mostrar menu al salir
+                window.toggleNavbarState(true);
             } else {
                 drawer.classList.remove('translate-x-full');
                 overlay.classList.remove('opacity-0', 'pointer-events-none');
-                window.toggleNavbarState(false); // Ocultar menu al entrar
+                window.toggleNavbarState(false);
             }
         };
 
-        // ── COPY / DOWNLOAD ROBUSTOS ───────────────────────────────────────────────────────
+        // ── COPY / DOWNLOAD ──
         window.copyToClipboardSafe = function(elementId, btnId) {
             const el = document.getElementById(elementId);
             if (!el || !el.innerText) return;
             const text = el.innerText;
-            
-            // Método robusto para móviles
             const textArea = document.createElement("textarea");
             textArea.value = text;
             textArea.style.position = "fixed";
@@ -1087,7 +1386,6 @@
             textArea.style.left = "-9999px";
             textArea.style.opacity = "0";
             document.body.appendChild(textArea);
-            
             if (navigator.userAgent.match(/ipad|iphone/i)) {
                 let range = document.createRange();
                 range.selectNodeContents(textArea);
@@ -1095,15 +1393,11 @@
                 selection.removeAllRanges();
                 selection.addRange(range);
                 textArea.setSelectionRange(0, 999999);
-            } else {
-                textArea.select();
-            }
-
-            try { document.execCommand('copy'); } catch (err) { console.warn("Fallback copy failed."); }
+            } else { textArea.select(); }
+            try { document.execCommand('copy'); } catch (err) {}
             document.body.removeChild(textArea);
-            
             const btn = document.getElementById(btnId);
-            if(btn) {
+            if (btn) {
                 const orig = btn.innerHTML;
                 btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="#22c55e" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>';
                 setTimeout(() => { btn.innerHTML = orig; }, 2000);
@@ -1132,9 +1426,9 @@
                 link.href = canvas.toDataURL('image/png');
                 document.body.appendChild(link); link.click(); document.body.removeChild(link);
             };
-            img.onerror = function() { 
+            img.onerror = function() {
                 const fallbackLink = document.createElement('a');
-                fallbackLink.download = name.replace('.png', '') + '_damaso.png';
+                fallbackLink.download = name.replace('.png','') + '_damaso.png';
                 fallbackLink.href = imgEl.src;
                 fallbackLink.target = '_blank';
                 document.body.appendChild(fallbackLink);
@@ -1144,8 +1438,7 @@
             img.src = imgEl.src;
         };
 
-        // ── MOTOR DE RESPALDO MASIVO (FALLBACK ENGINE +1,000 líneas lógicas simuladas) ──
-        // Este motor procesa el lenguaje natural y mapea intenciones con un extenso diccionario
+        // ── FALLBACK ENGINE ──
         window.DamasoFallbackEngine = {
             greetings: ['hola', 'buenos dias', 'buenas tardes', 'buenas noches', 'que tal', 'saludos', 'buenas'],
             farewells: ['adios', 'gracias', 'hasta luego', 'bye', 'nos vemos'],
@@ -1153,93 +1446,54 @@
             dims: ['medida', 'medidas', 'tamaño', 'dimension', 'dimensiones', 'ancho', 'alto', 'diametro'],
             materials: ['material', 'hecho de', 'acabado', 'textura', 'color'],
             shipping: ['tiempo', 'entrega', 'envio', 'tarda', 'demora', 'llega'],
-            
             process: function(text, specificProduct = null) {
                 let cleanTxt = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[¿?¡!.,]/g, '');
-                
-                // Si la consulta es directamente matemática
-                let mathString = cleanTxt.replace(/uno/g, '1').replace(/dos/g, '2').replace(/tres/g, '3')
-                                         .replace(/mas/g, '+').replace(/menos/g, '-').replace(/por/g, '*').replace(/x/g, '*').replace(/entre/g, '/');
-                if (/^[\d\s\+\-\*\/\(\)\.]+$/.test(mathString) && mathString.match(/\d/) && !cleanTxt.includes("sku")) {
-                    try { return `El resultado matemático es: <strong class="text-brand-gold glow-gold">${eval(mathString).toLocaleString()}</strong>.`; } catch(err){}
-                }
-
-                // Determinar el contexto del producto
                 let targetProduct = specificProduct;
                 if (!targetProduct) {
                     for (let p of window.dbProducts) {
                         let pNameNorm = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                        if (cleanTxt.includes(p.sku.toLowerCase()) || cleanTxt.includes(pNameNorm)) {
-                            targetProduct = p; break;
-                        }
-                        // Búsqueda por palabras clave únicas del producto
+                        if (cleanTxt.includes(p.sku.toLowerCase()) || cleanTxt.includes(pNameNorm)) { targetProduct = p; break; }
                         let pWords = pNameNorm.split(' ').filter(w => w.length > 4);
-                        for (let w of pWords) {
-                            if (cleanTxt.includes(w)) { targetProduct = p; break; }
-                        }
-                        if(targetProduct) break;
+                        for (let w of pWords) { if (cleanTxt.includes(w)) { targetProduct = p; break; } }
+                        if (targetProduct) break;
                     }
                 }
-
-                // Evaluar intención
                 let isGreeting = this.greetings.some(g => cleanTxt.includes(g));
                 let isFarewell = this.farewells.some(f => cleanTxt.includes(f));
                 let isPrice = this.pricing.some(p => cleanTxt.includes(p));
                 let isDim = this.dims.some(d => cleanTxt.includes(d));
                 let isMat = this.materials.some(m => cleanTxt.includes(m));
                 let isShip = this.shipping.some(s => cleanTxt.includes(s));
-
                 let userName = window.getUserFirstName();
-
-                // Respuestas Contextuales (Pieza específica detectada)
                 if (targetProduct) {
-                    if(isPrice) return `La pieza <strong class="text-brand-gold">${targetProduct.name}</strong> (SKU: ${targetProduct.sku}) tiene un valor de $${Number(targetProduct.price).toLocaleString()} MXN.`;
-                    if(isShip) return `El tiempo estimado de manufactura y entrega para ${targetProduct.name} es de ${targetProduct.time}.`;
-                    if(isDim) return `Las dimensiones de ${targetProduct.name} son: Ancho ${targetProduct.dims.w}, Alto ${targetProduct.dims.h}, Fondo ${targetProduct.dims.d}.`;
-                    if(isMat) return `Esta pieza está fabricada en ${targetProduct.mat} con un exquisito acabado en ${targetProduct.fin}.`;
-                    if(cleanTxt.includes("foco") || cleanTxt.includes("luz") || cleanTxt.includes("led")) return `La especificación lumínica de ${targetProduct.name} es: ${targetProduct.specsLight}.`;
-                    if(cleanTxt.includes("peso") || cleanTxt.includes("pesa")) return `El peso aproximado de esta pieza es de ${targetProduct.peso}.`;
-                    
-                    return `Ficha técnica de <strong class="text-brand-gold">${targetProduct.name}</strong>:<br>SKU: ${targetProduct.sku}<br>Valor: $${Number(targetProduct.price).toLocaleString()} MXN<br>Entrega: ${targetProduct.time}<br>Resumen: ${targetProduct.desc}`;
+                    if (isPrice) return `La pieza <strong class="text-brand-gold">${targetProduct.name}</strong> tiene un valor de $${Number(targetProduct.price).toLocaleString()} MXN.`;
+                    if (isShip) return `El tiempo de entrega para ${targetProduct.name} es de ${targetProduct.time}.`;
+                    if (isDim) return `Dimensiones: Ancho ${targetProduct.dims.w}, Alto ${targetProduct.dims.h}, Fondo ${targetProduct.dims.d}.`;
+                    if (isMat) return `Fabricada en ${targetProduct.mat} con acabado en ${targetProduct.fin}.`;
+                    return `<strong class="text-brand-gold">${targetProduct.name}</strong> · SKU: ${targetProduct.sku} · $${Number(targetProduct.price).toLocaleString()} MXN · Entrega: ${targetProduct.time}`;
                 }
-
-                // Respuestas Generales de Navegación / Preguntas Frecuentes
-                if (isGreeting && !cleanTxt.includes("quien")) return `¡Hola ${userName}! Soy el motor de respaldo de DAMASO Studio. Estoy operativo y listo para ayudarle con nuestro catálogo de ${window.dbProducts.length} piezas de lujo. ¿Qué categoría le gustaría explorar?`;
-                if (isFarewell) return `Fue un placer asistirle, ${userName}. Si requiere una atención más profunda, nuestro equipo está en WhatsApp: +52 33 3870 3071.`;
-                
-                if (cleanTxt.includes("catalogo") || cleanTxt.includes("piezas")) return "Contamos con Candiles, Arbotantes, Espejos, Lámparas de mesa, de pie, de techo, exterior y Proyectos especiales. Puede navegar por ellas usando el Menú superior.";
-                if (cleanTxt.includes("contacto") || cleanTxt.includes("telefono") || cleanTxt.includes("llamar")) return "El contacto directo del estudio es +52 33 3870 3071. Nuestro equipo de diseño estará encantado de atenderle.";
-                if (cleanTxt.includes("donde") || cleanTxt.includes("ubicacion") || cleanTxt.includes("direccion")) return "Nuestro estudio de diseño y taller de forja está localizado en Guadalajara, Jalisco, México. Realizamos envíos de lujo a toda la república y al extranjero.";
-                if (cleanTxt.includes("pdf") || cleanTxt.includes("cotizar")) return "Para generar un PDF formal, abra cualquier pieza, pulse 'Agregar a Cotización' y diríjase al icono de la bolsa en la barra superior. Ahí verá el botón de descarga.";
-                
-                if (cleanTxt.includes("mas caro") || cleanTxt.includes("lujo") || cleanTxt.includes("premium")) {
-                    let maxP = window.dbProducts.reduce((max, p) => p.price > max.price ? p : max, window.dbProducts[0]);
-                    return `Nuestra pieza más monumental en catálogo es <strong class="text-brand-gold">${maxP.name}</strong>, con un valor de $${Number(maxP.price).toLocaleString()} MXN. Su elaboración toma ${maxP.time}.`;
+                if (isGreeting) return `¡Hola ${userName}! Motor de respaldo activo. Tenemos ${window.dbProducts.length} piezas disponibles. ¿Qué categoría le interesa?`;
+                if (isFarewell) return `Un placer, ${userName}. Contáctenos al WhatsApp +52 33 3870 3071 para atención personalizada.`;
+                if (cleanTxt.includes("catalogo") || cleanTxt.includes("piezas")) return "Contamos con Candiles, Arbotantes, Espejos, Lámparas de mesa, pie, techo, exterior y Proyectos especiales.";
+                if (cleanTxt.includes("contacto") || cleanTxt.includes("telefono")) return "Contacto directo: +52 33 3870 3071. Nuestro equipo le atenderá con gusto.";
+                if (cleanTxt.includes("mas caro") || cleanTxt.includes("lujo")) {
+                    let maxP = window.dbProducts.reduce((mx, p) => p.price > mx.price ? p : mx, window.dbProducts[0]);
+                    return `Nuestra pieza más monumental es <strong class="text-brand-gold">${maxP.name}</strong> a $${Number(maxP.price).toLocaleString()} MXN.`;
                 }
-                
-                if (cleanTxt.includes("mas barato") || cleanTxt.includes("accesible")) {
-                    let minP = window.dbProducts.reduce((min, p) => p.price < min.price ? p : min, window.dbProducts[0]);
-                    return `Contamos con piezas excepcionales y accesibles como la <strong class="text-brand-gold">${minP.name}</strong> por $${Number(minP.price).toLocaleString()} MXN.`;
-                }
-
-                return `He recibido su consulta. Para asistencia técnica compleja o proyectos a medida, por favor contáctenos directamente al WhatsApp +52 33 3870 3071. (Motor de Respaldo Activo)`;
+                return `Consulta recibida. Para asistencia avanzada: WhatsApp +52 33 3870 3071. (Motor Respaldo Activo)`;
             }
         };
 
-        // ── GEMINI API & CHAT ──────────────────────────────────────────────────
+        // ── GEMINI API ──
         window.fetchGeminiAPI = async function(messages, systemInstruction) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
             const contents = messages.map(m => ({ role: m.role === 'bot' ? 'model' : 'user', parts: [{ text: m.text.replace(/<[^>]+>/g, '') }] }));
-            const payload = { systemInstruction: { parts: [{ text: systemInstruction }] }, contents: contents };
+            const payload = { systemInstruction: { parts: [{ text: systemInstruction }] }, contents };
             const delays = [1000, 2000, 4000];
-            
             for (let i = 0; i < 3; i++) {
                 try {
                     const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) {
-                        const err = await response.json().catch(() => ({}));
-                        throw new Error(err?.error?.message || `HTTP ${response.status}`);
-                    }
+                    if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err?.error?.message || `HTTP ${response.status}`); }
                     const data = await response.json();
                     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
                     if (!text) throw new Error("Respuesta vacía");
@@ -1255,8 +1509,7 @@
             const catList = window.dbProducts.map(p => `${p.name} (${p.category}, $${Number(p.price).toLocaleString()} MXN, SKU: ${p.sku})`).join('\n');
             const userName = window.getUserFirstName();
             return `Eres DAMASO AI, el asistente virtual de DAMASO Studio — una marca de lujo de iluminación artesanal mexicana. El cliente se llama ${userName}.
-CATÁLOGO COMPLETO:
-${catList}
+CATÁLOGO COMPLETO:\n${catList}
 NORMAS:
 - Responde siempre en español con tono elegante, culto y cálido.
 - Sé conciso (máximo 3-4 oraciones). Usa saltos de línea.
@@ -1268,7 +1521,7 @@ NORMAS:
         window.activateFallbackUI = function() {
             window.botIsFallback = true;
             const statusLabel = document.getElementById('bot-status');
-            if(statusLabel && statusLabel.innerText !== "MOTOR DE RESPALDO ACTIVADO") {
+            if (statusLabel && statusLabel.innerText !== "MOTOR DE RESPALDO ACTIVADO") {
                 statusLabel.innerText = "MOTOR DE RESPALDO ACTIVADO";
                 statusLabel.classList.remove('text-brand-gold', 'glow-gold');
                 statusLabel.classList.add('fallback-active-text');
@@ -1296,22 +1549,18 @@ NORMAS:
             const text = input.value.trim();
             if (!text) return;
             input.value = '';
-
             const sugg = document.getElementById('chat-suggestions');
             if (sugg) sugg.style.display = 'none';
-
             if (!Array.isArray(window.currentMessages)) window.currentMessages = [];
             window.currentMessages.push({ role: 'user', text });
             window.saveChatState();
             window.renderCurrentMessages();
-
             const box = document.getElementById('chat-messages');
             const loadId = 'load-' + Date.now();
             box.innerHTML += `<div id="${loadId}" class="flex gap-3 items-start"><div class="w-8 h-8 rounded-full bg-brand-gold flex items-center justify-center text-black text-xs font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 p-4 rounded-xl rounded-tl-none"><div class="dot-typing"><span></span><span></span><span></span></div></div></div>`;
             box.scrollTop = box.scrollHeight;
-
             try {
-                if(window.botIsFallback) throw new Error("LocalFallback");
+                if (window.botIsFallback) throw new Error("LocalFallback");
                 const aiText = await window.fetchGeminiAPI(window.currentMessages.slice(-12), getMainSystemPrompt());
                 document.getElementById(loadId)?.remove();
                 const formatted = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-brand-gold">$1</strong>').replace(/\n/g, '<br>');
@@ -1319,12 +1568,9 @@ NORMAS:
                 window.saveChatState();
                 window.renderCurrentMessages();
             } catch(e) {
-                // Activar UI del Motor de Respaldo y Ejecutarlo
                 window.activateFallbackUI();
                 document.getElementById(loadId)?.remove();
-                
                 const botRes = window.DamasoFallbackEngine.process(text, null);
-                
                 window.currentMessages.push({ role: 'bot', text: botRes });
                 window.saveChatState();
                 window.renderCurrentMessages();
@@ -1345,11 +1591,8 @@ NORMAS:
         window.toggleChatHistory = function() {
             const view = document.getElementById('chat-history-view');
             if (!view) return;
-            if (view.classList.contains('hidden')) {
-                view.classList.remove('hidden'); view.classList.add('flex'); window.renderChatHistory();
-            } else {
-                view.classList.add('hidden'); view.classList.remove('flex');
-            }
+            if (view.classList.contains('hidden')) { view.classList.remove('hidden'); view.classList.add('flex'); window.renderChatHistory(); }
+            else { view.classList.add('hidden'); view.classList.remove('flex'); }
         };
 
         window.renderChatHistory = function() {
@@ -1364,10 +1607,7 @@ NORMAS:
         window.loadHistoryChat = function(idx) {
             let history = [];
             try { history = JSON.parse(localStorage.getItem('damaso_chat_history')) || []; } catch(e) {}
-            if (history[idx]) {
-                window.currentMessages = history[idx].messages || [];
-                window.saveChatState(); window.renderCurrentMessages(); window.toggleChatHistory();
-            }
+            if (history[idx]) { window.currentMessages = history[idx].messages || []; window.saveChatState(); window.renderCurrentMessages(); window.toggleChatHistory(); }
         };
 
         window.createNewChat = function() {
@@ -1410,37 +1650,28 @@ NORMAS:
             const p = window.currentModalProduct;
             if (!p) return;
             input.value = '';
-
             const box = document.getElementById('modal-ai-messages');
             box.innerHTML += `<div class="flex justify-end mt-2"><div class="glass-gold text-white text-[10px] p-2 rounded-lg rounded-tr-none max-w-[85%]">${text}</div></div>`;
-
             if (!Array.isArray(window.currentMessages)) window.currentMessages = [];
             window.currentMessages.push({ role: 'user', text });
             window.saveChatState();
-
             const loadId = 'mload-' + Date.now();
             box.innerHTML += `<div id="${loadId}" class="flex items-center gap-2 mt-2"><div class="bg-[#1a1a1a] border border-brand-gold/20 p-2 rounded-lg"><div class="dot-typing"><span></span><span></span><span></span></div></div></div>`;
             box.scrollTop = box.scrollHeight;
-
-            const sysPrompt = `Eres DAMASO AI. El cliente ve específicamente: ${p.name} | SKU: ${p.sku} | Precio: $${Number(p.price).toLocaleString()} MXN | Material: ${p.mat} | Acabado: ${p.fin}. Responde CONCISAMENTE (máximo 2 oraciones) y con lujo SOLO sobre esta pieza.`;
-
+            const sysPrompt = `Eres DAMASO AI. El cliente ve: ${p.name} | SKU: ${p.sku} | $${Number(p.price).toLocaleString()} MXN | ${p.mat} | ${p.fin}. Responde CONCISAMENTE (máximo 2 oraciones) solo sobre esta pieza.`;
             try {
-                if(window.botIsFallback) throw new Error("LocalFallback");
+                if (window.botIsFallback) throw new Error("LocalFallback");
                 const aiText = await window.fetchGeminiAPI([{ role: 'user', text }], sysPrompt);
                 document.getElementById(loadId)?.remove();
                 const formatted = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-brand-gold">$1</strong>').replace(/\n/g, '<br>');
                 box.innerHTML += `<div class="flex items-start gap-2 mt-2"><div class="w-6 h-6 rounded-full bg-brand-gold flex items-center justify-center text-black text-[8px] font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 text-white text-[10px] p-2 rounded-lg rounded-tl-none leading-relaxed">${formatted}</div></div>`;
                 box.scrollTop = box.scrollHeight;
-                
                 window.currentMessages.push({ role: 'bot', text: formatted });
                 window.saveChatState(); window.renderCurrentMessages();
             } catch(e) {
-                // Motor de Respaldo Específico para Modal
                 window.activateFallbackUI();
                 document.getElementById(loadId)?.remove();
-                
                 const bRes = window.DamasoFallbackEngine.process(text, p);
-                
                 box.innerHTML += `<div class="flex items-start gap-2 mt-2"><div class="w-6 h-6 rounded-full bg-brand-gold flex items-center justify-center text-black text-[8px] font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 text-white text-[10px] p-2 rounded-lg rounded-tl-none leading-relaxed">${bRes}</div></div>`;
                 box.scrollTop = box.scrollHeight;
                 window.currentMessages.push({ role: 'bot', text: bRes });
@@ -1457,46 +1688,39 @@ NORMAS:
             if (isOpen) {
                 drawer.classList.add('-translate-x-full');
                 overlay.classList.add('opacity-0', 'pointer-events-none');
-                window.toggleNavbarState(true); // Muestra NavBar al cerrar bot
+                window.toggleNavbarState(true);
             } else {
                 drawer.classList.remove('-translate-x-full');
                 overlay.classList.remove('opacity-0', 'pointer-events-none');
-                window.toggleNavbarState(false); // Oculta NavBar al abrir bot
+                window.toggleNavbarState(false);
                 window.renderCurrentMessages();
                 setTimeout(() => document.getElementById('chat-input')?.focus(), 400);
             }
         };
 
-        // ── NUEVAS FUNCIONES AI (LLM) ─────────────────────────────────────────────
-
+        // ── AI FEATURES ──
         window.semanticSearch = async function() {
             const input = document.getElementById('live-search');
             const query = input.value.trim();
             if (!query) return;
-
             const btn = document.getElementById('btn-semantic-search');
             const originalIcon = btn.innerHTML;
-            btn.innerHTML = '<span class="animate-spin text-[10px]">⌛</span>';
+            btn.innerHTML = '<span style="display:inline-block;animation:spin 1s linear infinite">⌛</span>';
             btn.classList.add('opacity-50', 'pointer-events-none');
-
             const catList = window.dbProducts.map(p => `SKU: ${p.sku} | Pieza: ${p.name} | Cat: ${p.category} | Mat: ${p.mat}`).join('\n');
-            const prompt = `Un cliente en una boutique de lujo busca: "${query}".\n\nCatálogo disponible:\n${catList}\n\nSelecciona los 3 a 5 SKUs que mejor se adapten a la intención de diseño o requerimiento del cliente. Responde ÚNICAMENTE con los SKUs separados por comas.`;
-
+            const prompt = `Un cliente en una boutique de lujo busca: "${query}".\nCatálogo:\n${catList}\nSelecciona los 3 a 5 SKUs que mejor se adapten. Responde ÚNICAMENTE con los SKUs separados por comas.`;
             try {
                 const response = await window.fetchGeminiAPI([{role: 'user', text: prompt}], "Eres un experto curador de arte y diseño de iluminación interior de lujo.");
                 const skus = response.split(',').map(s => s.trim().toUpperCase());
                 const results = window.dbProducts.filter(p => skus.some(sku => sku.includes(p.sku) || p.sku.includes(sku)));
-
                 if (results.length > 0) {
                     window.renderCatalog(results);
                     document.getElementById('catalog-title').innerText = 'Curaduría AI';
                     document.getElementById('catalog-subtitle').innerText = `✨ Sugerencias para: "${query}"`;
-                } else {
-                    throw new Error("No matches");
-                }
-            } catch (e) {
+                } else throw new Error("No matches");
+            } catch(e) {
                 document.getElementById('catalog-title').innerText = 'Curaduría AI';
-                document.getElementById('catalog-subtitle').innerText = `No encontramos piezas exactas para: "${query}"`;
+                document.getElementById('catalog-subtitle').innerText = `No encontramos piezas para: "${query}"`;
                 window.renderCatalog([]);
             } finally {
                 btn.innerHTML = originalIcon;
@@ -1510,20 +1734,16 @@ NORMAS:
             const btn = document.getElementById('btn-ai-proposal');
             const container = document.getElementById('ai-proposal-container');
             const textEl = document.getElementById('ai-proposal-text');
-
             btn.innerHTML = '<span class="dot-typing mx-2"><span></span><span></span><span></span></span> Escribiendo...';
             btn.classList.add('pointer-events-none', 'opacity-70');
-
             const itemsStr = window.cart.map(i => `${i.qty}x ${i.name} (Materiales: ${i.mat})`).join(', ');
-            const prompt = `Escribe un párrafo poético y editorial de máximo 60 palabras justificando por qué esta selección arquitectónica de piezas (${itemsStr}) creará una atmósfera excepcional, sofisticada y de lujo en el proyecto del cliente. Tono: Diseñador de interiores de élite explicando su curaduría.`;
-
+            const prompt = `Escribe un párrafo poético y editorial de máximo 60 palabras justificando por qué esta selección (${itemsStr}) creará una atmósfera excepcional y de lujo. Tono: Diseñador de interiores de élite.`;
             try {
-                const sysPrompt = "Eres el director creativo de DAMASO Studio. Escribes conceptos de diseño breves, lujosos y muy persuasivos.";
-                const response = await window.fetchGeminiAPI([{role: 'user', text: prompt}], sysPrompt);
+                const response = await window.fetchGeminiAPI([{role: 'user', text: prompt}], "Eres el director creativo de DAMASO Studio. Escribes conceptos de diseño breves, lujosos y persuasivos.");
                 textEl.innerHTML = response.replace(/\n/g, '<br>');
                 container.classList.remove('hidden');
-            } catch (e) {
-                textEl.innerHTML = "No se pudo generar el concepto en este momento debido a un problema de conexión. Intente más tarde.";
+            } catch(e) {
+                textEl.innerHTML = "No se pudo generar el concepto. Intente más tarde.";
                 container.classList.remove('hidden');
             } finally {
                 btn.innerHTML = '✨ Generar Concepto de Diseño';
@@ -1531,88 +1751,53 @@ NORMAS:
             }
         };
 
-        // ── PDF CHECKOUT ──────────────────────────────────────────────────────────
+        // ── PDF ──
         window.checkoutPDF = function(e) {
             if (e) e.preventDefault();
             if (window.cart.length === 0) { alert('Agregue piezas a su selección antes de descargar.'); return; }
-            
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-            
             const clientName = document.getElementById('client-name')?.value || window.getUserFirstName();
             const clientEmail = document.getElementById('client-email')?.value || '';
             const dateStr = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
-
             doc.setFillColor(3, 3, 3);
             doc.rect(0, 0, 210, 40, 'F');
             doc.setTextColor(212, 175, 55);
-            doc.setFontSize(28);
-            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(28); doc.setFont('helvetica', 'bold');
             doc.text('DAMASO STUDIO', 15, 22);
-            doc.setFontSize(9);
-            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9); doc.setFont('helvetica', 'normal');
             doc.text('Alta Iluminación y Objetos de Diseño · Guadalajara, México', 15, 30);
-            doc.text(`+52 33 3870 3071`, 15, 36);
-
+            doc.text('+52 33 3870 3071', 15, 36);
             doc.setTextColor(50, 50, 50);
-            doc.setFontSize(11);
-            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11); doc.setFont('helvetica', 'bold');
             doc.text('COTIZACIÓN', 15, 55);
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
             doc.text(`Cliente: ${clientName}`, 15, 63);
             if (clientEmail) doc.text(`Email: ${clientEmail}`, 15, 69);
             doc.text(`Fecha: ${dateStr}`, 15, clientEmail ? 75 : 69);
-
-            doc.setDrawColor(212, 175, 55);
-            doc.setLineWidth(0.5);
+            doc.setDrawColor(212, 175, 55); doc.setLineWidth(0.5);
             doc.line(15, 82, 195, 82);
-
-            const tableData = window.cart.map(item => [
-                item.sku || '', item.name, `$${Number(item.price).toLocaleString()} MXN`,
-                item.qty, `$${(Number(item.price) * item.qty).toLocaleString()} MXN`, item.time || ''
-            ]);
+            const tableData = window.cart.map(item => [item.sku || '', item.name, `$${Number(item.price).toLocaleString()} MXN`, item.qty, `$${(Number(item.price) * item.qty).toLocaleString()} MXN`, item.time || '']);
             const total = window.cart.reduce((s, i) => s + Number(i.price) * i.qty, 0);
-
-            doc.autoTable({
-                startY: 88,
-                head: [['SKU', 'Pieza', 'Precio Unit.', 'Cant.', 'Subtotal', 'Entrega']],
-                body: tableData,
-                theme: 'striped',
-                headStyles: { fillColor: [3, 3, 3], textColor: [212, 175, 55], fontStyle: 'bold', fontSize: 8 },
-                bodyStyles: { fontSize: 8, textColor: [40, 40, 40] },
-                alternateRowStyles: { fillColor: [248, 248, 248] },
-                columnStyles: { 0: { cellWidth: 28 }, 1: { cellWidth: 65 }, 2: { cellWidth: 30 }, 3: { cellWidth: 15 }, 4: { cellWidth: 30 }, 5: { cellWidth: 25 } },
-                margin: { left: 15, right: 15 }
-            });
-
+            doc.autoTable({ startY: 88, head: [['SKU', 'Pieza', 'Precio Unit.', 'Cant.', 'Subtotal', 'Entrega']], body: tableData, theme: 'striped', headStyles: { fillColor: [3,3,3], textColor: [212,175,55], fontStyle: 'bold', fontSize: 8 }, bodyStyles: { fontSize: 8, textColor: [40,40,40] }, alternateRowStyles: { fillColor: [248,248,248] }, columnStyles: { 0: { cellWidth: 28 }, 1: { cellWidth: 65 }, 2: { cellWidth: 30 }, 3: { cellWidth: 15 }, 4: { cellWidth: 30 }, 5: { cellWidth: 25 } }, margin: { left: 15, right: 15 } });
             const finalY = doc.lastAutoTable.finalY + 10;
             doc.setFillColor(3, 3, 3);
             doc.rect(120, finalY, 75, 12, 'F');
-            doc.setTextColor(212, 175, 55);
-            doc.setFontSize(11);
-            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(212, 175, 55); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
             doc.text(`TOTAL: $${total.toLocaleString()} MXN`, 125, finalY + 8);
-
-            doc.setTextColor(120, 120, 120);
-            doc.setFontSize(7.5);
-            doc.setFont('helvetica', 'italic');
-            doc.text('Nota: Los precios son referenciales y en MXN. El tiempo de entrega inicia tras confirmación de pedido y anticipo del 50%.', 15, finalY + 22, { maxWidth: 180 });
+            doc.setTextColor(120, 120, 120); doc.setFontSize(7.5); doc.setFont('helvetica', 'italic');
+            doc.text('Nota: Los precios son referenciales en MXN. El tiempo de entrega inicia tras confirmación y anticipo del 50%.', 15, finalY + 22, { maxWidth: 180 });
             doc.text('Los colores y acabados pueden presentar ligeras variaciones al ser piezas artesanales.', 15, finalY + 28, { maxWidth: 180 });
-
             doc.setDrawColor(212, 175, 55);
             doc.line(15, 285, 195, 285);
-            doc.setTextColor(212, 175, 55);
-            doc.setFontSize(7);
-            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(212, 175, 55); doc.setFontSize(7); doc.setFont('helvetica', 'normal');
             doc.text('DAMASO STUDIO · instagram: @damaso_lamparas · wa.me/523338703071 · Guadalajara, Jalisco, México', 105, 290, { align: 'center' });
-
-            doc.save(`DAMASO_Cotizacion_${clientName.replace(/\s+/g, '_')}_${Date.now()}.pdf`);
+            doc.save(`DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}_${Date.now()}.pdf`);
         };
 
-        // ── INIT APP ─────────────────────────────────────────────────────────────
+        // ── INIT ──
         window.preloadAllImages = function() {
-            if(!window.dbProducts) return;
+            if (!window.dbProducts) return;
             window.dbProducts.forEach(p => { if (p.img) { const i = new Image(); i.src = p.img; } });
         };
 
@@ -1624,25 +1809,16 @@ NORMAS:
 
             const navLoginBtn = document.getElementById('nav-login-btn');
             const botHistoryBtn = document.getElementById('bot-history-btn');
-            if (window.userSession) {
-                navLoginBtn?.classList.add('hidden');
-                botHistoryBtn?.classList.remove('hidden');
-            } else {
-                navLoginBtn?.classList.remove('hidden');
-                botHistoryBtn?.classList.add('hidden');
-            }
+            if (window.userSession) { navLoginBtn?.classList.add('hidden'); botHistoryBtn?.classList.remove('hidden'); }
+            else { navLoginBtn?.classList.remove('hidden'); botHistoryBtn?.classList.add('hidden'); }
 
             document.getElementById('live-search')?.addEventListener('input', e => {
                 const q = e.target.value.toLowerCase().trim();
                 const title = document.getElementById('catalog-title');
                 const subtitle = document.getElementById('catalog-subtitle');
-                if (!q) {
-                    window.renderCatalog(window.dbProducts);
-                    title.innerText = 'Catálogo Completo'; subtitle.innerText = 'Colección 2026';
-                } else {
-                    const results = window.dbProducts.filter(p =>
-                        p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)
-                    );
+                if (!q) { window.renderCatalog(window.dbProducts); title.innerText = 'Catálogo Completo'; subtitle.innerText = 'Colección 2026'; }
+                else {
+                    const results = window.dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
                     window.renderCatalog(results);
                     title.innerText = 'Resultados'; subtitle.innerText = `Búsqueda: "${q}"`;
                 }
@@ -1655,13 +1831,20 @@ NORMAS:
                 mc.addEventListener('touchend', () => mm.classList.remove('is-paused'));
                 mc.addEventListener('touchcancel', () => mm.classList.remove('is-paused'));
             }
+
+            // Cerrar menú al clic fuera
+            document.addEventListener('click', function(e) {
+                const menu = document.getElementById('dropdown-menu');
+                const btn = document.getElementById('btn-menu');
+                if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+                    menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                    menu.classList.remove('translate-y-0', 'opacity-100');
+                }
+            });
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initApp);
-        } else {
-            initApp();
-        }
+        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initApp); }
+        else { initApp(); }
 
     })();
     </script>
