@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi App con Gemini</title>
+</head>
+<body>
+    <h1>Pregúntale a Gemini</h1>
+    <button id="miBoton">Pedir consejo</button>
+    <p id="respuesta">La respuesta aparecerá aquí...</p>
+
+    <!-- Cargamos Firebase directamente desde internet -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getAI, getGenerativeModel, GoogleAIBackend } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-ai.js";
+
+        // Configuración de tu proyecto DAMASO
+        const firebaseConfig = {
+          apiKey: "AIzaSyBuH4-Ydh2j4OAQaQSPrqO56PqHTfs-w-U",
+          authDomain: "damaso-b5d5a.firebaseapp.com",
+          projectId: "damaso-b5d5a",
+          storageBucket: "damaso-b5d5a.firebasestorage.app",
+          messagingSenderId: "514653959267",
+          appId: "1:514653959267:web:6f6509e68d769bbb957456"
+        };
+
+        // 1. Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // 2. Conectar con Gemini
+        const ai = getAI(app, { backend: new GoogleAIBackend() });
+        const model = getGenerativeModel(ai, { model: "gemini-2.5-flash-preview" });
+
+        // 3. Hacer que el botón funcione en la página
+        const boton = document.getElementById("miBoton");
+        const textoRespuesta = document.getElementById("respuesta");
+
+        boton.addEventListener("click", async () => {
+            textoRespuesta.innerText = "Pensando...";
+            try {
+                const response = await model.generateContent("Dame una frase motivadora muy corta");
+                textoRespuesta.innerText = response.text;
+            } catch (error) {
+                textoRespuesta.innerText = "Hubo un error al conectar con la IA.";
+            }
+        });
+    </script>
+</body>
+</html>
