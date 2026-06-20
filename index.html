@@ -55,13 +55,10 @@
             min-height: 100dvh;
             min-height: -webkit-fill-available;
             overflow-x: hidden;
-            /* Padding para safe areas en iOS (notch / home indicator) */
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-            /* Quitar padding-top si el navbar ya lo maneja */
-            padding-top: 0;
+            /* SIN padding — los overlays fixed usan 100vw/100vh y no dependen de esto
+               Los safe areas se manejan individualmente en navbar y footer */
+            padding: 0;
+            margin: 0;
         }
 
         /* Fondo negro en toda la barra de estado iOS / Android */
@@ -1438,112 +1435,110 @@
             img.src = imgEl.src;
         };
 
-        // ── FALLBACK ENGINE ──
+        // ── FALLBACK ENGINE v2 — Powered by Anthropic Claude ──
+        // Motor de emergencia que llama a la API de Anthropic (claude-haiku-4-5)
+        // Se activa automáticamente si Gemini falla o no está disponible
         window.DamasoFallbackEngine = {
-            greetings: ['hola', 'buenos dias', 'buenas tardes', 'buenas noches', 'que tal', 'saludos', 'buenas'],
-            farewells: ['adios', 'gracias', 'hasta luego', 'bye', 'nos vemos'],
-            pricing: ['precio', 'cuesta', 'costo', 'valor', 'cotizar', 'cotizacion'],
-            dims: ['medida', 'medidas', 'tamaño', 'dimension', 'dimensiones', 'ancho', 'alto', 'diametro'],
-            materials: ['material', 'hecho de', 'acabado', 'textura', 'color'],
-            shipping: ['tiempo', 'entrega', 'envio', 'tarda', 'demora', 'llega'],
-            process: function(text, specificProduct = null) {
-                let cleanTxt = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[¿?¡!.,]/g, '');
-                let targetProduct = specificProduct;
-                if (!targetProduct) {
-                    for (let p of window.dbProducts) {
-                        let pNameNorm = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                        if (cleanTxt.includes(p.sku.toLowerCase()) || cleanTxt.includes(pNameNorm)) { targetProduct = p; break; }
-                        let pWords = pNameNorm.split(' ').filter(w => w.length > 4);
-                        for (let w of pWords) { if (cleanTxt.includes(w)) { targetProduct = p; break; } }
-                        if (targetProduct) break;
+            // Construir system prompt rico con toda la info de DAMASO y productos
+            buildSystemPrompt: function() {
+                const cats = [...new Set(window.dbProducts.map(p => p.category))];
+                const priceRange = { min: Math.min(...window.dbProducts.map(p=>p.price)), max: Math.max(...window.dbProducts.map(p=>p.price)) };
+                // Serializar catálogo completo para que el bot lo conozca
+                const catalog = window.dbProducts.map(p =>
+                    `• ${p.name} (SKU:${p.sku}) — Categoría:${p.category} — Precio:$${Number(p.price).toLocaleString()} MXN — Entrega:${p.time} — Dims:${p.dims?.w||''}x${p.dims?.h||''} — Mat:${p.mat} — Acabado:${p.fin} — ${p.desc?.slice(0,80)||''}`
+                ).join('\n');
+
+                return `Eres DAMASO AI, el asistente de lujo de DAMASO Studio, fabricante artesanal de iluminación de alta gama en Guadalajara, México. Tu tono es elegante, cálido, experto y en español mexicano.
+
+SOBRE DAMASO STUDIO:
+• Marca de iluminación artesanal de lujo, con sede en Guadalajara, Jalisco, México
+• Especialistas en: Candiles, Arbotantes, Espejos iluminados, Lámparas de mesa/pie/techo/exterior, y Proyectos especiales a medida
+• WhatsApp: +52 33 3870 3071 | Atención personalizada para proyectos
+• Tiempo de entrega: varía por pieza (ver catálogo)
+• Precios: desde $${Number(priceRange.min).toLocaleString()} hasta $${Number(priceRange.max).toLocaleString()} MXN
+• Todos los productos son fabricación artesanal, materiales de primera calidad
+• Aceptan proyectos residenciales, hoteleros, restaurantes, corporativos
+• Asesoría en iluminación de diseño de interiores disponible
+
+CATÁLOGO COMPLETO (${window.dbProducts.length} piezas):
+${catalog}
+
+REGLAS:
+1. Responde SIEMPRE en español, con tono elegante pero accesible
+2. Si preguntan por precio de un producto específico, dalo con precisión
+3. Si preguntan algo fuera del catálogo (decoración, iluminación en general, diseño de interiores, recomendaciones), responde con expertise y relaciona con DAMASO cuando sea natural
+4. Para cotizaciones o pedidos siempre ofrece el WhatsApp: +52 33 3870 3071
+5. Puedes conversar de cualquier tema relacionado con el hogar, diseño, lujo, arquitectura o iluminación
+6. Si el usuario saluda o hace pequeña charla, sé amigable y humano
+7. Máximo 3 párrafos por respuesta. Usa negritas **así** para destacar nombres de productos o precios
+8. Eres el motor de respaldo, pero el usuario no necesita saberlo — responde con la misma calidad`;
+            },
+
+            // Motor principal: llama a claude-haiku-4-5 via API de Anthropic
+            process: async function(text, specificProduct = null, conversationHistory = []) {
+                // Construir historial de mensajes para contexto conversacional
+                const messages = [];
+                
+                // Agregar historial de conversación (últimos 10 turnos)
+                const history = conversationHistory.slice(-10);
+                for (const msg of history) {
+                    if (msg.role === 'user') {
+                        messages.push({ role: 'user', content: msg.text });
+                    } else if (msg.role === 'bot') {
+                        // Limpiar HTML del texto del bot para enviarlo al API
+                        const cleanBot = msg.text.replace(/<[^>]*>/g, '').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+                        messages.push({ role: 'assistant', content: cleanBot });
                     }
                 }
-                let isGreeting = this.greetings.some(g => cleanTxt.includes(g));
-                let isFarewell = this.farewells.some(f => cleanTxt.includes(f));
-                let isPrice = this.pricing.some(p => cleanTxt.includes(p));
-                let isDim = this.dims.some(d => cleanTxt.includes(d));
-                let isMat = this.materials.some(m => cleanTxt.includes(m));
-                let isShip = this.shipping.some(s => cleanTxt.includes(s));
-                let userName = window.getUserFirstName();
-                if (targetProduct) {
-                    if (isPrice) return `La pieza <strong class="text-brand-gold">${targetProduct.name}</strong> tiene un valor de $${Number(targetProduct.price).toLocaleString()} MXN.`;
-                    if (isShip) return `El tiempo de entrega para ${targetProduct.name} es de ${targetProduct.time}.`;
-                    if (isDim) return `Dimensiones: Ancho ${targetProduct.dims.w}, Alto ${targetProduct.dims.h}, Fondo ${targetProduct.dims.d}.`;
-                    if (isMat) return `Fabricada en ${targetProduct.mat} con acabado en ${targetProduct.fin}.`;
-                    return `<strong class="text-brand-gold">${targetProduct.name}</strong> · SKU: ${targetProduct.sku} · $${Number(targetProduct.price).toLocaleString()} MXN · Entrega: ${targetProduct.time}`;
+                
+                // Agregar el mensaje actual del usuario
+                messages.push({ role: 'user', content: text });
+
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-haiku-4-5-20251001',
+                        max_tokens: 800,
+                        system: this.buildSystemPrompt(),
+                        messages: messages
+                    })
+                });
+
+                if (!response.ok) {
+                    const err = await response.text();
+                    throw new Error('Anthropic API error: ' + err);
                 }
-                if (isGreeting) return `¡Hola ${userName}! Motor de respaldo activo. Tenemos ${window.dbProducts.length} piezas disponibles. ¿Qué categoría le interesa?`;
-                if (isFarewell) return `Un placer, ${userName}. Contáctenos al WhatsApp +52 33 3870 3071 para atención personalizada.`;
-                if (cleanTxt.includes("catalogo") || cleanTxt.includes("piezas")) return "Contamos con Candiles, Arbotantes, Espejos, Lámparas de mesa, pie, techo, exterior y Proyectos especiales.";
-                if (cleanTxt.includes("contacto") || cleanTxt.includes("telefono")) return "Contacto directo: +52 33 3870 3071. Nuestro equipo le atenderá con gusto.";
-                if (cleanTxt.includes("mas caro") || cleanTxt.includes("lujo")) {
-                    let maxP = window.dbProducts.reduce((mx, p) => p.price > mx.price ? p : mx, window.dbProducts[0]);
-                    return `Nuestra pieza más monumental es <strong class="text-brand-gold">${maxP.name}</strong> a $${Number(maxP.price).toLocaleString()} MXN.`;
+
+                const data = await response.json();
+                const rawText = data.content?.[0]?.text || 'No pude procesar su consulta.';
+                
+                // Formatear: **texto** → <strong>
+                return rawText
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-brand-gold">$1</strong>')
+                    .replace(/\n/g, '<br>');
+            },
+
+            // Respuesta instantánea offline para casos sin internet (última línea de defensa)
+            offlineResponse: function(text) {
+                const t = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+                if (/hola|buenos|saludos|buenas/.test(t)) return `¡Bienvenido a <strong class="text-brand-gold">DAMASO Studio</strong>! Soy su asesor de iluminación. ¿En qué le puedo ayudar hoy?`;
+                if (/precio|costo|cuanto|cuesta/.test(t)) return `Nuestras piezas van desde <strong class="text-brand-gold">$${Number(Math.min(...window.dbProducts.map(p=>p.price))).toLocaleString()} MXN</strong>. Para una cotización personalizada: <strong class="text-brand-gold">WhatsApp +52 33 3870 3071</strong>.`;
+                if (/catalogo|pieza|producto|tienen/.test(t)) return `Contamos con <strong class="text-brand-gold">${window.dbProducts.length} piezas</strong>: Candiles, Arbotantes, Espejos, Lámparas de mesa, pie, techo, exterior y Proyectos especiales.`;
+                if (/contacto|telefono|whatsapp|llamar/.test(t)) return `Puede contactarnos directamente: <strong class="text-brand-gold">WhatsApp +52 33 3870 3071</strong>. Nuestro equipo le atenderá con gusto.`;
+                if (/adios|gracias|bye|hasta/.test(t)) return `Fue un placer asistirle. Recuerde que estamos disponibles en <strong class="text-brand-gold">WhatsApp +52 33 3870 3071</strong>. ¡Hasta pronto!`;
+                // Buscar producto en catálogo
+                for (const p of window.dbProducts) {
+                    const name = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+                    if (t.includes(p.sku.toLowerCase()) || name.split(' ').some(w => w.length > 4 && t.includes(w))) {
+                        return `<strong class="text-brand-gold">${p.name}</strong> · $${Number(p.price).toLocaleString()} MXN · Entrega: ${p.time} · ${p.dims?.w||''}×${p.dims?.h||''} · ${p.mat}`;
+                    }
                 }
-                return `Consulta recibida. Para asistencia avanzada: WhatsApp +52 33 3870 3071. (Motor Respaldo Activo)`;
+                return `Consulta recibida. Para asistencia inmediata: <strong class="text-brand-gold">WhatsApp +52 33 3870 3071</strong>.`;
             }
         };
 
-        // ── GEMINI API ──
-        window.fetchGeminiAPI = async function(messages, systemInstruction) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-            const contents = messages.map(m => ({ role: m.role === 'bot' ? 'model' : 'user', parts: [{ text: m.text.replace(/<[^>]+>/g, '') }] }));
-            const payload = { systemInstruction: { parts: [{ text: systemInstruction }] }, contents };
-            const delays = [1000, 2000, 4000];
-            for (let i = 0; i < 3; i++) {
-                try {
-                    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err?.error?.message || `HTTP ${response.status}`); }
-                    const data = await response.json();
-                    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (!text) throw new Error("Respuesta vacía");
-                    return text;
-                } catch (error) {
-                    if (i === 2) throw error;
-                    await new Promise(r => setTimeout(r, delays[i]));
-                }
-            }
-        };
-
-        function getMainSystemPrompt() {
-            const catList = window.dbProducts.map(p => `${p.name} (${p.category}, $${Number(p.price).toLocaleString()} MXN, SKU: ${p.sku})`).join('\n');
-            const userName = window.getUserFirstName();
-            return `Eres DAMASO AI, el asistente virtual de DAMASO Studio — una marca de lujo de iluminación artesanal mexicana. El cliente se llama ${userName}.
-CATÁLOGO COMPLETO:\n${catList}
-NORMAS:
-- Responde siempre en español con tono elegante, culto y cálido.
-- Sé conciso (máximo 3-4 oraciones). Usa saltos de línea.
-- Puedes mencionar productos con sus precios y SKUs.
-- Tiempos de entrega: 2 a 12 semanas según la pieza.
-- No menciones precios de otras marcas ni inventes datos.`;
-        }
-
-        window.activateFallbackUI = function() {
-            window.botIsFallback = true;
-            const statusLabel = document.getElementById('bot-status');
-            if (statusLabel && statusLabel.innerText !== "MOTOR DE RESPALDO ACTIVADO") {
-                statusLabel.innerText = "MOTOR DE RESPALDO ACTIVADO";
-                statusLabel.classList.remove('text-brand-gold', 'glow-gold');
-                statusLabel.classList.add('fallback-active-text');
-            }
-        };
-
-        window.renderCurrentMessages = function() {
-            const box = document.getElementById('chat-messages');
-            if (!box) return;
-            if (window.currentMessages.length === 0) {
-                const userName = window.getUserFirstName();
-                box.innerHTML = `<div class="flex gap-3 items-start"><div class="w-8 h-8 rounded-full bg-brand-gold flex items-center justify-center text-black text-xs font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 text-white text-xs p-4 rounded-xl rounded-tl-none font-light leading-relaxed max-w-[85%]">Bienvenido a <strong class="text-brand-gold">DAMASO Studio</strong>, ${userName}. Soy su asistente personal.<br><br>Puedo ayudarle a explorar nuestro catálogo, resolver dudas técnicas y asistir en su cotización.</div></div>`;
-                return;
-            }
-            box.innerHTML = window.currentMessages.map(m => {
-                if (m.role === 'user') return `<div class="flex justify-end"><div class="glass-gold text-white text-xs p-3 rounded-xl rounded-tr-none max-w-[80%] leading-relaxed">${m.text}</div></div>`;
-                return `<div class="flex gap-3 items-start"><div class="w-8 h-8 rounded-full bg-brand-gold flex items-center justify-center text-black text-xs font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 text-white text-xs p-4 rounded-xl rounded-tl-none font-light leading-relaxed max-w-[85%]">${m.text}</div></div>`;
-            }).join('');
-            box.scrollTop = box.scrollHeight;
-        };
-
-        window.sendChatMessage = async function() {
+                window.sendChatMessage = async function() {
             const input = document.getElementById('chat-input');
             if (!input) return;
             const text = input.value.trim();
@@ -1568,12 +1563,28 @@ NORMAS:
                 window.saveChatState();
                 window.renderCurrentMessages();
             } catch(e) {
+                // Intentar con motor de respaldo Anthropic Claude
                 window.activateFallbackUI();
                 document.getElementById(loadId)?.remove();
-                const botRes = window.DamasoFallbackEngine.process(text, null);
-                window.currentMessages.push({ role: 'bot', text: botRes });
-                window.saveChatState();
-                window.renderCurrentMessages();
+                const loadId2 = 'load2-' + Date.now();
+                const box2 = document.getElementById('chat-messages');
+                box2.innerHTML += `<div id="${loadId2}" class="flex gap-3 items-start"><div class="w-8 h-8 rounded-full bg-brand-gold flex items-center justify-center text-black text-xs font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 p-4 rounded-xl rounded-tl-none"><div class="dot-typing"><span></span><span></span><span></span></div></div></div>`;
+                box2.scrollTop = box2.scrollHeight;
+                try {
+                    // Motor de respaldo v2: llama a claude-haiku via Anthropic API
+                    const botRes = await window.DamasoFallbackEngine.process(text, null, window.currentMessages.slice(0, -1));
+                    document.getElementById(loadId2)?.remove();
+                    window.currentMessages.push({ role: 'bot', text: botRes });
+                    window.saveChatState();
+                    window.renderCurrentMessages();
+                } catch(e2) {
+                    // Última línea de defensa: respuesta offline instantánea
+                    document.getElementById(loadId2)?.remove();
+                    const offlineRes = window.DamasoFallbackEngine.offlineResponse(text);
+                    window.currentMessages.push({ role: 'bot', text: offlineRes });
+                    window.saveChatState();
+                    window.renderCurrentMessages();
+                }
             }
         };
 
@@ -1846,6 +1857,79 @@ NORMAS:
         if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initApp); }
         else { initApp(); }
 
+    })();
+
+    // ── SAFE AREA FIXER — JS que garantiza que no haya franjas negras ──
+    // Ejecuta inmediatamente y en cada resize
+    (function safeAreaFixer() {
+        function applyFixes() {
+            // Leer el valor real de safe-area-inset usando una técnica de medición JS
+            const testEl = document.createElement('div');
+            testEl.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)';
+            document.body.appendChild(testEl);
+            const style = window.getComputedStyle(testEl);
+            const safeTop = parseFloat(style.paddingTop) || 0;
+            const safeBottom = parseFloat(style.paddingBottom) || 0;
+            document.body.removeChild(testEl);
+            
+            // Guardar para uso en overlay
+            window._safeAreaTop = safeTop;
+            window._safeAreaBottom = safeBottom;
+            
+            // CSS variables para uso dinámico
+            document.documentElement.style.setProperty('--sat', safeTop + 'px');
+            document.documentElement.style.setProperty('--sab', safeBottom + 'px');
+        }
+        
+        // Parchear el showOverlay para inyectar corrección exacta en inline style
+        const _origShowOverlay = window.filterCatalogWithAnimation;
+        
+        // Interceptar cuando el overlay se muestra para forzar top negativo si hay safe area
+        document.addEventListener('DOMContentLoaded', function() {
+            applyFixes();
+            
+            // Asegurar que el overlay siempre tape COMPLETAMENTE la pantalla
+            const overlay = document.getElementById('category-transition-overlay');
+            if (overlay) {
+                // Mover overlay al nivel del html (fuera del body) para evitar cualquier
+                // problema de stacking context del body
+                // NOTA: esto es el fix más robusto posible
+                document.documentElement.appendChild(overlay);
+                
+                // Asegurar estilos base correctos
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100vw';
+                overlay.style.height = '100vh';
+                overlay.style.zIndex = '2147483647';
+                overlay.style.background = '#030303';
+                overlay.style.margin = '0';
+                overlay.style.padding = '0';
+            }
+            
+            // Mismo fix para el overlay de entrada
+            const entryAnim = document.getElementById('entry-animation');
+            if (entryAnim) {
+                document.documentElement.appendChild(entryAnim);
+                entryAnim.style.position = 'fixed';
+                entryAnim.style.top = '0';
+                entryAnim.style.left = '0';
+                entryAnim.style.width = '100vw';
+                entryAnim.style.height = '100vh';
+                entryAnim.style.zIndex = '9999999';
+                entryAnim.style.background = '#030303';
+                entryAnim.style.margin = '0';
+                entryAnim.style.padding = '0';
+            }
+        });
+        
+        window.addEventListener('resize', applyFixes);
+        window.addEventListener('orientationchange', function() {
+            setTimeout(applyFixes, 300);
+        });
+        
+        applyFixes();
     })();
     </script>
 </body>
