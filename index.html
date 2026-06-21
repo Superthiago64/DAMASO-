@@ -229,7 +229,7 @@
             background-image: linear-gradient(180deg,
                 rgba(255,255,255,0.25) 0%,
                 rgba(255,255,255,0.25) 35%,
-                #fff8dc 50%,
+                #ffffff 50%,
                 rgba(255,255,255,0.25) 65%,
                 rgba(255,255,255,0.25) 100%);
             background-size: 100% 300%;
@@ -240,12 +240,15 @@
             -webkit-text-fill-color: transparent;
         }
         .navbar-wordmark-shine-active {
-            animation: navWordmarkShine 2.6s ease-out 1;
+            animation: navWordmarkShine 3.2s linear 1;
         }
         @keyframes navWordmarkShine {
-            0% { background-position: 0% 0%; opacity: 1; }
-            60% { background-position: 0% 100%; opacity: 1; }
-            100% { background-position: 0% 100%; opacity: 0; }
+            0% { background-position: 0% 0%; opacity: 1; animation-timing-function: linear; }
+            28% { background-position: 0% 100%; opacity: 1; }
+            28.01% { background-position: 0% 0%; opacity: 1; animation-timing-function: linear; }
+            56% { background-position: 0% 100%; opacity: 1; }
+            56.01% { background-position: 0% 0%; opacity: 1; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+            100% { background-position: 0% 50%; opacity: 1; }
         }
 
         .init-modal-overlay { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
@@ -893,7 +896,7 @@
                 shine.classList.remove('navbar-wordmark-shine-active');
                 void shine.offsetWidth; // reinicia la animación
                 shine.classList.add('navbar-wordmark-shine-active');
-                setTimeout(() => shine.classList.remove('navbar-wordmark-shine-active'), 2700);
+                setTimeout(() => shine.classList.remove('navbar-wordmark-shine-active'), 3300);
             }
         };
 
@@ -955,6 +958,8 @@
             { id: 104, name: "Arbotante Cuello de Cisne Cristal Azul", category: "arbotantes", price: 11200, img: "arbotante_6.png", sku: "DM-ARB-016", desc: "Brazo curvo en latón con cilindro de cristal soplado en tono azul, apto para interior y exterior.", specsLight: "1x E26 LED Edison 6W", cable: "Directo a muro, apto exterior", dims: { w: "18 cm", h: "55 cm", d: "22 cm", dia: "10 cm" }, peso: "2.2 kg", volt: "110-120V", mat: "Latón y cristal soplado azul", fin: "Latón envejecido y azul translúcido", time: "4 a 5 semanas", cert: "NOM" },
             { id: 115, name: "Arbotante Cascada Varillas de Cristal", category: "arbotantes", price: 16800, img: "arbotante_7.png", sku: "DM-ARB-017", desc: "Escultura vertical de varillas de cristal ámbar dispuestas en cascada con anillo central de latón.", specsLight: "Módulos LED integrados cálidos", cable: "Conexión directa a registro", dims: { w: "28 cm", h: "75 cm", d: "18 cm", dia: "N/A" }, peso: "5.8 kg", volt: "110-120V", mat: "Varillas de cristal ámbar y latón", fin: "Latón antiguo y cristal ámbar", time: "5 a 6 semanas", cert: "NOM" },
             { id: 116, name: "Arbotante Placa Latón y Lino", category: "arbotantes", price: 6400, img: "arbotante_8.png", sku: "DM-ARB-018", desc: "Placa rectangular en bronce oscuro con brazo de latón pulido y pantalla cilíndrica de lino crudo.", specsLight: "1x E26 LED 8W, 2700K", cable: "Directo a muro", dims: { w: "16 cm", h: "38 cm", d: "20 cm", dia: "20 cm" }, peso: "2.0 kg", volt: "110-120V", mat: "Bronce oscuro, latón pulido y lino", fin: "Bronce oscuro y latón satinado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 120, name: "Arbotante Placa Latón Esfera de Cristal", category: "arbotantes", price: 7200, img: "arbotante_9.png", sku: "DM-ARB-019", desc: "Placa rectangular de latón pulido con repisa inferior que sostiene una esfera de cristal opalino a manera de globo de luz.", specsLight: "1x E26 LED 8W, 2700K cálida", cable: "Directo a muro", dims: { w: "14 cm", h: "42 cm", d: "16 cm", dia: "16 cm" }, peso: "2.4 kg", volt: "110-120V", mat: "Latón pulido y cristal opalino", fin: "Latón dorado brillante", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 121, name: "Arbotante Placa Níquel Pantalla Cónica", category: "arbotantes", price: 8100, img: "arbotante_10.png", sku: "DM-ARB-020", desc: "Placa rectangular pulida tipo espejo en acabado níquel con pantalla cónica de tela en tono grafito.", specsLight: "1x E26 LED 8W, 2700K cálida", cable: "Directo a muro", dims: { w: "16 cm", h: "45 cm", d: "20 cm", dia: "20 cm" }, peso: "2.6 kg", volt: "110-120V", mat: "Níquel pulido y pantalla textil", fin: "Níquel espejo", time: "3 a 4 semanas", cert: "NOM" },
             { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
             { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "ESPEJO_1.PNG", sku: "DM-ESP-002", desc: "Espejo cápsula con retroiluminación LED perimetral.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante", time: "3 a 4 semanas", cert: "NOM" },
             { id: 11, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Cristal envejecido artesanalmente con marco de acero.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
@@ -1003,6 +1008,7 @@
             { id: 54, name: "Lámpara Minimalista Globo", category: "pie", price: 14200, img: "3CACAB0D-4EE1-4DBD-BB7B-05DBE6123AF4.png", sku: "DM-PIE-004", desc: "Estructura geométrica en ángulo recto con globo de cristal.", specsLight: "1x G9 LED 7W, 3000K", cable: "Cable negro 2m oculto en la base", dims: { w: "35 cm", h: "155 cm", d: "40 cm", dia: "25 cm" }, peso: "8 kg", volt: "110-120V", mat: "Acero con baño de latón y cristal opalino", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 55, name: "Lámpara de Pie Trípode Nogal", category: "pie", price: 16800, img: "77A61D28-316C-4BD7-B971-BE72E44B6A4E.png", sku: "DM-PIE-005", desc: "Trípode de nogal macizo con remates en latón.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil café 2.5m", dims: { w: "60 cm", h: "170 cm", d: "60 cm", dia: "60 cm" }, peso: "9 kg", volt: "110-120V", mat: "Madera de nogal, latón y lino", fin: "Nogal oscuro mate y latón avejentado", time: "5 a 6 semanas", cert: "NOM" },
             { id: 64, name: "Lámpara de Pie Cilindro Nogal", category: "pie", price: 13500, img: "Image_8.png", sku: "DM-PIE-006", desc: "Base cilíndrica de nogal con mástil negro y globo de cristal.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil negro 2.5m", dims: { w: "30 cm", h: "150 cm", d: "30 cm", dia: "30 cm" }, peso: "8.5 kg", volt: "110-120V", mat: "Madera de nogal, acero y cristal opalino", fin: "Nogal natural mate y acero negro mate", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 122, name: "Lámpara de Pie Brazo Latón Base Piedra", category: "pie", price: 15800, img: "lampara_de_pie_2.png", sku: "DM-PIE-007", desc: "Mástil de latón en ángulo recto con brazo elevado sobre base de piedra y madera, pantalla cónica en tono crema.", specsLight: "1x E26 LED 10W, 2700K cálida", cable: "Cable textil crema 2.5m", dims: { w: "45 cm", h: "165 cm", d: "35 cm", dia: "30 cm" }, peso: "7.5 kg", volt: "110-120V", mat: "Latón macizo, piedra y madera", fin: "Latón dorado mate", time: "4 a 5 semanas", cert: "NOM" },
             { id: 37, name: "Colgante Nido Mimbre", category: "techo", price: 4200, img: "IMG_2006.png", sku: "DM-TEC-001", desc: "Luminaria de techo tejida en mimbre natural.", specsLight: "1x E26 LED Edison 8W", cable: "Cable textil café 1.5m", dims: { w: "50 cm", h: "40 cm", d: "50 cm", dia: "50 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Mimbre y herraje de acero", fin: "Mimbre natural tostado", time: "3 semanas", cert: "NOM" },
             { id: 38, name: "Colgante Jaula Blanca", category: "techo", price: 4100, img: "IMG_2008.png", sku: "DM-TEC-002", desc: "Lámpara estilo jaula abierta en color blanco.", specsLight: "1x E26 LED 8W cálida", cable: "Cable textil blanco 1.5m", dims: { w: "30 cm", h: "45 cm", d: "30 cm", dia: "30 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Acero al carbón", fin: "Blanco mate", time: "2 a 3 semanas", cert: "NOM" },
             { id: 39, name: "Colgante Plisado Blanco", category: "techo", price: 5400, img: "IMG_2016.png", sku: "DM-TEC-003", desc: "Pantalla acampanada ondulada con luz directa.", specsLight: "1x E26 LED 10W, 3000K", cable: "Cable textil blanco 1.5m", dims: { w: "45 cm", h: "35 cm", d: "45 cm", dia: "45 cm" }, peso: "2.8 kg", volt: "110-240V", mat: "Material compuesto y herraje de latón", fin: "Blanco mate estriado", time: "2 a 3 semanas", cert: "NOM" },
