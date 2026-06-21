@@ -213,6 +213,34 @@
             100% { background-position: 0% 100%; }
         }
 
+        /* ── BARRA BLANCA "PEEK" — visible cuando el navbar se oculta por scroll ── */
+        #navbar-peek-bar {
+            height: 5px;
+            margin-top: env(safe-area-inset-top);
+            transition: opacity 0.4s ease;
+        }
+
+        /* ── DAMASO ILUMINÁNDOSE LENTAMENTE — al reabrir el navbar con la barra blanca ── */
+        .navbar-wordmark-shine {
+            background-image: linear-gradient(180deg,
+                rgba(255,255,255,0.25) 0%,
+                rgba(255,255,255,0.25) 35%,
+                #fff8dc 50%,
+                rgba(255,255,255,0.25) 65%,
+                rgba(255,255,255,0.25) 100%);
+            background-size: 100% 300%;
+            background-position: 0% 0%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            animation: navWordmarkShine 1.8s ease-out 1;
+        }
+        @keyframes navWordmarkShine {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 0% 100%; }
+        }
+
         .init-modal-overlay { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 
         @keyframes blink { 50% { opacity: 0; } }
@@ -508,7 +536,7 @@
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div class="flex items-center space-x-4 sm:space-x-6">
                 <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center">MENÚ</button>
-                <a href="#" onclick="window.scrollTo(0,0);" class="font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text uppercase font-bold ml-2">Damaso</a>
+                <a href="#" id="navbar-wordmark" onclick="window.scrollTo(0,0);" class="font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text uppercase font-bold ml-2">Damaso</a>
             </div>
 
             <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 glass-btn bg-brand-surface/90 border border-brand-gold/40 py-2 shadow-[0_0_20px_rgba(212,175,55,0.15)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-[990] rounded-sm">
@@ -557,6 +585,9 @@
             </div>
         </div>
     </nav>
+
+    <!-- ── BARRA BLANCA "PEEK" — toca para reabrir el navbar ── -->
+    <button id="navbar-peek-bar" onclick="window.reopenNavbar()" aria-label="Mostrar menú Damaso" class="fixed top-0 left-0 right-0 z-[101] bg-white opacity-0 pointer-events-none"></button>
 
     <!-- ── CHATBOT DRAWER ── -->
     <div id="chatbot-drawer" class="fixed inset-y-0 left-0 z-[110] w-full md:w-[400px] bg-brand-surface/95 backdrop-blur-xl border-r border-brand-gold/30 transform -translate-x-full transition-transform duration-500 flex flex-col shadow-[15px_0_40px_rgba(212,175,55,0.1)]">
@@ -826,6 +857,8 @@
         window._catAnimating = false; // lock para evitar doble-click
 
         // ── NAVBAR HIDE/SHOW ──
+        window._navLockedByOverlay = false; // true mientras un modal/drawer controla el navbar
+        window._navHiddenByScroll = false; // true cuando el scroll ocultó el navbar (barra blanca visible)
         window.toggleNavbarState = function(show) {
             const nav = document.getElementById('navbar');
             if (!nav) return;
@@ -834,8 +867,43 @@
             // En iOS Safari, restaurar opacity sobre una capa con backdrop-filter a veces
             // deja el navbar "atascado" invisible tras cerrar un drawer/modal encima.
             // Forzar un reflow lo obliga a repintarse.
-            if (show) void nav.offsetHeight;
+            if (show) {
+                void nav.offsetHeight;
+                window._navHiddenByScroll = false;
+                const peek = document.getElementById('navbar-peek-bar');
+                if (peek) { peek.style.opacity = '0'; peek.style.pointerEvents = 'none'; }
+            }
         };
+
+        // Reabre el navbar al tocar la barra blanca, con "DAMASO" iluminándose lentamente
+        window.reopenNavbar = function() {
+            window.toggleNavbarState(true);
+            const wordmark = document.getElementById('navbar-wordmark');
+            if (wordmark) {
+                wordmark.classList.remove('navbar-wordmark-shine');
+                void wordmark.offsetWidth; // reinicia la animación
+                wordmark.classList.add('navbar-wordmark-shine');
+                setTimeout(() => wordmark.classList.remove('navbar-wordmark-shine'), 1900);
+            }
+        };
+
+        // Oculta el navbar al deslizar (en cualquier dirección) y muestra la barra blanca
+        (function () {
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (window._navLockedByOverlay || ticking) return;
+                ticking = true;
+                requestAnimationFrame(() => {
+                    ticking = false;
+                    if (window.scrollY > 30 && !window._navHiddenByScroll) {
+                        window._navHiddenByScroll = true;
+                        window.toggleNavbarState(false);
+                        const peek = document.getElementById('navbar-peek-bar');
+                        if (peek) { peek.style.opacity = '1'; peek.style.pointerEvents = 'auto'; }
+                    }
+                });
+            }, { passive: true });
+        })();
 
         window.getUserFirstName = function() {
             return (window.userSession && window.userSession.name) ? window.userSession.name.split(' ')[0] : 'Estimado cliente';
@@ -910,6 +978,11 @@
             { id: 62, name: "Lámpara Reloj Metálica", category: "mesa", price: 7500, img: "B4D8B9D8-27FB-43DF-8733-E049E71C0F6F.png", sku: "DM-MES-013", desc: "Esmalte reactivo metálico de pátina moteada única.", specsLight: "1x E26 LED 12W", cable: "Cable textil negro 2m", dims: { w: "35 cm", h: "70 cm", d: "35 cm", dia: "35 cm" }, peso: "5.2 kg", volt: "110-240V", mat: "Cerámica gruesa con esmalte metálico y lino oscuro", fin: "Plata oxidada avejentada", time: "4 a 5 semanas", cert: "NOM" },
             { id: 63, name: "Lámpara Terrazo y Latón", category: "mesa", price: 8200, img: "C8B0A570-48B0-4133-ACCC-A9913665556D.png", sku: "DM-MES-014", desc: "Mitad terrazo blanco y mitad latón.", specsLight: "2x E26 LED 10W cálida", cable: "Cable transparente 1.8m", dims: { w: "38 cm", h: "68 cm", d: "38 cm", dia: "38 cm" }, peso: "7.8 kg", volt: "110-120V", mat: "Terrazo vaciado, cilindro de latón y lino", fin: "Terrazo blanco mate y latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 65, name: "Lámpara Mesa Campana Latón", category: "mesa", price: 5800, img: "Image_14.png", sku: "DM-MES-015", desc: "Base de latón pulido con pantalla acampanada de cristal blanco.", specsLight: "2x E12 LED 5W cálida", cable: "Cable textil negro 1.8m", dims: { w: "40 cm", h: "55 cm", d: "40 cm", dia: "40 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Latón macizo y cristal blanco opalino", fin: "Latón pulido brillante", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 105, name: "Lámpara Mesa Latón y Nogal", category: "mesa", price: 6800, img: "lampara_de_mesa_5.png", sku: "DM-MES-016", desc: "Base de latón y nogal con pantalla cilíndrica de lino color taupe.", specsLight: "1x E26 LED 9W, 2700K", cable: "Cable textil café 1.8m", dims: { w: "32 cm", h: "62 cm", d: "32 cm", dia: "32 cm" }, peso: "3.6 kg", volt: "110-120V", mat: "Latón cepillado, madera de nogal y lino", fin: "Latón satinado y nogal natural", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 106, name: "Lámpara Mesa Columna Vidrio Verde", category: "mesa", price: 5400, img: "lampara_de_mesa_6.png", sku: "DM-MES-017", desc: "Columna de vidrio color verde mar con pantalla floral blanco y negro.", specsLight: "1x E26 LED 8W, 3000K", cable: "Cable textil blanco 1.8m", dims: { w: "28 cm", h: "58 cm", d: "28 cm", dia: "28 cm" }, peso: "3.1 kg", volt: "110-120V", mat: "Vidrio soplado y algodón estampado", fin: "Verde mar translúcido", time: "3 semanas", cert: "NOM" },
+            { id: 107, name: "Lámpara Mesa Rústica Ratán", category: "mesa", price: 4600, img: "lampara_de_mesa_7.png", sku: "DM-MES-018", desc: "Base de madera de borde natural con pantalla tejida de ratán gris.", specsLight: "1x E26 LED 7W, 2700K", cable: "Cable textil natural 1.8m", dims: { w: "30 cm", h: "55 cm", d: "30 cm", dia: "30 cm" }, peso: "2.9 kg", volt: "110-120V", mat: "Madera maciza de borde vivo y ratán tejido", fin: "Madera natural y gris ceniza", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 108, name: "Lámpara Mesa Acero Cepillado", category: "mesa", price: 5200, img: "lampara_de_mesa_8.png", sku: "DM-MES-019", desc: "Base cilíndrica de acero cepillado con pantalla de lino blanco.", specsLight: "1x E26 LED 9W, 3000K", cable: "Cable textil plateado 1.8m", dims: { w: "33 cm", h: "60 cm", d: "33 cm", dia: "33 cm" }, peso: "4.0 kg", volt: "110-120V", mat: "Acero inoxidable cepillado y lino", fin: "Acero cepillado mate", time: "3 semanas", cert: "NOM" },
+            { id: 109, name: "Lámpara Mesa Geométrica Madera y Níquel", category: "mesa", price: 5900, img: "lampara_de_mesa_9.png", sku: "DM-MES-020", desc: "Base geométrica de madera oscura y marco rectangular de níquel con pantalla rectangular de lino.", specsLight: "1x E26 LED 9W, 2700K", cable: "Cable textil negro 1.8m", dims: { w: "35 cm", h: "58 cm", d: "20 cm", dia: "N/A" }, peso: "3.8 kg", volt: "110-120V", mat: "Madera oscura, níquel cepillado y lino", fin: "Madera ébano y níquel cepillado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 35, name: "Lámpara de Buró Texturizada", category: "pie", price: 4200, img: "lampara_de_mesa_3.png", sku: "DM-PIE-001", desc: "Base sólida en forma de gota texturizada.", specsLight: "1x E26 LED 6W, 2700K", cable: "Cable blanco 1.5m", dims: { w: "30 cm", h: "85 cm", d: "30 cm", dia: "30 cm" }, peso: "4.2 kg", volt: "110-120V", mat: "Pasta de estuco y lino", fin: "Crema texturizado", time: "2 a 3 semanas", cert: "NOM" },
             { id: 36, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "nueva_foto_1.png", sku: "DM-PIE-002", desc: "Mástil de esferas de madera de nogal torneadas a mano.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil negro 2.5m", dims: { w: "40 cm", h: "160 cm", d: "40 cm", dia: "40 cm" }, peso: "5 kg", volt: "110-120V", mat: "Nogal sólido y lino", fin: "Nogal mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 53, name: "Lámpara de Pie Botánica", category: "pie", price: 12500, img: "053C59D3-9C3F-4B14-8290-4514331538F9.png", sku: "DM-PIE-003", desc: "Mástil orgánico inspirado en la naturaleza, forjado en latón mate.", specsLight: "1x E26 LED 10W, 2700K cálida", cable: "Cable textil dorado 2m", dims: { w: "45 cm", h: "165 cm", d: "45 cm", dia: "45 cm" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido y pantalla de lino natural", fin: "Latón dorado mate", time: "4 a 5 semanas", cert: "NOM" },
@@ -1299,6 +1372,7 @@
             const p = window.dbProducts.find(x => x.id === parseInt(id));
             if (!p) return;
             window.currentModalProduct = p;
+            window._navLockedByOverlay = true;
             window.toggleNavbarState(false);
 
             document.getElementById('modal-img-link').href = p.img;
@@ -1334,6 +1408,7 @@
             if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
             document.body.style.overflow = '';
             window.closeModalAI();
+            window._navLockedByOverlay = false;
             window.toggleNavbarState(true);
         };
 
@@ -1395,10 +1470,12 @@
             if (isOpen) {
                 drawer.classList.add('translate-x-full');
                 overlay.classList.add('opacity-0', 'pointer-events-none');
+                window._navLockedByOverlay = false;
                 window.toggleNavbarState(true);
             } else {
                 drawer.classList.remove('translate-x-full');
                 overlay.classList.remove('opacity-0', 'pointer-events-none');
+                window._navLockedByOverlay = true;
                 window.toggleNavbarState(false);
             }
         };
@@ -1900,10 +1977,12 @@ NORMAS:
             if (isOpen) {
                 drawer.classList.add('-translate-x-full');
                 overlay.classList.add('opacity-0', 'pointer-events-none');
+                window._navLockedByOverlay = false;
                 window.toggleNavbarState(true);
             } else {
                 drawer.classList.remove('-translate-x-full');
                 overlay.classList.remove('opacity-0', 'pointer-events-none');
+                window._navLockedByOverlay = true;
                 window.toggleNavbarState(false);
                 window.renderCurrentMessages();
                 setTimeout(() => document.getElementById('chat-input')?.focus(), 400);
