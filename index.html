@@ -170,8 +170,6 @@
             padding-top: env(safe-area-inset-top);
             /* Forzar capa de composición GPU para que no tiemble al deslizar en móviles */
             will-change: transform;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
         }
 
         /* ── NAVBAR: SAFE AREA SUPERIOR ── */
@@ -792,9 +790,6 @@
     (function() {
         'use strict';
 
-        const GEMINI_API_KEY = "AIzaSyBuH4-Ydh2j4OAQaQSPrqO56PqHTfs-w-U";
-        const GEMINI_MODEL = "gemini-2.5-flash";
-
         window.cart = [];
         try { window.cart = JSON.parse(localStorage.getItem('damaso_cart')) || []; } catch(e) { window.cart = []; }
         window.userSession = null;
@@ -812,6 +807,10 @@
             if (!nav) return;
             nav.style.transform = show ? 'translate3d(0,0,0)' : 'translate3d(0,-100%,0)';
             nav.style.opacity = show ? '1' : '0';
+            // En iOS Safari, restaurar opacity sobre una capa con backdrop-filter a veces
+            // deja el navbar "atascado" invisible tras cerrar un drawer/modal encima.
+            // Forzar un reflow lo obliga a repintarse.
+            if (show) void nav.offsetHeight;
         };
 
         window.getUserFirstName = function() {
@@ -1637,20 +1636,28 @@
             }
         };
 
-        // ── GEMINI API ── Cada llamada se intenta de cero; si no responde en 7s, se corta y se usa el respaldo.
-        window.fetchGeminiAPI = async function(messages, systemInstruction) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-            const contents = messages.map(m => ({ role: m.role === 'bot' ? 'model' : 'user', parts: [{ text: m.text.replace(/<[^>]+>/g, '') }] }));
-            const payload = { systemInstruction: { parts: [{ text: systemInstruction }] }, contents };
+        // ── IA (OpenAI ChatGPT vía función segura de Netlify) ──
+        // La API key vive solo del lado del servidor (variable de entorno de Netlify),
+        // nunca en este HTML público. Cada llamada se intenta de cero; si no responde
+        // en 7s, se corta y se usa el motor de respaldo offline.
+        window.fetchAIResponse = async function(messages, systemInstruction) {
+            const oaiMessages = [
+                { role: 'system', content: systemInstruction },
+                ...messages.map(m => ({ role: m.role === 'bot' ? 'assistant' : 'user', content: m.text.replace(/<[^>]+>/g, '') }))
+            ];
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 7000);
             try {
-                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: controller.signal });
-                if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err?.error?.message || `HTTP ${response.status}`); }
+                const response = await fetch('/.netlify/functions/ai-chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: oaiMessages }),
+                    signal: controller.signal
+                });
+                if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err?.error || `HTTP ${response.status}`); }
                 const data = await response.json();
-                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!text) throw new Error("Respuesta vacía");
-                return text;
+                if (!data.text) throw new Error("Respuesta vacía");
+                return data.text;
             } finally {
                 clearTimeout(timeoutId);
             }
@@ -1729,7 +1736,7 @@ NORMAS:
             box.scrollTop = box.scrollHeight;
             try {
                 // Siempre se intenta conectar de nuevo con cada pregunta (sin importar fallos previos).
-                const aiText = await window.fetchGeminiAPI(window.currentMessages.slice(-12), getMainSystemPrompt());
+                const aiText = await window.fetchAIResponse(window.currentMessages.slice(-12), getMainSystemPrompt());
                 document.getElementById(loadId)?.remove();
                 const formatted = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-brand-gold">$1</strong>').replace(/\n/g, '<br>');
                 window.currentMessages.push({ role: 'bot', text: formatted });
@@ -1841,7 +1848,7 @@ NORMAS:
             const sysPrompt = `Eres DAMASO AI. El cliente ve: ${p.name} | SKU: ${p.sku} | $${Number(p.price).toLocaleString()} MXN | ${p.mat} | ${p.fin}. Responde CONCISAMENTE (máximo 2 oraciones) solo sobre esta pieza.`;
             try {
                 // Siempre se intenta conectar de nuevo con cada pregunta (sin importar fallos previos).
-                const aiText = await window.fetchGeminiAPI([{ role: 'user', text }], sysPrompt);
+                const aiText = await window.fetchAIResponse([{ role: 'user', text }], sysPrompt);
                 document.getElementById(loadId)?.remove();
                 const formatted = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-brand-gold">$1</strong>').replace(/\n/g, '<br>');
                 box.innerHTML += `<div class="flex items-start gap-2 mt-2"><div class="w-6 h-6 rounded-full bg-brand-gold flex items-center justify-center text-black text-[8px] font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 text-white text-[10px] p-2 rounded-lg rounded-tl-none leading-relaxed">${formatted}</div></div>`;
@@ -1891,7 +1898,7 @@ NORMAS:
             const catList = window.dbProducts.map(p => `SKU: ${p.sku} | Pieza: ${p.name} | Cat: ${p.category} | Mat: ${p.mat}`).join('\n');
             const prompt = `Un cliente en una boutique de lujo busca: "${query}".\nCatálogo:\n${catList}\nSelecciona los 3 a 5 SKUs que mejor se adapten. Responde ÚNICAMENTE con los SKUs separados por comas.`;
             try {
-                const response = await window.fetchGeminiAPI([{role: 'user', text: prompt}], "Eres un experto curador de arte y diseño de iluminación interior de lujo.");
+                const response = await window.fetchAIResponse([{role: 'user', text: prompt}], "Eres un experto curador de arte y diseño de iluminación interior de lujo.");
                 const skus = response.split(',').map(s => s.trim().toUpperCase());
                 const results = window.dbProducts.filter(p => skus.some(sku => sku.includes(p.sku) || p.sku.includes(sku)));
                 if (results.length > 0) {
@@ -1920,7 +1927,7 @@ NORMAS:
             const itemsStr = window.cart.map(i => `${i.qty}x ${i.name} (Materiales: ${i.mat})`).join(', ');
             const prompt = `Escribe un párrafo poético y editorial de máximo 60 palabras justificando por qué esta selección (${itemsStr}) creará una atmósfera excepcional y de lujo. Tono: Diseñador de interiores de élite.`;
             try {
-                const response = await window.fetchGeminiAPI([{role: 'user', text: prompt}], "Eres el director creativo de DAMASO Studio. Escribes conceptos de diseño breves, lujosos y persuasivos.");
+                const response = await window.fetchAIResponse([{role: 'user', text: prompt}], "Eres el director creativo de DAMASO Studio. Escribes conceptos de diseño breves, lujosos y persuasivos.");
                 textEl.innerHTML = response.replace(/\n/g, '<br>');
                 container.classList.remove('hidden');
             } catch(e) {
