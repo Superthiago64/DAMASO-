@@ -1250,10 +1250,12 @@
                     overlay.classList.remove('overlay-visible');
                     overlay.style.opacity = '0';
                     overlay.style.pointerEvents = 'none';
-                    setTimeout(() => { 
+                    setTimeout(() => {
                         window._catAnimating = false;
                         // Limpiar inline styles para que CSS tome control en próxima activación
                         overlay.style.cssText = '';
+                        // Restaurar scroll — si no se libera aquí la página queda trabada
+                        document.body.style.overflow = '';
                     }, 500);
                 }, 600);
             }, 2000);
@@ -1536,7 +1538,66 @@ REGLAS:
             }
         };
 
-                window.sendChatMessage = async function() {
+        // ── GEMINI API ──
+        window.fetchGeminiAPI = async function(messages, systemInstruction) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+            const contents = messages.map(m => ({ role: m.role === 'bot' ? 'model' : 'user', parts: [{ text: m.text.replace(/<[^>]+>/g, '') }] }));
+            const payload = { systemInstruction: { parts: [{ text: systemInstruction }] }, contents };
+            const delays = [1000, 2000, 4000];
+            for (let i = 0; i < 3; i++) {
+                try {
+                    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err?.error?.message || `HTTP ${response.status}`); }
+                    const data = await response.json();
+                    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (!text) throw new Error("Respuesta vacía");
+                    return text;
+                } catch (error) {
+                    if (i === 2) throw error;
+                    await new Promise(r => setTimeout(r, delays[i]));
+                }
+            }
+        };
+
+        function getMainSystemPrompt() {
+            const catList = window.dbProducts.map(p => `${p.name} (${p.category}, $${Number(p.price).toLocaleString()} MXN, SKU: ${p.sku})`).join('\n');
+            const userName = window.getUserFirstName();
+            return `Eres DAMASO AI, el asistente virtual de DAMASO Studio — una marca de lujo de iluminación artesanal mexicana. El cliente se llama ${userName}.
+CATÁLOGO COMPLETO:\n${catList}
+NORMAS:
+- Responde siempre en español con tono elegante, culto y cálido.
+- Sé conciso (máximo 3-4 oraciones). Usa saltos de línea.
+- Puedes mencionar productos con sus precios y SKUs.
+- Tiempos de entrega: 2 a 12 semanas según la pieza.
+- No menciones precios de otras marcas ni inventes datos.`;
+        }
+
+        window.activateFallbackUI = function() {
+            window.botIsFallback = true;
+            const statusLabel = document.getElementById('bot-status');
+            if (statusLabel && statusLabel.innerText !== "MOTOR DE RESPALDO ACTIVADO") {
+                statusLabel.innerText = "MOTOR DE RESPALDO ACTIVADO";
+                statusLabel.classList.remove('text-brand-gold', 'glow-gold');
+                statusLabel.classList.add('fallback-active-text');
+            }
+        };
+
+        window.renderCurrentMessages = function() {
+            const box = document.getElementById('chat-messages');
+            if (!box) return;
+            if (window.currentMessages.length === 0) {
+                const userName = window.getUserFirstName();
+                box.innerHTML = `<div class="flex gap-3 items-start"><div class="w-8 h-8 rounded-full bg-brand-gold flex items-center justify-center text-black text-xs font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 text-white text-xs p-4 rounded-xl rounded-tl-none font-light leading-relaxed max-w-[85%]">Bienvenido a <strong class="text-brand-gold">DAMASO Studio</strong>, ${userName}. Soy su asistente personal.<br><br>Puedo ayudarle a explorar nuestro catálogo, resolver dudas técnicas y asistir en su cotización.</div></div>`;
+                return;
+            }
+            box.innerHTML = window.currentMessages.map(m => {
+                if (m.role === 'user') return `<div class="flex justify-end"><div class="glass-gold text-white text-xs p-3 rounded-xl rounded-tr-none max-w-[80%] leading-relaxed">${m.text}</div></div>`;
+                return `<div class="flex gap-3 items-start"><div class="w-8 h-8 rounded-full bg-brand-gold flex items-center justify-center text-black text-xs font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 text-white text-xs p-4 rounded-xl rounded-tl-none font-light leading-relaxed max-w-[85%]">${m.text}</div></div>`;
+            }).join('');
+            box.scrollTop = box.scrollHeight;
+        };
+
+        window.sendChatMessage = async function() {
             const input = document.getElementById('chat-input');
             if (!input) return;
             const text = input.value.trim();
@@ -1610,7 +1671,17 @@ REGLAS:
             let history = [];
             try { history = JSON.parse(localStorage.getItem('damaso_chat_history')) || []; } catch(e) {}
             if (history.length === 0) { list.innerHTML = '<p class="text-brand-muted text-xs text-center py-8 italic">No hay conversaciones</p>'; return; }
-            list.innerHTML = history.map((h, i) => `<button onclick="window.loadHistoryChat(${i})" class="glass-btn w-full text-left p-3 rounded-sm hover:border-brand-gold/50 transition-all"><p class="text-white text-xs font-medium truncate">${h.title || 'Conversación ' + (i+1)}</p><p class="text-brand-muted text-[9px] mt-1">${h.date || ''}</p></button>`).join('');
+            list.innerHTML = history.map((h, i) => `<div class="flex items-center gap-2"><button onclick="window.loadHistoryChat(${i})" class="glass-btn flex-1 min-w-0 text-left p-3 rounded-sm hover:border-brand-gold/50 transition-all"><p class="text-white text-xs font-medium truncate">${h.title || 'Conversación ' + (i+1)}</p><p class="text-brand-muted text-[9px] mt-1">${h.date || ''}</p></button><button onclick="window.deleteHistoryChat(event, ${i})" class="glass-btn p-2.5 rounded-sm text-red-400 hover:text-red-300 hover:border-red-400/50 transition-all shrink-0" title="Borrar conversación" aria-label="Borrar conversación"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button></div>`).join('');
+        };
+
+        window.deleteHistoryChat = function(e, idx) {
+            if (e) e.stopPropagation();
+            if (!confirm('¿Borrar esta conversación? Esta acción no se puede deshacer.')) return;
+            let history = [];
+            try { history = JSON.parse(localStorage.getItem('damaso_chat_history')) || []; } catch(err) {}
+            history.splice(idx, 1);
+            localStorage.setItem('damaso_chat_history', JSON.stringify(history));
+            window.renderChatHistory();
         };
 
         window.loadHistoryChat = function(idx) {
