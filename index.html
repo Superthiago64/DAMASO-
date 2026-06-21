@@ -168,6 +168,10 @@
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
             /* Compensar el notch de iPhone */
             padding-top: env(safe-area-inset-top);
+            /* Forzar capa de composición GPU para que no tiemble al deslizar en móviles */
+            will-change: transform;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
 
         /* ── NAVBAR: SAFE AREA SUPERIOR ── */
@@ -477,7 +481,7 @@
     </div>
 
     <!-- ── NAVBAR ── -->
-    <nav class="fixed top-0 left-0 right-0 w-full z-[100] glass-nav flex flex-col" id="navbar" style="transform: translateY(0);">
+    <nav class="fixed top-0 left-0 right-0 w-full z-[100] glass-nav flex flex-col" id="navbar" style="transform: translate3d(0,0,0);">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div class="flex items-center space-x-4 sm:space-x-6">
                 <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center">MENÚ</button>
@@ -562,8 +566,8 @@
             </div>
             <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list"></div>
         </div>
-        <div class="p-4 border-t border-brand-gold/30 bg-black/60 flex items-center gap-2 pb-safe-input">
-            <input type="text" id="chat-input" placeholder="Escriba su consulta..." class="flex-1 bg-black/30 backdrop-blur-sm border border-brand-border/50 rounded-full px-4 py-2.5 text-xs text-brand-gold focus:outline-none focus:border-brand-gold/50 transition-colors placeholder-brand-muted/60" onkeypress="if(event.key==='Enter') window.sendChatMessage()">
+        <div class="p-4 border-t border-brand-gold/30 bg-black/60 flex items-end gap-2 pb-safe-input">
+            <textarea id="chat-input" placeholder="Escriba su consulta..." rows="1" class="flex-1 bg-black/30 backdrop-blur-sm border border-brand-border/50 rounded-2xl px-4 py-2.5 text-xs text-brand-gold focus:outline-none focus:border-brand-gold/50 transition-colors placeholder-brand-muted/60 resize-none overflow-y-auto leading-relaxed" style="max-height: 7rem;" oninput="window.autoGrowChatInput(this)" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); window.sendChatMessage(); }"></textarea>
             <button onclick="window.sendChatMessage()" class="glass-gold w-10 h-10 rounded-full flex items-center justify-center shrink-0">
                 <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
@@ -806,7 +810,7 @@
         window.toggleNavbarState = function(show) {
             const nav = document.getElementById('navbar');
             if (!nav) return;
-            nav.style.transform = show ? 'translateY(0)' : 'translateY(-100%)';
+            nav.style.transform = show ? 'translate3d(0,0,0)' : 'translate3d(0,-100%,0)';
             nav.style.opacity = show ? '1' : '0';
         };
 
@@ -1381,28 +1385,35 @@
             const el = document.getElementById(elementId);
             if (!el || !el.innerText) return;
             const text = el.innerText;
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.top = "0";
-            textArea.style.left = "-9999px";
-            textArea.style.opacity = "0";
-            document.body.appendChild(textArea);
-            if (navigator.userAgent.match(/ipad|iphone/i)) {
-                let range = document.createRange();
-                range.selectNodeContents(textArea);
-                let selection = window.getSelection();
-                selection.removeAllRanges();
-                selection.addRange(range);
-                textArea.setSelectionRange(0, 999999);
-            } else { textArea.select(); }
-            try { document.execCommand('copy'); } catch (err) {}
-            document.body.removeChild(textArea);
-            const btn = document.getElementById(btnId);
-            if (btn) {
+
+            const showCopied = () => {
+                const btn = document.getElementById(btnId);
+                if (!btn) return;
                 const orig = btn.innerHTML;
                 btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="#22c55e" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>';
                 setTimeout(() => { btn.innerHTML = orig; }, 2000);
+            };
+
+            const fallbackCopy = () => {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.setAttribute('readonly', '');
+                textArea.style.position = "fixed";
+                textArea.style.top = "0";
+                textArea.style.left = "-9999px";
+                textArea.style.opacity = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                textArea.setSelectionRange(0, 999999);
+                try { document.execCommand('copy'); showCopied(); } catch (err) {}
+                document.body.removeChild(textArea);
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(showCopied).catch(fallbackCopy);
+            } else {
+                fallbackCopy();
             }
         };
 
@@ -1444,123 +1455,204 @@
         // Motor de emergencia que llama a la API de Anthropic (claude-haiku-4-5)
         // Se activa automáticamente si Gemini falla o no está disponible
         window.DamasoFallbackEngine = {
-            // Construir system prompt rico con toda la info de DAMASO y productos
-            buildSystemPrompt: function() {
-                const cats = [...new Set(window.dbProducts.map(p => p.category))];
-                const priceRange = { min: Math.min(...window.dbProducts.map(p=>p.price)), max: Math.max(...window.dbProducts.map(p=>p.price)) };
-                // Serializar catálogo completo para que el bot lo conozca
-                const catalog = window.dbProducts.map(p =>
-                    `• ${p.name} (SKU:${p.sku}) — Categoría:${p.category} — Precio:$${Number(p.price).toLocaleString()} MXN — Entrega:${p.time} — Dims:${p.dims?.w||''}x${p.dims?.h||''} — Mat:${p.mat} — Acabado:${p.fin} — ${p.desc?.slice(0,80)||''}`
-                ).join('\n');
-
-                return `Eres DAMASO AI, el asistente de lujo de DAMASO Studio, fabricante artesanal de iluminación de alta gama en Guadalajara, México. Tu tono es elegante, cálido, experto y en español mexicano.
-
-SOBRE DAMASO STUDIO:
-• Marca de iluminación artesanal de lujo, con sede en Guadalajara, Jalisco, México
-• Especialistas en: Candiles, Arbotantes, Espejos iluminados, Lámparas de mesa/pie/techo/exterior, y Proyectos especiales a medida
-• WhatsApp: +52 33 3870 3071 | Atención personalizada para proyectos
-• Tiempo de entrega: varía por pieza (ver catálogo)
-• Precios: desde $${Number(priceRange.min).toLocaleString()} hasta $${Number(priceRange.max).toLocaleString()} MXN
-• Todos los productos son fabricación artesanal, materiales de primera calidad
-• Aceptan proyectos residenciales, hoteleros, restaurantes, corporativos
-• Asesoría en iluminación de diseño de interiores disponible
-
-CATÁLOGO COMPLETO (${window.dbProducts.length} piezas):
-${catalog}
-
-REGLAS:
-1. Responde SIEMPRE en español, con tono elegante pero accesible
-2. Si preguntan por precio de un producto específico, dalo con precisión
-3. Si preguntan algo fuera del catálogo (decoración, iluminación en general, diseño de interiores, recomendaciones), responde con expertise y relaciona con DAMASO cuando sea natural
-4. Para cotizaciones o pedidos siempre ofrece el WhatsApp: +52 33 3870 3071
-5. Puedes conversar de cualquier tema relacionado con el hogar, diseño, lujo, arquitectura o iluminación
-6. Si el usuario saluda o hace pequeña charla, sé amigable y humano
-7. Máximo 3 párrafos por respuesta. Usa negritas **así** para destacar nombres de productos o precios
-8. Eres el motor de respaldo, pero el usuario no necesita saberlo — responde con la misma calidad`;
-            },
-
-            // Motor principal: llama a claude-haiku-4-5 via API de Anthropic
-            process: async function(text, specificProduct = null, conversationHistory = []) {
-                // Construir historial de mensajes para contexto conversacional
-                const messages = [];
-                
-                // Agregar historial de conversación (últimos 10 turnos)
-                const history = conversationHistory.slice(-10);
-                for (const msg of history) {
-                    if (msg.role === 'user') {
-                        messages.push({ role: 'user', content: msg.text });
-                    } else if (msg.role === 'bot') {
-                        // Limpiar HTML del texto del bot para enviarlo al API
-                        const cleanBot = msg.text.replace(/<[^>]*>/g, '').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
-                        messages.push({ role: 'assistant', content: cleanBot });
-                    }
-                }
-                
-                // Agregar el mensaje actual del usuario
-                messages.push({ role: 'user', content: text });
-
-                const response = await fetch('https://api.anthropic.com/v1/messages', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: 'claude-haiku-4-5-20251001',
-                        max_tokens: 800,
-                        system: this.buildSystemPrompt(),
-                        messages: messages
-                    })
-                });
-
-                if (!response.ok) {
-                    const err = await response.text();
-                    throw new Error('Anthropic API error: ' + err);
-                }
-
-                const data = await response.json();
-                const rawText = data.content?.[0]?.text || 'No pude procesar su consulta.';
-                
-                // Formatear: **texto** → <strong>
-                return rawText
-                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-brand-gold">$1</strong>')
-                    .replace(/\n/g, '<br>');
-            },
-
             // Respuesta instantánea offline para casos sin internet (última línea de defensa)
+            // Tolerante a errores de dedo/ortografía (acentos, letras de más o de menos) y con
+            // varias variantes de respuesta por intención para que no se sienta repetitivo/robótico.
             offlineResponse: function(text) {
-                const t = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-                if (/hola|buenos|saludos|buenas/.test(t)) return `¡Bienvenido a <strong class="text-brand-gold">DAMASO Studio</strong>! Soy su asesor de iluminación. ¿En qué le puedo ayudar hoy?`;
-                if (/precio|costo|cuanto|cuesta/.test(t)) return `Nuestras piezas van desde <strong class="text-brand-gold">$${Number(Math.min(...window.dbProducts.map(p=>p.price))).toLocaleString()} MXN</strong>. Para una cotización personalizada: <strong class="text-brand-gold">WhatsApp +52 33 3870 3071</strong>.`;
-                if (/catalogo|pieza|producto|tienen/.test(t)) return `Contamos con <strong class="text-brand-gold">${window.dbProducts.length} piezas</strong>: Candiles, Arbotantes, Espejos, Lámparas de mesa, pie, techo, exterior y Proyectos especiales.`;
-                if (/contacto|telefono|whatsapp|llamar/.test(t)) return `Puede contactarnos directamente: <strong class="text-brand-gold">WhatsApp +52 33 3870 3071</strong>. Nuestro equipo le atenderá con gusto.`;
-                if (/adios|gracias|bye|hasta/.test(t)) return `Fue un placer asistirle. Recuerde que estamos disponibles en <strong class="text-brand-gold">WhatsApp +52 33 3870 3071</strong>. ¡Hasta pronto!`;
-                // Buscar producto en catálogo
+                const t = ' ' + text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim() + ' ';
+                const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+                const WA = '+52 33 3870 3071';
+                const userName = window.getUserFirstName ? window.getUserFirstName() : 'Estimado cliente';
+
+                const intents = [
+                    {
+                        test: /hola+|holis|buenos? ?(dias|tardes|noches)?|buenas|saludos|hey|q ?tal|que ?onda|ola+\b/,
+                        responses: [
+                            `¡Hola${userName !== 'Estimado cliente' ? ', ' + userName : ''}! Bienvenido a <strong class="text-brand-gold">DAMASO Studio</strong>. Soy su asesor de iluminación, ¿en qué le puedo ayudar hoy?`,
+                            `¡Qué gusto saludarle! Estoy aquí para ayudarle a encontrar la pieza perfecta de <strong class="text-brand-gold">DAMASO Studio</strong>. ¿Busca algo en particular?`,
+                            `Bienvenido(a) a <strong class="text-brand-gold">DAMASO Studio</strong>. Cuénteme, ¿qué espacio le gustaría iluminar?`
+                        ]
+                    },
+                    {
+                        test: /preci|costo|cuant[oa]s? (vale|cuesta|sale)|cuanto (vale|cuesta|sale)|cotiza|tarifa|presupuesto/,
+                        responses: [
+                            `Nuestras piezas van desde <strong class="text-brand-gold">$${Number(Math.min(...window.dbProducts.map(p=>p.price))).toLocaleString()} MXN</strong> hasta <strong class="text-brand-gold">$${Number(Math.max(...window.dbProducts.map(p=>p.price))).toLocaleString()} MXN</strong>, según la pieza. Si me dice el modelo o me da más detalles le doy el precio exacto.`,
+                            `Los precios varían según diseño, materiales y dimensiones. Si tiene un modelo en mente dígame el nombre o SKU y se lo cotizo con gusto. Para cotizaciones a medida: <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`,
+                            `Claro, con gusto le ayudo con el precio. ¿Me puede decir qué pieza o categoría le interesa (candiles, arbotantes, espejos, lámparas, etc.)?`
+                        ]
+                    },
+                    {
+                        test: /catalogo|que (piezas|productos) tienen|que tienen|que venden|coleccion|modelos disponibles/,
+                        responses: [
+                            `Contamos con <strong class="text-brand-gold">${window.dbProducts.length} piezas</strong> entre Candiles, Arbotantes, Espejos iluminados, Lámparas de mesa, de pie, de techo, de exterior y Proyectos especiales a medida.`,
+                            `Tenemos una colección muy amplia: candiles artesanales, arbotantes de pared, espejos retroiluminados y lámparas para cada espacio del hogar. ¿Quiere que le recomiende algo según el ambiente que busca?`,
+                            `Puede explorar todo el catálogo directamente en la página, o decirme qué tipo de pieza busca y le muestro las mejores opciones.`
+                        ]
+                    },
+                    {
+                        test: /candil(es)?|chandelier|lampara de techo colgante/,
+                        responses: [
+                            `Nuestros <strong class="text-brand-gold">candiles</strong> son piezas artesanales pensadas para comedores, salas y vestíbulos de doble altura. ¿Busca algo clásico, contemporáneo o minimalista?`,
+                            `Tenemos candiles en distintos estilos y tamaños, ideales como punto focal de cualquier espacio. Cuénteme las dimensiones de su techo o estilo de decoración y le sugiero opciones.`
+                        ]
+                    },
+                    {
+                        test: /arbotante(s)?|lampara de pared|de muro/,
+                        responses: [
+                            `Los <strong class="text-brand-gold">arbotantes</strong> son perfectos para pasillos, recámaras o cabeceras. Tenemos modelos con luz de lectura integrada, en latón, lino y cristal. ¿Para qué espacio los necesita?`,
+                            `Manejamos arbotantes desde diseños minimalistas hasta piezas escultóricas en latón. ¿Le interesa alguno con brazo de lectura o uno puramente decorativo?`
+                        ]
+                    },
+                    {
+                        test: /espejo(s)?|mirror/,
+                        responses: [
+                            `Nuestros <strong class="text-brand-gold">espejos</strong> combinan diseño y luz: muchos tienen retroiluminación LED perimetral. ¿Los busca para baño, recámara o área social?`,
+                            `Tenemos espejos circulares, ovalados y rectangulares, con y sin iluminación integrada. Dígame las medidas del espacio y le recomiendo el ideal.`
+                        ]
+                    },
+                    {
+                        test: /lampara de mesa|buro|mesa de noche/,
+                        responses: [
+                            `Las <strong class="text-brand-gold">lámparas de mesa</strong> son ideales para burós, consolas y escritorios. Tenemos en alabastro, cerámica y metal. ¿Busca algo cálido o más moderno?`
+                        ]
+                    },
+                    {
+                        test: /lampara de pie|de piso|floor lamp/,
+                        responses: [
+                            `Tenemos <strong class="text-brand-gold">lámparas de pie</strong> para dar acento a salas y rincones de lectura. ¿Qué altura aproximada necesita?`
+                        ]
+                    },
+                    {
+                        test: /lampara de techo|plafon|empotrad/,
+                        responses: [
+                            `Contamos con <strong class="text-brand-gold">lámparas de techo</strong> tanto colgantes como de plafón, para espacios con techo bajo o alto. ¿Cuál es la altura de su techo?`
+                        ]
+                    },
+                    {
+                        test: /exterior|jardin|terraza|alberca|patio/,
+                        responses: [
+                            `Tenemos piezas de <strong class="text-brand-gold">iluminación de exterior</strong> resistentes a la intemperie, perfectas para terrazas, jardines y albercas. ¿Busca algo de pared o de pie?`
+                        ]
+                    },
+                    {
+                        test: /proyecto especial|a la medida|personalizad|sobre pedido|diseño exclusivo|custom/,
+                        responses: [
+                            `Sí, realizamos <strong class="text-brand-gold">proyectos especiales a medida</strong> para residencias, hoteles, restaurantes y espacios corporativos. Cuénteme su idea y la canalizo con nuestro equipo de diseño vía <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`,
+                            `Claro, trabajamos piezas personalizadas desde cero. Para una propuesta a medida lo mejor es escribir directo a <strong class="text-brand-gold">WhatsApp ${WA}</strong> con sus ideas o referencias.`
+                        ]
+                    },
+                    {
+                        test: /entrega|tiempo de espera|cuando llega|cuanto tardan?|demora|envio|envío/,
+                        responses: [
+                            `Los tiempos de entrega van de <strong class="text-brand-gold">2 a 12 semanas</strong> dependiendo de la complejidad de la pieza, ya que todo es manufactura artesanal. Dígame el modelo y le confirmo el tiempo exacto.`,
+                            `Cada pieza tiene su propio tiempo de fabricación (entre 2 y 12 semanas). Para confirmar el de su pieza de interés, mándenos el modelo por <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                        ]
+                    },
+                    {
+                        test: /material(es)?|hecho de|fabricad[oa]|de que esta hecho/,
+                        responses: [
+                            `Trabajamos con materiales de primera calidad: latón macizo, cristal inastillable, alabastro natural, madera maciza y acero, entre otros, según cada diseño.`
+                        ]
+                    },
+                    {
+                        test: /garantia|garantía/,
+                        responses: [
+                            `Todas nuestras piezas cuentan con garantía de fabricación. Para detalles específicos de su pieza, contáctenos por <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                        ]
+                    },
+                    {
+                        test: /pago|tarjeta|transferencia|efectivo|msi|meses sin intereses|paypal/,
+                        responses: [
+                            `Aceptamos transferencia, tarjeta y, en algunos casos, meses sin intereses. Para coordinar el pago de su pieza, escríbanos a <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                        ]
+                    },
+                    {
+                        test: /instalacion|instalación|electricista|instalar|como se instala/,
+                        responses: [
+                            `Cada pieza incluye especificaciones de instalación (cableado, voltaje y tipo de conexión). Recomendamos instalación por electricista certificado; nuestro equipo puede asesorarle por <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                        ]
+                    },
+                    {
+                        test: /ubicacion|ubicación|direccion|dirección|donde estan|donde se encuentran|tienda fisica|showroom/,
+                        responses: [
+                            `Nuestro taller y showroom están en <strong class="text-brand-gold">Guadalajara, Jalisco, México</strong>. Para visita con cita, escríbanos por <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                        ]
+                    },
+                    {
+                        test: /horario|atencion|atención|abierto|a que hora/,
+                        responses: [
+                            `Nuestro equipo atiende por <strong class="text-brand-gold">WhatsApp ${WA}</strong> en horario de oficina; respondemos a la brevedad posible.`
+                        ]
+                    },
+                    {
+                        test: /contacto|telefono|teléfono|whatsapp|llamar|numero|número/,
+                        responses: [
+                            `Puede contactarnos directamente por <strong class="text-brand-gold">WhatsApp ${WA}</strong>; nuestro equipo le atenderá con gusto.`,
+                            `Con gusto lo conecto: escríbanos a <strong class="text-brand-gold">WhatsApp ${WA}</strong> y le daremos atención personalizada.`
+                        ]
+                    },
+                    {
+                        test: /queja|problema|mal servicio|no funciona|no llega|tarde|defectuos[oa]|roto|dañad[oa]/,
+                        responses: [
+                            `Lamento mucho el inconveniente. Para resolverlo lo antes posible, por favor escríbanos directo a <strong class="text-brand-gold">WhatsApp ${WA}</strong> con su número de pedido y le daremos seguimiento personal.`,
+                            `Entiendo su molestia y queremos ayudarle a resolverlo. Contáctenos por <strong class="text-brand-gold">WhatsApp ${WA}</strong> para atenderlo de inmediato.`
+                        ]
+                    },
+                    {
+                        test: /gracias|thank|agradec/,
+                        responses: [
+                            `¡Con mucho gusto! Estoy aquí para lo que necesite.`,
+                            `Para eso estamos. Cualquier otra duda, aquí le espero.`,
+                            `Es un placer ayudarle. Si necesita algo más, solo pregunte.`
+                        ]
+                    },
+                    {
+                        test: /adios|bye|hasta (luego|pronto)|nos vemos|me voy/,
+                        responses: [
+                            `Fue un placer asistirle. Recuerde que estamos disponibles en <strong class="text-brand-gold">WhatsApp ${WA}</strong>. ¡Hasta pronto!`,
+                            `Gracias por su visita a <strong class="text-brand-gold">DAMASO Studio</strong>. Quedamos a sus órdenes cuando guste. ¡Que tenga excelente día!`
+                        ]
+                    }
+                ];
+
+                for (const intent of intents) {
+                    if (intent.test.test(t)) return pick(intent.responses);
+                }
+
+                // Buscar producto en catálogo por nombre, palabra clave o SKU (tolerante a acentos)
                 for (const p of window.dbProducts) {
                     const name = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
                     if (t.includes(p.sku.toLowerCase()) || name.split(' ').some(w => w.length > 4 && t.includes(w))) {
                         return `<strong class="text-brand-gold">${p.name}</strong> · $${Number(p.price).toLocaleString()} MXN · Entrega: ${p.time} · ${p.dims?.w||''}×${p.dims?.h||''} · ${p.mat}`;
                     }
                 }
-                return `Consulta recibida. Para asistencia inmediata: <strong class="text-brand-gold">WhatsApp +52 33 3870 3071</strong>.`;
+
+                // Respuesta genérica variada cuando no se reconoce la intención
+                return pick([
+                    `Gracias por su mensaje. ¿Me puede contar un poco más para orientarle mejor? También puede escribirnos directo a <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`,
+                    `Quiero asegurarme de ayudarle bien. ¿Busca alguna pieza en particular o tiene un proyecto en mente? Si prefiere, hablamos por <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`,
+                    `Con gusto le ayudo. Cuénteme más sobre lo que necesita o contáctenos por <strong class="text-brand-gold">WhatsApp ${WA}</strong> para atención inmediata.`,
+                    `Consulta recibida. Para asistencia inmediata y personalizada: <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                ]);
             }
         };
 
-        // ── GEMINI API ──
+        // ── GEMINI API ── Cada llamada se intenta de cero; si no responde en 7s, se corta y se usa el respaldo.
         window.fetchGeminiAPI = async function(messages, systemInstruction) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
             const contents = messages.map(m => ({ role: m.role === 'bot' ? 'model' : 'user', parts: [{ text: m.text.replace(/<[^>]+>/g, '') }] }));
             const payload = { systemInstruction: { parts: [{ text: systemInstruction }] }, contents };
-            const delays = [1000, 2000, 4000];
-            for (let i = 0; i < 3; i++) {
-                try {
-                    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err?.error?.message || `HTTP ${response.status}`); }
-                    const data = await response.json();
-                    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (!text) throw new Error("Respuesta vacía");
-                    return text;
-                } catch (error) {
-                    if (i === 2) throw error;
-                    await new Promise(r => setTimeout(r, delays[i]));
-                }
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 7000);
+            try {
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: controller.signal });
+                if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err?.error?.message || `HTTP ${response.status}`); }
+                const data = await response.json();
+                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!text) throw new Error("Respuesta vacía");
+                return text;
+            } finally {
+                clearTimeout(timeoutId);
             }
         };
 
@@ -1587,6 +1679,17 @@ NORMAS:
             }
         };
 
+        window.restoreConnectedUI = function() {
+            if (!window.botIsFallback) return;
+            window.botIsFallback = false;
+            const statusLabel = document.getElementById('bot-status');
+            if (statusLabel) {
+                statusLabel.innerText = "BOT CONECTADO";
+                statusLabel.classList.remove('fallback-active-text');
+                statusLabel.classList.add('text-brand-gold', 'glow-gold');
+            }
+        };
+
         window.renderCurrentMessages = function() {
             const box = document.getElementById('chat-messages');
             if (!box) return;
@@ -1602,12 +1705,18 @@ NORMAS:
             box.scrollTop = box.scrollHeight;
         };
 
+        window.autoGrowChatInput = function(el) {
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight, 112) + 'px';
+        };
+
         window.sendChatMessage = async function() {
             const input = document.getElementById('chat-input');
             if (!input) return;
             const text = input.value.trim();
             if (!text) return;
             input.value = '';
+            window.autoGrowChatInput(input);
             const sugg = document.getElementById('chat-suggestions');
             if (sugg) sugg.style.display = 'none';
             if (!Array.isArray(window.currentMessages)) window.currentMessages = [];
@@ -1619,36 +1728,22 @@ NORMAS:
             box.innerHTML += `<div id="${loadId}" class="flex gap-3 items-start"><div class="w-8 h-8 rounded-full bg-brand-gold flex items-center justify-center text-black text-xs font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 p-4 rounded-xl rounded-tl-none"><div class="dot-typing"><span></span><span></span><span></span></div></div></div>`;
             box.scrollTop = box.scrollHeight;
             try {
-                if (window.botIsFallback) throw new Error("LocalFallback");
+                // Siempre se intenta conectar de nuevo con cada pregunta (sin importar fallos previos).
                 const aiText = await window.fetchGeminiAPI(window.currentMessages.slice(-12), getMainSystemPrompt());
                 document.getElementById(loadId)?.remove();
                 const formatted = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-brand-gold">$1</strong>').replace(/\n/g, '<br>');
                 window.currentMessages.push({ role: 'bot', text: formatted });
                 window.saveChatState();
+                window.restoreConnectedUI();
                 window.renderCurrentMessages();
             } catch(e) {
-                // Intentar con motor de respaldo Anthropic Claude
+                // Gemini no respondió en 7s o falló: última línea de defensa, respuesta offline instantánea.
                 window.activateFallbackUI();
                 document.getElementById(loadId)?.remove();
-                const loadId2 = 'load2-' + Date.now();
-                const box2 = document.getElementById('chat-messages');
-                box2.innerHTML += `<div id="${loadId2}" class="flex gap-3 items-start"><div class="w-8 h-8 rounded-full bg-brand-gold flex items-center justify-center text-black text-xs font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 p-4 rounded-xl rounded-tl-none"><div class="dot-typing"><span></span><span></span><span></span></div></div></div>`;
-                box2.scrollTop = box2.scrollHeight;
-                try {
-                    // Motor de respaldo v2: llama a claude-haiku via Anthropic API
-                    const botRes = await window.DamasoFallbackEngine.process(text, null, window.currentMessages.slice(0, -1));
-                    document.getElementById(loadId2)?.remove();
-                    window.currentMessages.push({ role: 'bot', text: botRes });
-                    window.saveChatState();
-                    window.renderCurrentMessages();
-                } catch(e2) {
-                    // Última línea de defensa: respuesta offline instantánea
-                    document.getElementById(loadId2)?.remove();
-                    const offlineRes = window.DamasoFallbackEngine.offlineResponse(text);
-                    window.currentMessages.push({ role: 'bot', text: offlineRes });
-                    window.saveChatState();
-                    window.renderCurrentMessages();
-                }
+                const offlineRes = window.DamasoFallbackEngine.offlineResponse(text);
+                window.currentMessages.push({ role: 'bot', text: offlineRes });
+                window.saveChatState();
+                window.renderCurrentMessages();
             }
         };
 
@@ -1745,18 +1840,19 @@ NORMAS:
             box.scrollTop = box.scrollHeight;
             const sysPrompt = `Eres DAMASO AI. El cliente ve: ${p.name} | SKU: ${p.sku} | $${Number(p.price).toLocaleString()} MXN | ${p.mat} | ${p.fin}. Responde CONCISAMENTE (máximo 2 oraciones) solo sobre esta pieza.`;
             try {
-                if (window.botIsFallback) throw new Error("LocalFallback");
+                // Siempre se intenta conectar de nuevo con cada pregunta (sin importar fallos previos).
                 const aiText = await window.fetchGeminiAPI([{ role: 'user', text }], sysPrompt);
                 document.getElementById(loadId)?.remove();
                 const formatted = aiText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-brand-gold">$1</strong>').replace(/\n/g, '<br>');
                 box.innerHTML += `<div class="flex items-start gap-2 mt-2"><div class="w-6 h-6 rounded-full bg-brand-gold flex items-center justify-center text-black text-[8px] font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 text-white text-[10px] p-2 rounded-lg rounded-tl-none leading-relaxed">${formatted}</div></div>`;
                 box.scrollTop = box.scrollHeight;
                 window.currentMessages.push({ role: 'bot', text: formatted });
-                window.saveChatState(); window.renderCurrentMessages();
+                window.saveChatState(); window.restoreConnectedUI(); window.renderCurrentMessages();
             } catch(e) {
+                // Gemini no respondió en 7s o falló: última línea de defensa, respuesta offline instantánea.
                 window.activateFallbackUI();
                 document.getElementById(loadId)?.remove();
-                const bRes = window.DamasoFallbackEngine.process(text, p);
+                const bRes = window.DamasoFallbackEngine.offlineResponse(text);
                 box.innerHTML += `<div class="flex items-start gap-2 mt-2"><div class="w-6 h-6 rounded-full bg-brand-gold flex items-center justify-center text-black text-[8px] font-bold shrink-0">AI</div><div class="bg-[#1a1a1a] border border-brand-gold/20 text-white text-[10px] p-2 rounded-lg rounded-tl-none leading-relaxed">${bRes}</div></div>`;
                 box.scrollTop = box.scrollHeight;
                 window.currentMessages.push({ role: 'bot', text: bRes });
@@ -1896,6 +1992,35 @@ NORMAS:
             const botHistoryBtn = document.getElementById('bot-history-btn');
             if (window.userSession) { navLoginBtn?.classList.add('hidden'); botHistoryBtn?.classList.remove('hidden'); }
             else { navLoginBtn?.classList.remove('hidden'); botHistoryBtn?.classList.add('hidden'); }
+
+            // ── TECLADO MÓVIL: mantener el chat ajustado al viewport visual real ──
+            // En iOS/Android el teclado no cambia el viewport de layout, así que un
+            // drawer "fixed inset-y-0" queda parcialmente tapado por el teclado.
+            // Ajustamos su altura al viewport visual para que la barra de texto
+            // siempre suba por encima del teclado en vez de quedar oculta.
+            if (window.visualViewport) {
+                const adjustChatForKeyboard = () => {
+                    const drawer = document.getElementById('chatbot-drawer');
+                    if (!drawer) return;
+                    drawer.style.height = window.visualViewport.height + 'px';
+                };
+                window.visualViewport.addEventListener('resize', adjustChatForKeyboard);
+                window.visualViewport.addEventListener('scroll', adjustChatForKeyboard);
+                const chatInputEl = document.getElementById('chat-input');
+                if (chatInputEl) {
+                    chatInputEl.addEventListener('focus', () => {
+                        setTimeout(() => {
+                            adjustChatForKeyboard();
+                            const box = document.getElementById('chat-messages');
+                            if (box) box.scrollTop = box.scrollHeight;
+                        }, 300);
+                    });
+                    chatInputEl.addEventListener('blur', () => {
+                        const drawer = document.getElementById('chatbot-drawer');
+                        if (drawer) drawer.style.height = '';
+                    });
+                }
+            }
 
             document.getElementById('live-search')?.addEventListener('input', e => {
                 const q = e.target.value.toLowerCase().trim();
