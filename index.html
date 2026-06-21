@@ -216,8 +216,8 @@
         /* ── BARRA BLANCA "PEEK" — flotando, separada del borde superior ── */
         #navbar-peek-bar {
             top: calc(env(safe-area-inset-top) + 18px);
-            width: 56px;
-            height: 10px;
+            width: 68px;
+            height: 13px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.35);
             transition: opacity 0.4s ease;
         }
@@ -240,15 +240,11 @@
             -webkit-text-fill-color: transparent;
         }
         .navbar-wordmark-shine-active {
-            animation: navWordmarkShine 3.2s linear 1;
+            animation: navWordmarkShine 2.8s linear 2;
         }
         @keyframes navWordmarkShine {
-            0% { background-position: 0% 0%; opacity: 1; animation-timing-function: linear; }
-            28% { background-position: 0% 100%; opacity: 1; }
-            28.01% { background-position: 0% 0%; opacity: 1; animation-timing-function: linear; }
-            56% { background-position: 0% 100%; opacity: 1; }
-            56.01% { background-position: 0% 0%; opacity: 1; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-            100% { background-position: 0% 50%; opacity: 1; }
+            0% { background-position: 0% 0%; opacity: 1; }
+            100% { background-position: 0% 100%; opacity: 1; }
         }
 
         .init-modal-overlay { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
@@ -896,7 +892,7 @@
                 shine.classList.remove('navbar-wordmark-shine-active');
                 void shine.offsetWidth; // reinicia la animación
                 shine.classList.add('navbar-wordmark-shine-active');
-                setTimeout(() => shine.classList.remove('navbar-wordmark-shine-active'), 3300);
+                setTimeout(() => shine.classList.remove('navbar-wordmark-shine-active'), 5700);
             }
         };
 
