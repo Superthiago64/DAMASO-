@@ -217,13 +217,15 @@
         #navbar-peek-bar {
             top: calc(env(safe-area-inset-top) + 18px);
             width: 56px;
-            height: 7px;
+            height: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.35);
             transition: opacity 0.4s ease;
         }
 
-        /* ── DAMASO ILUMINÁNDOSE LENTAMENTE — al reabrir el navbar con la barra blanca ── */
-        .navbar-wordmark-shine {
+        /* ── DAMASO ILUMINÁNDOSE LENTAMENTE — capa de barrido sobre el texto base blanco ── */
+        #navbar-wordmark-shine {
+            opacity: 0;
+            white-space: nowrap;
             background-image: linear-gradient(180deg,
                 rgba(255,255,255,0.25) 0%,
                 rgba(255,255,255,0.25) 35%,
@@ -236,11 +238,14 @@
             background-clip: text;
             color: transparent;
             -webkit-text-fill-color: transparent;
-            animation: navWordmarkShine 1.8s ease-out 1;
+        }
+        .navbar-wordmark-shine-active {
+            animation: navWordmarkShine 2.6s ease-out 1;
         }
         @keyframes navWordmarkShine {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 0% 100%; }
+            0% { background-position: 0% 0%; opacity: 1; }
+            60% { background-position: 0% 100%; opacity: 1; }
+            100% { background-position: 0% 100%; opacity: 0; }
         }
 
         .init-modal-overlay { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
@@ -538,7 +543,10 @@
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div class="flex items-center space-x-4 sm:space-x-6">
                 <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center">MENÚ</button>
-                <a href="#" id="navbar-wordmark" onclick="window.scrollTo(0,0);" class="font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text uppercase font-bold ml-2">Damaso</a>
+                <a href="#" onclick="window.scrollTo(0,0);" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text uppercase font-bold ml-2">
+                    <span>Damaso</span>
+                    <span id="navbar-wordmark-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true">Damaso</span>
+                </a>
             </div>
 
             <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 glass-btn bg-brand-surface/90 border border-brand-gold/40 py-2 shadow-[0_0_20px_rgba(212,175,55,0.15)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-[990] rounded-sm">
@@ -880,12 +888,12 @@
         // Reabre el navbar al tocar la barra blanca, con "DAMASO" iluminándose lentamente
         window.reopenNavbar = function() {
             window.toggleNavbarState(true);
-            const wordmark = document.getElementById('navbar-wordmark');
-            if (wordmark) {
-                wordmark.classList.remove('navbar-wordmark-shine');
-                void wordmark.offsetWidth; // reinicia la animación
-                wordmark.classList.add('navbar-wordmark-shine');
-                setTimeout(() => wordmark.classList.remove('navbar-wordmark-shine'), 1900);
+            const shine = document.getElementById('navbar-wordmark-shine');
+            if (shine) {
+                shine.classList.remove('navbar-wordmark-shine-active');
+                void shine.offsetWidth; // reinicia la animación
+                shine.classList.add('navbar-wordmark-shine-active');
+                setTimeout(() => shine.classList.remove('navbar-wordmark-shine-active'), 2700);
             }
         };
 
@@ -945,6 +953,8 @@
             { id: 102, name: "Arbotante Cilindro Pantalla Blanca", category: "arbotantes", price: 5600, img: "arbotante_4.png", sku: "DM-ARB-014", desc: "Diseño minimalista con pantalla cilíndrica blanca sobre tallo de acero cromado.", specsLight: "1x E26 LED 8W cálida", cable: "Directo a muro", dims: { w: "20 cm", h: "32 cm", d: "16 cm", dia: "18 cm" }, peso: "1.6 kg", volt: "110-120V", mat: "Acero cromado y pantalla textil", fin: "Blanco y cromo", time: "3 a 4 semanas", cert: "NOM" },
             { id: 103, name: "Arbotante Cascada Latón Multitubo", category: "arbotantes", price: 24500, img: "arbotante_5.png", sku: "DM-ARB-015", desc: "Pieza escultórica vertical con múltiples tubos de cristal estriado dispuestos en cascada sobre estructura de latón.", specsLight: "8x G9 LED 3W cálida", cable: "Conexión directa a registro", dims: { w: "25 cm", h: "140 cm", d: "15 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón macizo y cristal estriado", fin: "Latón pulido", time: "5 a 6 semanas", cert: "NOM" },
             { id: 104, name: "Arbotante Cuello de Cisne Cristal Azul", category: "arbotantes", price: 11200, img: "arbotante_6.png", sku: "DM-ARB-016", desc: "Brazo curvo en latón con cilindro de cristal soplado en tono azul, apto para interior y exterior.", specsLight: "1x E26 LED Edison 6W", cable: "Directo a muro, apto exterior", dims: { w: "18 cm", h: "55 cm", d: "22 cm", dia: "10 cm" }, peso: "2.2 kg", volt: "110-120V", mat: "Latón y cristal soplado azul", fin: "Latón envejecido y azul translúcido", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 115, name: "Arbotante Cascada Varillas de Cristal", category: "arbotantes", price: 16800, img: "arbotante_7.png", sku: "DM-ARB-017", desc: "Escultura vertical de varillas de cristal ámbar dispuestas en cascada con anillo central de latón.", specsLight: "Módulos LED integrados cálidos", cable: "Conexión directa a registro", dims: { w: "28 cm", h: "75 cm", d: "18 cm", dia: "N/A" }, peso: "5.8 kg", volt: "110-120V", mat: "Varillas de cristal ámbar y latón", fin: "Latón antiguo y cristal ámbar", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 116, name: "Arbotante Placa Latón y Lino", category: "arbotantes", price: 6400, img: "arbotante_8.png", sku: "DM-ARB-018", desc: "Placa rectangular en bronce oscuro con brazo de latón pulido y pantalla cilíndrica de lino crudo.", specsLight: "1x E26 LED 8W, 2700K", cable: "Directo a muro", dims: { w: "16 cm", h: "38 cm", d: "20 cm", dia: "20 cm" }, peso: "2.0 kg", volt: "110-120V", mat: "Bronce oscuro, latón pulido y lino", fin: "Bronce oscuro y latón satinado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
             { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "ESPEJO_1.PNG", sku: "DM-ESP-002", desc: "Espejo cápsula con retroiluminación LED perimetral.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante", time: "3 a 4 semanas", cert: "NOM" },
             { id: 11, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Cristal envejecido artesanalmente con marco de acero.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
@@ -1018,6 +1028,9 @@
             { id: 80, name: "Colgante Campana Loft", category: "techo", price: 5900, img: "Image_15.png", sku: "DM-TEC-023", desc: "Campana de acero patinado industrial.", specsLight: "1x E26 LED 15W", cable: "Cadena de eslabones pesados 1.5m", dims: { w: "50 cm", h: "45 cm", d: "50 cm", dia: "50 cm" }, peso: "4.2 kg", volt: "110-120V", mat: "Acero avejentado", fin: "Gris acero rústico", time: "3 a 4 semanas", cert: "NOM" },
             { id: 81, name: "Set Hexágono Alambre", category: "techo", price: 9500, img: "20200121_085825.png", sku: "DM-TEC-024", desc: "Clúster de pantallas alámbricas con forma de diamante.", specsLight: "3x E26 LED Edison 6W", cable: "Cables textiles individuales", dims: { w: "80 cm", h: "60 cm", d: "25 cm", dia: "N/A" }, peso: "3 kg", volt: "110-120V", mat: "Acero de alta resistencia", fin: "Dorado cobrizo mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 99, name: "Domo Cobre Bicolor", category: "techo", price: 11500, img: "Unknown.png", sku: "DM-TEC-025", desc: "Semiesfera con exterior neutro e interior cobrizado amplificador.", specsLight: "1x E26 LED Globo 12W cálida", cable: "Cable textil y tensor de acero", dims: { w: "60 cm", h: "35 cm", d: "60 cm", dia: "60 cm" }, peso: "4.5 kg", volt: "110-240V", mat: "Aluminio repujado", fin: "Blanco mate exterior, cobre cepillado interior", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 117, name: "Clúster Esferas de Cristal Colgantes", category: "techo", price: 14200, img: "lampara_de_techo_3.png", sku: "DM-TEC-026", desc: "Conjunto de esferas de cristal soplado a distintas alturas suspendidas de cables textiles blancos.", specsLight: "6x G9 LED 3W cálida", cable: "Cables textiles blancos a distintas longitudes", dims: { w: "70 cm", h: "A medida", d: "40 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Cristal soplado y cable textil", fin: "Cristal transparente y blanco", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 118, name: "Colgante Globo Madera y Negro", category: "techo", price: 5400, img: "lampara_de_techo_4.png", sku: "DM-TEC-027", desc: "Globo de cristal opalino suspendido de varilla negra con collarín de madera natural.", specsLight: "1x E26 LED Globo 9W cálida", cable: "Varilla rígida ajustable negra", dims: { w: "25 cm", h: "60 cm", d: "25 cm", dia: "25 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero negro, madera natural y cristal opalino", fin: "Negro mate y madera natural", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 119, name: "Colgante Pantalla Ratán Bicolor", category: "techo", price: 4600, img: "lampara_de_techo_5.png", sku: "DM-TEC-028", desc: "Pantalla acampanada de ratán tejido con franja inferior color turquesa.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable textil blanco ajustable", dims: { w: "38 cm", h: "26 cm", d: "38 cm", dia: "38 cm" }, peso: "1.4 kg", volt: "110-120V", mat: "Ratán tejido natural", fin: "Natural y turquesa", time: "3 a 4 semanas", cert: "NOM" },
             { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2012.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero treated y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
             { id: 47, name: "Lámpara Exterior Rústica Cuerda", category: "exterior", price: 3600, img: "IMG_2020.png", sku: "DM-EXT-002", desc: "Luminaria exterior con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
             { id: 86, name: "Farol Linterna Latón", category: "exterior", price: 6800, img: "image_exterior.png", sku: "DM-EXT-003", desc: "Farol negro mate con corona de latón pulido.", specsLight: "1x E26 LED 8W cálida", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero tratado, latón macizo y cristal templado", fin: "Negro mate exterior y latón brillante", time: "3 a 4 semanas", cert: "NOM, IP65" },
