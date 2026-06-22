@@ -503,8 +503,20 @@
             <div class="space-y-4 mb-8">
                 <input type="text" id="session-name" placeholder="Nombre Completo o Despacho" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
                 <input type="email" id="session-email" placeholder="Correo Electrónico" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
-                <input type="password" id="session-password" placeholder="Contraseña" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
+                <div class="relative">
+                    <input type="password" id="session-password" placeholder="Contraseña" class="w-full bg-[#0a0a0a] border border-brand-border p-4 pr-12 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
+                    <button type="button" onclick="window.toggleSessionPasswordVisibility()" id="toggle-password-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-gold transition-colors" aria-label="Mostrar contraseña">
+                        <svg id="eye-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
                 <input type="text" id="session-address" placeholder="Dirección / Ciudad (Opcional)" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
+                <div>
+                    <label class="block text-brand-muted text-[9px] uppercase tracking-widest mb-2 text-left">Género</label>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="window.selectGender('femenino')" id="gender-btn-femenino" class="flex-1 py-3 border border-brand-border text-brand-gold text-[10px] uppercase font-bold tracking-widest transition-all rounded-sm">Femenino</button>
+                        <button type="button" onclick="window.selectGender('masculino')" id="gender-btn-masculino" class="flex-1 py-3 border border-brand-border text-brand-gold text-[10px] uppercase font-bold tracking-widest transition-all rounded-sm">Masculino</button>
+                    </div>
+                </div>
             </div>
             <button onclick="window.processLogin()" class="w-full py-4 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm">Aceptar y Entrar</button>
         </div>
@@ -751,6 +763,18 @@
     </div>
     <div id="cart-overlay" onclick="window.toggleCart()" class="fixed inset-0 z-[105] bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
+    <!-- ── PROMPT DE INICIO DE SESIÓN AL ABRIR EL CARRITO SIN SESIÓN ── -->
+    <div id="cart-login-prompt-modal" class="fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 hidden">
+        <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-md w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm">
+            <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Inicia Sesión</h2>
+            <p class="text-brand-muted text-[11px] leading-relaxed mb-6">Inicia sesión para guardar tus productos, cotizaciones y conversaciones con DAMASO AI aquí.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="window.closeCartLoginPrompt()" class="glass-btn px-6 py-3 text-[#ff4444] text-[10px] uppercase tracking-widest rounded-sm">Cancelar</button>
+                <button onclick="window.closeCartLoginPrompt(); window.showLoginForm();" class="px-6 py-3 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm">Iniciar Sesión</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ── HERO ── -->
     <header class="relative min-h-[100vh] min-h-[100dvh] flex items-center justify-center pt-36 overflow-hidden bg-black">
         <div class="absolute inset-0 z-0">
@@ -881,19 +905,19 @@
                 window._navHiddenByScroll = false;
                 const peek = document.getElementById('navbar-peek-bar');
                 if (peek) { peek.style.opacity = '0'; peek.style.pointerEvents = 'none'; }
+                const shine = document.getElementById('navbar-wordmark-shine');
+                if (shine) {
+                    shine.classList.remove('navbar-wordmark-shine-active');
+                    void shine.offsetWidth; // reinicia la animación
+                    shine.classList.add('navbar-wordmark-shine-active');
+                    setTimeout(() => shine.classList.remove('navbar-wordmark-shine-active'), 5700);
+                }
             }
         };
 
         // Reabre el navbar al tocar la barra blanca, con "DAMASO" iluminándose lentamente
         window.reopenNavbar = function() {
             window.toggleNavbarState(true);
-            const shine = document.getElementById('navbar-wordmark-shine');
-            if (shine) {
-                shine.classList.remove('navbar-wordmark-shine-active');
-                void shine.offsetWidth; // reinicia la animación
-                shine.classList.add('navbar-wordmark-shine-active');
-                setTimeout(() => shine.classList.remove('navbar-wordmark-shine-active'), 5700);
-            }
         };
 
         // Oculta el navbar al deslizar (en cualquier dirección) y muestra la barra blanca
@@ -1136,17 +1160,40 @@
             const lf = document.getElementById('login-form-modal');
             if (lf) { lf.classList.remove('hidden'); void lf.offsetWidth; lf.classList.remove('opacity-0', 'pointer-events-none'); }
         };
+        // Toggle de visibilidad de la contraseña (botón de ojo)
+        window.toggleSessionPasswordVisibility = function() {
+            const input = document.getElementById('session-password');
+            const icon = document.getElementById('eye-icon');
+            if (!input) return;
+            const show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            if (icon) {
+                icon.innerHTML = show
+                    ? '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>'
+                    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+            }
+        };
+        // Selector de género (Femenino / Masculino) en el formulario de credenciales
+        window._selectedGender = null;
+        window.selectGender = function(g) {
+            window._selectedGender = g;
+            const f = document.getElementById('gender-btn-femenino');
+            const m = document.getElementById('gender-btn-masculino');
+            if (f) { f.classList.toggle('bg-brand-gold', g === 'femenino'); f.classList.toggle('text-black', g === 'femenino'); }
+            if (m) { m.classList.toggle('bg-brand-gold', g === 'masculino'); m.classList.toggle('text-black', g === 'masculino'); }
+        };
         window.processLogin = function() {
             const name = document.getElementById('session-name')?.value || 'Thiago';
             const email = document.getElementById('session-email')?.value || '';
             const addr = document.getElementById('session-address')?.value || '';
-            window.userSession = { name, email, addr };
+            const gender = window._selectedGender || 'masculino';
+            window.userSession = { name, email, addr, gender };
             localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
             document.getElementById('login-form-modal')?.classList.add('opacity-0', 'pointer-events-none');
             document.getElementById('nav-login-btn')?.classList.add('hidden');
-            window.showWelcomeAnimation(name);
+            window.showWelcomeAnimation(name, gender);
         };
-        window.showWelcomeAnimation = function(userName) {
+        window.showWelcomeAnimation = function(userName, gender) {
             const loading = document.getElementById('login-loading-modal');
             if (loading) { loading.classList.remove('hidden', 'opacity-0', 'pointer-events-none'); }
             setTimeout(() => {
@@ -1154,7 +1201,8 @@
                 const overlay = document.getElementById('welcome-animation-overlay');
                 const container = document.getElementById('welcome-letters');
                 if (!overlay || !container) { window.enterSiteDirectly(); return; }
-                const text = ('BIENVENIDO ' + userName).toUpperCase();
+                const greeting = gender === 'femenino' ? 'BIENVENIDA' : 'BIENVENIDO';
+                const text = (greeting + ' ' + userName).toUpperCase();
                 container.innerHTML = text.split(' ').map(word =>
                     `<span class="inline-block whitespace-nowrap mx-2 sm:mx-4">${word.split('').map(c =>
                         `<span class="welcome-letter opacity-0 transition-opacity duration-500 font-editorial text-4xl sm:text-6xl md:text-8xl text-white tracking-widest glow-text inline-block">${c}</span>`
@@ -1221,7 +1269,7 @@
                     entry.style.transform = 'translateY(-100%)';
                     setTimeout(() => {
                         entry.style.display = 'none';
-                        if (window.userSession) { window.showWelcomeAnimation(window.userSession.name); }
+                        if (window.userSession) { window.showWelcomeAnimation(window.userSession.name, window.userSession.gender); }
                         else {
                             if (cookieModal) { cookieModal.classList.remove('hidden'); void cookieModal.offsetWidth; cookieModal.classList.remove('opacity-0', 'pointer-events-none'); }
                         }
@@ -1495,11 +1543,26 @@
                 window._navLockedByOverlay = false;
                 window.toggleNavbarState(true);
             } else {
+                if (!window.userSession) { window.showCartLoginPrompt(); return; }
                 drawer.classList.remove('translate-x-full');
                 overlay.classList.remove('opacity-0', 'pointer-events-none');
                 window._navLockedByOverlay = true;
                 window.toggleNavbarState(false);
             }
+        };
+
+        // Pide iniciar sesión antes de abrir el carrito si no hay sesión activa
+        window.showCartLoginPrompt = function() {
+            const modal = document.getElementById('cart-login-prompt-modal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        };
+        window.closeCartLoginPrompt = function() {
+            const modal = document.getElementById('cart-login-prompt-modal');
+            if (!modal) return;
+            modal.classList.add('opacity-0', 'pointer-events-none');
         };
 
         // ── COPY / DOWNLOAD ──
@@ -1573,191 +1636,1011 @@
             img.src = imgEl.src;
         };
 
-        // ── FALLBACK ENGINE v2 — Powered by Anthropic Claude ──
-        // Motor de emergencia que llama a la API de Anthropic (claude-haiku-4-5)
-        // Se activa automáticamente si Gemini falla o no está disponible
-        window.DamasoFallbackEngine = {
-            // Respuesta instantánea offline para casos sin internet (última línea de defensa)
-            // Tolerante a errores de dedo/ortografía (acentos, letras de más o de menos) y con
-            // varias variantes de respuesta por intención para que no se sienta repetitivo/robótico.
-            offlineResponse: function(text) {
-                const t = ' ' + text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim() + ' ';
-                const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-                const WA = '+52 33 3870 3071';
-                const userName = window.getUserFirstName ? window.getUserFirstName() : 'Estimado cliente';
+        // ── FALLBACK ENGINE v2 — Motor de respaldo offline ──
+        // Se activa automáticamente cuando la IA principal (función de Netlify) no
+        // responde a tiempo o no hay conexión. Toda la lógica vive aquí mismo, en el
+        // navegador del cliente, sin depender de ningún servicio externo, y conoce
+        // todas las capacidades reales de la página: catálogo y categorías, búsqueda
+        // en vivo, filtros, ficha de producto con copiar SKU, carrito/bolsa de
+        // cotización, generación de PDF, propuesta de diseño con IA, inicio de sesión
+        // con selección de género y animación de bienvenida, historial de chat, música
+        // ambiental y contacto por WhatsApp.
+        //
+        // Tolerante a errores de dedo, acentos y distintas formas de preguntar lo mismo:
+        // primero corrige errores de ortografía frecuentes contra un diccionario de
+        // confusiones comunes en español (b/v, c/s/z, k/c, letras dobles, letras que
+        // faltan), y además compara cada palabra restante con distancia de Levenshtein
+        // contra cada palabra clave, así que "presio", "presyo" o "cuanto qesta" se
+        // entienden igual que "precio".
+        window.DamasoFallbackEngine = (function() {
 
-                const intents = [
+            // ── Utilidades de texto ──
+            function levenshtein(a, b) {
+                if (a === b) return 0;
+                const al = a.length, bl = b.length;
+                if (al === 0) return bl;
+                if (bl === 0) return al;
+                let prev = new Array(bl + 1);
+                let curr = new Array(bl + 1);
+                for (let j = 0; j <= bl; j++) prev[j] = j;
+                for (let i = 1; i <= al; i++) {
+                    curr[0] = i;
+                    for (let j = 1; j <= bl; j++) {
+                        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                        curr[j] = Math.min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
+                    }
+                    const tmp = prev; prev = curr; curr = tmp;
+                }
+                return prev[bl];
+            }
+
+            // ── Diccionario de errores de ortografía / dedo frecuentes ──
+            // Mapea variantes mal escritas a su forma canónica antes de tokenizar,
+            // para que el reconocimiento de intención no dependa solo de Levenshtein.
+            const COMMON_TYPOS = {
+                'presio': 'precio', 'presyo': 'precio', 'preccio': 'precio', 'prezio': 'precio',
+                'presios': 'precios', 'presyos': 'precios', 'preccios': 'precios',
+                'kuanto': 'cuanto', 'qanto': 'cuanto', 'cuamto': 'cuanto', 'kuamto': 'cuanto',
+                'cuanot': 'cuanto', 'kuanot': 'cuanto', 'qe': 'que', 'q': 'que',
+                'kosto': 'costo', 'costp': 'costo', 'kostos': 'costos', 'costoo': 'costo',
+                'balor': 'valor', 'vapor': 'valor', 'balores': 'valores',
+                'garantya': 'garantia', 'grantia': 'garantia', 'garantia s': 'garantias',
+                'garrantia': 'garantia', 'guarantia': 'garantia',
+                'entega': 'entrega', 'entrga': 'entrega', 'entreega': 'entrega', 'emtrega': 'entrega',
+                'envvio': 'envio', 'emvio': 'envio', 'enbio': 'envio', 'embio': 'envio',
+                'instalasion': 'instalacion', 'instalazion': 'instalacion', 'imstalacion': 'instalacion',
+                'instalacin': 'instalacion', 'enstalacion': 'instalacion',
+                'matrial': 'material', 'matereal': 'material', 'materail': 'material',
+                'materiales s': 'materiales', 'matriales': 'materiales',
+                'pagoo': 'pago', 'pgo': 'pago', 'pagho': 'pago',
+                'proyeto': 'proyecto', 'proyekto': 'proyecto', 'proiecto': 'proyecto',
+                'proyectoo': 'proyecto', 'proiectos': 'proyectos', 'proyetos': 'proyectos',
+                'cotisacion': 'cotizacion', 'cotizasion': 'cotizacion', 'kotizacion': 'cotizacion',
+                'cotizacin': 'cotizacion', 'cotisasion': 'cotizacion',
+                'carito': 'carrito', 'karrito': 'carrito', 'carrto': 'carrito', 'karito': 'carrito',
+                'contakto': 'contacto', 'contato': 'contacto', 'kontacto': 'contacto',
+                'orario': 'horario', 'orarios': 'horarios', 'jorario': 'horario',
+                'ubicasion': 'ubicacion', 'ubicazion': 'ubicacion', 'ubicacin': 'ubicacion',
+                'direccion s': 'direcciones', 'direcsion': 'direccion',
+                'ayda': 'ayuda', 'ayudaa': 'ayuda', 'alluda': 'ayuda', 'aiuda': 'ayuda',
+                'grasias': 'gracias', 'graciaz': 'gracias', 'grasiaz': 'gracias', 'graxias': 'gracias',
+                'olaa': 'hola', 'jola': 'hola', 'ola': 'hola', 'oloa': 'hola',
+                'adioz': 'adios', 'adius': 'adios', 'adioos': 'adios',
+                'kandil': 'candil', 'candi': 'candil', 'kandiles': 'candiles', 'candile': 'candil',
+                'arbotente': 'arbotante', 'arvotante': 'arbotante', 'arbotantes s': 'arbotantes',
+                'arbontante': 'arbotante', 'arbotanttes': 'arbotantes',
+                'espeho': 'espejo', 'espejoo': 'espejo', 'espeyo': 'espejo', 'espehos': 'espejos',
+                'lanpara': 'lampara', 'lampar': 'lampara', 'lanmpara': 'lampara', 'lampada': 'lampara',
+                'lamparaz': 'lamparas', 'lanparas': 'lamparas',
+                'mesaa': 'mesa', 'mesas s': 'mesas',
+                'techoo': 'techo', 'thecho': 'techo', 'techho': 'techo',
+                'exterio': 'exterior', 'eksterior': 'exterior', 'estexior': 'exterior',
+                'devolusion': 'devolucion', 'devoluzion': 'devolucion', 'devolucin': 'devolucion',
+                'reembolzo': 'reembolso', 'rembolso': 'reembolso', 'reembolzso': 'reembolso',
+                'desckuento': 'descuento', 'dcuento': 'descuento', 'descuentoo': 'descuento',
+                'fabricasion': 'fabricacion', 'fabrikacion': 'fabricacion', 'fabricazion': 'fabricacion',
+                'certificasion': 'certificacion', 'certifikacion': 'certificacion',
+                'tranferencia': 'transferencia', 'trasferencia': 'transferencia', 'trnasferencia': 'transferencia',
+                'efectibo': 'efectivo', 'efetivo': 'efectivo',
+                'tarjet': 'tarjeta', 'tarjta': 'tarjeta', 'tarjeeta': 'tarjeta',
+                'mayorist': 'mayorista', 'mayoristaz': 'mayorista',
+                'arkitecto': 'arquitecto', 'arquiteto': 'arquitecto', 'arquitecta': 'arquitecto',
+                'disponivilidad': 'disponibilidad', 'disponibilida': 'disponibilidad', 'disponivle': 'disponible',
+                'kalidad': 'calidad', 'calida': 'calidad', 'kalida': 'calidad',
+                'dimenciones': 'dimensiones', 'dimensione': 'dimensiones', 'dimencion': 'dimension',
+                'medidaz': 'medidas', 'medida s': 'medidas',
+                'pesoo': 'peso', 'pezo': 'peso',
+                'votaje': 'voltaje', 'boltaje': 'voltaje', 'voltahe': 'voltaje',
+                'fokus': 'foco', 'fucos': 'foco', 'focoo': 'foco',
+                'vulbo': 'bulbo', 'bulvo': 'bulbo', 'bulboz': 'bulbos',
+                'rekamara': 'recamara', 'recamaraa': 'recamara', 'recamarra': 'recamara',
+                'salaa': 'sala', 'zala': 'sala',
+                'comedorr': 'comedor', 'komedor': 'comedor',
+                'banio': 'bano', 'vanio': 'bano', 'banno': 'bano',
+                'kocina': 'cocina', 'cosina': 'cocina', 'cocinaa': 'cocina',
+                'oficinaa': 'oficina', 'ofisina': 'oficina',
+                'bestibulo': 'vestibulo', 'vestivulo': 'vestibulo', 'bestivulo': 'vestibulo',
+                'eskalera': 'escalera', 'eskaleras': 'escaleras',
+                'jardinn': 'jardin', 'jardiin': 'jardin',
+                'terrasa': 'terraza', 'terraza s': 'terrazas',
+                'alverca': 'alberca', 'alberka': 'alberca', 'alberca s': 'albercas',
+                'minimalist': 'minimalista', 'minimalsta': 'minimalista', 'minimalizta': 'minimalista',
+                'klasico': 'clasico', 'clazico': 'clasico', 'clasiko': 'clasico',
+                'rrustico': 'rustico', 'rrustiko': 'rustico', 'rustiko': 'rustico',
+                'industral': 'industrial', 'industial': 'industrial', 'industrual': 'industrial',
+                'modeno': 'moderno', 'modreno': 'moderno', 'modernoo': 'moderno',
+                'elegante s': 'elegantes', 'elgante': 'elegante',
+                'ivaa': 'iva', 'inpuesto': 'impuesto',
+                'inpuestos': 'impuestos', 'inpuesta': 'impuesta',
+                'segiro': 'seguro', 'seguroo': 'seguro',
+                'compania': 'compañia', 'enpresa': 'empresa', 'enprasa': 'empresa',
+                'horraio': 'horario', 'orariio': 'horario',
+                'wasap': 'whatsapp', 'wachat': 'whatsapp', 'wasapp': 'whatsapp', 'guasap': 'whatsapp',
+                'telefonoo': 'telefono', 'telephono': 'telefono', 'telefon': 'telefono',
+                'numeroo': 'numero', 'numro': 'numero',
+                'sesion': 'sesion', 'cesion': 'sesion', 'cesión': 'sesion',
+                'contrasenia': 'contrasena', 'contraceña': 'contrasena', 'contrasenha': 'contrasena',
+                'clabe': 'clave', 'clav': 'clave',
+                'corrreo': 'correo', 'koreo': 'correo', 'coreo': 'correo',
+                'usuarrio': 'usuario', 'husuario': 'usuario',
+                'cuanta': 'cuenta', 'cuentaa': 'cuenta',
+                'rejistro': 'registro', 'rrejistro': 'registro', 'rregistro': 'registro',
+                'eskritorio': 'escritorio', 'eskritoryo': 'escritorio',
+                'lumen': 'lumen', 'lumenes': 'lumenes', 'lumens': 'lumenes', 'lumene': 'lumen',
+                'kelvin': 'kelvin', 'kelvines': 'kelvin', 'kelvim': 'kelvin',
+                'alabastro': 'alabastro', 'alavastro': 'alabastro', 'alabaztro': 'alabastro',
+                'ceramica': 'ceramica', 'seramica': 'ceramica', 'zeramica': 'ceramica',
+                'laton': 'laton', 'laaton': 'laton', 'laxon': 'laton', 'laston': 'laton',
+                'cristal': 'cristal', 'kristal': 'cristal', 'cristral': 'cristal',
+                'mimbre': 'mimbre', 'mimbri': 'mimbre', 'minbre': 'mimbre',
+                'patina': 'patina', 'patiina': 'patina', 'pattina': 'patina',
+                'acero inoxidable': 'acero inoxidable', 'asero inoxidable': 'acero inoxidable',
+                'aluminio': 'aluminio', 'alunimio': 'aluminio', 'aluminyo': 'aluminio',
+                'glosario': 'glosario', 'glosaryo': 'glosario', 'glosarrio': 'glosario',
+                'significado': 'significado', 'sinificado': 'significado', 'significao': 'significado',
+                'definicion': 'definicion', 'definision': 'definicion', 'defincion': 'definicion',
+                'concepto': 'concepto', 'konsepto': 'concepto', 'consepto': 'concepto',
+                'forjado': 'forjado', 'forjaddo': 'forjado', 'forhado': 'forjado',
+                'retroiluminado': 'retroiluminado', 'retroiluminada': 'retroiluminada',
+                'minimalismo': 'minimalismo', 'minimalizmo': 'minimalismo',
+                'escultorico': 'escultorico', 'eskultorico': 'escultorico', 'esculturico': 'escultorico',
+                'artesania': 'artesania', 'artezania': 'artesania', 'artesanya': 'artesania',
+                'manufactura': 'manufactura', 'manofactura': 'manufactura', 'manufaktura': 'manufactura',
+                'cabecera': 'cabecera', 'cavecera': 'cabecera', 'cabesera': 'cabecera',
+                'lavabo': 'lavabo', 'lababo': 'lavabo', 'lavavo': 'lavabo',
+                'isla de cocina': 'isla de cocina', 'isla de la cocina': 'isla de cocina',
+                'doble altura': 'doble altura', 'doble altua': 'doble altura',
+                'punto focal': 'punto focal', 'punto fokal': 'punto focal',
+                'iluminacion': 'iluminacion', 'iluminasion': 'iluminacion', 'iluminacin': 'iluminacion',
+                'general y de acento': 'general y de acento',
+                'luz de tarea': 'luz de tarea', 'luz de tare a': 'luz de tarea',
+                'amperaje': 'amperaje', 'amperahe': 'amperaje',
+                'apagador': 'apagador', 'apagadorr': 'apagador', 'interuptor': 'interruptor',
+                'breaker': 'breaker', 'breker': 'breaker', 'breiker': 'breaker',
+                'plafon': 'plafon', 'plafond': 'plafon', 'plafone': 'plafon',
+                'cuki': 'cookie', 'kuki': 'cookie', 'cookis': 'cookies', 'kukis': 'cookies',
+                'privasidad': 'privacidad', 'prebacidad': 'privacidad', 'privacidaad': 'privacidad',
+                'asesibilidad': 'accesibilidad', 'axesibilidad': 'accesibilidad',
+                'tema oscuro': 'tema oscuro', 'modo oscuro': 'modo oscuro', 'modo oscurro': 'modo oscuro',
+                'navegador': 'navegador', 'navegadorr': 'navegador', 'nabegador': 'navegador',
+                'selular': 'celular', 'celula': 'celular', 'movil': 'movil', 'mobil': 'movil',
+                'tablet': 'tablet', 'tableta': 'tablet', 'tablete': 'tablet',
+                'compatible': 'compatible', 'conpatible': 'compatible', 'kompatible': 'compatible',
+                'chatbot': 'chatbot', 'chat bot': 'chatbot', 'xatbot': 'chatbot',
+                'asistente': 'asistente', 'asistende': 'asistente', 'asistenta': 'asistente',
+                'inteligencia artificial': 'inteligencia artificial', 'inteligencia artifisial': 'inteligencia artificial',
+                'descuento': 'descuento', 'dezcuento': 'descuento', 'descuentto': 'descuento',
+                'promocion': 'promocion', 'promosion': 'promocion', 'promocin': 'promocion',
+                'oferta': 'oferta', 'oferrta': 'oferta', 'ofertaz': 'ofertas',
+                'cliente': 'cliente', 'clyente': 'cliente', 'clientee': 'cliente',
+                'asesoria': 'asesoria', 'asesorria': 'asesoria', 'asesoryia': 'asesoria',
+                'diseño': 'diseno', 'diseñoo': 'diseno', 'desiño': 'diseno',
+                'interiorismo': 'interiorismo', 'interiorizmo': 'interiorismo',
+                'decoracion': 'decoracion', 'decorasion': 'decoracion', 'decoracin': 'decoracion'
+            };
+
+            // ── Glosario de términos de iluminación y materiales ──
+            const GLOSSARY = [
+                { terms: ['lumen', 'lumenes'], def: 'el lumen es la unidad que mide la cantidad de luz visible que emite una fuente; entre más lúmenes, más brillante es la luz.' },
+                { terms: ['kelvin', 'temperatura de color'], def: 'los kelvin (K) miden si una luz se ve cálida (alrededor de 2700K, amarillenta) o fría (5000K+, azulada). La mayoría de nuestras piezas usan luz cálida.' },
+                { terms: ['alabastro'], def: 'el alabastro es una piedra translúcida que, al iluminarse desde dentro, produce un brillo suave y cálido; lo usamos en varias lámparas de mesa.' },
+                { terms: ['laton', 'laton macizo'], def: 'el latón es una aleación de cobre y zinc, muy usada en herrería decorativa por su brillo dorado y durabilidad; con el tiempo puede desarrollar una pátina natural.' },
+                { terms: ['patina'], def: 'la pátina es el cambio de color natural que desarrollan metales como el latón con el tiempo y la exposición al aire, y suele apreciarse como un acabado envejecido elegante.' },
+                { terms: ['retroiluminado', 'retroiluminada'], def: 'retroiluminado significa que la fuente de luz está integrada detrás o alrededor de la pieza (por ejemplo, el borde de un espejo) en vez de ser un foco visible.' },
+                { terms: ['minimalismo', 'minimalista'], def: 'el minimalismo es un estilo de líneas limpias, pocos elementos decorativos y formas geométricas simples.' },
+                { terms: ['escultorico'], def: 'una pieza escultórica es aquella diseñada como una obra de arte por sí misma, más allá de su función de iluminar.' },
+                { terms: ['artesania', 'artesanal'], def: 'artesanal se refiere a piezas elaboradas a mano o con procesos tradicionales, en lugar de producción 100% industrial en masa.' },
+                { terms: ['manufactura'], def: 'manufactura es el proceso de fabricación de la pieza; en DAMASO Studio combina técnicas artesanales con control de calidad moderno.' },
+                { terms: ['voltaje'], def: 'el voltaje es la tensión eléctrica que requiere la pieza para funcionar correctamente; en México la red doméstica estándar es de 110-127V.' },
+                { terms: ['amperaje'], def: 'el amperaje es la corriente eléctrica que circula por el circuito; relevante para saber si su instalación soporta varias piezas conectadas.' },
+                { terms: ['punto focal'], def: 'un punto focal es el elemento que atrae primero la mirada en un espacio; un candil o una pieza escultórica suelen cumplir ese papel.' },
+                { terms: ['luz de tarea'], def: 'la luz de tarea es la iluminación dirigida a una actividad específica, como leer o cocinar, distinta de la luz general ambiental.' },
+                { terms: ['luz de acento'], def: 'la luz de acento resalta un objeto, textura o zona particular del espacio, complementando la luz general.' }
+            ];
+
+            function lookupGlossary(normText) {
+                const triggers = ['que es', 'que significa', 'definicion de', 'que quiere decir', 'a que se refiere'];
+                let isTrigger = false;
+                for (const t of triggers) { if (normText.indexOf(t) !== -1) { isTrigger = true; break; } }
+                if (!isTrigger) return null;
+                for (const entry of GLOSSARY) {
+                    for (const term of entry.terms) {
+                        if (normText.indexOf(term) !== -1) {
+                            return 'Con gusto: ' + entry.def + ' ¿Le gustaría ver piezas relacionadas con este término?';
+                        }
+                    }
+                }
+                return null;
+            }
+
+            function correctToken(tok) {
+                return COMMON_TYPOS.hasOwnProperty(tok) ? COMMON_TYPOS[tok] : tok;
+            }
+
+            function normalize(s) {
+                return (s || '').toString().toLowerCase()
+                    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+                    .replace(/[^a-z0-9\s$]/g, ' ')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+            }
+
+            function tokenize(s) {
+                const n = normalize(s);
+                if (!n.length) return [];
+                return n.split(' ').map(correctToken);
+            }
+
+            function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+            function fmt(n) { return '$' + Number(n).toLocaleString('es-MX') + ' MXN'; }
+
+            // Compara una palabra del mensaje contra una palabra clave canónica,
+            // tolerando errores de dedo proporcional al largo de la palabra.
+            function fuzzyWordMatch(token, kw) {
+                if (token === kw) return true;
+                if (token.length < 3 || kw.length < 3) return false;
+                const maxDist = kw.length <= 4 ? 1 : (kw.length <= 8 ? 2 : 3);
+                if (Math.abs(token.length - kw.length) > maxDist) return false;
+                return levenshtein(token, kw) <= maxDist;
+            }
+
+            // keywords puede mezclar palabras sueltas ("precio") y frases ("cuanto cuesta").
+            // Las frases se buscan como subcadena (sobre el texto ya corregido); las
+            // palabras sueltas se comparan con fuzzy match contra cada token del mensaje.
+            function matchIntent(tokens, normText, keywords) {
+                for (let i = 0; i < keywords.length; i++) {
+                    const kw = keywords[i];
+                    if (kw.indexOf(' ') !== -1) {
+                        if (normText.indexOf(kw) !== -1) return true;
+                        continue;
+                    }
+                    for (let j = 0; j < tokens.length; j++) {
+                        if (fuzzyWordMatch(tokens[j], kw)) return true;
+                    }
+                }
+                return false;
+            }
+
+            function minPrice() { return Math.min.apply(null, window.dbProducts.map(function(p) { return p.price; })); }
+            function maxPrice() { return Math.max.apply(null, window.dbProducts.map(function(p) { return p.price; })); }
+            function avgPrice() {
+                const sum = window.dbProducts.reduce(function(acc, p) { return acc + p.price; }, 0);
+                return Math.round(sum / window.dbProducts.length);
+            }
+
+            const WA = '+52 33 3870 3071';
+
+            // ── Búsqueda en catálogo (tolerante a acentos y typos) ──
+            function searchCatalog(normText, tokens) {
+                let best = null;
+                let bestScore = 0;
+                for (const p of window.dbProducts) {
+                    const nameNorm = normalize(p.name);
+                    const nameTokens = nameNorm.split(' ').filter(function(w) { return w.length > 3; });
+                    const skuNorm = normalize(p.sku);
+                    let score = 0;
+                    if (normText.indexOf(skuNorm) !== -1) score += 10;
+                    for (const nt of nameTokens) {
+                        for (const tok of tokens) {
+                            if (fuzzyWordMatch(tok, nt)) { score += 2; break; }
+                        }
+                    }
+                    if (score > bestScore) { bestScore = score; best = p; }
+                }
+                if (best && bestScore >= 2) {
+                    return '<strong class="text-brand-gold">' + best.name + '</strong> · ' + fmt(best.price) +
+                        ' · SKU ' + best.sku + ' · Entrega: ' + best.time + ' · ' +
+                        (best.dims && best.dims.w || '') + '×' + (best.dims && best.dims.h || '') + ' · ' + best.mat +
+                        '. ¿Quiere que se la agregue a su bolsa de cotización o le doy más detalle?';
+                }
+                return null;
+            }
+
+            // ── Comparación entre dos piezas mencionadas en el mismo mensaje ──
+            function findProductsInText(tokens) {
+                const found = [];
+                for (const p of window.dbProducts) {
+                    const nameTokens = normalize(p.name).split(' ').filter(function(w) { return w.length > 3; });
+                    let hits = 0;
+                    for (const nt of nameTokens) {
+                        for (const tok of tokens) {
+                            if (fuzzyWordMatch(tok, nt)) { hits++; break; }
+                        }
+                    }
+                    if (hits >= 1) found.push({ p: p, hits: hits });
+                }
+                found.sort(function(a, b) { return b.hits - a.hits; });
+                const unique = [];
+                for (const f of found) {
+                    if (!unique.some(function(u) { return u.sku === f.p.sku; })) unique.push(f.p);
+                    if (unique.length >= 2) break;
+                }
+                return unique;
+            }
+
+            function compareProducts(normText, tokens) {
+                if (normText.indexOf('compar') === -1 && normText.indexOf('diferencia') === -1 && normText.indexOf('cual es mejor') === -1) return null;
+                const found = findProductsInText(tokens);
+                if (found.length < 2) return null;
+                const a = found[0], b = found[1];
+                const priceDiff = Math.abs(a.price - b.price);
+                const cheaper = a.price <= b.price ? a : b;
+                const pricier = a.price <= b.price ? b : a;
+                return 'Comparando <strong class="text-brand-gold">' + a.name + '</strong> (' + fmt(a.price) + ', ' + a.mat + ', entrega ' + a.time + ') y ' +
+                    '<strong class="text-brand-gold">' + b.name + '</strong> (' + fmt(b.price) + ', ' + b.mat + ', entrega ' + b.time + '): ' +
+                    cheaper.name + ' es ' + fmt(priceDiff) + ' más accesible que ' + pricier.name + '. ' +
+                    'Si me dice el espacio donde la usará, le ayudo a decidir cuál conviene más.';
+            }
+
+            // ── Rangos de precio ("menos de $5000", "entre 3000 y 8000", "mas de 10000") ──
+            function parsePriceRange(normText) {
+                const between = normText.match(/entre\s*\$?\s*(\d[\d,.]*)\s*(?:y|a)\s*\$?\s*(\d[\d,.]*)/);
+                const under = normText.match(/(?:menos de|maximo|menor a|hasta)\s*\$?\s*(\d[\d,.]*)/);
+                const over = normText.match(/(?:mas de|minimo|mayor a|arriba de)\s*\$?\s*(\d[\d,.]*)/);
+                let lo = null, hi = null;
+                if (between) { lo = parseFloat(between[1].replace(/[,.]/g, '')); hi = parseFloat(between[2].replace(/[,.]/g, '')); }
+                else if (under) { hi = parseFloat(under[1].replace(/[,.]/g, '')); }
+                else if (over) { lo = parseFloat(over[1].replace(/[,.]/g, '')); }
+                else return null;
+                const matches = window.dbProducts.filter(function(p) {
+                    return (lo === null || p.price >= lo) && (hi === null || p.price <= hi);
+                }).sort(function(a, b) { return a.price - b.price; }).slice(0, 5);
+                if (!matches.length) {
+                    return 'No encontré piezas exactamente en ese rango, pero nuestro catálogo va de ' + fmt(minPrice()) + ' a ' + fmt(maxPrice()) + ', con un promedio de ' + fmt(avgPrice()) + '. ¿Le muestro opciones cercanas o prefiere hablar con nuestro equipo por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>?';
+                }
+                const list = matches.map(function(p) { return p.name + ' (' + fmt(p.price) + ')'; }).join(', ');
+                return 'En ese rango le recomiendo: <strong class="text-brand-gold">' + list + '</strong>. ¿Quiere el detalle de alguna?';
+            }
+
+            // ── Calculadora orientativa de iluminación por metro cuadrado ──
+            const LUMENS_PER_M2 = [
+                { keywords: ['recamara', 'dormitorio', 'cuarto', 'habitacion'], lumens: 150, label: 'recámara' },
+                { keywords: ['sala', 'living', 'estancia'], lumens: 200, label: 'sala' },
+                { keywords: ['comedor', 'antecomedor'], lumens: 250, label: 'comedor' },
+                { keywords: ['cocina', 'desayunador'], lumens: 300, label: 'cocina' },
+                { keywords: ['bano', 'sanitario'], lumens: 200, label: 'baño' },
+                { keywords: ['oficina', 'estudio', 'despacho'], lumens: 350, label: 'oficina' },
+                { keywords: ['pasillo', 'corredor', 'vestibulo'], lumens: 100, label: 'pasillo o vestíbulo' },
+                { keywords: ['exterior', 'terraza', 'jardin', 'patio'], lumens: 100, label: 'exterior' }
+            ];
+
+            function calculateLighting(normText) {
+                const triggers = ['watts necesito', 'cuanta luz necesito', 'cuantos lumenes', 'cuanta iluminacion necesito', 'cuanta luz para', 'cuantos watts'];
+                let isTrigger = false;
+                for (const t of triggers) { if (normText.indexOf(t) !== -1) { isTrigger = true; break; } }
+                const areaMatch = normText.match(/(\d+(?:\.\d+)?)\s*(?:m2|metros|metros cuadrados|mts)/);
+                if (!isTrigger && !areaMatch) return null;
+                if (!areaMatch) {
+                    return 'Para calcularle la iluminación recomendada necesito el área aproximada en metros cuadrados del espacio. ¿Cuántos m² tiene?';
+                }
+                const area = parseFloat(areaMatch[1]);
+                let roomEntry = null;
+                for (const room of LUMENS_PER_M2) {
+                    for (const kw of room.keywords) {
+                        if (normText.indexOf(kw) !== -1) { roomEntry = room; break; }
+                    }
+                    if (roomEntry) break;
+                }
+                const lumensPerM2 = roomEntry ? roomEntry.lumens : 200;
+                const totalLumens = Math.round(area * lumensPerM2);
+                const roomLabel = roomEntry ? roomEntry.label : 'ese espacio';
+                return 'Para ' + roomLabel + ' de ' + area + ' m² recomendamos aproximadamente <strong class="text-brand-gold">' + totalLumens + ' lúmenes</strong> en total (orientativo, puede combinarse entre luz general y de acento). Cuénteme el estilo que busca y le sugiero piezas concretas de nuestro catálogo.';
+            }
+
+            // ── Guías por espacio y por estilo ──
+            const ROOM_GUIDE = [
+                { keywords: ['recamara', 'dormitorio', 'cuarto', 'habitacion'], label: 'recámara', cats: ['arbotantes', 'mesa', 'techo'], note: 'arbotantes de cabecera con luz de lectura y lámparas de mesa para burós' },
+                { keywords: ['sala', 'living', 'estancia'], label: 'sala', cats: ['pie', 'techo', 'mesa'], note: 'lámparas de pie como acento y piezas de techo como punto focal' },
+                { keywords: ['comedor', 'antecomedor'], label: 'comedor', cats: ['techo', 'candiles'], note: 'candiles o colgantes centrados sobre la mesa' },
+                { keywords: ['bano', 'sanitario', 'toilette'], label: 'baño', cats: ['espejos', 'arbotantes'], note: 'espejos retroiluminados y arbotantes a los lados del lavabo' },
+                { keywords: ['pasillo', 'corredor'], label: 'pasillo', cats: ['arbotantes', 'techo'], note: 'arbotantes espaciados de forma rítmica o plafones empotrados' },
+                { keywords: ['cocina', 'desayunador'], label: 'cocina', cats: ['techo', 'pie'], note: 'colgantes sobre la isla y plafones de luz general' },
+                { keywords: ['oficina', 'estudio', 'despacho'], label: 'oficina', cats: ['mesa', 'pie'], note: 'lámparas de mesa para escritorio y de pie para rincones de lectura' },
+                { keywords: ['vestibulo', 'entrada', 'hall'], label: 'vestíbulo', cats: ['candiles', 'techo'], note: 'una pieza escultórica de techo como primera impresión' },
+                { keywords: ['escalera', 'escaleras', 'doble altura'], label: 'escaleras / doble altura', cats: ['candiles', 'proyectos'], note: 'candiles de gran formato o proyectos especiales a medida' },
+                { keywords: ['jardin', 'terraza', 'alberca', 'patio', 'exterior'], label: 'exterior', cats: ['exterior'], note: 'piezas resistentes a la intemperie para terraza, jardín o alberca' },
+                { keywords: ['vestidor', 'closet'], label: 'vestidor', cats: ['techo', 'mesa'], note: 'luz general uniforme de techo más una lámpara de mesa para detalle de color verdadero' },
+                { keywords: ['biblioteca', 'lectura', 'rincon de lectura'], label: 'biblioteca o rincón de lectura', cats: ['pie', 'mesa'], note: 'una lámpara de pie con buen ángulo de lectura o una de mesa cálida' }
+            ];
+
+            function recommendRoom(normText) {
+                for (const room of ROOM_GUIDE) {
+                    for (const kw of room.keywords) {
+                        if (normText.indexOf(kw) !== -1) {
+                            const examples = window.dbProducts.filter(function(p) { return room.cats.indexOf(p.category) !== -1; }).slice(0, 3).map(function(p) { return p.name; }).join(', ');
+                            return 'Para ' + room.label + ' le recomiendo ' + room.note + '. Algunos ejemplos de nuestro catálogo: <strong class="text-brand-gold">' + examples + '</strong>. ¿Le gustaría ver más opciones?';
+                        }
+                    }
+                }
+                return null;
+            }
+
+            const STYLE_GUIDE = [
+                { keywords: ['minimalista', 'minimalismo', 'sencillo', 'simple'], label: 'minimalista', match: ['minimalista', 'geometrico', 'lineal', 'cromado', 'acero'] },
+                { keywords: ['clasico', 'elegante', 'tradicional'], label: 'clásico', match: ['clasico', 'laton', 'cristal', 'tallado'] },
+                { keywords: ['rustico', 'campestre', 'organico'], label: 'rústico', match: ['mimbre', 'madera', 'nogal', 'organico', 'natural'] },
+                { keywords: ['industrial'], label: 'industrial', match: ['acero', 'negro mate', 'carbon', 'tubular'] },
+                { keywords: ['art deco', 'glamuroso', 'lujoso', 'opulento'], label: 'art decó / glamuroso', match: ['cristal', 'cascada', 'escultorico', 'laton pulido'] },
+                { keywords: ['contemporaneo', 'moderno', 'vanguardista'], label: 'contemporáneo', match: ['contemporaneo', 'moderno', 'minimalista', 'geometrico'] },
+                { keywords: ['mexicano', 'artesanal', 'hecho a mano'], label: 'artesanal mexicano', match: ['artesanal', 'forjado', 'a mano', 'mexicano'] },
+                { keywords: ['escandinavo', 'nordico'], label: 'escandinavo', match: ['madera clara', 'lineal', 'minimalista'] }
+            ];
+
+            function recommendStyle(normText) {
+                for (const style of STYLE_GUIDE) {
+                    for (const kw of style.keywords) {
+                        if (normText.indexOf(kw) !== -1) {
+                            const examples = window.dbProducts.filter(function(p) {
+                                const blob = normalize(p.name + ' ' + p.desc + ' ' + p.fin + ' ' + p.mat);
+                                return style.match.some(function(m) { return blob.indexOf(m) !== -1; });
+                            }).slice(0, 3).map(function(p) { return p.name; });
+                            if (examples.length) {
+                                return 'Para un estilo ' + style.label + ' le sugiero: <strong class="text-brand-gold">' + examples.join(', ') + '</strong>. ¿Busca alguna categoría en particular (candil, arbotante, lámpara, espejo)?';
+                            }
+                            return 'Tenemos piezas con líneas ' + style.label + 's en varias categorías. Cuénteme el espacio a iluminar y le doy opciones puntuales.';
+                        }
+                    }
+                }
+                return null;
+            }
+
+            // ── Guía por ocasión / motivo de compra ──
+            const OCCASION_GUIDE = [
+                { keywords: ['regalo de boda', 'regalo para boda', 'es para una boda'], note: 'un espejo decorativo o un candil pequeño suelen ser regalos de boda muy apreciados' },
+                { keywords: ['regalo de cumpleanos', 'es un cumpleanos'], note: 'una lámpara de mesa con un diseño distintivo es un regalo de cumpleaños memorable' },
+                { keywords: ['inauguracion', 'nuevo negocio', 'abrir un restaurante', 'abrir un hotel'], note: 'para inauguraciones recomendamos candiles o piezas de techo como punto focal de bienvenida' },
+                { keywords: ['estrenar casa', 'casa nueva', 'mudanza'], note: 'para una casa nueva, una pieza de techo en la entrada y arbotantes en pasillos dan personalidad de inmediato' },
+                { keywords: ['remodelacion', 'remodelar', 'renovar'], note: 'en remodelaciones aprovechamos para revisar instalación eléctrica y proponer iluminación por capas (general, de acento y de tarea)' },
+                { keywords: ['aniversario'], note: 'una pieza con cristal o latón pulido es una excelente forma de celebrar un aniversario' }
+            ];
+
+            function recommendOccasion(normText) {
+                for (const occ of OCCASION_GUIDE) {
+                    for (const kw of occ.keywords) {
+                        if (normText.indexOf(kw) !== -1) {
+                            return 'Para esa ocasión, ' + occ.note + '. ¿Le gustaría que le recomiende un modelo específico?';
+                        }
+                    }
+                }
+                return null;
+            }
+
+            // ── Construcción de intenciones (depende del usuario en sesión) ──
+            function buildIntents() {
+                const userName = window.getUserFirstName ? window.getUserFirstName() : 'Estimado cliente';
+                const greetName = userName !== 'Estimado cliente' ? (', ' + userName) : '';
+                const totalProductos = window.dbProducts.length;
+
+                return [
                     {
-                        test: /hola+|holis|buenos? ?(dias|tardes|noches)?|buenas|saludos|hey|q ?tal|que ?onda|ola+\b/,
+                        keywords: ['hola', 'holi', 'buenas', 'buenos dias', 'buenas tardes', 'buenas noches', 'saludos', 'hey', 'que tal', 'que onda', 'ola', 'buen dia'],
                         responses: [
-                            `¡Hola${userName !== 'Estimado cliente' ? ', ' + userName : ''}! Bienvenido a <strong class="text-brand-gold">DAMASO Studio</strong>. Soy su asesor de iluminación, ¿en qué le puedo ayudar hoy?`,
-                            `¡Qué gusto saludarle! Estoy aquí para ayudarle a encontrar la pieza perfecta de <strong class="text-brand-gold">DAMASO Studio</strong>. ¿Busca algo en particular?`,
-                            `Bienvenido(a) a <strong class="text-brand-gold">DAMASO Studio</strong>. Cuénteme, ¿qué espacio le gustaría iluminar?`
+                            '¡Hola' + greetName + '! Bienvenido a <strong class="text-brand-gold">DAMASO Studio</strong>. Soy su asesor de iluminación, ¿en qué le puedo ayudar hoy?',
+                            '¡Qué gusto saludarle! Estoy aquí para ayudarle a encontrar la pieza perfecta de <strong class="text-brand-gold">DAMASO Studio</strong>. ¿Busca algo en particular?',
+                            'Bienvenido(a) a <strong class="text-brand-gold">DAMASO Studio</strong>. Cuénteme, ¿qué espacio le gustaría iluminar?'
                         ]
                     },
                     {
-                        test: /preci|costo|cuant[oa]s? (vale|cuesta|sale)|cuanto (vale|cuesta|sale)|cotiza|tarifa|presupuesto/,
+                        keywords: ['gracias', 'thank you', 'thanks', 'agradecido', 'agradecida', 'te lo agradezco', 'muchas gracias'],
                         responses: [
-                            `Nuestras piezas van desde <strong class="text-brand-gold">$${Number(Math.min(...window.dbProducts.map(p=>p.price))).toLocaleString()} MXN</strong> hasta <strong class="text-brand-gold">$${Number(Math.max(...window.dbProducts.map(p=>p.price))).toLocaleString()} MXN</strong>, según la pieza. Si me dice el modelo o me da más detalles le doy el precio exacto.`,
-                            `Los precios varían según diseño, materiales y dimensiones. Si tiene un modelo en mente dígame el nombre o SKU y se lo cotizo con gusto. Para cotizaciones a medida: <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`,
-                            `Claro, con gusto le ayudo con el precio. ¿Me puede decir qué pieza o categoría le interesa (candiles, arbotantes, espejos, lámparas, etc.)?`
+                            '¡Con mucho gusto! Estoy aquí para lo que necesite.',
+                            'Para eso estamos. Cualquier otra duda, aquí le espero.',
+                            'Es un placer ayudarle. Si necesita algo más, solo pregunte.'
                         ]
                     },
                     {
-                        test: /catalogo|que (piezas|productos) tienen|que tienen|que venden|coleccion|modelos disponibles/,
+                        keywords: ['adios', 'bye', 'hasta luego', 'hasta pronto', 'nos vemos', 'me voy', 'me despido'],
                         responses: [
-                            `Contamos con <strong class="text-brand-gold">${window.dbProducts.length} piezas</strong> entre Candiles, Arbotantes, Espejos iluminados, Lámparas de mesa, de pie, de techo, de exterior y Proyectos especiales a medida.`,
-                            `Tenemos una colección muy amplia: candiles artesanales, arbotantes de pared, espejos retroiluminados y lámparas para cada espacio del hogar. ¿Quiere que le recomiende algo según el ambiente que busca?`,
-                            `Puede explorar todo el catálogo directamente en la página, o decirme qué tipo de pieza busca y le muestro las mejores opciones.`
+                            'Fue un placer asistirle. Recuerde que estamos disponibles en <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>. ¡Hasta pronto!',
+                            'Gracias por su visita a <strong class="text-brand-gold">DAMASO Studio</strong>. Quedamos a sus órdenes cuando guste. ¡Que tenga excelente día!'
                         ]
                     },
                     {
-                        test: /candil(es)?|chandelier|lampara de techo colgante/,
+                        keywords: ['precio', 'cuesta', 'vale', 'costo', 'cotizar', 'cotizacion', 'presupuesto', 'cuanto'],
                         responses: [
-                            `Nuestros <strong class="text-brand-gold">candiles</strong> son piezas artesanales pensadas para comedores, salas y vestíbulos de doble altura. ¿Busca algo clásico, contemporáneo o minimalista?`,
-                            `Tenemos candiles en distintos estilos y tamaños, ideales como punto focal de cualquier espacio. Cuénteme las dimensiones de su techo o estilo de decoración y le sugiero opciones.`
+                            'Nuestras piezas van desde <strong class="text-brand-gold">' + fmt(minPrice()) + '</strong> hasta <strong class="text-brand-gold">' + fmt(maxPrice()) + '</strong>, según la pieza. Si me dice el modelo o me da más detalles le doy el precio exacto.',
+                            'Los precios varían según diseño, materiales y dimensiones. Si tiene un modelo en mente dígame el nombre o SKU y se lo cotizo con gusto. Para cotizaciones a medida: <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.',
+                            'Claro, con gusto le ayudo con el precio. ¿Me puede decir qué pieza o categoría le interesa (candiles, arbotantes, espejos, lámparas, etc.)?'
                         ]
                     },
                     {
-                        test: /arbotante(s)?|lampara de pared|de muro/,
+                        keywords: ['iva', 'impuesto', 'impuestos', 'incluye iva', 'precio con iva', 'precio mas iva'],
                         responses: [
-                            `Los <strong class="text-brand-gold">arbotantes</strong> son perfectos para pasillos, recámaras o cabeceras. Tenemos modelos con luz de lectura integrada, en latón, lino y cristal. ¿Para qué espacio los necesita?`,
-                            `Manejamos arbotantes desde diseños minimalistas hasta piezas escultóricas en latón. ¿Le interesa alguno con brazo de lectura o uno puramente decorativo?`
+                            'El estimado que ve en la página es antes de impuestos. Para la cotización formal con IVA desglosado, generamos su PDF o lo atendemos directo por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.',
+                            'Los precios mostrados son un estimado sin IVA incluido. Si gusta, le confirmamos el total con impuestos al generar su cotización formal.'
                         ]
                     },
                     {
-                        test: /espejo(s)?|mirror/,
+                        keywords: ['catalogo', 'que piezas tienen', 'que productos tienen', 'que tienen', 'que venden', 'coleccion', 'modelos disponibles'],
                         responses: [
-                            `Nuestros <strong class="text-brand-gold">espejos</strong> combinan diseño y luz: muchos tienen retroiluminación LED perimetral. ¿Los busca para baño, recámara o área social?`,
-                            `Tenemos espejos circulares, ovalados y rectangulares, con y sin iluminación integrada. Dígame las medidas del espacio y le recomiendo el ideal.`
+                            'Contamos con <strong class="text-brand-gold">' + totalProductos + ' piezas</strong> entre Candiles, Arbotantes, Espejos iluminados, Lámparas de mesa, de pie, de techo, de exterior y Proyectos especiales a medida.',
+                            'Tenemos una colección muy amplia: candiles artesanales, arbotantes de pared, espejos retroiluminados y lámparas para cada espacio del hogar. ¿Quiere que le recomiende algo según el ambiente que busca?',
+                            'Puede explorar todo el catálogo directamente en la página, o decirme qué tipo de pieza busca y le muestro las mejores opciones.'
                         ]
                     },
                     {
-                        test: /lampara de mesa|buro|mesa de noche/,
+                        keywords: ['candil', 'candiles', 'chandelier', 'lampara colgante grande'],
                         responses: [
-                            `Las <strong class="text-brand-gold">lámparas de mesa</strong> son ideales para burós, consolas y escritorios. Tenemos en alabastro, cerámica y metal. ¿Busca algo cálido o más moderno?`
+                            'Nuestros <strong class="text-brand-gold">candiles</strong> son piezas artesanales pensadas para comedores, salas y vestíbulos de doble altura. ¿Busca algo clásico, contemporáneo o minimalista?',
+                            'Tenemos candiles en distintos estilos y tamaños, ideales como punto focal de cualquier espacio. Cuénteme las dimensiones de su techo o estilo de decoración y le sugiero opciones.'
                         ]
                     },
                     {
-                        test: /lampara de pie|de piso|floor lamp/,
+                        keywords: ['como elegir un candil', 'que candil me conviene'],
                         responses: [
-                            `Tenemos <strong class="text-brand-gold">lámparas de pie</strong> para dar acento a salas y rincones de lectura. ¿Qué altura aproximada necesita?`
+                            'Para elegir un candil considere tres cosas: la altura del techo (entre más alto, más grande puede ser la pieza), el diámetro de la mesa o área debajo, y el estilo general del espacio. ¿Me comparte esos datos?'
                         ]
                     },
                     {
-                        test: /lampara de techo|plafon|empotrad/,
+                        keywords: ['arbotante', 'arbotantes', 'lampara de pared', 'de muro'],
                         responses: [
-                            `Contamos con <strong class="text-brand-gold">lámparas de techo</strong> tanto colgantes como de plafón, para espacios con techo bajo o alto. ¿Cuál es la altura de su techo?`
+                            'Los <strong class="text-brand-gold">arbotantes</strong> son perfectos para pasillos, recámaras o cabeceras. Tenemos modelos con luz de lectura integrada, en latón, lino y cristal. ¿Para qué espacio los necesita?',
+                            'Manejamos arbotantes desde diseños minimalistas hasta piezas escultóricas en latón. ¿Le interesa alguno con brazo de lectura o uno puramente decorativo?'
                         ]
                     },
                     {
-                        test: /exterior|jardin|terraza|alberca|patio/,
+                        keywords: ['a que altura se instala un arbotante', 'altura de instalacion arbotante'],
                         responses: [
-                            `Tenemos piezas de <strong class="text-brand-gold">iluminación de exterior</strong> resistentes a la intemperie, perfectas para terrazas, jardines y albercas. ¿Busca algo de pared o de pie?`
+                            'Como referencia general, los arbotantes de cabecera suelen instalarse entre 1.0 y 1.2 metros sobre el nivel del colchón, y los de pasillo entre 1.5 y 1.7 metros de altura sobre el piso. Cada ficha de producto incluye la recomendación específica.'
                         ]
                     },
                     {
-                        test: /proyecto especial|a la medida|personalizad|sobre pedido|diseño exclusivo|custom/,
+                        keywords: ['espejo', 'espejos', 'mirror'],
                         responses: [
-                            `Sí, realizamos <strong class="text-brand-gold">proyectos especiales a medida</strong> para residencias, hoteles, restaurantes y espacios corporativos. Cuénteme su idea y la canalizo con nuestro equipo de diseño vía <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`,
-                            `Claro, trabajamos piezas personalizadas desde cero. Para una propuesta a medida lo mejor es escribir directo a <strong class="text-brand-gold">WhatsApp ${WA}</strong> con sus ideas o referencias.`
+                            'Nuestros <strong class="text-brand-gold">espejos</strong> combinan diseño y luz: muchos tienen retroiluminación LED perimetral. ¿Los busca para baño, recámara o área social?',
+                            'Tenemos espejos circulares, ovalados y rectangulares, con y sin iluminación integrada. Dígame las medidas del espacio y le recomiendo el ideal.'
                         ]
                     },
                     {
-                        test: /entrega|tiempo de espera|cuando llega|cuanto tardan?|demora|envio|envío/,
+                        keywords: ['el espejo se puede usar en el bano', 'resiste humedad el espejo'],
                         responses: [
-                            `Los tiempos de entrega van de <strong class="text-brand-gold">2 a 12 semanas</strong> dependiendo de la complejidad de la pieza, ya que todo es manufactura artesanal. Dígame el modelo y le confirmo el tiempo exacto.`,
-                            `Cada pieza tiene su propio tiempo de fabricación (entre 2 y 12 semanas). Para confirmar el de su pieza de interés, mándenos el modelo por <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                            'Algunos modelos de espejo retroiluminado están preparados para ambientes con humedad moderada como baños; dígame el modelo exacto y le confirmo si requiere instalación especial.'
                         ]
                     },
                     {
-                        test: /material(es)?|hecho de|fabricad[oa]|de que esta hecho/,
+                        keywords: ['lampara de mesa', 'buro', 'mesa de noche', 'lampara de buro'],
                         responses: [
-                            `Trabajamos con materiales de primera calidad: latón macizo, cristal inastillable, alabastro natural, madera maciza y acero, entre otros, según cada diseño.`
+                            'Las <strong class="text-brand-gold">lámparas de mesa</strong> son ideales para burós, consolas y escritorios. Tenemos en alabastro, cerámica y metal. ¿Busca algo cálido o más moderno?'
                         ]
                     },
                     {
-                        test: /garantia|garantía/,
+                        keywords: ['lampara de pie', 'de piso', 'floor lamp'],
                         responses: [
-                            `Todas nuestras piezas cuentan con garantía de fabricación. Para detalles específicos de su pieza, contáctenos por <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                            'Tenemos <strong class="text-brand-gold">lámparas de pie</strong> para dar acento a salas y rincones de lectura. ¿Qué altura aproximada necesita?'
                         ]
                     },
                     {
-                        test: /pago|tarjeta|transferencia|efectivo|msi|meses sin intereses|paypal/,
+                        keywords: ['lampara de techo', 'plafon', 'empotrada', 'colgante de techo'],
                         responses: [
-                            `Aceptamos transferencia, tarjeta y, en algunos casos, meses sin intereses. Para coordinar el pago de su pieza, escríbanos a <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                            'Contamos con <strong class="text-brand-gold">lámparas de techo</strong> tanto colgantes como de plafón, para espacios con techo bajo o alto. ¿Cuál es la altura de su techo?'
                         ]
                     },
                     {
-                        test: /instalacion|instalación|electricista|instalar|como se instala/,
+                        keywords: ['exterior', 'jardin', 'terraza', 'alberca', 'patio'],
                         responses: [
-                            `Cada pieza incluye especificaciones de instalación (cableado, voltaje y tipo de conexión). Recomendamos instalación por electricista certificado; nuestro equipo puede asesorarle por <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                            'Tenemos piezas de <strong class="text-brand-gold">iluminación de exterior</strong> resistentes a la intemperie, perfectas para terrazas, jardines y albercas. ¿Busca algo de pared o de pie?'
                         ]
                     },
                     {
-                        test: /ubicacion|ubicación|direccion|dirección|donde estan|donde se encuentran|tienda fisica|showroom/,
+                        keywords: ['resiste la lluvia', 'es para exterior resistente al agua', 'grado de proteccion ip'],
                         responses: [
-                            `Nuestro taller y showroom están en <strong class="text-brand-gold">Guadalajara, Jalisco, México</strong>. Para visita con cita, escríbanos por <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                            'Nuestras piezas de exterior están fabricadas con materiales resistentes a la intemperie (acero inoxidable, aluminio tratado, vidrio templado) con grado de protección adecuado para lluvia y humedad. Dígame el modelo y le confirmo el grado IP exacto.'
                         ]
                     },
                     {
-                        test: /horario|atencion|atención|abierto|a que hora/,
+                        keywords: ['proyecto especial', 'a la medida', 'personalizado', 'sobre pedido', 'diseño exclusivo', 'custom'],
                         responses: [
-                            `Nuestro equipo atiende por <strong class="text-brand-gold">WhatsApp ${WA}</strong> en horario de oficina; respondemos a la brevedad posible.`
+                            'Sí, realizamos <strong class="text-brand-gold">proyectos especiales a medida</strong> para residencias, hoteles, restaurantes y espacios corporativos. Cuénteme su idea y la canalizo con nuestro equipo de diseño vía <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.',
+                            'Claro, trabajamos piezas personalizadas desde cero. Para una propuesta a medida lo mejor es escribir directo a <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> con sus ideas o referencias.'
                         ]
                     },
                     {
-                        test: /contacto|telefono|teléfono|whatsapp|llamar|numero|número/,
+                        keywords: ['cuanto tarda un proyecto especial', 'tiempo de un proyecto a la medida'],
                         responses: [
-                            `Puede contactarnos directamente por <strong class="text-brand-gold">WhatsApp ${WA}</strong>; nuestro equipo le atenderá con gusto.`,
-                            `Con gusto lo conecto: escríbanos a <strong class="text-brand-gold">WhatsApp ${WA}</strong> y le daremos atención personalizada.`
+                            'Los proyectos especiales a medida normalmente requieren entre 6 y 16 semanas dependiendo de la complejidad del diseño y los acabados. Le confirmamos el tiempo exacto en cuanto definamos la propuesta.'
                         ]
                     },
                     {
-                        test: /queja|problema|mal servicio|no funciona|no llega|tarde|defectuos[oa]|roto|dañad[oa]/,
+                        keywords: ['hotel', 'restaurante', 'corporativo', 'oficinas corporativas', 'proyecto comercial'],
                         responses: [
-                            `Lamento mucho el inconveniente. Para resolverlo lo antes posible, por favor escríbanos directo a <strong class="text-brand-gold">WhatsApp ${WA}</strong> con su número de pedido y le daremos seguimiento personal.`,
-                            `Entiendo su molestia y queremos ayudarle a resolverlo. Contáctenos por <strong class="text-brand-gold">WhatsApp ${WA}</strong> para atenderlo de inmediato.`
+                            'Para proyectos de hotelería, restaurantes o corporativos trabajamos de la mano con arquitectos e interioristas en piezas a medida y volumen. Contáctenos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> para una propuesta.'
                         ]
                     },
                     {
-                        test: /gracias|thank|agradec/,
+                        keywords: ['entrega', 'tiempo de espera', 'cuando llega', 'cuanto tardan', 'demora', 'envio', 'tiempo de fabricacion'],
                         responses: [
-                            `¡Con mucho gusto! Estoy aquí para lo que necesite.`,
-                            `Para eso estamos. Cualquier otra duda, aquí le espero.`,
-                            `Es un placer ayudarle. Si necesita algo más, solo pregunte.`
+                            'Los tiempos de entrega van de <strong class="text-brand-gold">2 a 12 semanas</strong> dependiendo de la complejidad de la pieza, ya que todo es manufactura artesanal. Dígame el modelo y le confirmo el tiempo exacto.',
+                            'Cada pieza tiene su propio tiempo de fabricación (entre 2 y 12 semanas). Para confirmar el de su pieza de interés, mándenos el modelo por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
                         ]
                     },
                     {
-                        test: /adios|bye|hasta (luego|pronto)|nos vemos|me voy/,
+                        keywords: ['costo de envio', 'cuanto cuesta el envio', 'envio gratis', 'flete'],
                         responses: [
-                            `Fue un placer asistirle. Recuerde que estamos disponibles en <strong class="text-brand-gold">WhatsApp ${WA}</strong>. ¡Hasta pronto!`,
-                            `Gracias por su visita a <strong class="text-brand-gold">DAMASO Studio</strong>. Quedamos a sus órdenes cuando guste. ¡Que tenga excelente día!`
+                            'El costo de envío depende del destino y tamaño de la pieza; se calcula al confirmar su pedido. Para una cotización de flete escríbanos a <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
+                        ]
+                    },
+                    {
+                        keywords: ['envio internacional', 'envian a estados unidos', 'envian fuera de mexico', 'shipping internacional'],
+                        responses: [
+                            'Sí, hacemos envíos internacionales bajo cotización especial de logística. Escríbanos a <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> con su país de destino para cotizarlo.'
+                        ]
+                    },
+                    {
+                        keywords: ['como rastreo mi pedido', 'donde va mi pedido', 'estatus de mi pedido'],
+                        responses: [
+                            'Para conocer el estatus exacto de fabricación o envío de su pedido, escríbanos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> con su número de orden o nombre de compra.'
+                        ]
+                    },
+                    {
+                        keywords: ['devolucion', 'cambio', 'cancelar pedido', 'reembolso', 'me puedo arrepentir'],
+                        responses: [
+                            'Al ser piezas artesanales fabricadas sobre pedido, cambios y cancelaciones se evalúan caso por caso. Escríbanos a <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> con su número de pedido y le ayudamos.'
+                        ]
+                    },
+                    {
+                        keywords: ['material', 'hecho de', 'fabricado', 'de que esta hecho', 'materiales'],
+                        responses: [
+                            'Trabajamos con materiales de primera calidad: latón macizo, cristal inastillable, alabastro natural, madera maciza y acero, entre otros, según cada diseño.'
+                        ]
+                    },
+                    {
+                        keywords: ['sustentable', 'sostenible', 'origen de los materiales', 'ecologico', 'medio ambiente'],
+                        responses: [
+                            'Privilegiamos materiales nobles y duraderos (latón, madera maciza, cristal) y manufactura artesanal local, reduciendo desperdicio frente a la producción masiva.'
+                        ]
+                    },
+                    {
+                        keywords: ['garantia'],
+                        responses: [
+                            'Todas nuestras piezas cuentan con garantía de fabricación. Para detalles específicos de su pieza, contáctenos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
+                        ]
+                    },
+                    {
+                        keywords: ['cuanto dura la garantia', 'tiempo de garantia'],
+                        responses: [
+                            'El periodo de garantía depende del modelo y sus componentes eléctricos; en general cubre defectos de fabricación durante el primer año. Confírmenos el modelo exacto para darle el detalle preciso.'
+                        ]
+                    },
+                    {
+                        keywords: ['certificacion', 'nom', 'norma electrica', 'seguro electricamente'],
+                        responses: [
+                            'Nuestras piezas con componentes eléctricos cuentan con certificación <strong class="text-brand-gold">NOM</strong>, garantizando seguridad eléctrica conforme a la norma mexicana.'
+                        ]
+                    },
+                    {
+                        keywords: ['pago', 'tarjeta', 'transferencia', 'efectivo', 'msi', 'meses sin intereses', 'paypal', 'financiamiento'],
+                        responses: [
+                            'Aceptamos transferencia, tarjeta y, en algunos casos, meses sin intereses. Para coordinar el pago de su pieza, escríbanos a <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
+                        ]
+                    },
+                    {
+                        keywords: ['se puede pagar en partes', 'anticipo', 'enganche', 'deposito inicial'],
+                        responses: [
+                            'En piezas a medida normalmente trabajamos con un anticipo para iniciar fabricación y el resto contra entrega. Le confirmamos el esquema exacto al cotizar formalmente.'
+                        ]
+                    },
+                    {
+                        keywords: ['mayorista', 'arquitecto', 'diseñador de interiores', 'descuento profesional', 'programa de socios'],
+                        responses: [
+                            'Contamos con condiciones especiales para arquitectos, interioristas y compras por volumen. Escríbanos a <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> para conocer el programa profesional.'
+                        ]
+                    },
+                    {
+                        keywords: ['muestra de material', 'muestras', 'acabados disponibles', 'ver el acabado antes'],
+                        responses: [
+                            'Podemos compartirle fotos detalladas de acabados y, en algunos casos, muestras físicas de material antes de confirmar su pedido. Pídalo por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
+                        ]
+                    },
+                    {
+                        keywords: ['personalizar color', 'cambiar acabado', 'otro tamaño', 'otro voltaje', 'medida especial'],
+                        responses: [
+                            'Muchas piezas se pueden personalizar en acabado, tamaño o voltaje según el proyecto. Cuénteme qué pieza le interesa y qué cambio busca para confirmar viabilidad.'
+                        ]
+                    },
+                    {
+                        keywords: ['mantenimiento', 'como se limpia', 'limpieza', 'cuidados de la lampara'],
+                        responses: [
+                            'Recomendamos limpiar con un paño seco o ligeramente húmedo, sin productos abrasivos, y desconectar la pieza antes de limpiarla. Para piezas de cristal o latón con acabado especial, evite alcohol o solventes.'
+                        ]
+                    },
+                    {
+                        keywords: ['se oxida el laton', 'el laton se mancha', 'mantenimiento del laton'],
+                        responses: [
+                            'El latón puede desarrollar una pátina natural con el tiempo; si prefiere mantenerlo brillante, límpielo con un paño suave y, ocasionalmente, un producto específico para latón. Evite limpiadores abrasivos.'
+                        ]
+                    },
+                    {
+                        keywords: ['instalacion', 'electricista', 'como se instala', 'tablaroca', 'registro electrico'],
+                        responses: [
+                            'Cada pieza incluye especificaciones de instalación (cableado, voltaje y tipo de conexión). Recomendamos instalación por electricista certificado; nuestro equipo puede asesorarle por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
+                        ]
+                    },
+                    {
+                        keywords: ['incluye instalacion', 'el precio incluye instalacion', 'mandan a instalar'],
+                        responses: [
+                            'El precio de la pieza no incluye instalación eléctrica; recomendamos contratar a un electricista certificado local. En algunos proyectos especiales podemos coordinar instalación, pregúntenos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
+                        ]
+                    },
+                    {
+                        keywords: ['cable', 'longitud del cable', 'que tan largo es el cable'],
+                        responses: [
+                            'La longitud del cable varía por modelo (normalmente entre 1.5 y 2.5 metros); cada ficha de producto especifica el detalle exacto.'
+                        ]
+                    },
+                    {
+                        keywords: ['voltaje', 'foco', 'bulbo', 'led', 'que tipo de luz usa'],
+                        responses: [
+                            'La mayoría de nuestras piezas usan focos LED de bajo consumo (E26, E12 o G9 según el modelo) en 110-120V, algunas aptas también para 220-240V. Dígame el modelo y le confirmo el detalle exacto.'
+                        ]
+                    },
+                    {
+                        keywords: ['temperatura de color', 'luz calida o fria', 'kelvin'],
+                        responses: [
+                            'La mayoría de nuestras piezas usan luz cálida (alrededor de 2700K-3000K) para un ambiente acogedor; algunas permiten foco regulable o de temperatura ajustable. Dígame el modelo para confirmar la opción exacta.'
+                        ]
+                    },
+                    {
+                        keywords: ['tiene dimmer', 'es regulable la intensidad', 'atenuador'],
+                        responses: [
+                            'Algunos modelos son compatibles con atenuador (dimmer) si se instalan con el foco y switch adecuados. Confírmenos el modelo de su interés y le decimos si es compatible.'
+                        ]
+                    },
+                    {
+                        keywords: ['peso de la lampara', 'cuanto pesa', 'soporta el techo'],
+                        responses: [
+                            'El peso varía mucho según el modelo, desde menos de 2 kg hasta piezas de más de 30 kg en candiles monumentales. Confírmenos el modelo y validamos si requiere refuerzo de instalación.'
+                        ]
+                    },
+                    {
+                        keywords: ['medidas', 'dimensiones', 'tamaño de la pieza', 'que tan grande es'],
+                        responses: [
+                            'Cada pieza tiene sus medidas exactas en su ficha (ancho, alto, profundidad y diámetro). Dígame el modelo y le paso las medidas completas.'
+                        ]
+                    },
+                    {
+                        keywords: ['disponibilidad', 'hay en stock', 'tienen inventario', 'esta disponible'],
+                        responses: [
+                            'Al ser piezas en gran parte artesanales, trabajamos principalmente sobre pedido con tiempos de 2 a 12 semanas. Para confirmar disponibilidad inmediata de un modelo, pregúntenos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
+                        ]
+                    },
+                    {
+                        keywords: ['regalo', 'es para regalar', 'idea de regalo'],
+                        responses: [
+                            'Una lámpara de mesa o un espejo decorativo suelen ser excelentes regalos. Dígame el gusto o estilo de la persona y le sugiero algo especial.'
+                        ]
+                    },
+                    {
+                        keywords: ['comparar', 'diferencia entre', 'cual es mejor'],
+                        responses: [
+                            'Con gusto le ayudo a comparar. Dígame las dos piezas, categorías o modelos que tiene en mente y le explico las diferencias clave (tamaño, material, uso recomendado).'
+                        ]
+                    },
+                    {
+                        keywords: ['ubicacion', 'direccion', 'donde estan', 'donde se encuentran', 'tienda fisica', 'showroom'],
+                        responses: [
+                            'Nuestro taller y showroom están en <strong class="text-brand-gold">Guadalajara, Jalisco, México</strong>. Para visita con cita, escríbanos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
+                        ]
+                    },
+                    {
+                        keywords: ['horario', 'atencion', 'abierto', 'a que hora'],
+                        responses: [
+                            'Nuestro equipo atiende por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> en horario de oficina; respondemos a la brevedad posible.'
+                        ]
+                    },
+                    {
+                        keywords: ['contacto', 'telefono', 'whatsapp', 'llamar', 'numero'],
+                        responses: [
+                            'Puede contactarnos directamente por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>; nuestro equipo le atenderá con gusto.',
+                            'Con gusto lo conecto: escríbanos a <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> y le daremos atención personalizada.'
+                        ]
+                    },
+                    {
+                        keywords: ['redes sociales', 'instagram', 'facebook', 'tiktok'],
+                        responses: [
+                            'Puede seguirnos en nuestras redes sociales para ver nuestras piezas e instalaciones; para el enlace directo a cada red, escríbanos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
+                        ]
+                    },
+                    {
+                        keywords: ['historia de la marca', 'quienes son', 'quien es damaso', 'sobre la empresa'],
+                        responses: [
+                            '<strong class="text-brand-gold">DAMASO Studio</strong> es una marca mexicana de iluminación artesanal de lujo, dedicada a fusionar diseño contemporáneo con manufactura tradicional en cada pieza, radicada en Guadalajara, Jalisco.'
+                        ]
+                    },
+                    {
+                        keywords: ['quien es el diseñador', 'quien diseña las piezas'],
+                        responses: [
+                            'Nuestro diseñador está radicado en Guadalajara, Jalisco; su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo.'
+                        ]
+                    },
+                    {
+                        keywords: ['empleo', 'trabajo en damaso', 'vacante', 'colaboracion', 'prensa', 'medios'],
+                        responses: [
+                            'Para temas de colaboraciones, prensa o vacantes, por favor escríbanos directo a <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> y lo canalizamos con el equipo correcto.'
+                        ]
+                    },
+                    {
+                        keywords: ['moneda', 'dolares', 'usd', 'pesos mexicanos'],
+                        responses: [
+                            'Todos los precios en la página están expresados en <strong class="text-brand-gold">pesos mexicanos (MXN)</strong>. Si necesita el equivalente en otra moneda, podemos confirmárselo al cotizar formalmente.'
+                        ]
+                    },
+                    {
+                        keywords: ['idioma', 'hablan ingles', 'en otro idioma'],
+                        responses: [
+                            'Por ahora la página y este asistente operan en español; para atención en otro idioma, contáctenos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> y vemos cómo apoyarle.'
+                        ]
+                    },
+                    {
+                        keywords: ['iniciar sesion', 'crear cuenta', 'registrarme', 'tengo cuenta'],
+                        responses: [
+                            'Puede iniciar sesión desde el botón de la barra superior. Al iniciar sesión guarda su bolsa de cotización, sus conversaciones con este asistente y autocompleta sus datos en el PDF. También elegirá su género para personalizar la animación de bienvenida.'
+                        ]
+                    },
+                    {
+                        keywords: ['mostrar contraseña', 'ver mi contraseña', 'el ojo de la contraseña'],
+                        responses: [
+                            'En el formulario de inicio de sesión hay un ícono de ojo junto al campo de contraseña; al presionarlo puede ver o volver a ocultar lo que escribió.'
+                        ]
+                    },
+                    {
+                        keywords: ['genero', 'femenino o masculino', 'bienvenida o bienvenido'],
+                        responses: [
+                            'Al iniciar sesión puede elegir Femenino o Masculino; según su elección, la animación de bienvenida le saludará como "Bienvenida" o "Bienvenido".'
+                        ]
+                    },
+                    {
+                        keywords: ['olvide mi contraseña', 'recuperar contraseña', 'no recuerdo mi clave'],
+                        responses: [
+                            'Por ahora no contamos con recuperación automática de contraseña; le sugerimos volver a iniciar sesión con sus datos o escribirnos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> para ayudarle.'
+                        ]
+                    },
+                    {
+                        keywords: ['cerrar sesion', 'salir de mi cuenta'],
+                        responses: [
+                            'Puede cerrar sesión desde el botón "Cerrar Sesión" dentro del carrito de compras; se borrará su información guardada localmente en este dispositivo.'
+                        ]
+                    },
+                    {
+                        keywords: ['carrito', 'bolsa de cotizacion', 'agregar al carrito', 'mi seleccion'],
+                        responses: [
+                            'Puede agregar piezas a su bolsa de cotización desde cada producto y revisarlas en el ícono del carrito en la barra superior. Ahí también puede generar su PDF de cotización.'
+                        ]
+                    },
+                    {
+                        keywords: ['necesito iniciar sesion para ver el carrito', 'por que me pide iniciar sesion el carrito'],
+                        responses: [
+                            'Pedimos iniciar sesión antes de abrir el carrito para poder guardar de forma segura sus productos, cotizaciones y conversaciones en este dispositivo; el proceso toma menos de un minuto.'
+                        ]
+                    },
+                    {
+                        keywords: ['generar pdf', 'descargar cotizacion', 'pdf de cotizacion'],
+                        responses: [
+                            'Desde el carrito puede descargar un <strong class="text-brand-gold">PDF de cotización</strong> con todas las piezas seleccionadas, precios y tiempos de entrega.'
+                        ]
+                    },
+                    {
+                        keywords: ['propuesta de diseño', 'concepto de diseño ai', 'que hace la ia'],
+                        responses: [
+                            'La función "Generar Concepto de Diseño" usa inteligencia artificial para redactar una propuesta breve sobre cómo combinar las piezas de su bolsa de cotización; la encuentra dentro del carrito.'
+                        ]
+                    },
+                    {
+                        keywords: ['buscador', 'barra de busqueda', 'buscar por sku', 'buscar modelo'],
+                        responses: [
+                            'En la sección de catálogo hay una barra de búsqueda en vivo donde puede escribir el nombre, modelo o SKU de la pieza y el catálogo se filtra al instante.'
+                        ]
+                    },
+                    {
+                        keywords: ['filtrar por categoria', 'como filtro el catalogo'],
+                        responses: [
+                            'Puede filtrar el catálogo por categoría (candiles, arbotantes, espejos, lámparas de mesa, de pie, de techo, de exterior y proyectos especiales) desde el menú de categorías de la barra superior.'
+                        ]
+                    },
+                    {
+                        keywords: ['copiar sku', 'copiar el nombre del producto'],
+                        responses: [
+                            'Dentro de la ficha de cada producto hay botones para copiar rápidamente el nombre y el SKU al portapapeles, útil para compartirlo por WhatsApp o correo.'
+                        ]
+                    },
+                    {
+                        keywords: ['musica', 'audio de la pagina', 'quitar la musica', 'sonido de fondo'],
+                        responses: [
+                            'La página incluye música ambiental que se reproduce de forma automática durante la experiencia inmersiva; forma parte del diseño de la marca.'
+                        ]
+                    },
+                    {
+                        keywords: ['eres un robot', 'eres una ia', 'eres humano', 'con quien hablo'],
+                        responses: [
+                            'Soy el asistente virtual de <strong class="text-brand-gold">DAMASO Studio</strong>, en este momento operando con mi motor de respaldo (sin conexión a la IA principal). Puedo ayudarle con catálogo, precios, tiempos de entrega y más.'
+                        ]
+                    },
+                    {
+                        keywords: ['historial de chat', 'conversaciones guardadas', 'ver chats anteriores'],
+                        responses: [
+                            'Si inició sesión, sus conversaciones con este asistente se guardan y puede revisarlas desde el ícono de historial dentro del chat.'
+                        ]
+                    },
+                    {
+                        keywords: ['cookies', 'cookie', 'que cookies usan', 'politica de privacidad', 'privacidad de mis datos'],
+                        responses: [
+                            'Usamos cookies estrictamente necesarias y analíticas para brindarle la experiencia inmersiva del sitio; puede ver el detalle completo en el aviso de cookies que aparece al entrar.'
+                        ]
+                    },
+                    {
+                        keywords: ['por que el chat se tarda', 'por que tardas en responder', 'modo sin conexion del chat'],
+                        responses: [
+                            'Normalmente respondo con ayuda de inteligencia artificial; si esa conexión tarda demasiado o no está disponible, activo este motor de respaldo local para seguir ayudándole sin interrupciones.'
+                        ]
+                    },
+                    {
+                        keywords: ['funciona en celular', 'se puede usar en el telefono', 'es responsive la pagina'],
+                        responses: [
+                            'Sí, la página y este asistente funcionan tanto en computadora como en celular o tablet, adaptándose al tamaño de su pantalla.'
+                        ]
+                    },
+                    {
+                        keywords: ['ayuda', 'que puedes hacer', 'capacidades', 'que sabes hacer', 'menu de opciones'],
+                        responses: [
+                            'Puedo ayudarle con: catálogo y categorías, búsqueda en vivo, precios y rangos de presupuesto, cálculo orientativo de iluminación, comparación entre piezas, tiempos de entrega, materiales, instalación, garantía, pago, proyectos a medida, recomendaciones por espacio, estilo u ocasión, y cómo usar el carrito, el PDF de cotización, la propuesta de diseño con IA y su cuenta. ¿Por dónde empezamos?'
+                        ]
+                    },
+                    {
+                        keywords: ['queja', 'problema', 'mal servicio', 'no funciona', 'no llega', 'defectuoso', 'roto', 'dañado'],
+                        responses: [
+                            'Lamento mucho el inconveniente. Para resolverlo lo antes posible, por favor escríbanos directo a <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> con su número de pedido y le daremos seguimiento personal.',
+                            'Entiendo su molestia y queremos ayudarle a resolverlo. Contáctenos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> para atenderlo de inmediato.'
                         ]
                     }
                 ];
+            }
+
+            // ── Punto de entrada principal ──
+            function offlineResponse(text) {
+                const normText = ' ' + normalize(text).split(' ').map(correctToken).join(' ') + ' ';
+                const tokens = tokenize(text);
+                const intents = buildIntents();
 
                 for (const intent of intents) {
-                    if (intent.test.test(t)) return pick(intent.responses);
-                }
-
-                // Buscar producto en catálogo por nombre, palabra clave o SKU (tolerante a acentos)
-                for (const p of window.dbProducts) {
-                    const name = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-                    if (t.includes(p.sku.toLowerCase()) || name.split(' ').some(w => w.length > 4 && t.includes(w))) {
-                        return `<strong class="text-brand-gold">${p.name}</strong> · $${Number(p.price).toLocaleString()} MXN · Entrega: ${p.time} · ${p.dims?.w||''}×${p.dims?.h||''} · ${p.mat}`;
+                    if (matchIntent(tokens, normText, intent.keywords)) {
+                        return pick(intent.responses);
                     }
                 }
 
-                // Respuesta genérica variada cuando no se reconoce la intención
+                const compareReply = compareProducts(normText, tokens);
+                if (compareReply) return compareReply;
+
+                const lightingReply = calculateLighting(normText);
+                if (lightingReply) return lightingReply;
+
+                const occasionReply = recommendOccasion(normText);
+                if (occasionReply) return occasionReply;
+
+                const glossaryReply = lookupGlossary(normText);
+                if (glossaryReply) return glossaryReply;
+
+                const roomReply = recommendRoom(normText);
+                if (roomReply) return roomReply;
+
+                const styleReply = recommendStyle(normText);
+                if (styleReply) return styleReply;
+
+                const priceRangeReply = parsePriceRange(normText);
+                if (priceRangeReply) return priceRangeReply;
+
+                const catalogReply = searchCatalog(normText, tokens);
+                if (catalogReply) return catalogReply;
+
                 return pick([
-                    `Gracias por su mensaje. ¿Me puede contar un poco más para orientarle mejor? También puede escribirnos directo a <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`,
-                    `Quiero asegurarme de ayudarle bien. ¿Busca alguna pieza en particular o tiene un proyecto en mente? Si prefiere, hablamos por <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`,
-                    `Con gusto le ayudo. Cuénteme más sobre lo que necesita o contáctenos por <strong class="text-brand-gold">WhatsApp ${WA}</strong> para atención inmediata.`,
-                    `Consulta recibida. Para asistencia inmediata y personalizada: <strong class="text-brand-gold">WhatsApp ${WA}</strong>.`
+                    'Gracias por su mensaje. ¿Me puede contar un poco más para orientarle mejor? También puede escribirnos directo a <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.',
+                    'Quiero asegurarme de ayudarle bien. ¿Busca alguna pieza en particular o tiene un proyecto en mente? Si prefiere, hablamos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.',
+                    'Con gusto le ayudo. Cuénteme más sobre lo que necesita o contáctenos por <strong class="text-brand-gold">WhatsApp ' + WA + '</strong> para atención inmediata.',
+                    'Consulta recibida. Para asistencia inmediata y personalizada: <strong class="text-brand-gold">WhatsApp ' + WA + '</strong>.'
                 ]);
             }
-        };
+
+            return { offlineResponse: offlineResponse };
+        })();
 
         // ── IA (OpenAI ChatGPT vía función segura de Netlify) ──
         // La API key vive solo del lado del servidor (variable de entorno de Netlify),
