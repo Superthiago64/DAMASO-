@@ -136,7 +136,7 @@
         }
         .navbar-wordmark-pulse { animation: navbarWordmarkGlowPulse 4.5s ease-in-out infinite; }
         .glow-gold { text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4), 0 0 30px rgba(212,175,55,0.2); }
-        .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+        .scroll-reveal { opacity: 0; transform: translateY(60px); transition: opacity 1.8s cubic-bezier(0.16,1,0.3,1), transform 1.8s cubic-bezier(0.16,1,0.3,1); }
         .scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
         .break-words-custom { word-wrap: break-word; word-break: break-word; hyphens: auto; white-space: normal; }
 
@@ -918,14 +918,6 @@
         </div>
     </section>
 
-    <!-- ── MANIFIESTO ── -->
-    <section id="manifiesto" class="py-40 bg-black text-center">
-        <div class="max-w-4xl mx-auto px-6 scroll-reveal">
-            <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-12 glow-gold">Filosofía de marca</p>
-            <h2 class="font-editorial text-4xl md:text-6xl text-white leading-tight">No fabricamos lámparas. Creamos puntos de enfoque que transforman lo cotidiano en algo <span class="italic text-brand-gold glow-gold">extraordinario</span>.</h2>
-        </div>
-    </section>
-
     <!-- ── MARCA ── -->
     <section id="marca" class="py-32 bg-brand-surface border-y border-brand-border text-center">
         <div class="max-w-5xl mx-auto px-6">
@@ -934,18 +926,18 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
                     <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6">Clientes</p>
-                    <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold">+27</p>
+                    <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="100">0</span>+</p>
                     <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest">clientes</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
                     <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6">Experiencia</p>
-                    <p class="text-4xl md:text-5xl text-white font-bold">25 <span class="text-brand-gold glow-gold">años</span></p>
+                    <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="25">0</span> <span class="text-brand-gold glow-gold">años</span></p>
                     <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest">de experiencia</p>
                 </div>
             </div>
-            <div class="max-w-3xl mx-auto scroll-reveal">
-                <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-8 glow-gold">Filosofía de marca</p>
-                <h3 class="font-editorial text-2xl md:text-4xl text-white leading-tight">No fabricamos lámparas. Creamos puntos de enfoque que transforman lo cotidiano en algo <span class="italic text-brand-gold glow-gold">extraordinario</span>.</h3>
+            <div class="max-w-4xl mx-auto px-6 scroll-reveal">
+                <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-12 glow-gold">Filosofía de marca</p>
+                <h2 class="font-editorial text-4xl md:text-6xl text-white leading-tight">No fabricamos lámparas. Creamos puntos de enfoque que transforman lo cotidiano en algo <span class="italic text-brand-gold glow-gold">extraordinario</span>.</h2>
             </div>
         </div>
     </section>
@@ -1316,7 +1308,7 @@
             if (e) e.preventDefault();
             const menu = document.getElementById('dropdown-menu');
             if (menu) { menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2'); menu.classList.remove('translate-y-0', 'opacity-100'); }
-            const belowTextMap = { clientes: 'CLIENTES', disenador: 'DISEÑADOR', marca: 'MARCA', social: 'REDES SOCIALES', home: 'INICIO' };
+            const belowTextMap = { clientes: 'Clientes', disenador: 'Diseñador', marca: 'Marca', social: 'Redes Sociales', home: 'Inicio' };
             const belowText = belowTextMap[id];
             const doScroll = () => {
                 if (id === 'home') { window.scrollTo({ top: 0, behavior: 'smooth' }); }
@@ -3278,6 +3270,41 @@ NORMAS:
             els.forEach(el => window._scrollRevealObserver.observe(el));
         };
 
+        // ── COUNT UP ──
+        window.initCountUp = function() {
+            const els = document.querySelectorAll('.count-up:not(.is-counted)');
+            if (!els.length) return;
+            const animateCount = (el) => {
+                el.classList.add('is-counted');
+                const target = parseInt(el.getAttribute('data-count-target'), 10) || 0;
+                if (target <= 0) { el.textContent = target; return; }
+                const duration = 1200;
+                const stepTime = duration / target;
+                let current = 0;
+                const tick = () => {
+                    current++;
+                    el.textContent = current;
+                    if (current < target) setTimeout(tick, stepTime);
+                };
+                tick();
+            };
+            if (!('IntersectionObserver' in window)) {
+                els.forEach(animateCount);
+                return;
+            }
+            if (!window._countUpObserver) {
+                window._countUpObserver = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animateCount(entry.target);
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.4 });
+            }
+            els.forEach(el => window._countUpObserver.observe(el));
+        };
+
         // ── INIT ──
         window.preloadAllImages = function() {
             if (!window.dbProducts) return;
@@ -3290,6 +3317,7 @@ NORMAS:
             window.updateCartUI();
             window.startAppAnimation();
             window.initScrollReveal();
+            window.initCountUp();
 
             const navLoginBtn = document.getElementById('nav-login-btn');
             const botHistoryBtn = document.getElementById('bot-history-btn');
