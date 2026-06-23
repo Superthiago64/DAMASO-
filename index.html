@@ -217,7 +217,7 @@
         #navbar-peek-bar {
             top: calc(env(safe-area-inset-top) + 18px);
             width: 68px;
-            height: 13px;
+            height: 17px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.35);
             transition: opacity 0.4s ease;
         }
@@ -499,6 +499,9 @@
 
     <div id="login-form-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-10 max-w-md w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm">
+            <button type="button" onclick="window.cancelLoginForm()" class="absolute top-3 right-3 text-brand-muted hover:text-white transition-colors p-2" aria-label="Cancelar inicio de sesión">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
             <h2 class="font-editorial text-2xl text-brand-gold mb-6 uppercase tracking-widest glow-gold">Credenciales</h2>
             <div class="space-y-4 mb-8">
                 <input type="text" id="session-name" placeholder="Nombre Completo o Despacho" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
@@ -518,6 +521,7 @@
                     </div>
                 </div>
             </div>
+            <p id="login-validation-error" class="hidden text-[#ff4444] text-[9px] uppercase tracking-widest mb-4">Completa nombre, correo, contraseña y género para continuar.</p>
             <button onclick="window.processLogin()" class="w-full py-4 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm">Aceptar y Entrar</button>
         </div>
     </div>
@@ -554,7 +558,7 @@
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div class="flex items-center space-x-4 sm:space-x-6">
                 <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center">MENÚ</button>
-                <a href="#" onclick="window.scrollTo(0,0);" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text uppercase font-bold ml-2">
+                <a href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text uppercase font-bold ml-2">
                     <span>Damaso</span>
                     <span id="navbar-wordmark-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true">Damaso</span>
                 </a>
@@ -709,8 +713,7 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Specs Lumínicas:</span><span class="col-span-2 text-white" id="modal-luz"></span></div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Voltaje:</span><span class="col-span-2 text-white" id="modal-volt"></span></div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Cable:</span><span class="col-span-2 text-white" id="modal-cable"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Electrificación:</span><span class="col-span-2 text-white" id="modal-cable"></span></div>
                     <div class="py-2">
                         <span class="text-brand-gold font-medium uppercase tracking-widest text-[10px] block mb-2">Dimensiones:</span>
                         <div class="grid grid-cols-2 gap-2 pl-4 text-xs">
@@ -721,12 +724,9 @@
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Peso:</span><span class="col-span-2 text-white" id="modal-peso"></span></div>
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Materiales:</span><span class="col-span-2 text-white" id="modal-mat"></span></div>
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Acabados:</span><span class="col-span-2 text-white" id="modal-fin"></span></div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Tiempo Entrega:</span><span class="col-span-2 text-white" id="modal-time"></span></div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Certificaciones:</span><span class="col-span-2 text-white" id="modal-cert"></span></div>
                 </div>
-                <div class="mt-4 pt-6 border-t border-brand-gold flex items-center justify-between pb-8 relative z-10 shrink-0">
-                    <span id="modal-price" class="font-editorial text-xl sm:text-2xl text-brand-gold glow-gold"></span>
-                    <button id="modal-add-btn" class="glass-gold px-4 sm:px-6 py-3 text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold transition-colors flex-shrink-0 ml-2 rounded-sm">Agregar a Cotización</button>
+                <div class="mt-4 pt-6 border-t border-brand-gold flex items-center justify-end pb-8 relative z-10 shrink-0">
+                    <button id="modal-add-btn" class="glass-gold px-4 sm:px-6 py-3 text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold transition-colors flex-shrink-0 rounded-sm">Agregar a Cotización</button>
                 </div>
             </div>
         </div>
@@ -828,7 +828,7 @@
     <!-- ── DISEÑADOR ── -->
     <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex flex-col items-center justify-center">
         <div class="max-w-4xl mx-auto px-4 text-center">
-            <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold mb-12">Iván<br>Damaso</h2>
+            <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold mb-12">Iván</h2>
             <p class="text-xl text-white font-light italic mb-8 border-b border-brand-gold pb-8 inline-block px-8">"La luz es el alma de la arquitectura."</p>
             <p class="text-brand-muted mx-auto leading-relaxed max-w-2xl mb-16">Diseñador radicado en Guadalajara, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo.</p>
             <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24" onclick="this.classList.toggle('active')">
@@ -921,10 +921,11 @@
         };
 
         // Oculta el navbar al deslizar (en cualquier dirección) y muestra la barra blanca
+        window._searchFocused = false; // true mientras el usuario interactúa con la barra de búsqueda
         (function () {
             let ticking = false;
             window.addEventListener('scroll', () => {
-                if (window._navLockedByOverlay || ticking) return;
+                if (window._navLockedByOverlay || window._searchFocused || ticking) return;
                 ticking = true;
                 requestAnimationFrame(() => {
                     ticking = false;
@@ -933,6 +934,9 @@
                         window.toggleNavbarState(false);
                         const peek = document.getElementById('navbar-peek-bar');
                         if (peek) { peek.style.opacity = '1'; peek.style.pointerEvents = 'auto'; }
+                    } else if (window.scrollY <= 30 && window._navHiddenByScroll) {
+                        // De vuelta en la parte superior: el navbar siempre se muestra, sin píldora
+                        window.toggleNavbarState(true);
                     }
                 });
             }, { passive: true });
@@ -951,15 +955,15 @@
 
         // ── BASE DE DATOS ──
         window.dbProducts = [
-            { id: 1, name: "Candil Cascada Eclipse", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "Módulos LED Integrados 3W por esfera, 3000K", cable: "Tensores de acero y coaxial ajustable (hasta 4m)", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "60 cm (chapetón)" }, peso: "18 kg", volt: "110-240V", mat: "Aluminio repujado y cristal opalino soplado", fin: "Bronce oscuro avejentado y cristal blanco", time: "6 a 8 semanas", cert: "NOM" },
-            { id: 2, name: "Candil Media Luna Latón", category: "candiles", price: 14500, img: "lampara_luna.png", sku: "DM-CAN-002", desc: "Elegante candil suspendido en forma de cuarto de luna asimétrico.", specsLight: "3x G9 LED 5W, 2700K cálida", cable: "Cable transparente y tensores (2m)", dims: { w: "85 cm", h: "45 cm", d: "20 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido, difusor de cristal", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 3, name: "Candil Tubos Dorados", category: "candiles", price: 34000, img: "candil_3.png", sku: "DM-CAN-003", desc: "Impresionante candil de techo compuesto por una lluvia de finos cilindros de latón.", specsLight: "15x GU10 LED 3W cálida", cable: "Cables individuales de suspensión negra", dims: { w: "80 cm", h: "400 cm", d: "80 cm", dia: "N/A" }, peso: "22 kg", volt: "110-240V", mat: "Cilindros de latón sólido", fin: "Dorado pulido brillante", time: "6 a 8 semanas", cert: "NOM" },
-            { id: 4, name: "Candil Loto Latón", category: "candiles", price: 28500, img: "IMG_2010.png", sku: "DM-CAN-004", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto.", specsLight: "6x G9 LED 5W cálida", cable: "Tensores invisibles de acero", dims: { w: "120 cm", h: "150 cm", d: "120 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "Latón sólido moldeado a mano", fin: "Latón dorado antiguo", time: "6 semanas", cert: "NOM" },
-            { id: 82, name: "Candil Sputnik Nova", category: "candiles", price: 32000, img: "20191224_104820.png", sku: "DM-CAN-005", desc: "Un estallido lumínico de diseño atemporal.", specsLight: "18x G9 LED 3W cálida", cable: "Tubo rígido ajustable a techo", dims: { w: "90 cm", h: "90 cm", d: "90 cm", dia: "90 cm" }, peso: "12 kg", volt: "110-120V", mat: "Latón sólido e insertos de cristal", fin: "Latón avejentado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 83, name: "Candil Cintas Lumínicas", category: "candiles", price: 26500, img: "20200121_085437.png", sku: "DM-CAN-006", desc: "Escultura suspendida de iluminación continua.", specsLight: "Tira LED Integrada de Alta Densidad 45W, 3000K", cable: "Tensores invisibles de acero", dims: { w: "85 cm", h: "120 cm", d: "85 cm", dia: "N/A" }, peso: "8.5 kg", volt: "110-240V", mat: "Aluminio extruido y difusor acrílico", fin: "Cromo mate", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 84, name: "Candil Pérgola Rústica", category: "candiles", price: 65000, img: "20200121_085904.png", sku: "DM-CAN-007", desc: "Una obra monumental para proyectos a gran escala.", specsLight: "12x GU10 LED 5W + luz ambiental", cable: "Cadenas de acero pesado", dims: { w: "250 cm", h: "100 cm", d: "150 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Madera sólida tratada y acero al carbón", fin: "Madera rústica y acero patinado", time: "8 a 10 semanas", cert: "NOM" },
-            { id: 85, name: "Candil Órbitas Flotantes", category: "candiles", price: 48000, img: "Image_7.png", sku: "DM-CAN-008", desc: "Aros monumentales suspendidos en diferentes ejes.", specsLight: "Sistema LED Integrado perimetral 60W, 3000K", cable: "Tensores de acero de 3 metros ajustables", dims: { w: "150 cm", h: "200 cm", d: "150 cm", dia: "150 cm (aro mayor)" }, peso: "16 kg", volt: "110-240V", mat: "Aleación de aluminio y latón", fin: "Dorado champán cepillado", time: "5 a 6 semanas", cert: "NOM" },
-            { id: 98, name: "Candil Starburst Radiante", category: "candiles", price: 38500, img: "Unknown-2.png", sku: "DM-CAN-009", desc: "Candil monumental starburst en latón brillante con esferas de cristal soplado.", specsLight: "24x E12 LED 4W cálida", cable: "Tubo rígido de latón a techo", dims: { w: "110 cm", h: "110 cm", d: "110 cm", dia: "110 cm" }, peso: "18 kg", volt: "110-120V", mat: "Latón macizo y cristal transparente", fin: "Latón pulido brillante", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 1, name: "Candil de Esferas", category: "candiles", price: 45000, img: "candil.png", sku: "DM-CAN-001", desc: "Espectacular candil de doble altura con esferas lumínicas bicolores suspendidas asimétricamente.", specsLight: "candil fabricado con esferas de vidrio con terminado Frozen, con detalles en metal, con terminado en pintura electrostática.", cable: "cable redondo con certificado UL y NOM", dims: { w: "60 cm", h: "350 cm", d: "60 cm", dia: "N/A" }, peso: "40 kg", volt: "110-240V", mat: "metal/ cristal opalino", fin: "pintura electroestática", time: "6 a 8 semanas", cert: "NOM" },
+            { id: 2, name: "Candil Medialuna", category: "candiles", price: 14500, img: "lampara_luna.png", sku: "DM-CAN-002", desc: "Elegante candil suspendido en forma de cuarto de luna asimétrico.", specsLight: "candil, impreso en 3D", cable: "cable de certificado UL y NOM", dims: { w: "2 m", h: "1 m", d: "35 cm", dia: "N/A" }, peso: "20 kg", volt: "110-120V", mat: "petg termoplástico", fin: "metálico", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 3, name: "Candil Tubos", category: "candiles", price: 34000, img: "candil_3.png", sku: "DM-CAN-003", desc: "Impresionante candil de techo compuesto por una lluvia de finos cilindros de latón.", specsLight: "candil tubos de Laton", cable: "certificado UL y NOM", dims: { w: "60 cm", h: "5 m", d: "60 cm", dia: "N/A" }, peso: "22 kg", volt: "110-240V", mat: "tubos de Laton", fin: "pulido", time: "6 a 8 semanas", cert: "NOM" },
+            { id: 4, name: "Candil Cuadrado", category: "candiles", price: 28500, img: "IMG_2010.png", sku: "DM-CAN-004", desc: "Candil escultórico de múltiples colgantes en forma de hojas de loto.", specsLight: "lámpara de techo, fabricada en acero inoxidable, con pantallas de vidrio", cable: "certificado UL y NOM", dims: { w: "46 cm", h: "46 cm", d: "46 cm", dia: "N/A" }, peso: "14 kg", volt: "110-120V", mat: "acero, inoxidable/vidrio con bisel", fin: "pintura, electrostática", time: "6 semanas", cert: "NOM" },
+            { id: 82, name: "Candil Estrella", category: "candiles", price: 32000, img: "20191224_104820.png", sku: "DM-CAN-005", desc: "Un estallido lumínico de diseño atemporal.", specsLight: "candil fabricado en Laton, con pantallas de vidrio", cable: "certificado, UL y NOM", dims: { w: "90 cm", h: "90 cm", d: "90 cm", dia: "N/A" }, peso: "5 kg", volt: "110-120V", mat: "laton, con pantallas de vidrio", fin: "pulido", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 83, name: "Candil Aros", category: "candiles", price: 26500, img: "20200121_085437.png", sku: "DM-CAN-006", desc: "Escultura suspendida de iluminación continua.", specsLight: "candil fabricado con aros de acero, inoxidable, con pantalla en acrílico y tira de LED", cable: "certificado UL y NOM", dims: { w: "1.10 m", h: "7 m", d: "1.10 m", dia: "1.10 cm" }, peso: "40 kg", volt: "110-240V", mat: "acero inoxidable, difusor, acrílico", fin: "pulido", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 84, name: "Candil Marino", category: "candiles", price: 65000, img: "20200121_085904.png", sku: "DM-CAN-007", desc: "Una obra monumental para proyectos a gran escala.", specsLight: "candil, fabricado con cuerdas, marinas y remo de madera con iluminación", cable: "certificado UL y NOM", dims: { w: "1.20 m", h: "2.50 m", d: "2.90 m", dia: "N/A" }, peso: "80 kg", volt: "110-240V", mat: "fabricado en aluminio con cuerda marina, con remos de madera de rosa morada", fin: "pintura, electrostática, madera tratada", time: "8 a 10 semanas", cert: "NOM" },
+            { id: 85, name: "Candil Órbitas", category: "candiles", price: 48000, img: "Image_7.png", sku: "DM-CAN-008", desc: "Aros monumentales suspendidos en diferentes ejes.", specsLight: "candil fabricado en madera, con difusor en acrílico", cable: "certificado UL y NOM", dims: { w: "150 cm", h: "3 m", d: "150 cm", dia: "N/A" }, peso: "30 kg", volt: "110-240V", mat: "madera/acrílico", fin: "pintura automotriz", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 98, name: "Candil Radiante", category: "candiles", price: 38500, img: "Unknown-2.png", sku: "DM-CAN-009", desc: "Candil monumental starburst en latón brillante con esferas de cristal soplado.", specsLight: "candil fabricado en Laton, con esferas de vidrio", cable: "certificado UL y NOM", dims: { w: "60 cm", h: "120 cm", d: "60 cm", dia: "60 cm" }, peso: "10 kg", volt: "110-120V", mat: "laton y vidrio", fin: "pulido", time: "5 a 6 semanas", cert: "NOM" },
             { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino y concreto", fin: "Blanco y gris", time: "3 a 4 semanas", cert: "NOM" },
             { id: 6, name: "Arbotante Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-002", desc: "Arbotante de muro minimalista con aro perimetral luminoso trasero.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" }, peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
             { id: 7, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-003", desc: "Arbotante elegante con cilindros de vidrio transparente.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
@@ -1120,11 +1124,84 @@
         };
 
         // ── SCROLL ──
+        // Animación reutilizable "DAMASO" (+ palabra opcional debajo), usando el mismo
+        // overlay de letras que la transición de categorías del menú.
+        window.playDamasoOverlayAnimation = function(belowText, onComplete) {
+            if (window._catAnimating) { if (onComplete) onComplete(); return; }
+            window._catAnimating = true;
+            const overlay = document.getElementById('category-transition-overlay');
+            const letters = Array.from(document.querySelectorAll('#menu-damaso-letters .menu-letter'));
+            const categoryText = document.getElementById('menu-category-text');
+            const divider = document.getElementById('cat-divider');
+            if (!overlay) { window._catAnimating = false; if (onComplete) onComplete(); return; }
+
+            letters.forEach(l => { l.classList.remove('letter-animate-in', 'letter-animate-out'); l.style.opacity = '0'; });
+            if (categoryText) { categoryText.classList.remove('category-animate-in'); categoryText.style.opacity = '0'; categoryText.innerText = belowText || ''; }
+            if (divider) divider.style.width = '0';
+
+            overlay.style.cssText = 'position:fixed!important;inset:0!important;margin:0!important;padding:0!important;z-index:2147483647!important;background:#030303!important;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:none!important;overflow:hidden;';
+            overlay.classList.add('overlay-visible');
+            document.body.style.overflow = 'hidden';
+            window.playGlowSound();
+
+            const particleContainer = document.getElementById('cat-particles');
+            if (particleContainer) {
+                particleContainer.innerHTML = '';
+                for (let i = 0; i < 12; i++) {
+                    setTimeout(() => {
+                        const p = document.createElement('div');
+                        p.className = 'particle';
+                        p.style.left = Math.random() * 100 + '%';
+                        p.style.top = (40 + Math.random() * 30) + '%';
+                        p.style.setProperty('--tx', (Math.random() * 60 - 30) + 'px');
+                        p.style.animationDelay = (Math.random() * 0.5) + 's';
+                        particleContainer.appendChild(p);
+                        setTimeout(() => p.remove(), 2000);
+                    }, i * 100);
+                }
+            }
+
+            setTimeout(() => {
+                letters.forEach((l, i) => { setTimeout(() => l.classList.add('letter-animate-in'), i * 100); });
+            }, 150);
+
+            if (belowText) {
+                setTimeout(() => { if (divider) divider.style.width = '200px'; }, letters.length * 100 + 200);
+                setTimeout(() => { if (categoryText) categoryText.classList.add('category-animate-in'); }, letters.length * 100 + 350);
+            }
+
+            setTimeout(() => {
+                if (onComplete) onComplete();
+                setTimeout(() => {
+                    overlay.classList.remove('overlay-visible');
+                    overlay.style.opacity = '0';
+                    overlay.style.pointerEvents = 'none';
+                    setTimeout(() => {
+                        window._catAnimating = false;
+                        overlay.style.cssText = '';
+                        document.body.style.overflow = '';
+                    }, 500);
+                }, 600);
+            }, 2000);
+        };
+
+        // Clic en el wordmark "DAMASO" del navbar: SOLO regresa al inicio (sin recargar la página)
+        window.handleDamasoWordmarkClick = function(e) {
+            if (e) e.preventDefault();
+            window.playDamasoOverlayAnimation('', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        };
+
         window.scrollToSection = function(e, id) {
             if (e) e.preventDefault();
             const menu = document.getElementById('dropdown-menu');
             if (menu) { menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2'); menu.classList.remove('translate-y-0', 'opacity-100'); }
-            setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 300);
+            const belowTextMap = { clientes: 'CLIENTES', disenador: 'DISEÑADOR' };
+            const belowText = belowTextMap[id];
+            if (belowText) {
+                window.playDamasoOverlayAnimation(belowText, () => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }));
+            } else {
+                setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 300);
+            }
         };
 
         // ── COOKIES ──
@@ -1183,15 +1260,27 @@
             if (m) { m.classList.toggle('bg-brand-gold', g === 'masculino'); m.classList.toggle('text-black', g === 'masculino'); }
         };
         window.processLogin = function() {
-            const name = document.getElementById('session-name')?.value || 'Thiago';
-            const email = document.getElementById('session-email')?.value || '';
+            const name = document.getElementById('session-name')?.value.trim() || '';
+            const email = document.getElementById('session-email')?.value.trim() || '';
+            const password = document.getElementById('session-password')?.value.trim() || '';
             const addr = document.getElementById('session-address')?.value || '';
-            const gender = window._selectedGender || 'masculino';
+            const gender = window._selectedGender;
+            const errEl = document.getElementById('login-validation-error');
+            if (!name || !email || !password || !gender) {
+                if (errEl) errEl.classList.remove('hidden');
+                return;
+            }
+            if (errEl) errEl.classList.add('hidden');
             window.userSession = { name, email, addr, gender };
             localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
             document.getElementById('login-form-modal')?.classList.add('opacity-0', 'pointer-events-none');
             document.getElementById('nav-login-btn')?.classList.add('hidden');
             window.showWelcomeAnimation(name, gender);
+        };
+        window.cancelLoginForm = function() {
+            document.getElementById('login-form-modal')?.classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('login-validation-error')?.classList.add('hidden');
+            window.enterSiteDirectly();
         };
         window.showWelcomeAnimation = function(userName, gender) {
             const loading = document.getElementById('login-loading-modal');
@@ -1314,17 +1403,14 @@
                                     <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                 </div>
                                 <img src="${p.img}" id="img-${p.id}" onload="window.imageLoaded(${p.id})" onerror="setTimeout(()=>{this.src='${p.img}?t='+Date.now()},1500)" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="${p.name}">
-                                <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
-                                    <button class="glass-btn text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:border-brand-gold/70 transition-all pointer-events-auto rounded-sm" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
-                                    <button onclick="window.addToCart(${p.id})" class="glass-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 transition-all pointer-events-auto rounded-sm">Agregar Cotización</button>
+                                <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
+                                    <button class="glass-btn text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:border-brand-gold/70 transition-all rounded-sm" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
+                                    <button onclick="window.addToCart(${p.id})" class="glass-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 transition-all rounded-sm">Agregar Cotización</button>
                                 </div>
                             </div>
-                            <div class="mt-6 flex justify-between items-start">
-                                <div class="flex-1 pr-4">
-                                    <h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-gold transition-colors leading-tight break-words-custom" onclick="window.openSpecModal(${p.id})">${p.name}</h3>
-                                    <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mt-2 glow-gold">${catTitle}</p>
-                                </div>
-                                <p class="font-editorial text-lg text-brand-gold whitespace-nowrap ml-2 glow-gold">$${Number(p.price).toLocaleString()}</p>
+                            <div class="mt-6">
+                                <h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-gold transition-colors leading-tight break-words-custom" onclick="window.openSpecModal(${p.id})">${p.name}</h3>
+                                <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mt-2 glow-gold">${catTitle}</p>
                             </div>
                         </div>`;
                 });
@@ -1453,7 +1539,6 @@
             document.getElementById('modal-desc').innerText = p.desc;
             document.getElementById('modal-sku').innerText = p.sku;
             document.getElementById('modal-luz').innerText = p.specsLight;
-            document.getElementById('modal-volt').innerText = p.volt;
             document.getElementById('modal-cable').innerText = p.cable;
             document.getElementById('modal-w').innerText = p.dims.w;
             document.getElementById('modal-h').innerText = p.dims.h;
@@ -1462,9 +1547,6 @@
             document.getElementById('modal-peso').innerText = p.peso;
             document.getElementById('modal-mat').innerText = p.mat;
             document.getElementById('modal-fin').innerText = p.fin;
-            document.getElementById('modal-time').innerText = p.time;
-            document.getElementById('modal-cert').innerText = p.cert;
-            document.getElementById('modal-price').innerText = '$' + Number(p.price).toLocaleString() + ' MXN';
             const btn = document.getElementById('modal-add-btn');
             if (btn) btn.onclick = () => { window.addToCart(p.id); window.closeSpecModal(); };
             const modalMsgs = document.getElementById('modal-ai-messages');
@@ -1613,7 +1695,7 @@
             img.onload = function() {
                 canvas.width = img.width; canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
-                const size = Math.max(20, canvas.width * 0.035);
+                const size = Math.max(28, canvas.width * 0.05);
                 ctx.font = `italic bold ${size}px "Playfair Display", serif`;
                 ctx.fillStyle = 'rgba(255,255,255,0.85)';
                 ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 8;
@@ -3037,6 +3119,13 @@ NORMAS:
                 }
             }
 
+            const liveSearchEl = document.getElementById('live-search');
+            if (liveSearchEl) {
+                // Evita que el navbar se oculte mientras el usuario toca/escribe en la búsqueda
+                // (en móvil, el teclado virtual puede mover momentáneamente el scroll).
+                liveSearchEl.addEventListener('focus', () => { window._searchFocused = true; });
+                liveSearchEl.addEventListener('blur', () => { window._searchFocused = false; });
+            }
             document.getElementById('live-search')?.addEventListener('input', e => {
                 const q = e.target.value.toLowerCase().trim();
                 const title = document.getElementById('catalog-title');
