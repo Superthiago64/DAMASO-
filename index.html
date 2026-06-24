@@ -608,14 +608,14 @@
     <nav class="fixed top-0 left-0 right-0 w-full z-[100] glass-nav flex flex-col" id="navbar" style="transform: translate3d(0,0,0);">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center">MENÚ</button>
+                <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-10 py-3.5 rounded-full text-sm tracking-[0.25em] font-extrabold uppercase focus:outline-none cursor-pointer flex items-center justify-center">Menú</button>
                 <a href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text navbar-wordmark-pulse uppercase font-bold ml-2">
                     <span>Damaso</span>
                     <span id="navbar-wordmark-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true">Damaso</span>
                 </a>
             </div>
 
-            <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 glass-btn bg-brand-surface/90 border border-brand-gold/40 py-2 shadow-[0_0_20px_rgba(212,175,55,0.15)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-[990] rounded-sm">
+            <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 glass-btn bg-brand-surface/90 border border-brand-gold/40 py-2 shadow-[0_0_20px_rgba(212,175,55,0.15)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-[990] rounded-sm max-h-[70vh] overflow-y-auto overscroll-contain">
                 <div class="px-6 py-3 text-[9px] text-brand-gold glow-gold tracking-[0.3em] uppercase border-b border-brand-border mb-2 font-bold">Catálogo</div>
                 <a href="#coleccion" onclick="window.filterCatalogWithAnimation('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all">Ver Todo</a>
                 <a href="#coleccion" onclick="window.filterCatalogWithAnimation('candiles')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Candiles</a>
@@ -863,7 +863,10 @@
         </div>
         <div class="relative z-10 w-full max-w-[95%] mx-auto flex flex-col items-center text-center px-4">
             <p class="text-[10px] tracking-[0.4em] text-brand-gold uppercase mb-4 font-semibold italic glow-gold">Luxury Lighting Studio</p>
-            <h1 class="font-editorial text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-8">Damaso<br><span class="italic text-brand-gold glow-gold">Studio</span></h1>
+            <h1 class="font-editorial text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-8">
+                <img src="damaso-wordmark-logo.png" alt="Damaso" class="mx-auto w-full max-w-xl md:max-w-2xl lg:max-w-3xl h-auto drop-shadow-[0_0_25px_rgba(255,255,255,0.25)]">
+                <span class="italic text-brand-gold glow-gold block mt-2">Studio</span>
+            </h1>
             <p class="text-lg md:text-xl text-white/90 font-light mx-auto max-w-2xl mb-12">Esculpiendo la oscuridad con piezas de diseño atemporal. Hecho a mano en México.</p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
                 <a href="#coleccion" class="glass-gold w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] uppercase font-bold px-10 py-5 rounded-sm">VER COLECCIÓN</a>
@@ -923,7 +926,7 @@
         <div class="max-w-5xl mx-auto px-6">
             <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-6 glow-gold scroll-reveal">La marca</p>
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold uppercase mb-20 scroll-reveal">Damaso</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-20">
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
                     <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6">Clientes</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="100">0</span>+</p>
@@ -933,6 +936,16 @@
                     <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6">Experiencia</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="25">0</span> <span class="text-brand-gold glow-gold">años</span></p>
                     <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest">de experiencia</p>
+                </div>
+                <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
+                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6">Proyectos</p>
+                    <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="200">0</span>+</p>
+                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest">proyectos</p>
+                </div>
+                <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
+                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6">Empresa</p>
+                    <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="100">0</span><span class="text-brand-gold glow-gold">%</span></p>
+                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest">empresa tapatía</p>
                 </div>
             </div>
             <div class="max-w-4xl mx-auto px-6 scroll-reveal">
@@ -964,7 +977,8 @@
                 </div>
             </div>
             <div class="mt-12 text-center border-t border-brand-border pt-8 pb-8">
-                <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mb-6">&copy; 2026 DAMASO STUDIO. IVÁN DAMASO. GUADALAJARA, MÉXICO.</p>
+                <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mb-2">&copy; 2026 DAMASO STUDIO. IVÁN DAMASO. GUADALAJARA, MÉXICO.</p>
+                <p class="text-[9px] tracking-[0.15em] text-brand-muted uppercase mb-6">Derechos reservados. Corporativo Insignia de México S.A. de C.V.</p>
                 <button onclick="window.confirmLogout()" class="text-[9px] tracking-widest text-brand-muted hover:text-red-500 uppercase transition-colors hidden" id="logout-btn">Cerrar Sesión</button>
             </div>
         </div>
@@ -1181,43 +1195,11 @@
             exterior: "Lámparas de Exterior", proyectos: "Proyectos Especiales"
         };
 
-        // ── AUDIO ──
+        // ── AUDIO ── (efectos de sonido desactivados)
         window.audioCtx = null;
-        window.initAudio = function() {
-            try {
-                if (!window.audioCtx) window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (window.audioCtx.state === 'suspended') window.audioCtx.resume();
-            } catch(e) {}
-        };
-        window.playGlowSound = function() {
-            try {
-                if (!window.audioCtx) return;
-                const osc = window.audioCtx.createOscillator();
-                const gain = window.audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(150, window.audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(600, window.audioCtx.currentTime + 1.5);
-                gain.gain.setValueAtTime(0, window.audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.2, window.audioCtx.currentTime + 0.5);
-                gain.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 2.0);
-                osc.connect(gain); gain.connect(window.audioCtx.destination);
-                osc.start(); osc.stop(window.audioCtx.currentTime + 2.0);
-            } catch(e) {}
-        };
-        window.playClickSound = function() {
-            try {
-                if (!window.audioCtx) return;
-                const osc = window.audioCtx.createOscillator();
-                const gain = window.audioCtx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(600, window.audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1200, window.audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.05, window.audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.1);
-                osc.connect(gain); gain.connect(window.audioCtx.destination);
-                osc.start(); osc.stop(window.audioCtx.currentTime + 0.1);
-            } catch(e) {}
-        };
+        window.initAudio = function() {};
+        window.playGlowSound = function() {};
+        window.playClickSound = function() {};
 
         // ── SCROLL ──
         // Lock anti-doble-click compartido por filterCatalogWithAnimation y
@@ -1429,7 +1411,6 @@
         window.enterSiteDirectly = function() {
             document.querySelectorAll('.init-overlay').forEach(o => o.classList.add('opacity-0', 'pointer-events-none'));
             document.getElementById('main-body')?.classList.remove('overflow-hidden');
-            document.getElementById('bg-music')?.play().catch(() => {});
             if (window.userSession) {
                 document.getElementById('logout-btn')?.classList.remove('hidden');
                 const cn = document.getElementById('client-name');
