@@ -225,10 +225,18 @@
         /* ── BARRA BLANCA "PEEK" — flotando, separada del borde superior ── */
         #navbar-peek-bar {
             top: calc(env(safe-area-inset-top) + 18px);
-            width: 68px;
-            height: 17px;
+            width: 132px;
+            height: 34px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.35);
             transition: opacity 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #111;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
         }
 
         /* ── DAMASO ILUMINÁNDOSE LENTAMENTE — capa de barrido sobre el texto base blanco ── */
@@ -608,7 +616,7 @@
     <nav class="fixed top-0 left-0 right-0 w-full z-[100] glass-nav flex flex-col" id="navbar" style="transform: translate3d(0,0,0);">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-10 py-3.5 rounded-full text-sm tracking-[0.25em] font-extrabold uppercase focus:outline-none cursor-pointer flex items-center justify-center">Menú</button>
+                <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center">Menú</button>
                 <a href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text navbar-wordmark-pulse uppercase font-bold ml-2">
                     <span>Damaso</span>
                     <span id="navbar-wordmark-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true">Damaso</span>
@@ -616,16 +624,30 @@
             </div>
 
             <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 glass-btn bg-brand-surface/90 border border-brand-gold/40 py-2 shadow-[0_0_20px_rgba(212,175,55,0.15)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-[990] rounded-sm max-h-[70vh] overflow-y-auto overscroll-contain">
-                <div class="px-6 py-3 text-[9px] text-brand-gold glow-gold tracking-[0.3em] uppercase border-b border-brand-border mb-2 font-bold">Catálogo</div>
-                <a href="#coleccion" onclick="window.filterCatalogWithAnimation('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all">Ver Todo</a>
-                <a href="#coleccion" onclick="window.filterCatalogWithAnimation('candiles')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Candiles</a>
-                <a href="#coleccion" onclick="window.filterCatalogWithAnimation('arbotantes')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Arbotantes</a>
-                <a href="#coleccion" onclick="window.filterCatalogWithAnimation('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Espejos</a>
-                <a href="#coleccion" onclick="window.filterCatalogWithAnimation('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de mesa</a>
-                <a href="#coleccion" onclick="window.filterCatalogWithAnimation('pie')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de pie</a>
-                <a href="#coleccion" onclick="window.filterCatalogWithAnimation('techo')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de techo</a>
-                <a href="#coleccion" onclick="window.filterCatalogWithAnimation('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de exterior</a>
-                <a href="#coleccion" onclick="window.filterCatalogWithAnimation('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Proyectos especiales</a>
+                <div class="flex items-center justify-between px-6 py-3 border-b border-brand-border mb-2">
+                    <span class="text-[9px] text-brand-gold glow-gold tracking-[0.3em] uppercase font-bold">Catálogo</span>
+                    <button type="button" id="btn-idioma" onclick="window.toggleLanguagePanel(event)" class="text-[9px] text-brand-muted hover:text-brand-gold tracking-[0.2em] uppercase font-bold transition-colors" aria-label="Cambiar idioma">
+                        <span id="btn-idioma-label">Español</span>
+                    </button>
+                </div>
+                <div id="catalog-menu-list">
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all">Ver Todo</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('candiles')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Candiles</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('arbotantes')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Arbotantes</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Espejos</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de mesa</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('pie')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de pie</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('techo')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de techo</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de exterior</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Proyectos especiales</a>
+                </div>
+                <div id="language-panel" class="hidden">
+                    <button type="button" onclick="window.toggleLanguagePanel(event)" class="flex items-center gap-2 px-6 py-2 text-[10px] tracking-widest text-brand-gold uppercase transition-all hover:underline">&larr; Volver</button>
+                    <div class="px-6 pb-2">
+                        <input type="text" id="lang-search-input" oninput="window.filterLanguageList()" placeholder="Buscar idioma..." class="w-full bg-black/30 border border-brand-border rounded-sm px-3 py-2 text-xs text-white placeholder-brand-muted focus:outline-none focus:border-brand-gold">
+                    </div>
+                    <div id="lang-list" class="max-h-56 overflow-y-auto"></div>
+                </div>
                 <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
                     <a href="#" onclick="window.scrollToSection(event, 'home')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Home</a>
                     <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Clientes</a>
@@ -669,7 +691,7 @@
     </nav>
 
     <!-- ── BARRA BLANCA "PEEK" — toca para reabrir el navbar ── -->
-    <button id="navbar-peek-bar" onclick="window.reopenNavbar()" aria-label="Mostrar menú Damaso" class="fixed left-1/2 -translate-x-1/2 z-[101] bg-white rounded-full opacity-0 pointer-events-none"></button>
+    <button id="navbar-peek-bar" onclick="window.reopenNavbar()" aria-label="Mostrar panel Damaso" class="fixed left-1/2 -translate-x-1/2 z-[101] bg-white rounded-full opacity-0 pointer-events-none">Panel</button>
 
     <!-- ── BOTÓN FLOTANTE WHATSAPP — dorado con ondas pulsantes ── -->
     <a href="https://wa.me/523338703071" target="_blank" rel="noopener" aria-label="WhatsApp" id="whatsapp-float-btn" class="fixed bottom-6 right-6 z-[105] w-14 h-14 rounded-full flex items-center justify-center">
@@ -863,10 +885,7 @@
         </div>
         <div class="relative z-10 w-full max-w-[95%] mx-auto flex flex-col items-center text-center px-4">
             <p class="text-[10px] tracking-[0.4em] text-brand-gold uppercase mb-4 font-semibold italic glow-gold">Luxury Lighting Studio</p>
-            <h1 class="font-editorial text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-8">
-                <img src="damaso-wordmark-logo.png" alt="Damaso" class="mx-auto w-full max-w-xl md:max-w-2xl lg:max-w-3xl h-auto drop-shadow-[0_0_25px_rgba(255,255,255,0.25)]">
-                <span class="italic text-brand-gold glow-gold block mt-2">Studio</span>
-            </h1>
+            <h1 class="font-editorial text-4xl md:text-6xl lg:text-7xl text-white leading-[0.9] mb-8">Damaso<br><span class="italic text-brand-gold glow-gold">Studio</span></h1>
             <p class="text-lg md:text-xl text-white/90 font-light mx-auto max-w-2xl mb-12">Esculpiendo la oscuridad con piezas de diseño atemporal. Hecho a mano en México.</p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
                 <a href="#coleccion" class="glass-gold w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] uppercase font-bold px-10 py-5 rounded-sm">VER COLECCIÓN</a>
@@ -1528,6 +1547,66 @@
             } else {
                 menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
                 menu.classList.remove('translate-y-0', 'opacity-100');
+                const langPanel = document.getElementById('language-panel');
+                const catList = document.getElementById('catalog-menu-list');
+                if (langPanel && catList) { langPanel.classList.add('hidden'); catList.classList.remove('hidden'); }
+            }
+        };
+
+        // ── SELECTOR DE IDIOMA ──
+        window.languageList = [
+            'Español','Inglés','Francés','Alemán','Italiano','Portugués','Neerlandés','Sueco','Noruego','Danés',
+            'Finlandés','Islandés','Polaco','Checo','Eslovaco','Húngaro','Rumano','Búlgaro','Griego','Ruso',
+            'Ucraniano','Turco','Árabe','Hebreo','Persa','Hindi','Bengalí','Urdu','Punjabi','Tamil',
+            'Telugu','Maratí','Gujarati','Chino Mandarín','Cantonés','Japonés','Coreano','Vietnamita','Tailandés','Indonesio',
+            'Malayo','Filipino (Tagalo)','Swahili','Amárico','Hausa','Yoruba','Zulú','Afrikáans','Catalán','Euskera (Vasco)',
+            'Gallego','Croata','Serbio','Esloveno','Bosnio','Macedonio','Albanés','Estonio','Letón','Lituano',
+            'Georgiano','Armenio','Azerí','Kazajo','Uzbeko','Mongol','Nepalí','Cingalés','Birmano','Jemer',
+            'Lao','Maorí','Samoano','Hawaiano','Galés','Irlandés','Gaélico Escocés','Maltés','Esperanto','Latín',
+            'Criollo Haitiano'
+        ];
+        window.selectedLanguage = 'Español';
+
+        window.renderLanguageList = function(filter) {
+            const container = document.getElementById('lang-list');
+            if (!container) return;
+            const q = (filter || '').trim().toLowerCase();
+            const items = window.languageList.filter(l => l.toLowerCase().includes(q));
+            container.innerHTML = items.map(l => {
+                const checked = l === window.selectedLanguage;
+                return `<button type="button" onclick="window.selectLanguage('${l.replace(/'/g, "\\'")}')" class="w-full flex items-center justify-between px-6 py-2.5 text-xs tracking-widest uppercase transition-all ${checked ? 'text-brand-gold' : 'text-brand-muted hover:bg-brand-gold hover:text-black'}">
+                    <span>${l}</span>
+                    ${checked ? '<span class="text-brand-gold">&#10003;</span>' : ''}
+                </button>`;
+            }).join('') || '<p class="px-6 py-3 text-[10px] text-brand-muted uppercase">Sin resultados</p>';
+        };
+
+        window.selectLanguage = function(lang) {
+            window.selectedLanguage = lang;
+            const btn = document.getElementById('btn-idioma-label');
+            if (btn) btn.innerText = lang;
+            window.renderLanguageList(document.getElementById('lang-search-input')?.value || '');
+        };
+
+        window.filterLanguageList = function() {
+            window.renderLanguageList(document.getElementById('lang-search-input').value);
+        };
+
+        window.toggleLanguagePanel = function(e) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            const catList = document.getElementById('catalog-menu-list');
+            const langPanel = document.getElementById('language-panel');
+            if (!catList || !langPanel) return;
+            const isOpen = !langPanel.classList.contains('hidden');
+            if (isOpen) {
+                langPanel.classList.add('hidden');
+                catList.classList.remove('hidden');
+            } else {
+                catList.classList.add('hidden');
+                langPanel.classList.remove('hidden');
+                window.renderLanguageList('');
+                const input = document.getElementById('lang-search-input');
+                if (input) { input.value = ''; setTimeout(() => input.focus(), 50); }
             }
         };
 
