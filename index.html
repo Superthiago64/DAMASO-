@@ -283,6 +283,14 @@
             padding-bottom: calc(2rem + env(safe-area-inset-bottom));
         }
 
+        /* ── OCULTAR BARRA/UI POR DEFECTO DE GOOGLE TRANSLATE ── */
+        .goog-te-banner-frame, .goog-te-gadget-icon, #goog-gt-tt, .goog-tooltip, .goog-tooltip:hover { display: none !important; }
+        .goog-text-highlight { background: none !important; box-shadow: none !important; }
+        body { top: 0 !important; }
+        body.translated-ltr, body.translated-rtl { top: 0 !important; }
+        html.translated-ltr, html.translated-rtl { top: 0 !important; }
+        iframe.goog-te-banner-frame { display: none !important; visibility: hidden !important; }
+
         /* ── ANIMACIÓN DE CATEGORÍA — PANTALLA COMPLETA REAL ── */
         #category-transition-overlay {
             /* CRÍTICO: position fixed escapa COMPLETAMENTE del flujo del documento
@@ -885,7 +893,7 @@
         </div>
         <div class="relative z-10 w-full max-w-[95%] mx-auto flex flex-col items-center text-center px-4">
             <p class="text-[10px] tracking-[0.4em] text-brand-gold uppercase mb-4 font-semibold italic glow-gold">Luxury Lighting Studio</p>
-            <h1 class="font-editorial text-4xl md:text-6xl lg:text-7xl text-white leading-[0.9] mb-8">Damaso<br><span class="italic text-brand-gold glow-gold">Studio</span></h1>
+            <h1 class="font-editorial text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-8">DAMASO<br><span class="italic text-brand-gold glow-gold">Studio</span></h1>
             <p class="text-lg md:text-xl text-white/90 font-light mx-auto max-w-2xl mb-12">Esculpiendo la oscuridad con piezas de diseño atemporal. Hecho a mano en México.</p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
                 <a href="#coleccion" class="glass-gold w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] uppercase font-bold px-10 py-5 rounded-sm">VER COLECCIÓN</a>
@@ -1555,37 +1563,61 @@
 
         // ── SELECTOR DE IDIOMA ──
         window.languageList = [
-            'Español','Inglés','Francés','Alemán','Italiano','Portugués','Neerlandés','Sueco','Noruego','Danés',
-            'Finlandés','Islandés','Polaco','Checo','Eslovaco','Húngaro','Rumano','Búlgaro','Griego','Ruso',
-            'Ucraniano','Turco','Árabe','Hebreo','Persa','Hindi','Bengalí','Urdu','Punjabi','Tamil',
-            'Telugu','Maratí','Gujarati','Chino Mandarín','Cantonés','Japonés','Coreano','Vietnamita','Tailandés','Indonesio',
-            'Malayo','Filipino (Tagalo)','Swahili','Amárico','Hausa','Yoruba','Zulú','Afrikáans','Catalán','Euskera (Vasco)',
-            'Gallego','Croata','Serbio','Esloveno','Bosnio','Macedonio','Albanés','Estonio','Letón','Lituano',
-            'Georgiano','Armenio','Azerí','Kazajo','Uzbeko','Mongol','Nepalí','Cingalés','Birmano','Jemer',
-            'Lao','Maorí','Samoano','Hawaiano','Galés','Irlandés','Gaélico Escocés','Maltés','Esperanto','Latín',
-            'Criollo Haitiano'
+            {name:'Español', code:'es'},{name:'Inglés', code:'en'},{name:'Francés', code:'fr'},{name:'Alemán', code:'de'},{name:'Italiano', code:'it'},
+            {name:'Portugués', code:'pt'},{name:'Neerlandés', code:'nl'},{name:'Sueco', code:'sv'},{name:'Noruego', code:'no'},{name:'Danés', code:'da'},
+            {name:'Finlandés', code:'fi'},{name:'Islandés', code:'is'},{name:'Polaco', code:'pl'},{name:'Checo', code:'cs'},{name:'Eslovaco', code:'sk'},
+            {name:'Húngaro', code:'hu'},{name:'Rumano', code:'ro'},{name:'Búlgaro', code:'bg'},{name:'Griego', code:'el'},{name:'Ruso', code:'ru'},
+            {name:'Ucraniano', code:'uk'},{name:'Turco', code:'tr'},{name:'Árabe', code:'ar'},{name:'Hebreo', code:'iw'},{name:'Persa', code:'fa'},
+            {name:'Hindi', code:'hi'},{name:'Bengalí', code:'bn'},{name:'Urdu', code:'ur'},{name:'Punjabi', code:'pa'},{name:'Tamil', code:'ta'},
+            {name:'Telugu', code:'te'},{name:'Maratí', code:'mr'},{name:'Gujarati', code:'gu'},{name:'Chino Mandarín', code:'zh-CN'},{name:'Chino Tradicional', code:'zh-TW'},
+            {name:'Japonés', code:'ja'},{name:'Coreano', code:'ko'},{name:'Vietnamita', code:'vi'},{name:'Tailandés', code:'th'},{name:'Indonesio', code:'id'},
+            {name:'Malayo', code:'ms'},{name:'Filipino (Tagalo)', code:'tl'},{name:'Swahili', code:'sw'},{name:'Amárico', code:'am'},{name:'Hausa', code:'ha'},
+            {name:'Yoruba', code:'yo'},{name:'Zulú', code:'zu'},{name:'Afrikáans', code:'af'},{name:'Catalán', code:'ca'},{name:'Euskera (Vasco)', code:'eu'},
+            {name:'Gallego', code:'gl'},{name:'Croata', code:'hr'},{name:'Serbio', code:'sr'},{name:'Esloveno', code:'sl'},{name:'Bosnio', code:'bs'},
+            {name:'Macedonio', code:'mk'},{name:'Albanés', code:'sq'},{name:'Estonio', code:'et'},{name:'Letón', code:'lv'},{name:'Lituano', code:'lt'},
+            {name:'Georgiano', code:'ka'},{name:'Armenio', code:'hy'},{name:'Azerí', code:'az'},{name:'Kazajo', code:'kk'},{name:'Uzbeko', code:'uz'},
+            {name:'Mongol', code:'mn'},{name:'Nepalí', code:'ne'},{name:'Cingalés', code:'si'},{name:'Birmano', code:'my'},{name:'Jemer', code:'km'},
+            {name:'Lao', code:'lo'},{name:'Maorí', code:'mi'},{name:'Samoano', code:'sm'},{name:'Hawaiano', code:'haw'},{name:'Galés', code:'cy'},
+            {name:'Irlandés', code:'ga'},{name:'Gaélico Escocés', code:'gd'},{name:'Maltés', code:'mt'},{name:'Esperanto', code:'eo'},{name:'Latín', code:'la'},
+            {name:'Criollo Haitiano', code:'ht'}
         ];
         window.selectedLanguage = 'Español';
+        window.selectedLanguageCode = 'es';
 
         window.renderLanguageList = function(filter) {
             const container = document.getElementById('lang-list');
             if (!container) return;
             const q = (filter || '').trim().toLowerCase();
-            const items = window.languageList.filter(l => l.toLowerCase().includes(q));
+            const items = window.languageList.filter(l => l.name.toLowerCase().includes(q));
             container.innerHTML = items.map(l => {
-                const checked = l === window.selectedLanguage;
-                return `<button type="button" onclick="window.selectLanguage('${l.replace(/'/g, "\\'")}')" class="w-full flex items-center justify-between px-6 py-2.5 text-xs tracking-widest uppercase transition-all ${checked ? 'text-brand-gold' : 'text-brand-muted hover:bg-brand-gold hover:text-black'}">
-                    <span>${l}</span>
+                const checked = l.name === window.selectedLanguage;
+                return `<button type="button" onclick="window.selectLanguage('${l.name.replace(/'/g, "\\'")}', '${l.code}')" class="w-full flex items-center justify-between px-6 py-2.5 text-xs tracking-widest uppercase transition-all ${checked ? 'text-brand-gold' : 'text-brand-muted hover:bg-brand-gold hover:text-black'}">
+                    <span>${l.name}</span>
                     ${checked ? '<span class="text-brand-gold">&#10003;</span>' : ''}
                 </button>`;
             }).join('') || '<p class="px-6 py-3 text-[10px] text-brand-muted uppercase">Sin resultados</p>';
         };
 
-        window.selectLanguage = function(lang) {
+        // ── TRADUCCIÓN REAL DEL SITIO (Google Website Translator) ──
+        window._gtRetries = 0;
+        window.applyGoogleTranslate = function(code) {
+            const combo = document.querySelector('.goog-te-combo');
+            if (!combo) {
+                if (window._gtRetries++ < 30) { setTimeout(() => window.applyGoogleTranslate(code), 300); }
+                return;
+            }
+            window._gtRetries = 0;
+            combo.value = code;
+            combo.dispatchEvent(new Event('change'));
+        };
+
+        window.selectLanguage = function(lang, code) {
             window.selectedLanguage = lang;
+            window.selectedLanguageCode = code || 'es';
             const btn = document.getElementById('btn-idioma-label');
             if (btn) btn.innerText = lang;
             window.renderLanguageList(document.getElementById('lang-search-input')?.value || '');
+            window.applyGoogleTranslate(window.selectedLanguageCode);
         };
 
         window.filterLanguageList = function() {
@@ -3526,5 +3558,14 @@ NORMAS:
         applyFixes();
     })();
     </script>
+
+    <!-- ── TRADUCCIÓN AUTOMÁTICA DEL SITIO ── -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'es', autoDisplay: false }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
