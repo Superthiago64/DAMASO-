@@ -47,6 +47,25 @@
             background-attachment: fixed;
         }
 
+        /* ── TONO DE PÁGINA: BLANCO (alternativa al oscuro predeterminado) ── */
+        html.theme-light, html.theme-light body { background-color: #f5f3ee !important; color: #111111 !important; }
+        html.theme-light .bg-brand-bg,
+        html.theme-light .bg-black,
+        html.theme-light .bg-\[\#050505\],
+        html.theme-light .bg-\[\#0a0a0a\] { background-color: #f5f3ee !important; }
+        html.theme-light .bg-brand-surface { background-color: #ffffff !important; }
+        html.theme-light .text-white,
+        html.theme-light .text-brand-text { color: #111111 !important; }
+        html.theme-light .text-brand-muted { color: #5a5a5a !important; }
+        html.theme-light .border-brand-border { border-color: #d8d3c4 !important; }
+        html.theme-light .glow-text { text-shadow: 0 0 12px rgba(0,0,0,0.15) !important; }
+
+        /* ── ANIMACIONES DESACTIVADAS POR EL USUARIO ── */
+        html.animations-off *, html.animations-off *::before, html.animations-off *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+
         body {
             background-color: #030303;
             color: #f2f2f2;
@@ -282,14 +301,6 @@
         .pb-safe {
             padding-bottom: calc(2rem + env(safe-area-inset-bottom));
         }
-
-        /* ── OCULTAR BARRA/UI POR DEFECTO DE GOOGLE TRANSLATE ── */
-        .goog-te-banner-frame, .goog-te-gadget-icon, #goog-gt-tt, .goog-tooltip, .goog-tooltip:hover { display: none !important; }
-        .goog-text-highlight { background: none !important; box-shadow: none !important; }
-        body { top: 0 !important; }
-        body.translated-ltr, body.translated-rtl { top: 0 !important; }
-        html.translated-ltr, html.translated-rtl { top: 0 !important; }
-        iframe.goog-te-banner-frame { display: none !important; visibility: hidden !important; }
 
         /* ── ANIMACIÓN DE CATEGORÍA — PANTALLA COMPLETA REAL ── */
         #category-transition-overlay {
@@ -527,8 +538,8 @@
     <!-- ── MODALES INICIO ── -->
     <div id="cookie-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-1000 hidden">
         <div class="glass-btn bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm">
-            <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">Aviso de Privacidad</h2>
-            <p class="text-brand-muted text-xs font-light leading-relaxed mb-5">Para brindar la experiencia inmersiva y personalizada que caracteriza a DAMASO Studio, utilizamos cookies estrictamente necesarias y analíticas.</p>
+            <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold" data-i18n="cookie_title">Aviso de Privacidad</h2>
+            <p class="text-brand-muted text-xs font-light leading-relaxed mb-5" data-i18n="cookie_text">Para brindar la experiencia inmersiva y personalizada que caracteriza a DAMASO Studio, utilizamos cookies estrictamente necesarias y analíticas.</p>
             <div id="cookie-details" class="hidden text-left bg-[#0a0a0a] p-4 mb-5 text-[10px] text-brand-muted border border-brand-border h-32 overflow-y-auto leading-relaxed">
                 <p class="mb-2"><strong class="text-brand-gold">1. Cookies Esenciales:</strong> Necesarias para el funcionamiento de la bolsa de cotizaciones.</p>
                 <p class="mb-2"><strong class="text-brand-gold">2. DAMASO AI:</strong> Nuestro agente inteligente ofrece respuestas sobre nuestro catálogo.</p>
@@ -538,62 +549,62 @@
                 <div id="cookie-checkbox-box" class="relative w-4 h-4 border border-brand-gold bg-black flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-brand-gold/20">
                     <svg id="cookie-check" class="w-3 h-3 text-brand-gold opacity-0 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </div>
-                <span class="text-white text-[10px] tracking-widest uppercase group-hover:text-brand-gold transition-colors">Estoy de acuerdo</span>
+                <span class="text-white text-[10px] tracking-widest uppercase group-hover:text-brand-gold transition-colors" data-i18n="cookie_agree">Estoy de acuerdo</span>
             </label>
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <button onclick="window.toggleCookieDetails()" class="glass-btn px-5 py-2.5 text-brand-gold text-[9px] uppercase tracking-widest rounded-sm">Leer Cookies</button>
-                <button id="btn-accept-cookies" disabled onclick="window.acceptCookiesNext()" class="px-6 py-2.5 bg-brand-gold text-black text-[9px] uppercase font-bold tracking-widest opacity-30 cursor-not-allowed transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm">Aceptar y Continuar</button>
+                <button onclick="window.toggleCookieDetails()" class="glass-btn px-5 py-2.5 text-brand-gold text-[9px] uppercase tracking-widest rounded-sm" data-i18n="cookie_read_btn">Leer Cookies</button>
+                <button id="btn-accept-cookies" disabled onclick="window.acceptCookiesNext()" class="px-6 py-2.5 bg-brand-gold text-black text-[9px] uppercase font-bold tracking-widest opacity-30 cursor-not-allowed transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm" data-i18n="cookie_accept">Aceptar y Continuar</button>
             </div>
         </div>
     </div>
 
     <div id="login-prompt-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm">
-            <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold">¿Desea Iniciar Sesión?</h2>
+            <h2 class="font-editorial text-2xl text-brand-gold mb-3 uppercase tracking-widest glow-gold" data-i18n="login_prompt_title">¿Desea Iniciar Sesión?</h2>
             <div class="bg-[#0a0a0a] p-5 mb-6 border border-brand-border text-left">
                 <div class="flex items-center gap-3 mb-2">
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="#d4af37" stroke-width="2" fill="none" class="flex-shrink-0"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                    <span class="text-brand-gold text-xs font-bold uppercase tracking-widest">Ventajas de su cuenta</span>
+                    <span class="text-brand-gold text-xs font-bold uppercase tracking-widest" data-i18n="login_prompt_advantage_label">Ventajas de su cuenta</span>
                 </div>
-                <p class="text-brand-muted text-[10px] leading-relaxed">Al iniciar sesión podrá <strong class="text-white">guardar conversaciones</strong> con DAMASO AI, preservar su bolsa de cotización y autocompletar sus PDFs.</p>
+                <p class="text-brand-muted text-[10px] leading-relaxed" data-i18n-html="login_prompt_text">Al iniciar sesión podrá <strong class="text-white">guardar conversaciones</strong> con DAMASO AI, preservar su bolsa de cotización y autocompletar sus PDFs.</p>
             </div>
             <div class="flex flex-col sm:flex-row gap-4 justify-center mt-4">
-                <button onclick="window.enterSiteDirectly()" class="glass-btn px-6 py-3 text-[#ff4444] text-[10px] uppercase tracking-widest rounded-sm">Cancelar</button>
-                <button onclick="window.showLoginForm()" class="px-6 py-3 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm">Iniciar Sesión</button>
+                <button onclick="window.enterSiteDirectly()" class="glass-btn px-6 py-3 text-[#ff4444] text-[10px] uppercase tracking-widest rounded-sm" data-i18n="login_cancel_btn">Cancelar</button>
+                <button onclick="window.showLoginForm()" class="px-6 py-3 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm" data-i18n="settings_login">Iniciar Sesión</button>
             </div>
         </div>
     </div>
 
-    <div id="login-form-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700">
+    <div id="login-form-modal" class="init-overlay fixed inset-0 z-[9999998] flex items-center justify-center p-4 bg-black/80 init-modal-overlay opacity-0 pointer-events-none transition-opacity duration-700 hidden">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-10 max-w-md w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.1)] relative rounded-sm">
             <button type="button" onclick="window.cancelLoginForm()" class="absolute top-3 right-3 text-brand-muted hover:text-white transition-colors p-2" aria-label="Cancelar inicio de sesión">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-            <h2 class="font-editorial text-2xl text-brand-gold mb-6 uppercase tracking-widest glow-gold">Credenciales</h2>
+            <h2 class="font-editorial text-2xl text-brand-gold mb-6 uppercase tracking-widest glow-gold" data-i18n="login_title">Credenciales</h2>
             <div class="space-y-4 mb-8">
-                <input type="text" id="session-name" placeholder="Nombre Completo o Despacho" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
-                <input type="email" id="session-email" placeholder="Correo Electrónico" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
+                <input type="text" id="session-name" autocomplete="off" placeholder="Nombre Completo o Despacho" data-i18n-placeholder="login_name_placeholder" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
+                <input type="email" id="session-email" autocomplete="off" placeholder="Correo Electrónico" data-i18n-placeholder="login_email_placeholder" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
                 <div class="relative">
-                    <input type="password" id="session-password" placeholder="Contraseña" class="w-full bg-[#0a0a0a] border border-brand-border p-4 pr-12 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
+                    <input type="password" id="session-password" autocomplete="new-password" placeholder="Contraseña" data-i18n-placeholder="login_password_placeholder" class="w-full bg-[#0a0a0a] border border-brand-border p-4 pr-12 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
                     <button type="button" onclick="window.toggleSessionPasswordVisibility()" id="toggle-password-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-gold transition-colors" aria-label="Mostrar contraseña">
                         <svg id="eye-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </button>
                 </div>
-                <input type="text" id="session-address" placeholder="Dirección / Ciudad (Opcional)" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
+                <input type="text" id="session-address" autocomplete="off" placeholder="Dirección / Ciudad (Opcional)" data-i18n-placeholder="login_address_placeholder" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
                 <div>
-                    <label class="block text-brand-muted text-[9px] uppercase tracking-widest mb-2 text-left">Género</label>
+                    <label class="block text-brand-muted text-[9px] uppercase tracking-widest mb-2 text-left" data-i18n="login_gender_label">Género</label>
                     <div class="flex gap-2">
-                        <button type="button" onclick="window.selectGender('femenino')" id="gender-btn-femenino" class="flex-1 py-3 border border-brand-border text-brand-gold text-[10px] uppercase font-bold tracking-widest transition-all rounded-sm">Femenino</button>
-                        <button type="button" onclick="window.selectGender('masculino')" id="gender-btn-masculino" class="flex-1 py-3 border border-brand-border text-brand-gold text-[10px] uppercase font-bold tracking-widest transition-all rounded-sm">Masculino</button>
+                        <button type="button" onclick="window.selectGender('femenino')" id="gender-btn-femenino" class="flex-1 py-3 border border-brand-border text-brand-gold text-[10px] uppercase font-bold tracking-widest transition-all rounded-sm" data-i18n="login_gender_f">Femenino</button>
+                        <button type="button" onclick="window.selectGender('masculino')" id="gender-btn-masculino" class="flex-1 py-3 border border-brand-border text-brand-gold text-[10px] uppercase font-bold tracking-widest transition-all rounded-sm" data-i18n="login_gender_m">Masculino</button>
                     </div>
                 </div>
             </div>
-            <p id="login-validation-error" class="hidden text-[#ff4444] text-[9px] uppercase tracking-widest mb-4">Completa nombre, correo, contraseña y género para continuar.</p>
-            <button onclick="window.processLogin()" class="w-full py-4 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm">Aceptar y Entrar</button>
+            <p id="login-validation-error" class="hidden text-[#ff4444] text-[9px] uppercase tracking-widest mb-4" data-i18n="login_validation_error">Completa nombre, correo, contraseña y género para continuar.</p>
+            <button onclick="window.processLogin()" class="w-full py-4 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm" data-i18n="login_accept_btn">Aceptar y Entrar</button>
         </div>
     </div>
 
-    <div id="login-loading-modal" class="init-overlay fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#030303] opacity-0 pointer-events-none transition-opacity duration-700">
+    <div id="login-loading-modal" class="init-overlay fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#030303] opacity-0 pointer-events-none transition-opacity duration-700 hidden">
         <div class="relative w-40 h-40 mb-12 flex items-center justify-center">
             <span class="d-loader font-editorial" aria-hidden="true">D</span>
         </div>
@@ -624,7 +635,7 @@
     <nav class="fixed top-0 left-0 right-0 w-full z-[100] glass-nav flex flex-col" id="navbar" style="transform: translate3d(0,0,0);">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div class="flex items-center space-x-4 sm:space-x-6">
-                <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center">Menú</button>
+                <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center" data-i18n="menu_btn">Menú</button>
                 <a href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text navbar-wordmark-pulse uppercase font-bold ml-2">
                     <span>Damaso</span>
                     <span id="navbar-wordmark-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true">Damaso</span>
@@ -633,44 +644,100 @@
 
             <div id="dropdown-menu" class="absolute top-full left-4 mt-1 w-64 glass-btn bg-brand-surface/90 border border-brand-gold/40 py-2 shadow-[0_0_20px_rgba(212,175,55,0.15)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 z-[990] rounded-sm max-h-[70vh] overflow-y-auto overscroll-contain">
                 <div class="flex items-center justify-between px-6 py-3 border-b border-brand-border mb-2">
-                    <span class="text-[9px] text-brand-gold glow-gold tracking-[0.3em] uppercase font-bold">Catálogo</span>
-                    <button type="button" id="btn-idioma" onclick="window.toggleLanguagePanel(event)" class="text-[9px] text-brand-muted hover:text-brand-gold tracking-[0.2em] uppercase font-bold transition-colors" aria-label="Cambiar idioma">
-                        <span id="btn-idioma-label">Español</span>
+                    <span class="text-[9px] text-brand-gold glow-gold tracking-[0.3em] uppercase font-bold" data-i18n="catalogo_label">Catálogo</span>
+                    <button type="button" id="btn-settings" onclick="window.toggleSettingsPanel(event)" class="text-brand-muted hover:text-brand-gold transition-colors" aria-label="Configuración">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     </button>
                 </div>
                 <div id="catalog-menu-list">
-                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all">Ver Todo</a>
-                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('candiles')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Candiles</a>
-                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('arbotantes')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Arbotantes</a>
-                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Espejos</a>
-                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de mesa</a>
-                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('pie')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de pie</a>
-                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('techo')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de techo</a>
-                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Lámparas de exterior</a>
-                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all">Proyectos especiales</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('all')" class="block px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="ver_todo">Ver Todo</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('candiles')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="candiles">Candiles</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('arbotantes')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="arbotantes">Arbotantes</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('espejos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="espejos">Espejos</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="lamp_mesa">Lámparas de mesa</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('pie')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="lamp_pie">Lámparas de pie</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('techo')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="lamp_techo">Lámparas de techo</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="lamp_exterior">Lámparas de exterior</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="proyectos">Proyectos especiales</a>
                 </div>
-                <div id="language-panel" class="hidden">
-                    <button type="button" onclick="window.toggleLanguagePanel(event)" class="flex items-center gap-2 px-6 py-2 text-[10px] tracking-widest text-brand-gold uppercase transition-all hover:underline">&larr; Volver</button>
-                    <div class="px-6 pb-2">
-                        <input type="text" id="lang-search-input" oninput="window.filterLanguageList()" placeholder="Buscar idioma..." class="w-full bg-black/30 border border-brand-border rounded-sm px-3 py-2 text-xs text-white placeholder-brand-muted focus:outline-none focus:border-brand-gold">
+                <div id="settings-panel" class="hidden">
+                    <!-- ── Vista principal de configuración ── -->
+                    <div id="settings-view-main">
+                        <button type="button" onclick="window.toggleSettingsPanel(event)" class="flex items-center gap-2 px-6 py-2 text-[10px] tracking-widest text-brand-gold uppercase transition-all hover:underline" data-i18n="volver">&larr; Volver</button>
+                        <button type="button" onclick="window.showSettingsView('account')" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="settings_account">Cuenta</button>
+                        <button type="button" onclick="window.showSettingsView('language')" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="settings_language">Idioma</button>
+                        <button type="button" onclick="window.showSettingsView('theme')" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="settings_theme">Tono de la página</button>
+                        <button type="button" onclick="window.showSettingsView('animations')" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="settings_animations">Animaciones</button>
+                        <button type="button" onclick="window.showSettingsView('privacy')" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="settings_privacy">Avisos de Privacidad</button>
                     </div>
-                    <div id="lang-list" class="max-h-56 overflow-y-auto"></div>
+                    <!-- ── Cuenta ── -->
+                    <div id="settings-view-account" class="hidden">
+                        <button type="button" onclick="window.showSettingsView('main')" class="flex items-center gap-2 px-6 py-2 text-[10px] tracking-widest text-brand-gold uppercase transition-all hover:underline" data-i18n="volver">&larr; Volver</button>
+                        <div id="settings-account-logged-out" class="hidden px-6 py-4">
+                            <p class="text-brand-muted text-xs mb-4" data-i18n="settings_no_session">No has iniciado sesión.</p>
+                            <button type="button" onclick="window.toggleSettingsPanel(); window.showLoginForm();" class="w-full py-3 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all rounded-sm" data-i18n="settings_login">Iniciar Sesión</button>
+                        </div>
+                        <div id="settings-account-logged-in" class="hidden px-6 py-4 space-y-3">
+                            <div><span class="text-brand-gold text-[9px] uppercase tracking-widest" data-i18n="settings_name">Nombre</span><p id="settings-account-name" class="text-white text-xs mt-1"></p></div>
+                            <div><span class="text-brand-gold text-[9px] uppercase tracking-widest" data-i18n="settings_email">Correo</span><p id="settings-account-email" class="text-white text-xs mt-1"></p></div>
+                            <div><span class="text-brand-gold text-[9px] uppercase tracking-widest" data-i18n="settings_password">Contraseña</span><p id="settings-account-password" class="text-white text-xs mt-1 tracking-widest"></p></div>
+                            <button type="button" onclick="window.confirmLogout()" class="w-full py-3 border border-[#ff4444] text-[#ff4444] text-[10px] uppercase font-bold tracking-widest hover:bg-[#ff4444] hover:text-white transition-all rounded-sm mt-2" data-i18n="settings_logout">Cerrar Sesión</button>
+                        </div>
+                    </div>
+                    <!-- ── Idioma (diccionario interno, sin traductor externo) ── -->
+                    <div id="settings-view-language" class="hidden">
+                        <button type="button" onclick="window.showSettingsView('main')" class="flex items-center gap-2 px-6 py-2 text-[10px] tracking-widest text-brand-gold uppercase transition-all hover:underline" data-i18n="volver">&larr; Volver</button>
+                        <button type="button" onclick="window.setAppLanguage('es')" id="lang-opt-es" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest uppercase transition-all hover:bg-brand-gold hover:text-black">
+                            <span>Español</span><span class="lang-check text-brand-gold">&#10003;</span>
+                        </button>
+                        <button type="button" onclick="window.setAppLanguage('en')" id="lang-opt-en" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest uppercase transition-all hover:bg-brand-gold hover:text-black">
+                            <span>English</span><span class="lang-check text-brand-gold"></span>
+                        </button>
+                    </div>
+                    <!-- ── Tono de la página ── -->
+                    <div id="settings-view-theme" class="hidden">
+                        <button type="button" onclick="window.showSettingsView('main')" class="flex items-center gap-2 px-6 py-2 text-[10px] tracking-widest text-brand-gold uppercase transition-all hover:underline" data-i18n="volver">&larr; Volver</button>
+                        <button type="button" onclick="window.setAppTheme('dark')" id="theme-opt-dark" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest uppercase transition-all hover:bg-brand-gold hover:text-black">
+                            <span data-i18n="theme_dark">Oscuro</span><span class="theme-check text-brand-gold"></span>
+                        </button>
+                        <button type="button" onclick="window.setAppTheme('light')" id="theme-opt-light" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest uppercase transition-all hover:bg-brand-gold hover:text-black">
+                            <span data-i18n="theme_light">Blanco</span><span class="theme-check text-brand-gold"></span>
+                        </button>
+                        <button type="button" onclick="window.setAppTheme('auto')" id="theme-opt-auto" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest uppercase transition-all hover:bg-brand-gold hover:text-black">
+                            <span data-i18n="theme_auto">Automático</span><span class="theme-check text-brand-gold"></span>
+                        </button>
+                    </div>
+                    <!-- ── Animaciones ── -->
+                    <div id="settings-view-animations" class="hidden">
+                        <button type="button" onclick="window.showSettingsView('main')" class="flex items-center gap-2 px-6 py-2 text-[10px] tracking-widest text-brand-gold uppercase transition-all hover:underline" data-i18n="volver">&larr; Volver</button>
+                        <div class="px-6 py-4">
+                            <p class="text-brand-muted text-xs mb-4" data-i18n="settings_animations_desc">Las animaciones están encendidas de forma predeterminada. Puedes apagarlas si lo prefieres.</p>
+                            <button type="button" onclick="window.toggleAnimationsSetting()" id="btn-animations-toggle" class="w-full py-3 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all rounded-sm" data-i18n="settings_animations_on">Animaciones: Encendidas</button>
+                        </div>
+                    </div>
+                    <!-- ── Avisos de Privacidad ── -->
+                    <div id="settings-view-privacy" class="hidden">
+                        <button type="button" onclick="window.showSettingsView('main')" class="flex items-center gap-2 px-6 py-2 text-[10px] tracking-widest text-brand-gold uppercase transition-all hover:underline" data-i18n="volver">&larr; Volver</button>
+                        <div class="px-6 py-4">
+                            <p class="text-brand-muted text-xs leading-relaxed" data-i18n="privacy_cookies_text">Este sitio utiliza cookies y almacenamiento local únicamente para recordar tu sesión, tu carrito de cotización y tus preferencias (idioma, tono y animaciones). No compartimos tu información con terceros. Puedes borrar estos datos cerrando sesión.</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
-                    <a href="#" onclick="window.scrollToSection(event, 'home')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Home</a>
-                    <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Clientes</a>
-                    <a href="#disenador" onclick="window.scrollToSection(event, 'disenador')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">El Diseñador</a>
-                    <a href="#marca" onclick="window.scrollToSection(event, 'marca')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Marca</a>
-                    <a href="#social" onclick="window.scrollToSection(event, 'social')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all">Redes Sociales</a>
+                    <a href="#" onclick="window.scrollToSection(event, 'home')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all" data-i18n="nav_home">Home</a>
+                    <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all" data-i18n="nav_clientes">Clientes</a>
+                    <a href="#disenador" onclick="window.scrollToSection(event, 'disenador')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all" data-i18n="nav_disenador">El Diseñador</a>
+                    <a href="#marca" onclick="window.scrollToSection(event, 'marca')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all" data-i18n="nav_marca">Marca</a>
+                    <a href="#social" onclick="window.scrollToSection(event, 'social')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all" data-i18n="nav_social">Redes Sociales</a>
                 </div>
             </div>
 
             <div class="hidden md:flex items-center space-x-10">
-                <a href="#" onclick="window.scrollToSection(event, 'home')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">Home</a>
-                <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">Clientes</a>
-                <a href="#disenador" onclick="window.scrollToSection(event, 'disenador')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">El Diseñador</a>
-                <a href="#marca" onclick="window.scrollToSection(event, 'marca')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">Marca</a>
-                <a href="#social" onclick="window.scrollToSection(event, 'social')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer">Redes Sociales</a>
+                <a href="#" onclick="window.scrollToSection(event, 'home')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer" data-i18n="nav_home">Home</a>
+                <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer" data-i18n="nav_clientes">Clientes</a>
+                <a href="#disenador" onclick="window.scrollToSection(event, 'disenador')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer" data-i18n="nav_disenador">El Diseñador</a>
+                <a href="#marca" onclick="window.scrollToSection(event, 'marca')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer" data-i18n="nav_marca">Marca</a>
+                <a href="#social" onclick="window.scrollToSection(event, 'social')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer" data-i18n="nav_social">Redes Sociales</a>
             </div>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
@@ -692,8 +759,8 @@
         <div class="w-full bg-black/30 backdrop-blur-xl border-t border-brand-border/30 h-14 flex items-center justify-center px-4">
             <div class="w-full max-w-3xl relative flex items-center">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" class="text-brand-gold absolute left-4 pointer-events-none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="search" id="live-search" placeholder="Buscar pieza, modelo o SKU..." class="w-full bg-transparent border-none text-[11px] tracking-widest text-white placeholder-brand-muted focus:outline-none pl-12 pr-12 py-2 uppercase focus:border-b focus:border-brand-gold transition-colors">
-                <button onclick="window.semanticSearch()" id="btn-semantic-search" class="absolute right-2 glass-gold w-8 h-8 rounded-full flex items-center justify-center text-sm hover:scale-110 transition-transform" title="Búsqueda Inteligente AI">✨</button>
+                <input type="search" id="live-search" placeholder="Buscar pieza, modelo o SKU..." data-i18n-placeholder="search_placeholder" class="w-full bg-transparent border-none text-[11px] tracking-widest text-white placeholder-brand-muted focus:outline-none pl-12 pr-20 py-2 uppercase focus:border-b focus:border-brand-gold transition-colors" onkeydown="if(event.key==='Enter'){ event.preventDefault(); window.runPieceSearch(); }">
+                <button type="button" onclick="window.runPieceSearch()" id="btn-piece-search" data-i18n="btn_buscar" class="absolute right-2 glass-gold px-4 h-8 rounded-full flex items-center justify-center text-[9px] tracking-widest uppercase font-bold hover:scale-105 transition-all opacity-0 pointer-events-none scale-90" title="Buscar pieza">Buscar</button>
             </div>
         </div>
     </nav>
@@ -742,7 +809,7 @@
             <div class="flex-1 overflow-y-auto p-4 space-y-2 chat-scroll" id="history-list"></div>
         </div>
         <div class="p-4 border-t border-brand-gold/30 bg-black flex items-end gap-2 pb-safe-input">
-            <textarea id="chat-input" placeholder="Escriba su consulta..." rows="1" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" enterkeyhint="send" class="flex-1 bg-black/30 backdrop-blur-sm border border-brand-border/50 rounded-2xl px-4 py-2.5 text-xs text-brand-gold focus:outline-none focus:border-brand-gold/50 transition-colors placeholder-brand-muted/60 resize-none overflow-y-auto leading-relaxed" style="max-height: 7rem;" oninput="window.autoGrowChatInput(this)" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); window.sendChatMessage(); }"></textarea>
+            <textarea id="chat-input" placeholder="Escriba su consulta..." data-i18n-placeholder="chat_placeholder" rows="1" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" enterkeyhint="send" class="flex-1 bg-black/30 backdrop-blur-sm border border-brand-border/50 rounded-2xl px-4 py-2.5 text-xs text-brand-gold focus:outline-none focus:border-brand-gold/50 transition-colors placeholder-brand-muted/60 resize-none overflow-y-auto leading-relaxed" style="max-height: 7rem;" oninput="window.autoGrowChatInput(this)" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); window.sendChatMessage(); }"></textarea>
             <button onclick="window.sendChatMessage()" class="glass-gold w-10 h-10 rounded-full flex items-center justify-center shrink-0">
                 <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
@@ -893,11 +960,11 @@
         </div>
         <div class="relative z-10 w-full max-w-[95%] mx-auto flex flex-col items-center text-center px-4">
             <p class="text-[10px] tracking-[0.4em] text-brand-gold uppercase mb-4 font-semibold italic glow-gold">Luxury Lighting Studio</p>
-            <h1 class="font-editorial text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-8">DAMASO<br><span class="italic text-brand-gold glow-gold">Studio</span></h1>
-            <p class="text-lg md:text-xl text-white/90 font-light mx-auto max-w-2xl mb-12">Esculpiendo la oscuridad con piezas de diseño atemporal. Hecho a mano en México.</p>
+            <h1 class="font-editorial text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-8">DAMASO<br><span class="italic text-brand-gold glow-gold uppercase">STUDIO</span></h1>
+            <p class="text-lg md:text-xl text-white/90 font-light mx-auto max-w-2xl mb-12" data-i18n="hero_subtitle">Esculpiendo la oscuridad con piezas de diseño atemporal. Hecho a mano en México.</p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <a href="#coleccion" class="glass-gold w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] uppercase font-bold px-10 py-5 rounded-sm">VER COLECCIÓN</a>
-                <a href="mailto:dogma.dogma@hotmail.com" class="glass-btn w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] text-brand-gold uppercase font-bold px-10 py-5 rounded-sm">CONTACTO DIRECTO</a>
+                <a href="#coleccion" class="glass-gold w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] uppercase font-bold px-10 py-5 rounded-sm" data-i18n="ver_coleccion_btn">VER COLECCIÓN</a>
+                <a href="mailto:dogma.dogma@hotmail.com" class="glass-btn w-full sm:w-auto inline-flex items-center justify-center text-[10px] tracking-[0.3em] text-brand-gold uppercase font-bold px-10 py-5 rounded-sm" data-i18n="contacto_directo_btn">CONTACTO DIRECTO</a>
             </div>
         </div>
     </header>
@@ -918,16 +985,16 @@
     <!-- ── CLIENTES ── -->
     <section id="clientes" class="pt-32 pb-16 bg-black border-t border-brand-gold">
         <div class="max-w-[95%] mx-auto px-4 mb-12 text-center scroll-reveal">
-            <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-4 glow-gold">Confianza que ilumina</p>
-            <h2 class="font-editorial text-4xl text-white">Nuestros Clientes</h2>
+            <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-4 glow-gold" data-i18n="clientes_label">Confianza que ilumina</p>
+            <h2 class="font-editorial text-4xl text-white" data-i18n="clientes_title">Nuestros Clientes</h2>
         </div>
         <div class="marquee-container">
             <div class="marquee-content">
-                <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín</span></div>
+                <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín <span class="dot">•</span> Hotel Princess</span></div>
                 <div class="client-group"><span class="client-title">RESTAURANTES</span><span class="client-names">Lorenza <span class="dot">•</span> Casa de Leo <span class="dot">•</span> Garra <span class="dot">•</span> Los Arcos <span class="dot">•</span> Cabana <span class="dot">•</span> Madelina <span class="dot">•</span> Tequila Orendain</span></div>
                 <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
                 <div class="client-group"><span class="client-title">DESPACHOS</span><span class="client-names">AHA Internacional <span class="dot">•</span> Arquitectura de Interiores <span class="dot">•</span> Rockwell Group Nueva York</span></div>
-                <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín</span></div>
+                <div class="client-group"><span class="client-title">HOTELES</span><span class="client-names">JW Marriott <span class="dot">•</span> Conrad Punta Mita <span class="dot">•</span> Garden Inn Chihuahua <span class="dot">•</span> Kimpton Roatan <span class="dot">•</span> Kimpton Emilio <span class="dot">•</span> Kimpton Virgilio <span class="dot">•</span> Garza Blanca <span class="dot">•</span> Vidanta <span class="dot">•</span> Holiday Inn <span class="dot">•</span> Casa Las Flores <span class="dot">•</span> Love It Signature <span class="dot">•</span> Velas Vallarta <span class="dot">•</span> Vista Plaza <span class="dot">•</span> Hotel Valentín <span class="dot">•</span> Hotel Princess</span></div>
                 <div class="client-group"><span class="client-title">RESTAURANTES</span><span class="client-names">Lorenza <span class="dot">•</span> Casa de Leo <span class="dot">•</span> Garra <span class="dot">•</span> Los Arcos <span class="dot">•</span> Cabana <span class="dot">•</span> Madelina <span class="dot">•</span> Tequila Orendain</span></div>
                 <div class="client-group"><span class="client-title">COMPRADORAS</span><span class="client-names">The Parker Company <span class="dot">•</span> Benjamin West <span class="dot">•</span> HPG International</span></div>
                 <div class="client-group"><span class="client-title">DESPACHOS</span><span class="client-names">AHA Internacional <span class="dot">•</span> Arquitectura de Interiores <span class="dot">•</span> Rockwell Group Nueva York</span></div>
@@ -939,8 +1006,8 @@
     <section id="disenador" class="py-32 bg-brand-surface border-y border-brand-border flex flex-col items-center justify-center">
         <div class="max-w-4xl mx-auto px-4 text-center scroll-reveal">
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold mb-12">Iván</h2>
-            <p class="text-xl text-white font-light italic mb-8 border-b border-brand-gold pb-8 inline-block px-8">"La luz es el alma de la arquitectura."</p>
-            <p class="text-brand-muted mx-auto leading-relaxed max-w-2xl mb-16">Diseñador radicado en Guadalajara, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo.</p>
+            <p class="text-xl text-white font-light italic mb-8 border-b border-brand-gold pb-8 inline-block px-8" data-i18n="disenador_quote">"La luz es el alma de la arquitectura."</p>
+            <p class="text-brand-muted mx-auto leading-relaxed max-w-2xl mb-16" data-i18n="disenador_bio">Diseñador radicado en Guadalajara, Jalisco. Su trabajo explora la intersección entre el brutalismo y la artesanía mexicana, forjando metal y luz para redefinir el espacio contemporáneo.</p>
             <div class="relative w-full aspect-video md:aspect-[21/9] cursor-pointer group rounded-lg overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)] mb-24" onclick="this.classList.toggle('active')">
                 <img src="imagen_damaso_apagada.png" alt="Decoración DAMASO Apagada" class="w-full h-full object-cover block">
                 <img src="imagen_damaso_encendida.png" alt="Decoración DAMASO Encendida" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-in-out group-hover:opacity-100 group-[.active]:opacity-100">
@@ -951,33 +1018,33 @@
     <!-- ── MARCA ── -->
     <section id="marca" class="py-32 bg-brand-surface border-y border-brand-border text-center">
         <div class="max-w-5xl mx-auto px-6">
-            <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-6 glow-gold scroll-reveal">La marca</p>
+            <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-6 glow-gold scroll-reveal" data-i18n="marca_label">La marca</p>
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold uppercase mb-20 scroll-reveal">Damaso</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-20">
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
-                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6">Clientes</p>
+                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_clientes">Clientes</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="100">0</span>+</p>
-                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest">clientes</p>
+                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest" data-i18n="marca_clientes_lower">clientes</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
-                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6">Experiencia</p>
-                    <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="25">0</span> <span class="text-brand-gold glow-gold">años</span></p>
-                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest">de experiencia</p>
+                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_experiencia">Experiencia</p>
+                    <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="25">0</span> <span class="text-brand-gold glow-gold" data-i18n="marca_anios">años</span></p>
+                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest" data-i18n="marca_de_experiencia">de experiencia</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
-                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6">Proyectos</p>
+                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_proyectos">Proyectos</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="200">0</span>+</p>
-                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest">proyectos</p>
+                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest" data-i18n="marca_proyectos_lower">proyectos</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
-                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6">Empresa</p>
+                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_empresa">Empresa</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="100">0</span><span class="text-brand-gold glow-gold">%</span></p>
-                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest">empresa tapatía</p>
+                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest" data-i18n="marca_empresa_tapatia">empresa tapatía</p>
                 </div>
             </div>
             <div class="max-w-4xl mx-auto px-6 scroll-reveal">
-                <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-12 glow-gold">Filosofía de marca</p>
-                <h2 class="font-editorial text-4xl md:text-6xl text-white leading-tight">No fabricamos lámparas. Creamos puntos de enfoque que transforman lo cotidiano en algo <span class="italic text-brand-gold glow-gold">extraordinario</span>.</h2>
+                <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-12 glow-gold" data-i18n="marca_filosofia_label">Filosofía de marca</p>
+                <h2 class="font-editorial text-4xl md:text-6xl text-white leading-tight" data-i18n-html="marca_filosofia_heading">No fabricamos lámparas. Creamos puntos de enfoque que transforman lo cotidiano en algo <span class="italic text-brand-gold glow-gold">extraordinario</span>.</h2>
             </div>
         </div>
     </section>
@@ -988,14 +1055,14 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-16">
                 <div class="md:col-span-2 scroll-reveal">
                     <h3 class="font-editorial text-4xl text-brand-gold glow-gold uppercase mb-8">Damaso</h3>
-                    <p class="text-brand-muted max-w-sm font-light">Alta iluminación y objetos de diseño.</p>
+                    <p class="text-brand-muted max-w-sm font-light" data-i18n="footer_tagline">Alta iluminación y objetos de diseño.</p>
                 </div>
                 <div class="scroll-reveal">
-                    <h4 class="text-[10px] tracking-[0.3em] text-brand-gold uppercase mb-8 font-bold">Estudio</h4>
+                    <h4 class="text-[10px] tracking-[0.3em] text-brand-gold uppercase mb-8 font-bold" data-i18n="footer_estudio">Estudio</h4>
                     <p class="text-brand-muted text-sm font-light">Guadalajara, Jalisco. México.<br>T. +52 33 3870 3071</p>
                 </div>
                 <div id="social" class="scroll-reveal">
-                    <h4 class="text-[10px] tracking-[0.3em] text-brand-gold uppercase mb-8 font-bold">Social</h4>
+                    <h4 class="text-[10px] tracking-[0.3em] text-brand-gold uppercase mb-8 font-bold" data-i18n="footer_social">Social</h4>
                     <ul class="text-brand-muted text-sm space-y-4 font-light">
                         <li><a href="https://www.instagram.com/damaso_lamparas?igsh=MTkxcDU0anJweWxvcQ==" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.25-3.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z"/></svg>Instagram</a></li>
                         <li><a href="https://www.facebook.com/damaso.lighting" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.79c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.45h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg>Facebook</a></li>
@@ -1101,18 +1168,18 @@
             { id: 84, name: "Candil Marino", category: "candiles", price: 65000, img: "20200121_085904.png", sku: "DM-CAN-007", desc: "Una obra monumental para proyectos a gran escala.", specsLight: "candil, fabricado con cuerdas, marinas y remo de madera con iluminación", cable: "certificado UL y NOM", dims: { w: "1.20 m", h: "2.50 m", d: "2.90 m", dia: "N/A" }, peso: "80 kg", volt: "110-240V", mat: "fabricado en aluminio con cuerda marina, con remos de madera de rosa morada", fin: "pintura, electrostática, madera tratada", time: "8 a 10 semanas", cert: "NOM" },
             { id: 85, name: "Candil Órbitas", category: "candiles", price: 48000, img: "Image_7.png", sku: "DM-CAN-008", desc: "Aros monumentales suspendidos en diferentes ejes.", specsLight: "candil fabricado en madera, con difusor en acrílico", cable: "certificado UL y NOM", dims: { w: "150 cm", h: "3 m", d: "150 cm", dia: "N/A" }, peso: "30 kg", volt: "110-240V", mat: "madera/acrílico", fin: "pintura automotriz", time: "5 a 6 semanas", cert: "NOM" },
             { id: 98, name: "Candil Radiante", category: "candiles", price: 38500, img: "Unknown-2.png", sku: "DM-CAN-009", desc: "Candil monumental starburst en latón brillante con esferas de cristal soplado.", specsLight: "candil fabricado en Laton, con esferas de vidrio", cable: "certificado UL y NOM", dims: { w: "60 cm", h: "120 cm", d: "60 cm", dia: "60 cm" }, peso: "10 kg", volt: "110-120V", mat: "laton y vidrio", fin: "pulido", time: "5 a 6 semanas", cert: "NOM" },
-            { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Fusiona una esfera de cristal opalino con un cilindro texturizado pétreo.", specsLight: "1x G9 LED 5W, 3000K", cable: "Conexión directa a registro", dims: { w: "18 cm", h: "42 cm", d: "20 cm", dia: "18 cm" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal opalino y concreto", fin: "Blanco y gris", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 6, name: "Arbotante Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-002", desc: "Arbotante de muro minimalista con aro perimetral luminoso trasero.", specsLight: "Tira LED 12V 4000K perimetral", cable: "Conexión directa a registro", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "125 cm" }, peso: "20 kg", volt: "110-120V", mat: "Cristal plata 6mm, herraje invisible", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 7, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-003", desc: "Arbotante elegante con cilindros de vidrio transparente.", specsLight: "8x E12 LED 4W cálida", cable: "Conexión directa a muro", dims: { w: "120 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "12 kg", volt: "110-240V", mat: "Vidrio templado y latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 8, name: "Espejo Doble Eclipse Trasero", category: "arbotantes", price: 26800, img: "candil_2.png", sku: "DM-ARB-004", desc: "Espejo monumental de dos círculos excéntricos con LED trasero.", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Conexión directa a registro", dims: { w: "150 cm", h: "150 cm", d: "6 cm", dia: "N/A" }, peso: "32 kg", volt: "110-120V", mat: "Doble cristal inastillable", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
-            { id: 66, name: "Arbotante Articulado Lino", category: "arbotantes", price: 5400, img: "Image_11.png", sku: "DM-ARB-005", desc: "Elegante arbotante con brazo articulado en latón.", specsLight: "1x E12 LED 6W cálida", cable: "Conexión directa a registro", dims: { w: "15 cm", h: "45 cm", d: "35 cm", dia: "15 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Latón macizo y pantalla de lino", fin: "Latón cepillado mate", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 92, name: "Arbotante Cilindro Minimalista", category: "arbotantes", price: 6500, img: "Unknown-5.png", sku: "DM-ARB-006", desc: "Arbotante cilíndrico minimalista con iluminación direccional.", specsLight: "LED integrado 10W", cable: "Directo a muro", dims: { w: "10 cm", h: "35 cm", d: "12 cm", dia: "10 cm" }, peso: "2.1 kg", volt: "110-240V", mat: "Aluminio fundido", fin: "Marrón oscuro texturizado", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 93, name: "Arbotante Piramidal Bidireccional", category: "arbotantes", price: 5800, img: "Unknown-7.png", sku: "DM-ARB-007", desc: "Líneas geométricas con emisión superior e inferior.", specsLight: "2x LED 5W", cable: "Directo a muro", dims: { w: "15 cm", h: "25 cm", d: "10 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-240V", mat: "Acero pintado", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 94, name: "Arbotante Óvalo Alabastro", category: "arbotantes", price: 9200, img: "Image 19.png", sku: "DM-ARB-008", desc: "Placa de alabastro translúcido con luz cálida trasera.", specsLight: "Tira LED cálida trasera", cable: "Directo a muro", dims: { w: "45 cm", h: "15 cm", d: "8 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Alabastro natural y latón", fin: "Alabastro pulido y latón brillante", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 95, name: "Arbotante Vela Cristal", category: "arbotantes", price: 7500, img: "Image 20.png", sku: "DM-ARB-009", desc: "Reinterpretación contemporánea de una vela de muro.", specsLight: "1x E26 LED Edison 4W", cable: "Directo a muro", dims: { w: "12 cm", h: "50 cm", d: "18 cm", dia: "8 cm" }, peso: "2.4 kg", volt: "110-120V", mat: "Latón sólido y cristal", fin: "Latón cepillado y cristal transparente", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 96, name: "Arbotante Doble Texturizado", category: "arbotantes", price: 8900, img: "Screenshot_Gallery.png", sku: "DM-ARB-010", desc: "Cilindros de cristal craquelado en tono esmeralda.", specsLight: "2x E12 LED 4W", cable: "Directo a muro", dims: { w: "30 cm", h: "40 cm", d: "15 cm", dia: "N/A" }, peso: "3.2 kg", volt: "110-120V", mat: "Cristal texturizado y acero", fin: "Latón mate y esmeralda", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 97, name: "Arbotante Lino Articulado", category: "arbotantes", price: 5600, img: "Unknown-3.png", sku: "DM-ARB-011", desc: "Clásico arbotante de lectura con brazo articulado.", specsLight: "1x E26 LED 8W", cable: "Directo a muro", dims: { w: "20 cm", h: "35 cm", d: "40 cm", dia: "20 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Latón y pantalla de lino", fin: "Latón cepillado mate", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 100, name: "Arbotante Lectura Pantalla Crema", category: "arbotantes", price: 6800, img: "arbotante_2.png", sku: "DM-ARB-012", desc: "Arbotante con pantalla cilíndrica de lino crema y brazo de lectura LED integrado en acabado plateado.", specsLight: "1x E26 LED 8W cálida + lectura LED 3W", cable: "Conexión directa a registro", dims: { w: "22 cm", h: "35 cm", d: "18 cm", dia: "20 cm" }, peso: "2.3 kg", volt: "110-120V", mat: "Acero y pantalla de lino", fin: "Taupe mate y plateado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 5, name: "Arbotante Esfera Pétrea", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Lámpara fabricada con recinto y acero inoxidable con pantalla en vidrio", specsLight: "1x G9 LED 5W, 3000K", cable: "", dims: { w: "15 cm", h: "40 cm", d: "15 cm", dia: "12 cm" }, peso: "5 kg", volt: "110-120V", mat: "Acero inoxidable/recinto/vidrio", fin: "Recinto natural/Pulido", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 6, name: "Arbotante Circular Flotante", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-002", desc: "Lámpara fabricada en aluminio, con terminado en pintura electrostática y pantalla de vidrio blanco", specsLight: "Tira LED 12V 4000K perimetral", cable: "Certificado UL y NOM", dims: { w: "25 cm", h: "50 cm", d: "25 cm", dia: "12 cm" }, peso: "5 kg", volt: "110-120V", mat: "Aluminio/vidrio", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 7, name: "Arbotante Rectangular Vidrio", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-003", desc: "Lámpara fabricada en aluminio, terminado en pintura electrostática y pantalla de vidrio", specsLight: "8x E12 LED 4W cálida", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "1 m", d: "50 cm", dia: "20 cm" }, peso: "10 kg", volt: "110-240V", mat: "Aluminio/vidrio", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 8, name: "Espejo Doble Eclipse Trasero", category: "arbotantes", price: 26800, img: "candil_2.png", sku: "DM-ARB-004", desc: "Lámpara fabricada en metal determinado en pintura electrostática y pantalla de vidrio opalino", specsLight: "Tira LED 12V 3000K en espejo trasero", cable: "Certificado UL/NOM", dims: { w: "40 cm", h: "1 m", d: "20 cm", dia: "15 cm" }, peso: "15 kg", volt: "110-120V", mat: "Fierro y vidrio", fin: "Acero oscuro pavonado", time: "5 semanas", cert: "NOM" },
+            { id: 66, name: "Arbotante Articulado Lino", category: "arbotantes", price: 5400, img: "Image_11.png", sku: "DM-ARB-005", desc: "Lámpara fabricada en Latón con pantalla en tela lino", specsLight: "1x E12 LED 6W cálida", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "40 cm", d: "40 cm", dia: "15 cm" }, peso: "3 kg", volt: "110-120V", mat: "Latón, pantalla de lino", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 92, name: "Arbotante Cilindro Minimalista", category: "arbotantes", price: 6500, img: "Unknown-5.png", sku: "DM-ARB-006", desc: "Lámpara fabricada en aluminio, con terminado en pintura electrostática", specsLight: "LED integrado 10W", cable: "Certificado UL/NOM", dims: { w: "10 cm", h: "30 cm", d: "20 cm", dia: "10 cm" }, peso: "2 kg", volt: "110-240V", mat: "Aluminio", fin: "Marrón oscuro texturizado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 93, name: "Arbotante Piramidal Bidireccional", category: "arbotantes", price: 5800, img: "Unknown-7.png", sku: "DM-ARB-007", desc: "Lámpara de pared, fabricada en aluminio, con terminado en pintura electrostática", specsLight: "2x LED 5W", cable: "Certificado UL/NOM", dims: { w: "10 cm", h: "15 cm", d: "8 cm", dia: "N/A" }, peso: "2 kg", volt: "110-240V", mat: "Aluminio", fin: "Pintura electrostática", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 94, name: "Arbotante Óvalo Alabastro", category: "arbotantes", price: 9200, img: "Image 19.png", sku: "DM-ARB-008", desc: "Lámpara fabricada en metal con pantalla en ónix", specsLight: "Tira LED cálida trasera", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "10 cm", d: "5 cm", dia: "N/A" }, peso: "5 kg", volt: "110-120V", mat: "Metal/ónix", fin: "Pintura electrostática", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 95, name: "Arbotante Vela Cristal", category: "arbotantes", price: 7500, img: "Image 20.png", sku: "DM-ARB-009", desc: "Lámpara fabricada en aluminio, con terminado en pintura electrostática y pantalla en vidrio", specsLight: "1x E26 LED Edison 4W", cable: "Certificado UL/NOM", dims: { w: "12 cm", h: "40 cm", d: "10 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Metal/vidrio", fin: "Pintura electrostática", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 96, name: "Arbotante Doble Texturizado", category: "arbotantes", price: 8900, img: "Screenshot_Gallery.png", sku: "DM-ARB-010", desc: "Lámpara fabricada en metal con pantallas en vidrio", specsLight: "2x E12 LED 4W", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "40 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Metal/vidrio texturizado", fin: "Pintura electrostática", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 97, name: "Arbotante Lino Articulado", category: "arbotantes", price: 5600, img: "Unknown-3.png", sku: "DM-ARB-011", desc: "Lámpara fabricada en Latón con pantalla en lino", specsLight: "1x E26 LED 8W", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "25 cm", d: "20 cm", dia: "20 cm" }, peso: "5 kg", volt: "110-120V", mat: "Latón/lino", fin: "Cepillado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 100, name: "Arbotante Lectura Pantalla Crema", category: "arbotantes", price: 6800, img: "arbotante_2.png", sku: "DM-ARB-012", desc: "Lámpara fabricada en metal con pantalla en tela con iluminación movible", specsLight: "1x E26 LED 8W cálida + lectura LED 3W", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "35 cm", d: "20 cm", dia: "20 cm" }, peso: "5 kg", volt: "110-120V", mat: "Metal/tela", fin: "Pintura electrostática y cromo", time: "3 a 4 semanas", cert: "NOM" },
             { id: 101, name: "Arbotante Tallo Latón Lino", category: "arbotantes", price: 9800, img: "arbotante_3.png", sku: "DM-ARB-013", desc: "Elegante arbotante de tallo alto en latón pulido con pantalla cilíndrica de lino natural, ideal para cabeceras y pasillos.", specsLight: "1x E26 LED 8W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "58 cm", d: "20 cm", dia: "20 cm" }, peso: "2.8 kg", volt: "110-120V", mat: "Latón pulido y pantalla de lino", fin: "Latón brillante", time: "3 a 4 semanas", cert: "NOM" },
             { id: 102, name: "Arbotante Cilindro Pantalla Blanca", category: "arbotantes", price: 5600, img: "arbotante_4.png", sku: "DM-ARB-014", desc: "Diseño minimalista con pantalla cilíndrica blanca sobre tallo de acero cromado.", specsLight: "1x E26 LED 8W cálida", cable: "Directo a muro", dims: { w: "20 cm", h: "32 cm", d: "16 cm", dia: "18 cm" }, peso: "1.6 kg", volt: "110-120V", mat: "Acero cromado y pantalla textil", fin: "Blanco y cromo", time: "3 a 4 semanas", cert: "NOM" },
             { id: 103, name: "Arbotante Cascada Latón Multitubo", category: "arbotantes", price: 24500, img: "arbotante_5.png", sku: "DM-ARB-015", desc: "Pieza escultórica vertical con múltiples tubos de cristal estriado dispuestos en cascada sobre estructura de latón.", specsLight: "8x G9 LED 3W cálida", cable: "Conexión directa a registro", dims: { w: "25 cm", h: "140 cm", d: "15 cm", dia: "N/A" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón macizo y cristal estriado", fin: "Latón pulido", time: "5 a 6 semanas", cert: "NOM" },
@@ -1397,7 +1464,7 @@
                 return;
             }
             if (errEl) errEl.classList.add('hidden');
-            window.userSession = { name, email, addr, gender };
+            window.userSession = { name, email, addr, gender, password };
             localStorage.setItem('damaso_session', JSON.stringify(window.userSession));
             document.getElementById('login-form-modal')?.classList.add('opacity-0', 'pointer-events-none');
             document.getElementById('nav-login-btn')?.classList.add('hidden');
@@ -1513,7 +1580,7 @@
                 html += `<div class="col-span-full mt-16 mb-4 border-b border-brand-gold pb-4"><h3 class="font-editorial text-4xl text-brand-gold uppercase glow-gold">${catTitle}</h3></div>`;
                 catProducts.forEach(p => {
                     html += `
-                        <div class="group scroll-reveal">
+                        <div class="group scroll-reveal" id="product-card-${p.id}">
                             <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
                                 <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
                                     <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] opacity-80">
@@ -1555,91 +1622,165 @@
             } else {
                 menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
                 menu.classList.remove('translate-y-0', 'opacity-100');
-                const langPanel = document.getElementById('language-panel');
+                const settingsPanel = document.getElementById('settings-panel');
                 const catList = document.getElementById('catalog-menu-list');
-                if (langPanel && catList) { langPanel.classList.add('hidden'); catList.classList.remove('hidden'); }
+                if (settingsPanel && catList) { settingsPanel.classList.add('hidden'); catList.classList.remove('hidden'); window.showSettingsView('main'); }
             }
         };
 
-        // ── SELECTOR DE IDIOMA ──
-        window.languageList = [
-            {name:'Español', code:'es'},{name:'Inglés', code:'en'},{name:'Francés', code:'fr'},{name:'Alemán', code:'de'},{name:'Italiano', code:'it'},
-            {name:'Portugués', code:'pt'},{name:'Neerlandés', code:'nl'},{name:'Sueco', code:'sv'},{name:'Noruego', code:'no'},{name:'Danés', code:'da'},
-            {name:'Finlandés', code:'fi'},{name:'Islandés', code:'is'},{name:'Polaco', code:'pl'},{name:'Checo', code:'cs'},{name:'Eslovaco', code:'sk'},
-            {name:'Húngaro', code:'hu'},{name:'Rumano', code:'ro'},{name:'Búlgaro', code:'bg'},{name:'Griego', code:'el'},{name:'Ruso', code:'ru'},
-            {name:'Ucraniano', code:'uk'},{name:'Turco', code:'tr'},{name:'Árabe', code:'ar'},{name:'Hebreo', code:'iw'},{name:'Persa', code:'fa'},
-            {name:'Hindi', code:'hi'},{name:'Bengalí', code:'bn'},{name:'Urdu', code:'ur'},{name:'Punjabi', code:'pa'},{name:'Tamil', code:'ta'},
-            {name:'Telugu', code:'te'},{name:'Maratí', code:'mr'},{name:'Gujarati', code:'gu'},{name:'Chino Mandarín', code:'zh-CN'},{name:'Chino Tradicional', code:'zh-TW'},
-            {name:'Japonés', code:'ja'},{name:'Coreano', code:'ko'},{name:'Vietnamita', code:'vi'},{name:'Tailandés', code:'th'},{name:'Indonesio', code:'id'},
-            {name:'Malayo', code:'ms'},{name:'Filipino (Tagalo)', code:'tl'},{name:'Swahili', code:'sw'},{name:'Amárico', code:'am'},{name:'Hausa', code:'ha'},
-            {name:'Yoruba', code:'yo'},{name:'Zulú', code:'zu'},{name:'Afrikáans', code:'af'},{name:'Catalán', code:'ca'},{name:'Euskera (Vasco)', code:'eu'},
-            {name:'Gallego', code:'gl'},{name:'Croata', code:'hr'},{name:'Serbio', code:'sr'},{name:'Esloveno', code:'sl'},{name:'Bosnio', code:'bs'},
-            {name:'Macedonio', code:'mk'},{name:'Albanés', code:'sq'},{name:'Estonio', code:'et'},{name:'Letón', code:'lv'},{name:'Lituano', code:'lt'},
-            {name:'Georgiano', code:'ka'},{name:'Armenio', code:'hy'},{name:'Azerí', code:'az'},{name:'Kazajo', code:'kk'},{name:'Uzbeko', code:'uz'},
-            {name:'Mongol', code:'mn'},{name:'Nepalí', code:'ne'},{name:'Cingalés', code:'si'},{name:'Birmano', code:'my'},{name:'Jemer', code:'km'},
-            {name:'Lao', code:'lo'},{name:'Maorí', code:'mi'},{name:'Samoano', code:'sm'},{name:'Hawaiano', code:'haw'},{name:'Galés', code:'cy'},
-            {name:'Irlandés', code:'ga'},{name:'Gaélico Escocés', code:'gd'},{name:'Maltés', code:'mt'},{name:'Esperanto', code:'eo'},{name:'Latín', code:'la'},
-            {name:'Criollo Haitiano', code:'ht'}
-        ];
-        window.selectedLanguage = 'Español';
-        window.selectedLanguageCode = 'es';
-
-        window.renderLanguageList = function(filter) {
-            const container = document.getElementById('lang-list');
-            if (!container) return;
-            const q = (filter || '').trim().toLowerCase();
-            const items = window.languageList.filter(l => l.name.toLowerCase().includes(q));
-            container.innerHTML = items.map(l => {
-                const checked = l.name === window.selectedLanguage;
-                return `<button type="button" onclick="window.selectLanguage('${l.name.replace(/'/g, "\\'")}', '${l.code}')" class="w-full flex items-center justify-between px-6 py-2.5 text-xs tracking-widest uppercase transition-all ${checked ? 'text-brand-gold' : 'text-brand-muted hover:bg-brand-gold hover:text-black'}">
-                    <span>${l.name}</span>
-                    ${checked ? '<span class="text-brand-gold">&#10003;</span>' : ''}
-                </button>`;
-            }).join('') || '<p class="px-6 py-3 text-[10px] text-brand-muted uppercase">Sin resultados</p>';
-        };
-
-        // ── TRADUCCIÓN REAL DEL SITIO (Google Website Translator) ──
-        window._gtRetries = 0;
-        window.applyGoogleTranslate = function(code) {
-            const combo = document.querySelector('.goog-te-combo');
-            if (!combo) {
-                if (window._gtRetries++ < 30) { setTimeout(() => window.applyGoogleTranslate(code), 300); }
-                return;
-            }
-            window._gtRetries = 0;
-            combo.value = code;
-            combo.dispatchEvent(new Event('change'));
-        };
-
-        window.selectLanguage = function(lang, code) {
-            window.selectedLanguage = lang;
-            window.selectedLanguageCode = code || 'es';
-            const btn = document.getElementById('btn-idioma-label');
-            if (btn) btn.innerText = lang;
-            window.renderLanguageList(document.getElementById('lang-search-input')?.value || '');
-            window.applyGoogleTranslate(window.selectedLanguageCode);
-        };
-
-        window.filterLanguageList = function() {
-            window.renderLanguageList(document.getElementById('lang-search-input').value);
-        };
-
-        window.toggleLanguagePanel = function(e) {
+        // ── PANEL DE CONFIGURACIÓN (cuenta, idioma, tono, animaciones, privacidad) ──
+        window.toggleSettingsPanel = function(e) {
             if (e) { e.preventDefault(); e.stopPropagation(); }
             const catList = document.getElementById('catalog-menu-list');
-            const langPanel = document.getElementById('language-panel');
-            if (!catList || !langPanel) return;
-            const isOpen = !langPanel.classList.contains('hidden');
+            const settingsPanel = document.getElementById('settings-panel');
+            if (!catList || !settingsPanel) return;
+            const isOpen = !settingsPanel.classList.contains('hidden');
             if (isOpen) {
-                langPanel.classList.add('hidden');
+                settingsPanel.classList.add('hidden');
                 catList.classList.remove('hidden');
             } else {
                 catList.classList.add('hidden');
-                langPanel.classList.remove('hidden');
-                window.renderLanguageList('');
-                const input = document.getElementById('lang-search-input');
-                if (input) { input.value = ''; setTimeout(() => input.focus(), 50); }
+                settingsPanel.classList.remove('hidden');
+                window.showSettingsView('main');
             }
+        };
+
+        window.showSettingsView = function(view) {
+            ['main', 'account', 'language', 'theme', 'animations', 'privacy'].forEach(v => {
+                document.getElementById('settings-view-' + v)?.classList.add('hidden');
+            });
+            document.getElementById('settings-view-' + view)?.classList.remove('hidden');
+            if (view === 'account') window.populateSettingsAccount();
+        };
+
+        window.populateSettingsAccount = function() {
+            const loggedOut = document.getElementById('settings-account-logged-out');
+            const loggedIn = document.getElementById('settings-account-logged-in');
+            if (!loggedOut || !loggedIn) return;
+            if (window.userSession) {
+                loggedOut.classList.add('hidden');
+                loggedIn.classList.remove('hidden');
+                const nameEl = document.getElementById('settings-account-name');
+                const emailEl = document.getElementById('settings-account-email');
+                const pwEl = document.getElementById('settings-account-password');
+                if (nameEl) nameEl.innerText = window.userSession.name || '';
+                if (emailEl) emailEl.innerText = window.userSession.email || '';
+                if (pwEl) pwEl.innerText = window.userSession.password ? '•'.repeat(window.userSession.password.length) : '••••••••';
+            } else {
+                loggedOut.classList.remove('hidden');
+                loggedIn.classList.add('hidden');
+            }
+        };
+
+        // ── IDIOMA: diccionario interno embebido, sin servicio de traducción externo ──
+        // "DAMASO" nunca se traduce: ningún elemento con ese texto recibe data-i18n.
+        window.appLang = localStorage.getItem('damaso_lang') || 'es';
+
+        window.dictEN = {
+            menu_btn: 'Menu', catalogo_label: 'Catalog', ver_todo: 'View All', candiles: 'Chandeliers', arbotantes: 'Wall Sconces',
+            espejos: 'Mirrors', lamp_mesa: 'Table Lamps', lamp_pie: 'Floor Lamps', lamp_techo: 'Ceiling Lamps', lamp_exterior: 'Outdoor Lamps',
+            proyectos: 'Special Projects', volver: '← Back',
+            settings_account: 'Account', settings_language: 'Language', settings_theme: 'Page Tone', settings_animations: 'Animations', settings_privacy: 'Privacy Notice',
+            settings_no_session: 'You are not signed in.', settings_login: 'Sign In', settings_name: 'Name', settings_email: 'Email', settings_password: 'Password', settings_logout: 'Sign Out',
+            theme_dark: 'Dark', theme_light: 'Light', theme_auto: 'Automatic',
+            settings_animations_desc: 'Animations are on by default. You can turn them off if you prefer.', settings_animations_on: 'Animations: On', settings_animations_off: 'Animations: Off',
+            privacy_cookies_text: 'This site uses cookies and local storage only to remember your session, your quote cart, and your preferences (language, tone, and animations). We do not share your information with third parties. You can erase this data by signing out.',
+            nav_home: 'Home', nav_clientes: 'Clients', nav_disenador: 'The Designer', nav_marca: 'Brand', nav_social: 'Social Media',
+            search_placeholder: 'Search piece, model or SKU...', btn_buscar: 'Search',
+            hero_subtitle: 'Sculpting darkness with timeless design pieces. Handmade in Mexico.',
+            ver_coleccion_btn: 'VIEW COLLECTION', contacto_directo_btn: 'DIRECT CONTACT',
+            clientes_label: 'Trust that illuminates', clientes_title: 'Our Clients',
+            disenador_quote: '"Light is the soul of architecture."',
+            disenador_bio: 'Designer based in Guadalajara, Jalisco. His work explores the intersection between brutalism and Mexican craftsmanship, forging metal and light to redefine contemporary space.',
+            marca_label: 'The brand', marca_clientes: 'Clients', marca_clientes_lower: 'clients', marca_experiencia: 'Experience', marca_anios: 'years', marca_de_experiencia: 'of experience',
+            marca_proyectos: 'Projects', marca_proyectos_lower: 'projects', marca_empresa: 'Company', marca_empresa_tapatia: 'company from Guadalajara',
+            marca_filosofia_label: 'Brand philosophy',
+            marca_filosofia_heading: 'We don\'t make lamps. We create focal points that transform the everyday into something <span class="italic text-brand-gold glow-gold">extraordinary</span>.',
+            footer_tagline: 'High-end lighting and design objects.', footer_estudio: 'Studio', footer_social: 'Social',
+            login_title: 'Credentials', login_gender_label: 'Gender', login_gender_f: 'Female', login_gender_m: 'Male',
+            login_name_placeholder: 'Full Name or Firm', login_email_placeholder: 'Email Address', login_password_placeholder: 'Password',
+            login_address_placeholder: 'Address / City (Optional)', login_validation_error: 'Please complete all required fields.', login_accept_btn: 'Accept and Enter',
+            login_cancel_btn: 'Cancel', login_prompt_title: 'Would You Like to Sign In?', login_prompt_advantage_label: 'Benefits of your account',
+            login_prompt_text: 'By signing in you can <strong class="text-white">save conversations</strong> with DAMASO AI, keep your quote cart, and auto-fill your PDFs.',
+            cookie_title: 'Cookie Notice', cookie_text: 'We use cookies and local storage to remember your session and preferences.',
+            cookie_agree: 'I agree', cookie_read_btn: 'Read Cookie Policy',
+            cookie_accept: 'Accept and Continue', cart_title: 'Quote Cart', cart_empty: 'Your cart is empty.', cart_send: 'Send Quote Request',
+            bot_status: 'BOT CONNECTED', chat_placeholder: 'Write your question...'
+        };
+
+        window.t = function(key, esFallback) {
+            if (window.appLang === 'en' && window.dictEN[key]) return window.dictEN[key];
+            return esFallback;
+        };
+
+        window.applyStaticTranslations = function() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (el.dataset.i18nOrig === undefined) el.dataset.i18nOrig = el.innerText;
+                el.innerText = (window.appLang === 'en' && window.dictEN[key]) ? window.dictEN[key] : el.dataset.i18nOrig;
+            });
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const key = el.getAttribute('data-i18n-html');
+                if (el.dataset.i18nOrig === undefined) el.dataset.i18nOrig = el.innerHTML;
+                el.innerHTML = (window.appLang === 'en' && window.dictEN[key]) ? window.dictEN[key] : el.dataset.i18nOrig;
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (el.dataset.i18nOrig === undefined) el.dataset.i18nOrig = el.getAttribute('placeholder') || '';
+                el.setAttribute('placeholder', (window.appLang === 'en' && window.dictEN[key]) ? window.dictEN[key] : el.dataset.i18nOrig);
+            });
+            document.getElementById('lang-opt-es')?.querySelector('.lang-check')?.replaceChildren(document.createTextNode(window.appLang === 'es' ? '✓' : ''));
+            document.getElementById('lang-opt-en')?.querySelector('.lang-check')?.replaceChildren(document.createTextNode(window.appLang === 'en' ? '✓' : ''));
+        };
+
+        window.setAppLanguage = function(code) {
+            window.appLang = code === 'en' ? 'en' : 'es';
+            localStorage.setItem('damaso_lang', window.appLang);
+            window.applyStaticTranslations();
+        };
+
+        // ── TONO DE LA PÁGINA (oscuro por defecto / blanco / automático) ──
+        window.appTheme = localStorage.getItem('damaso_theme') || 'dark';
+
+        window.applyAppTheme = function() {
+            let effective = window.appTheme;
+            if (effective === 'auto') {
+                effective = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+            }
+            document.documentElement.classList.toggle('theme-light', effective === 'light');
+            ['theme-opt-dark', 'theme-opt-light', 'theme-opt-auto'].forEach(id => {
+                document.getElementById(id)?.querySelector('.theme-check')?.replaceChildren();
+            });
+            const activeId = { dark: 'theme-opt-dark', light: 'theme-opt-light', auto: 'theme-opt-auto' }[window.appTheme];
+            const activeCheck = document.getElementById(activeId)?.querySelector('.theme-check');
+            if (activeCheck) activeCheck.innerText = '✓';
+        };
+
+        window.setAppTheme = function(mode) {
+            window.appTheme = (mode === 'light' || mode === 'auto') ? mode : 'dark';
+            localStorage.setItem('damaso_theme', window.appTheme);
+            window.applyAppTheme();
+        };
+
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+                if (window.appTheme === 'auto') window.applyAppTheme();
+            });
+        }
+
+        // ── ANIMACIONES (encendidas por defecto, el usuario puede apagarlas) ──
+        window.animationsEnabled = localStorage.getItem('damaso_animations') !== 'off';
+
+        window.applyAnimationsSetting = function() {
+            document.documentElement.classList.toggle('animations-off', !window.animationsEnabled);
+            const btn = document.getElementById('btn-animations-toggle');
+            if (btn) btn.innerText = window.animationsEnabled ? window.t('settings_animations_on', 'Animaciones: Encendidas') : window.t('settings_animations_off', 'Animaciones: Apagadas');
+        };
+
+        window.toggleAnimationsSetting = function() {
+            window.animationsEnabled = !window.animationsEnabled;
+            localStorage.setItem('damaso_animations', window.animationsEnabled ? 'on' : 'off');
+            window.applyAnimationsSetting();
         };
 
         // ── ANIMACIÓN DE CATEGORÍA MEJORADA — PANTALLA COMPLETA ──
@@ -1717,6 +1858,7 @@
                     try {
                         const searchInput = document.getElementById('live-search');
                         if (searchInput) searchInput.value = '';
+                        document.getElementById('btn-piece-search')?.classList.add('opacity-0', 'pointer-events-none', 'scale-90');
                         const filtered = cat === 'all' ? window.dbProducts : window.dbProducts.filter(p => p.category === cat);
                         window.renderCatalog(filtered);
                         document.getElementById('catalog-title').innerText = cat === 'all' ? "Catálogo Completo" : (window.catMap[cat] || cat);
@@ -3220,33 +3362,27 @@ NORMAS:
             }
         };
 
-        // ── AI FEATURES ──
-        window.semanticSearch = async function() {
+        // ── BÚSQUEDA DE PIEZAS — solo se ejecuta al picar "Buscar" (o Enter) ──
+        window.runPieceSearch = function() {
             const input = document.getElementById('live-search');
-            const query = input.value.trim();
-            if (!query) return;
-            const btn = document.getElementById('btn-semantic-search');
-            const originalIcon = btn.innerHTML;
-            btn.innerHTML = '<span style="display:inline-block;animation:spin 1s linear infinite">⌛</span>';
-            btn.classList.add('opacity-50', 'pointer-events-none');
-            const catList = window.dbProducts.map(p => `SKU: ${p.sku} | Pieza: ${p.name} | Cat: ${p.category} | Mat: ${p.mat}`).join('\n');
-            const prompt = `Un cliente en una boutique de lujo busca: "${query}".\nCatálogo:\n${catList}\nSelecciona los 3 a 5 SKUs que mejor se adapten. Responde ÚNICAMENTE con los SKUs separados por comas.`;
-            try {
-                const response = await window.fetchAIResponse([{role: 'user', text: prompt}], "Eres un experto curador de arte y diseño de iluminación interior de lujo.");
-                const skus = response.split(',').map(s => s.trim().toUpperCase());
-                const results = window.dbProducts.filter(p => skus.some(sku => sku.includes(p.sku) || p.sku.includes(sku)));
-                if (results.length > 0) {
-                    window.renderCatalog(results);
-                    document.getElementById('catalog-title').innerText = 'Curaduría AI';
-                    document.getElementById('catalog-subtitle').innerText = `✨ Sugerencias para: "${query}"`;
-                } else throw new Error("No matches");
-            } catch(e) {
-                document.getElementById('catalog-title').innerText = 'Curaduría AI';
-                document.getElementById('catalog-subtitle').innerText = `No encontramos piezas para: "${query}"`;
-                window.renderCatalog([]);
-            } finally {
-                btn.innerHTML = originalIcon;
-                btn.classList.remove('opacity-50', 'pointer-events-none');
+            const q = (input?.value || '').toLowerCase().trim();
+            const title = document.getElementById('catalog-title');
+            const subtitle = document.getElementById('catalog-subtitle');
+            if (!q) {
+                window.renderCatalog(window.dbProducts);
+                if (title) title.innerText = 'Catálogo Completo';
+                if (subtitle) subtitle.innerText = 'Colección 2026';
+                return;
+            }
+            const results = window.dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+            window.renderCatalog(results);
+            if (title) title.innerText = 'Resultados';
+            if (subtitle) subtitle.innerText = `Búsqueda: "${q}"`;
+            if (results.length > 0) {
+                setTimeout(() => {
+                    document.getElementById('product-card-' + results[0].id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 80);
+            } else {
                 document.getElementById('coleccion')?.scrollIntoView({ behavior: 'smooth' });
             }
         };
@@ -3404,6 +3540,9 @@ NORMAS:
         };
 
         function initApp() {
+            window.applyAppTheme();
+            window.applyAnimationsSetting();
+            window.applyStaticTranslations();
             window.preloadAllImages();
             window.renderCatalog(window.dbProducts);
             window.updateCartUI();
@@ -3453,15 +3592,10 @@ NORMAS:
                 liveSearchEl.addEventListener('blur', () => { window._searchFocused = false; });
             }
             document.getElementById('live-search')?.addEventListener('input', e => {
-                const q = e.target.value.toLowerCase().trim();
-                const title = document.getElementById('catalog-title');
-                const subtitle = document.getElementById('catalog-subtitle');
-                if (!q) { window.renderCatalog(window.dbProducts); title.innerText = 'Catálogo Completo'; subtitle.innerText = 'Colección 2026'; }
-                else {
-                    const results = window.dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
-                    window.renderCatalog(results);
-                    title.innerText = 'Resultados'; subtitle.innerText = `Búsqueda: "${q}"`;
-                }
+                const q = e.target.value.trim();
+                const searchBtn = document.getElementById('btn-piece-search');
+                if (q) { searchBtn?.classList.remove('opacity-0', 'pointer-events-none', 'scale-90'); }
+                else { searchBtn?.classList.add('opacity-0', 'pointer-events-none', 'scale-90'); window.runPieceSearch(); }
             });
 
             const mc = document.querySelector('.marquee-container');
@@ -3559,13 +3693,5 @@ NORMAS:
     })();
     </script>
 
-    <!-- ── TRADUCCIÓN AUTOMÁTICA DEL SITIO ── -->
-    <div id="google_translate_element" style="display:none;"></div>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({ pageLanguage: 'es', autoDisplay: false }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
