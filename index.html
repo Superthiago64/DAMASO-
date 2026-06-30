@@ -59,11 +59,33 @@
         html.theme-light .text-brand-muted { color: #5a5a5a !important; }
         html.theme-light .border-brand-border { border-color: #d8d3c4 !important; }
         html.theme-light .glow-text { text-shadow: 0 0 12px rgba(0,0,0,0.15) !important; }
+        /* Conservar texto claro en los elementos que siempre tienen fondo oscuro */
+        html.theme-light #navbar .text-white,
+        html.theme-light #navbar .text-brand-text,
+        html.theme-light #dropdown-menu .text-white,
+        html.theme-light #settings-panel .text-white,
+        html.theme-light #chatbot-drawer .text-white,
+        html.theme-light #cart-drawer .text-white,
+        html.theme-light #spec-modal .text-white,
+        html.theme-light .init-overlay .text-white { color: #f2f2f2 !important; }
+
+        /* ── MENÚ DESPLEGABLE: más opaco para mejor contraste en desktop ── */
+        #dropdown-menu {
+            background: rgba(12, 12, 12, 0.97) !important;
+            border: 1px solid rgba(212,175,55,0.55) !important;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.9), 0 0 32px rgba(212,175,55,0.22) !important;
+        }
 
         /* ── ANIMACIONES DESACTIVADAS POR EL USUARIO ── */
-        html.animations-off *, html.animations-off *::before, html.animations-off *::after {
-            animation: none !important;
+        html.animations-off .scroll-reveal {
+            opacity: 1 !important;
+            transform: none !important;
             transition: none !important;
+            animation: none !important;
+        }
+        html.animations-off *, html.animations-off *::before, html.animations-off *::after {
+            animation-duration: 1ms !important;
+            transition-duration: 1ms !important;
         }
 
         body {
@@ -1288,6 +1310,15 @@
             mesa: "Lámparas de Mesa", pie: "Lámparas de Pie", techo: "Lámparas de Techo",
             exterior: "Lámparas de Exterior", proyectos: "Proyectos Especiales"
         };
+        window.catMapEN = {
+            candiles: "Chandeliers", arbotantes: "Wall Sconces", espejos: "Mirrors",
+            mesa: "Table Lamps", pie: "Floor Lamps", techo: "Ceiling Lamps",
+            exterior: "Outdoor Lamps", proyectos: "Special Projects"
+        };
+        window.catLabel = function(key) {
+            if (window.appLang === 'en' && window.catMapEN[key]) return window.catMapEN[key];
+            return window.catMap[key] || key;
+        };
 
         // ── AUDIO ── (efectos de sonido desactivados)
         window.audioCtx = null;
@@ -1574,9 +1605,10 @@
                 return;
             }
             let html = '';
-            for (const [catKey, catTitle] of Object.entries(window.catMap)) {
+            for (const catKey of Object.keys(window.catMap)) {
                 const catProducts = products.filter(p => p.category === catKey);
                 if (catProducts.length === 0) continue;
+                const catTitle = window.catLabel(catKey);
                 html += `<div class="col-span-full mt-16 mb-4 border-b border-brand-gold pb-4"><h3 class="font-editorial text-4xl text-brand-gold uppercase glow-gold">${catTitle}</h3></div>`;
                 catProducts.forEach(p => {
                     html += `
@@ -1705,7 +1737,9 @@
             cookie_title: 'Cookie Notice', cookie_text: 'We use cookies and local storage to remember your session and preferences.',
             cookie_agree: 'I agree', cookie_read_btn: 'Read Cookie Policy',
             cookie_accept: 'Accept and Continue', cart_title: 'Quote Cart', cart_empty: 'Your cart is empty.', cart_send: 'Send Quote Request',
-            bot_status: 'BOT CONNECTED', chat_placeholder: 'Write your question...'
+            bot_status: 'BOT CONNECTED', chat_placeholder: 'Write your question...',
+            catalog_title_all: 'Complete Catalog', collection_2026: 'Collection 2026',
+            collection_complete: 'Complete Collection', search_results: 'Results'
         };
 
         window.t = function(key, esFallback) {
@@ -1737,6 +1771,18 @@
             window.appLang = code === 'en' ? 'en' : 'es';
             localStorage.setItem('damaso_lang', window.appLang);
             window.applyStaticTranslations();
+            if (window.renderCatalog && window.dbProducts) {
+                const currentSearch = document.getElementById('live-search')?.value.trim();
+                if (currentSearch) {
+                    window.runPieceSearch();
+                } else {
+                    const catalogTitle = document.getElementById('catalog-title');
+                    const catalogSubtitle = document.getElementById('catalog-subtitle');
+                    window.renderCatalog(window.dbProducts);
+                    if (catalogTitle) catalogTitle.innerText = window.t('catalog_title_all', 'Catálogo Completo');
+                    if (catalogSubtitle) catalogSubtitle.innerText = window.t('collection_2026', 'Colección 2026');
+                }
+            }
         };
 
         // ── TONO DE LA PÁGINA (oscuro por defecto / blanco / automático) ──
@@ -1775,6 +1821,11 @@
             document.documentElement.classList.toggle('animations-off', !window.animationsEnabled);
             const btn = document.getElementById('btn-animations-toggle');
             if (btn) btn.innerText = window.animationsEnabled ? window.t('settings_animations_on', 'Animaciones: Encendidas') : window.t('settings_animations_off', 'Animaciones: Apagadas');
+            if (!window.animationsEnabled) {
+                document.querySelectorAll('.scroll-reveal').forEach(el => el.classList.add('is-visible'));
+            } else {
+                if (window.initScrollReveal) window.initScrollReveal();
+            }
         };
 
         window.toggleAnimationsSetting = function() {
@@ -1803,7 +1854,7 @@
                 const letters = Array.from(document.querySelectorAll('#menu-damaso-letters .menu-letter'));
                 const categoryText = document.getElementById('menu-category-text');
                 const divider = document.getElementById('cat-divider');
-                const displayName = cat === 'all' ? 'Colección Completa' : (window.catMap[cat] || cat);
+                const displayName = cat === 'all' ? window.t('collection_complete', 'Colección Completa') : window.catLabel(cat);
 
                 if (!overlay) { window._resetCatLock(); return; }
 
@@ -1861,8 +1912,8 @@
                         document.getElementById('btn-piece-search')?.classList.add('opacity-0', 'pointer-events-none', 'scale-90');
                         const filtered = cat === 'all' ? window.dbProducts : window.dbProducts.filter(p => p.category === cat);
                         window.renderCatalog(filtered);
-                        document.getElementById('catalog-title').innerText = cat === 'all' ? "Catálogo Completo" : (window.catMap[cat] || cat);
-                        document.getElementById('catalog-subtitle').innerText = "Colección 2026";
+                        document.getElementById('catalog-title').innerText = cat === 'all' ? window.t('catalog_title_all', 'Catálogo Completo') : window.catLabel(cat);
+                        document.getElementById('catalog-subtitle').innerText = window.t('collection_2026', 'Colección 2026');
                         document.getElementById('coleccion')?.scrollIntoView({ behavior: 'smooth' });
                     } catch(e) {}
 
@@ -3370,14 +3421,14 @@ NORMAS:
             const subtitle = document.getElementById('catalog-subtitle');
             if (!q) {
                 window.renderCatalog(window.dbProducts);
-                if (title) title.innerText = 'Catálogo Completo';
-                if (subtitle) subtitle.innerText = 'Colección 2026';
+                if (title) title.innerText = window.t('catalog_title_all', 'Catálogo Completo');
+                if (subtitle) subtitle.innerText = window.t('collection_2026', 'Colección 2026');
                 return;
             }
             const results = window.dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
             window.renderCatalog(results);
-            if (title) title.innerText = 'Resultados';
-            if (subtitle) subtitle.innerText = `Búsqueda: "${q}"`;
+            if (title) title.innerText = window.t('search_results', 'Resultados');
+            if (subtitle) subtitle.innerText = (window.appLang === 'en' ? `Search: "${q}"` : `Búsqueda: "${q}"`);
             if (results.length > 0) {
                 setTimeout(() => {
                     document.getElementById('product-card-' + results[0].id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
