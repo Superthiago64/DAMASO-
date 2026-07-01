@@ -73,6 +73,36 @@
         html.theme-light #chatbot-drawer .text-brand-muted,
         html.theme-light #cart-drawer .text-brand-muted,
         html.theme-light #spec-modal .text-brand-muted { color: #a1a1a1 !important; }
+        /* Tema blanco: el texto dorado pasa a negro para que sea legible sobre fondo claro */
+        html.theme-light .text-brand-gold { color: #111111 !important; }
+        html.theme-light .glow-gold { text-shadow: none !important; }
+        /* …excepto dentro de las superficies que permanecen oscuras */
+        html.theme-light #navbar .text-brand-gold,
+        html.theme-light #dropdown-menu .text-brand-gold,
+        html.theme-light #settings-panel .text-brand-gold,
+        html.theme-light #chatbot-drawer .text-brand-gold,
+        html.theme-light #cart-drawer .text-brand-gold,
+        html.theme-light #spec-modal .text-brand-gold,
+        html.theme-light .init-overlay .text-brand-gold,
+        html.theme-light #forgot-password-modal .text-brand-gold,
+        html.theme-light #fp-email-toast .text-brand-gold,
+        html.theme-light #welcome-animation-overlay .text-brand-gold,
+        html.theme-light #category-transition-overlay .text-brand-gold { color: #d4af37 !important; }
+        html.theme-light #navbar .glow-gold,
+        html.theme-light #dropdown-menu .glow-gold,
+        html.theme-light #settings-panel .glow-gold,
+        html.theme-light #chatbot-drawer .glow-gold,
+        html.theme-light #cart-drawer .glow-gold,
+        html.theme-light #spec-modal .glow-gold,
+        html.theme-light .init-overlay .glow-gold,
+        html.theme-light #category-transition-overlay .glow-gold { text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4) !important; }
+        /* Superficies que permanecen oscuras en tema blanco (para que su texto claro sea legible) */
+        html.theme-light #spec-modal .bg-\[\#0a0a0a\],
+        html.theme-light #spec-modal .bg-\[\#050505\] { background-color: #0a0a0a !important; }
+        html.theme-light .init-overlay .bg-brand-surface { background-color: #101010 !important; }
+        html.theme-light .init-overlay .bg-\[\#0a0a0a\] { background-color: #0a0a0a !important; }
+        html.theme-light #welcome-animation-overlay .text-white,
+        html.theme-light #category-transition-overlay .text-white { color: #f2f2f2 !important; }
 
         /* ── MENÚ DESPLEGABLE: más opaco para mejor contraste en desktop ── */
         #dropdown-menu {
@@ -184,7 +214,8 @@
         .glow-gold { text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4), 0 0 30px rgba(212,175,55,0.2); }
         .scroll-reveal { opacity: 0; transform: translateY(60px); transition: opacity 1.8s cubic-bezier(0.16,1,0.3,1), transform 1.8s cubic-bezier(0.16,1,0.3,1); }
         .scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
-        .break-words-custom { word-wrap: break-word; word-break: break-word; hyphens: auto; white-space: normal; }
+        /* Las palabras largas bajan completas al siguiente renglón, sin partirse con guion */
+        .break-words-custom { overflow-wrap: break-word; word-break: normal; hyphens: none; white-space: normal; }
 
         /* ── LIQUID GLASS ── */
         .glass-btn {
@@ -617,6 +648,7 @@
                         <svg id="eye-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </button>
                 </div>
+                <button type="button" onclick="window.showForgotPassword()" class="block w-full text-left text-[#ff4444] text-[9px] uppercase tracking-widest hover:underline" data-i18n="forgot_password">¿Has olvidado tu contraseña?</button>
                 <input type="text" id="session-address" autocomplete="off" placeholder="Dirección / Ciudad (Opcional)" data-i18n-placeholder="login_address_placeholder" class="w-full bg-[#0a0a0a] border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm">
                 <div>
                     <label class="block text-brand-muted text-[9px] uppercase tracking-widest mb-2 text-left" data-i18n="login_gender_label">Género</label>
@@ -628,6 +660,39 @@
             </div>
             <p id="login-validation-error" class="hidden text-[#ff4444] text-[9px] uppercase tracking-widest mb-4" data-i18n="login_validation_error">Completa nombre, correo, contraseña y género para continuar.</p>
             <button onclick="window.processLogin()" class="w-full py-4 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm" data-i18n="login_accept_btn">Aceptar y Entrar</button>
+        </div>
+    </div>
+
+    <!-- ── RECUPERAR CONTRASEÑA (código de seguridad aleatorio) ── -->
+    <div id="forgot-password-modal" class="fixed inset-0 z-[9999999] hidden opacity-0 pointer-events-none transition-opacity duration-500 flex items-center justify-center p-4" style="background: rgba(0,0,0,0.85);">
+        <div class="border border-brand-gold p-6 sm:p-10 max-w-md w-full text-center relative rounded-sm shadow-[0_0_30px_rgba(212,175,55,0.15)]" style="background:#0d0d0d;">
+            <button type="button" onclick="window.closeForgotPassword()" class="absolute top-3 right-3 text-brand-muted hover:text-white transition-colors p-2" aria-label="Cerrar">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <h2 class="font-editorial text-2xl text-brand-gold mb-4 uppercase tracking-widest glow-gold" data-i18n="fp_title">Recuperar Contraseña</h2>
+            <div id="fp-step-email">
+                <p class="text-brand-muted text-xs mb-6" data-i18n="fp_desc">Te enviaremos un código de seguridad aleatorio al correo registrado.</p>
+                <input type="email" id="fp-email" autocomplete="off" placeholder="Correo Electrónico" data-i18n-placeholder="login_email_placeholder" class="w-full border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm mb-4" style="background:#161616;">
+                <button type="button" onclick="window.sendRecoveryCode()" class="w-full py-4 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all rounded-sm" data-i18n="fp_send_code">Enviar Código</button>
+            </div>
+            <div id="fp-step-code" class="hidden">
+                <p id="fp-sent-msg" class="text-brand-muted text-xs mb-6"></p>
+                <input type="text" id="fp-code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Código de 6 dígitos" data-i18n-placeholder="fp_code_placeholder" class="w-full border border-brand-border p-4 text-xs text-brand-gold text-center tracking-[0.5em] focus:outline-none focus:border-brand-gold transition-colors rounded-sm mb-4" style="background:#161616;">
+                <input type="password" id="fp-new-password" autocomplete="new-password" placeholder="Nueva contraseña" data-i18n-placeholder="fp_new_password" class="w-full border border-brand-border p-4 text-xs text-brand-gold focus:outline-none focus:border-brand-gold transition-colors rounded-sm mb-4" style="background:#161616;">
+                <button type="button" onclick="window.confirmRecoveryCode()" class="w-full py-4 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all rounded-sm" data-i18n="fp_change">Cambiar Contraseña</button>
+            </div>
+            <p id="fp-error" class="hidden text-[#ff4444] text-[9px] uppercase tracking-widest mt-4"></p>
+            <p id="fp-success" class="hidden text-[#22c55e] text-[9px] uppercase tracking-widest mt-4"></p>
+        </div>
+    </div>
+    <!-- Notificación del correo con el código de seguridad -->
+    <div id="fp-email-toast" class="fixed left-1/2 -translate-x-1/2 z-[10000000] hidden w-[92%] max-w-sm border border-brand-gold/60 rounded-lg p-4 shadow-[0_8px_40px_rgba(0,0,0,0.8)]" style="top: calc(1rem + env(safe-area-inset-top)); background:#101010;">
+        <div class="flex items-start gap-3">
+            <span class="text-xl">📧</span>
+            <div class="text-left">
+                <p class="text-brand-gold text-[10px] uppercase tracking-widest font-bold mb-1">DAMASO Studio</p>
+                <p id="fp-toast-text" class="text-white text-xs leading-relaxed"></p>
+            </div>
         </div>
     </div>
 
@@ -707,7 +772,14 @@
                         <div id="settings-account-logged-in" class="hidden px-6 py-4 space-y-3">
                             <div><span class="text-brand-gold text-[9px] uppercase tracking-widest" data-i18n="settings_name">Nombre</span><p id="settings-account-name" class="text-white text-xs mt-1"></p></div>
                             <div><span class="text-brand-gold text-[9px] uppercase tracking-widest" data-i18n="settings_email">Correo</span><p id="settings-account-email" class="text-white text-xs mt-1"></p></div>
-                            <div><span class="text-brand-gold text-[9px] uppercase tracking-widest" data-i18n="settings_password">Contraseña</span><p id="settings-account-password" class="text-white text-xs mt-1 tracking-widest"></p></div>
+                            <div><span class="text-brand-gold text-[9px] uppercase tracking-widest" data-i18n="settings_password">Contraseña</span>
+                                <div class="flex items-center gap-3 mt-1">
+                                    <p id="settings-account-password" class="text-white text-xs tracking-widest"></p>
+                                    <button type="button" onclick="window.toggleAccountPasswordVisibility()" class="text-brand-muted hover:text-brand-gold transition-colors shrink-0" aria-label="Mostrar contraseña">
+                                        <svg id="account-eye-icon" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                    </button>
+                                </div>
+                            </div>
                             <button type="button" onclick="window.confirmLogout()" class="w-full py-3 border border-[#ff4444] text-[#ff4444] text-[10px] uppercase font-bold tracking-widest hover:bg-[#ff4444] hover:text-white transition-all rounded-sm mt-2" data-i18n="settings_logout">Cerrar Sesión</button>
                         </div>
                     </div>
@@ -719,6 +791,12 @@
                         </button>
                         <button type="button" onclick="window.setAppLanguage('en')" id="lang-opt-en" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest uppercase transition-all hover:bg-brand-gold hover:text-black">
                             <span>English</span><span class="lang-check text-brand-gold"></span>
+                        </button>
+                        <button type="button" onclick="window.setAppLanguage('fr')" id="lang-opt-fr" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest uppercase transition-all hover:bg-brand-gold hover:text-black">
+                            <span>Français</span><span class="lang-check text-brand-gold"></span>
+                        </button>
+                        <button type="button" onclick="window.setAppLanguage('zh')" id="lang-opt-zh" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest uppercase transition-all hover:bg-brand-gold hover:text-black">
+                            <span>中文</span><span class="lang-check text-brand-gold"></span>
                         </button>
                     </div>
                     <!-- ── Tono de la página ── -->
@@ -750,7 +828,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="md:hidden mt-4 pt-2 border-t border-brand-border">
+                <div id="dropdown-mobile-nav" class="md:hidden mt-4 pt-2 border-t border-brand-border">
                     <a href="#" onclick="window.scrollToSection(event, 'home')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all" data-i18n="nav_home">Home</a>
                     <a href="#clientes" onclick="window.scrollToSection(event, 'clientes')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all" data-i18n="nav_clientes">Clientes</a>
                     <a href="#disenador" onclick="window.scrollToSection(event, 'disenador')" class="block px-6 py-3 text-[10px] tracking-widest text-brand-gold uppercase transition-all" data-i18n="nav_disenador">El Diseñador</a>
@@ -887,14 +965,14 @@
                     </button>
                     <button onclick="window.downloadWatermarkedImage()" class="glass-gold transition-colors p-1.5 px-3 flex items-center gap-2 text-[8px] uppercase tracking-widest rounded-sm">
                         <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        Descargar
+                        <span data-i18n="modal_download">Descargar</span>
                     </button>
                 </div>
                 <h2 id="modal-title" class="font-editorial text-3xl sm:text-4xl text-brand-gold glow-gold mb-2 uppercase break-words-custom leading-tight relative z-10"></h2>
                 <p id="modal-desc" class="text-brand-muted mb-8 italic relative z-10"></p>
                 <div class="space-y-4 text-brand-muted flex-1 relative z-10 pb-8">
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2 items-center">
-                        <span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Código SKU:</span>
+                        <span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]" data-i18n="spec_sku">Código SKU:</span>
                         <div class="col-span-2 flex items-center gap-2">
                             <span class="text-white" id="modal-sku"></span>
                             <button id="modal-copy-sku-btn" onclick="window.copyToClipboardSafe('modal-sku', 'modal-copy-sku-btn')" class="glass-btn text-brand-muted hover:text-white transition-colors p-1 rounded-sm">
@@ -903,20 +981,20 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span id="modal-luz-label" class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Descripción:</span><span class="col-span-2 text-white" id="modal-luz"></span></div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Electrificación:</span><span class="col-span-2 text-white" id="modal-cable"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]" data-i18n="spec_electr">Electrificación:</span><span class="col-span-2 text-white" id="modal-cable"></span></div>
                     <div class="py-2">
-                        <span class="text-brand-gold font-medium uppercase tracking-widest text-[10px] block mb-2">Dimensiones:</span>
+                        <span class="text-brand-gold font-medium uppercase tracking-widest text-[10px] block mb-2" data-i18n="spec_dims">Dimensiones:</span>
                         <div class="grid grid-cols-2 gap-2 pl-4 text-xs">
-                            <div>Ancho: <span id="modal-w" class="text-white"></span></div><div>Alto: <span id="modal-h" class="text-white"></span></div>
-                            <div>Fondo: <span id="modal-d" class="text-white"></span></div><div>Diámetro: <span id="modal-dia" class="text-white"></span></div>
+                            <div><span data-i18n="dim_ancho">Ancho:</span> <span id="modal-w" class="text-white"></span></div><div><span data-i18n="dim_alto">Alto:</span> <span id="modal-h" class="text-white"></span></div>
+                            <div><span data-i18n="dim_fondo">Fondo:</span> <span id="modal-d" class="text-white"></span></div><div><span data-i18n="dim_diametro">Diámetro:</span> <span id="modal-dia" class="text-white"></span></div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Peso:</span><span class="col-span-2 text-white" id="modal-peso"></span></div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Materiales:</span><span class="col-span-2 text-white" id="modal-mat"></span></div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Acabados:</span><span class="col-span-2 text-white" id="modal-fin"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]" data-i18n="spec_peso">Peso:</span><span class="col-span-2 text-white" id="modal-peso"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]" data-i18n="spec_mat">Materiales:</span><span class="col-span-2 text-white" id="modal-mat"></span></div>
+                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]" data-i18n="spec_fin">Acabados:</span><span class="col-span-2 text-white" id="modal-fin"></span></div>
                 </div>
                 <div class="mt-4 pt-6 border-t border-brand-gold flex items-center justify-between pb-8 relative z-10 shrink-0">
-                    <span class="text-[10px] tracking-[0.2em] text-brand-gold uppercase font-bold">En Cotización</span>
+                    <span class="text-[10px] tracking-[0.2em] text-brand-gold uppercase font-bold" data-i18n="modal_quote">En Cotización</span>
                     <div class="flex items-center gap-4">
                         <button id="modal-qty-minus" onclick="window.modalChangeQty(-1)" aria-label="Quitar pieza" class="glass-btn w-9 h-9 rounded-full flex items-center justify-center text-brand-gold text-lg font-bold hover:bg-brand-gold hover:text-black transition-colors">−</button>
                         <span id="modal-qty-count" class="text-white text-base font-bold w-6 text-center">0</span>
@@ -1320,9 +1398,197 @@
             mesa: "Table Lamps", pie: "Floor Lamps", techo: "Ceiling Lamps",
             exterior: "Outdoor Lamps", proyectos: "Special Projects"
         };
+        window.catMapFR = {
+            candiles: "Lustres", arbotantes: "Appliques", espejos: "Miroirs",
+            mesa: "Lampes de table", pie: "Lampadaires", techo: "Plafonniers",
+            exterior: "Lampes d'extérieur", proyectos: "Projets spéciaux"
+        };
+        window.catMapZH = {
+            candiles: "吊灯", arbotantes: "壁灯", espejos: "镜子",
+            mesa: "台灯", pie: "落地灯", techo: "吸顶灯",
+            exterior: "户外灯", proyectos: "特别项目"
+        };
         window.catLabel = function(key) {
-            if (window.appLang === 'en' && window.catMapEN[key]) return window.catMapEN[key];
+            const maps = { en: window.catMapEN, fr: window.catMapFR, zh: window.catMapZH };
+            const m = maps[window.appLang];
+            if (m && m[key]) return m[key];
             return window.catMap[key] || key;
+        };
+
+        // ── TRADUCTOR DE NOMBRES Y ESPECIFICACIONES DE PRODUCTOS ──
+        // Diccionario de frases/términos [es, en, fr, zh]. Se aplica en una sola
+        // pasada (regex combinada, frases más largas primero) para no re-traducir
+        // texto ya traducido. "DAMASO" nunca aparece aquí: la marca no se traduce.
+        window.termsI18n = [
+            ["Lámpara de pared, fabricada en", "Wall lamp made of", "Lampe murale fabriquée en", "壁灯，材质："],
+            ["Lámpara de pared fabricada en", "Wall lamp made of", "Lampe murale fabriquée en", "壁灯，材质："],
+            ["Lámpara fabricada con", "Lamp made with", "Lampe fabriquée avec", "灯具，材质："],
+            ["Lámpara fabricada en", "Lamp made of", "Lampe fabriquée en", "灯具，材质："],
+            ["Lámpara fabricaba en", "Lamp made of", "Lampe fabriquée en", "灯具，材质："],
+            ["candil fabricado en", "chandelier made of", "lustre fabriqué en", "吊灯，材质："],
+            ["con terminado en pintura electrostática", "with electrostatic paint finish", "avec finition en peinture électrostatique", "，静电喷涂饰面"],
+            ["terminado en pintura electrostática", "electrostatic paint finish", "finition en peinture électrostatique", "静电喷涂饰面"],
+            ["determinado en pintura electrostática", "with electrostatic paint finish", "avec finition en peinture électrostatique", "，静电喷涂饰面"],
+            ["con terminado en pantalla, electrostática", "with electrostatic finish", "avec finition électrostatique", "，静电喷涂饰面"],
+            ["con iluminación movible", "with adjustable lighting", "avec éclairage orientable", "，灯头可调"],
+            ["con luz movible", "with adjustable light", "avec lumière orientable", "，灯头可调"],
+            ["con esferas de vidrio", "with glass spheres", "avec sphères en verre", "，配玻璃球"],
+            ["con difusor en acrílico", "with acrylic diffuser", "avec diffuseur en acrylique", "，亚克力扩散罩"],
+            ["con pantallas en", "with shades of", "avec abat-jours en", "，灯罩："],
+            ["con pantallas de", "with shades of", "avec abat-jours en", "，灯罩："],
+            ["con pantalla en", "with a shade of", "avec abat-jour en", "，灯罩："],
+            ["con pantalla de", "with a shade of", "avec abat-jour en", "，灯罩："],
+            ["y pantalla en", "and a shade of", "et abat-jour en", "，灯罩："],
+            ["y pantalla de", "and a shade of", "et abat-jour en", "，灯罩："],
+            ["y pantallas de", "and shades of", "et abat-jours en", "，灯罩："],
+            ["cable de certificado UL y NOM", "UL and NOM certified cable", "câble certifié UL et NOM", "UL与NOM认证线缆"],
+            ["certificado UL y NOM", "UL and NOM certified", "certifié UL et NOM", "UL与NOM认证"],
+            ["certificado, UL y NOM", "UL and NOM certified", "certifié UL et NOM", "UL与NOM认证"],
+            ["Certificado UL/NOM", "UL/NOM certified", "Certifié UL/NOM", "UL/NOM认证"],
+            ["Conexión directa a registro", "Direct connection to junction box", "Connexion directe au boîtier électrique", "直连接线盒"],
+            ["Conexión directa a muro", "Direct wall connection", "Connexion directe au mur", "直连墙面"],
+            ["Conexión a registro", "Connection to junction box", "Connexion au boîtier électrique", "接线盒连接"],
+            ["Directo a muro", "Direct to wall", "Direct au mur", "直连墙面"],
+            ["tubos de Laton", "brass tubes", "tubes en laiton", "黄铜圆管"],
+            ["vidrio esmerilado", "frosted glass", "verre dépoli", "磨砂玻璃"],
+            ["vidrio opalino", "opal glass", "verre opalin", "乳白玻璃"],
+            ["vidrio blanco", "white glass", "verre blanc", "白色玻璃"],
+            ["vidrio soplado", "blown glass", "verre soufflé", "吹制玻璃"],
+            ["cristal Frozen", "Frozen crystal", "cristal Frozen", "Frozen水晶"],
+            ["cristal envejecido", "aged crystal", "cristal vieilli", "做旧水晶"],
+            ["cristal plata", "silver crystal", "cristal argenté", "银镜水晶"],
+            ["cristal inastillable", "shatterproof crystal", "cristal incassable", "防碎水晶"],
+            ["acero inoxidable", "stainless steel", "acier inoxydable", "不锈钢"],
+            ["pintura electrostática", "electrostatic paint", "peinture électrostatique", "静电喷涂"],
+            ["pintura automotriz", "automotive paint", "peinture automobile", "汽车级喷漆"],
+            ["recinto natural", "natural quarry stone", "pierre volcanique naturelle", "天然火山石"],
+            ["Reflejo Profundo", "Deep Reflection", "Reflet Profond", "深邃倒影"],
+            ["Vanguardia Luz", "Vanguard Light", "Lumière Avant-garde", "先锋之光"],
+            ["cuello de cisne", "gooseneck", "col de cygne", "鹅颈"],
+            ["chapa de nogal", "walnut veneer", "placage de noyer", "胡桃木饰面"],
+            ["Tira LED", "LED strip", "Bande LED", "LED灯带"],
+            ["impreso en 3D", "3D printed", "imprimé en 3D", "3D打印"],
+            ["perimetral oculta", "hidden perimeter", "périmétrique cachée", "隐藏式环绕"],
+            ["perimetral", "perimeter", "périmétrique", "环绕式"],
+            ["retroiluminación", "backlighting", "rétroéclairage", "背光"],
+            ["Retroiluminado", "Backlit", "Rétroéclairé", "背光"],
+            ["termoplástico", "thermoplastic", "thermoplastique", "热塑性"],
+            ["3 a 4 semanas", "3 to 4 weeks", "3 à 4 semaines", "3至4周"],
+            ["4 a 5 semanas", "4 to 5 weeks", "4 à 5 semaines", "4至5周"],
+            ["5 a 6 semanas", "5 to 6 weeks", "5 à 6 semaines", "5至6周"],
+            ["6 a 8 semanas", "6 to 8 weeks", "6 à 8 semaines", "6至8周"],
+            ["semanas", "weeks", "semaines", "周"],
+            ["Arbotante", "Sconce", "Applique", "壁灯"],
+            ["Candil", "Chandelier", "Lustre", "吊灯"],
+            ["Espejo", "Mirror", "Miroir", "镜子"],
+            ["Lámpara", "Lamp", "Lampe", "灯"],
+            ["pantallas", "shades", "abat-jours", "灯罩"],
+            ["pantalla", "shade", "abat-jour", "灯罩"],
+            ["aluminio", "aluminum", "aluminium", "铝"],
+            ["Latón", "brass", "laiton", "黄铜"],
+            ["Laton", "brass", "laiton", "黄铜"],
+            ["fierro", "iron", "fer", "铁"],
+            ["metal", "metal", "métal", "金属"],
+            ["recinto", "quarry stone", "pierre volcanique", "火山石"],
+            ["ónix", "onyx", "onyx", "缟玛瑙"],
+            ["tela lino", "linen fabric", "tissu de lin", "亚麻布"],
+            ["tela", "fabric", "tissu", "布艺"],
+            ["lino", "linen", "lin", "亚麻"],
+            ["vidrio", "glass", "verre", "玻璃"],
+            ["cristal", "crystal", "cristal", "水晶"],
+            ["madera tallada", "carved wood", "bois sculpté", "雕花木"],
+            ["madera", "wood", "bois", "木材"],
+            ["nogal", "walnut", "noyer", "胡桃木"],
+            ["roble", "oak", "chêne", "橡木"],
+            ["encino", "oak", "chêne", "橡木"],
+            ["níquel", "nickel", "nickel", "镍"],
+            ["bronce", "bronze", "bronze", "青铜"],
+            ["cromado", "chrome-plated", "chromé", "镀铬"],
+            ["cromo", "chrome", "chrome", "铬"],
+            ["acero", "steel", "acier", "钢"],
+            ["acrílico", "acrylic", "acrylique", "亚克力"],
+            ["translúcido", "translucent", "translucide", "半透明"],
+            ["esmerilado", "frosted", "dépoli", "磨砂"],
+            ["texturizado", "textured", "texturé", "纹理"],
+            ["opalino", "opal", "opalin", "乳白"],
+            ["cepillado", "brushed", "brossé", "拉丝"],
+            ["pulido", "polished", "poli", "抛光"],
+            ["satinado", "satin", "satiné", "缎面"],
+            ["Cerillado", "waxed", "ciré", "打蜡"],
+            ["envejecido", "aged", "vieilli", "做旧"],
+            ["pavonado", "blued", "bronzé", "发蓝处理"],
+            ["barnizada", "varnished", "vernie", "上漆"],
+            ["mate", "matte", "mat", "哑光"],
+            ["brillante", "glossy", "brillant", "亮面"],
+            ["dorado", "golden", "doré", "金色"],
+            ["oscuro", "dark", "foncé", "深色"],
+            ["natural", "natural", "naturel", "天然"],
+            ["cálida", "warm", "chaude", "暖光"],
+            ["luz neutra", "neutral light", "lumière neutre", "中性光"],
+            ["escalera", "ladder", "échelle", "梯形"],
+            ["cascada", "cascade", "cascade", "瀑布"],
+            ["placa", "plate", "plaque", "面板"],
+            ["tallo", "stem", "tige", "枝干"],
+            ["lectura", "reading", "lecture", "阅读"],
+            ["tubos", "tubes", "tubes", "圆管"],
+            ["tubo", "tube", "tube", "圆管"],
+            ["esferas", "spheres", "sphères", "球形"],
+            ["esfera", "sphere", "sphère", "球形"],
+            ["doble", "double", "double", "双头"],
+            ["vela", "candle", "bougie", "烛形"],
+            ["óvalo", "oval", "ovale", "椭圆"],
+            ["articulado", "articulated", "articulée", "可调节"],
+            ["Pirámide", "Pyramid", "Pyramide", "金字塔"],
+            ["Marco", "Frame", "Cadre", "框架"],
+            ["Medialuna", "Half Moon", "Demi-lune", "半月"],
+            ["Estrella", "Star", "Étoile", "星形"],
+            ["Radiante", "Radiant", "Radiant", "光芒"],
+            ["Órbitas", "Orbits", "Orbites", "轨道"],
+            ["Globo", "Globe", "Globe", "圆球"],
+            ["Ámbar", "Amber", "Ambre", "琥珀"],
+            ["Cápsula", "Capsule", "Capsule", "胶囊"],
+            ["Redondo", "Round", "Rond", "圆形"],
+            ["Rectangular", "Rectangular", "Rectangulaire", "矩形"],
+            ["Circular", "Circular", "Circulaire", "圆形"],
+            ["Hexagonal", "Hexagonal", "Hexagonal", "六边形"],
+            ["Cuadrado", "Square", "Carré", "方形"],
+            ["Trasluz", "Backlit", "Rétroéclairé", "透光"],
+            ["Orgánico", "Organic", "Organique", "有机"],
+            ["Píldora", "Pill", "Pilule", "药丸形"],
+            ["Lunar", "Lunar", "Lunaire", "月光"],
+            ["Geométrico", "Geometric", "Géométrique", "几何"],
+            ["Arquitectónico", "Architectural", "Architectural", "建筑感"],
+            ["Monumental", "Monumental", "Monumental", "宏伟"],
+            ["Piso", "Floor", "Sol", "落地"],
+            ["Sol", "Sun", "Soleil", "太阳"],
+            ["Luna", "Moon", "Lune", "月亮"],
+            ["exterior", "outdoor", "extérieur", "户外"],
+            ["interior", "indoor", "intérieur", "室内"],
+            ["mármol", "marble", "marbre", "大理石"],
+            ["cerámica", "ceramic", "céramique", "陶瓷"],
+            ["cuero", "leather", "cuir", "皮革"],
+            ["difusor", "diffuser", "diffuseur", "扩散罩"],
+            ["de", "of", "en", "·"],
+            ["y", "and", "et", "和"],
+            ["o", "or", "ou", "或"]
+        ];
+
+        window.trPhrase = function(text) {
+            const lang = window.appLang;
+            if (!text || lang === 'es') return String(text ?? '');
+            const col = { en: 1, fr: 2, zh: 3 }[lang];
+            if (!col) return String(text);
+            if (!window._trRegex) {
+                const sorted = [...window.termsI18n].sort((a, b) => b[0].length - a[0].length);
+                window._trLookup = {};
+                sorted.forEach(t => { window._trLookup[t[0].toLowerCase()] = t; });
+                const alts = sorted.map(t => t[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+                window._trRegex = new RegExp('(^|[^A-Za-zÀ-ÿ])(' + alts + ')(?![A-Za-zÀ-ÿ])', 'gi');
+            }
+            return String(text).replace(window._trRegex, (m, pre, term) => {
+                const entry = window._trLookup[term.toLowerCase()];
+                return pre + (entry ? entry[col] : term);
+            });
         };
 
         // ── AUDIO ── (efectos de sonido desactivados)
@@ -1349,6 +1615,8 @@
         // Animación reutilizable "DAMASO" (+ palabra opcional debajo), usando el mismo
         // overlay de letras que la transición de categorías del menú.
         window.playDamasoOverlayAnimation = function(belowText, onComplete) {
+            // Con las animaciones apagadas no se muestra el overlay: acción directa
+            if (!window.animationsEnabled) { if (onComplete) onComplete(); return; }
             if (window._catAnimating) { if (onComplete) onComplete(); return; }
             window._catAnimating = true;
             clearTimeout(window._catAnimSafetyTimer);
@@ -1423,8 +1691,9 @@
             const belowTextMap = { clientes: 'Clientes', disenador: 'Diseñador', marca: 'Marca', social: 'Redes Sociales', home: 'Inicio' };
             const belowText = belowTextMap[id];
             const doScroll = () => {
-                if (id === 'home') { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-                else { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); }
+                const behavior = window.animationsEnabled ? 'smooth' : 'auto';
+                if (id === 'home') { window.scrollTo({ top: 0, behavior }); }
+                else { document.getElementById(id)?.scrollIntoView({ behavior }); }
             };
             if (belowText) {
                 window.playDamasoOverlayAnimation(belowText, doScroll);
@@ -1510,6 +1779,91 @@
             document.getElementById('login-form-modal')?.classList.add('opacity-0', 'pointer-events-none');
             document.getElementById('login-validation-error')?.classList.add('hidden');
             window.enterSiteDirectly();
+        };
+
+        // ── RECUPERAR CONTRASEÑA: código de seguridad aleatorio al correo registrado ──
+        window._recoveryCode = null;
+        window.showForgotPassword = function() {
+            const m = document.getElementById('forgot-password-modal');
+            if (!m) return;
+            document.getElementById('fp-step-email')?.classList.remove('hidden');
+            document.getElementById('fp-step-code')?.classList.add('hidden');
+            document.getElementById('fp-error')?.classList.add('hidden');
+            document.getElementById('fp-success')?.classList.add('hidden');
+            const codeInput = document.getElementById('fp-code');
+            const pwInput = document.getElementById('fp-new-password');
+            if (codeInput) codeInput.value = '';
+            if (pwInput) pwInput.value = '';
+            const emailInput = document.getElementById('fp-email');
+            if (emailInput) {
+                try {
+                    const saved = JSON.parse(localStorage.getItem('damaso_session') || 'null');
+                    emailInput.value = (saved && saved.email) ? saved.email : '';
+                } catch(e) { emailInput.value = ''; }
+            }
+            m.classList.remove('hidden');
+            void m.offsetWidth;
+            m.classList.remove('opacity-0', 'pointer-events-none');
+        };
+        window.closeForgotPassword = function() {
+            const m = document.getElementById('forgot-password-modal');
+            if (m) { m.classList.add('opacity-0', 'pointer-events-none'); setTimeout(() => m.classList.add('hidden'), 500); }
+            document.getElementById('fp-email-toast')?.classList.add('hidden');
+        };
+        window._fpError = function(msg) {
+            const e = document.getElementById('fp-error');
+            if (e) { e.innerText = msg; e.classList.remove('hidden'); }
+        };
+        window.sendRecoveryCode = function() {
+            const email = document.getElementById('fp-email')?.value.trim().toLowerCase() || '';
+            document.getElementById('fp-error')?.classList.add('hidden');
+            let saved = null;
+            try { saved = JSON.parse(localStorage.getItem('damaso_session') || 'null'); } catch(e) {}
+            if (!email || !saved || !saved.email || saved.email.trim().toLowerCase() !== email) {
+                window._fpError(window.t('fp_no_account', 'No encontramos una cuenta registrada con ese correo.'));
+                return;
+            }
+            window._recoveryCode = String(Math.floor(100000 + Math.random() * 900000));
+            window._recoveryEmail = email;
+            document.getElementById('fp-step-email')?.classList.add('hidden');
+            document.getElementById('fp-step-code')?.classList.remove('hidden');
+            const sentMsg = document.getElementById('fp-sent-msg');
+            if (sentMsg) sentMsg.innerText = window.t('fp_sent', 'Código enviado a') + ' ' + email;
+            // El código llega como notificación de correo en pantalla
+            setTimeout(() => {
+                const toast = document.getElementById('fp-email-toast');
+                const txt = document.getElementById('fp-toast-text');
+                if (txt) txt.innerHTML = window.t('fp_sent', 'Código enviado a') + ' ' + email + '<br><b class="text-brand-gold tracking-[0.35em] text-base">' + window._recoveryCode + '</b>';
+                if (toast) toast.classList.remove('hidden');
+                setTimeout(() => toast?.classList.add('hidden'), 30000);
+            }, 1500);
+        };
+        window.confirmRecoveryCode = function() {
+            const code = document.getElementById('fp-code')?.value.trim() || '';
+            const newPw = document.getElementById('fp-new-password')?.value.trim() || '';
+            document.getElementById('fp-error')?.classList.add('hidden');
+            if (!window._recoveryCode || code !== window._recoveryCode) {
+                window._fpError(window.t('fp_wrong_code', 'Código incorrecto.'));
+                return;
+            }
+            if (newPw.length < 4) {
+                window._fpError(window.t('fp_short_password', 'La contraseña debe tener al menos 4 caracteres.'));
+                return;
+            }
+            let saved = null;
+            try { saved = JSON.parse(localStorage.getItem('damaso_session') || 'null'); } catch(e) {}
+            if (saved) {
+                saved.password = newPw;
+                localStorage.setItem('damaso_session', JSON.stringify(saved));
+                if (window.userSession) window.userSession.password = newPw;
+            }
+            window._recoveryCode = null;
+            document.getElementById('fp-email-toast')?.classList.add('hidden');
+            const s = document.getElementById('fp-success');
+            if (s) { s.innerText = window.t('fp_success', '¡Contraseña actualizada! Ya puedes iniciar sesión.'); s.classList.remove('hidden'); }
+            const pwInput = document.getElementById('session-password');
+            if (pwInput) pwInput.value = '';
+            setTimeout(window.closeForgotPassword, 2200);
         };
         window.showWelcomeAnimation = function(userName, gender) {
             const loading = document.getElementById('login-loading-modal');
@@ -1638,7 +1992,7 @@
                                 </div>
                             </div>
                             <div class="mt-6">
-                                <h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-gold transition-colors leading-tight break-words-custom" onclick="window.openSpecModal(${p.id})">${p.name}</h3>
+                                <h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-gold transition-colors leading-tight break-words-custom" onclick="window.openSpecModal(${p.id})">${window.trPhrase(p.name)}</h3>
                                 <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mt-2 glow-gold">${catTitle}</p>
                             </div>
                         </div>`;
@@ -1661,7 +2015,7 @@
                 menu.classList.remove('translate-y-0', 'opacity-100');
                 const settingsPanel = document.getElementById('settings-panel');
                 const catList = document.getElementById('catalog-menu-list');
-                if (settingsPanel && catList) { settingsPanel.classList.add('hidden'); catList.classList.remove('hidden'); window.showSettingsView('main'); }
+                if (settingsPanel && catList) { settingsPanel.classList.add('hidden'); catList.classList.remove('hidden'); document.getElementById('dropdown-mobile-nav')?.classList.remove('hidden'); window.showSettingsView('main'); }
             }
         };
 
@@ -1672,12 +2026,15 @@
             const settingsPanel = document.getElementById('settings-panel');
             if (!catList || !settingsPanel) return;
             const isOpen = !settingsPanel.classList.contains('hidden');
+            const mobileNav = document.getElementById('dropdown-mobile-nav');
             if (isOpen) {
                 settingsPanel.classList.add('hidden');
                 catList.classList.remove('hidden');
+                mobileNav?.classList.remove('hidden');
             } else {
                 catList.classList.add('hidden');
                 settingsPanel.classList.remove('hidden');
+                mobileNav?.classList.add('hidden');
                 window.showSettingsView('main');
             }
         };
@@ -1702,11 +2059,27 @@
                 const pwEl = document.getElementById('settings-account-password');
                 if (nameEl) nameEl.innerText = window.userSession.name || '';
                 if (emailEl) emailEl.innerText = window.userSession.email || '';
+                window._accountPwVisible = false;
                 if (pwEl) pwEl.innerText = window.userSession.password ? '•'.repeat(window.userSession.password.length) : '••••••••';
+                const eyeIcon = document.getElementById('account-eye-icon');
+                if (eyeIcon) eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
             } else {
                 loggedOut.classList.remove('hidden');
                 loggedIn.classList.add('hidden');
             }
+        };
+
+        // Botón de ojo en Configuración > Cuenta: muestra u oculta la contraseña guardada
+        window._accountPwVisible = false;
+        window.toggleAccountPasswordVisibility = function() {
+            window._accountPwVisible = !window._accountPwVisible;
+            const pwEl = document.getElementById('settings-account-password');
+            const icon = document.getElementById('account-eye-icon');
+            const pw = (window.userSession && window.userSession.password) || '';
+            if (pwEl) pwEl.innerText = window._accountPwVisible ? (pw || '—') : '•'.repeat(pw.length || 8);
+            if (icon) icon.innerHTML = window._accountPwVisible
+                ? '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>'
+                : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
         };
 
         // ── IDIOMA: diccionario interno embebido, sin servicio de traducción externo ──
@@ -1744,36 +2117,138 @@
             cookie_accept: 'Accept and Continue', cart_title: 'Quote Cart', cart_empty: 'Your cart is empty.', cart_send: 'Send Quote Request',
             bot_status: 'BOT CONNECTED', chat_placeholder: 'Write your question...',
             catalog_title_all: 'Complete Catalog', collection_2026: 'Collection 2026',
-            collection_complete: 'Complete Collection', search_results: 'Results'
+            collection_complete: 'Complete Collection', search_results: 'Results',
+            search_prefix: 'Search:',
+            spec_sku: 'SKU Code:', spec_desc: 'Description:', spec_light: 'Light Specs:', spec_electr: 'Electrification:',
+            spec_dims: 'Dimensions:', dim_ancho: 'Width:', dim_alto: 'Height:', dim_fondo: 'Depth:', dim_diametro: 'Diameter:',
+            spec_peso: 'Weight:', spec_mat: 'Materials:', spec_fin: 'Finishes:', modal_quote: 'In Quote', modal_download: 'Download',
+            forgot_password: 'Forgot your password?', fp_title: 'Recover Password',
+            fp_desc: 'We will send a random security code to your registered email.', fp_send_code: 'Send Code',
+            fp_code_placeholder: '6-digit code', fp_new_password: 'New password', fp_change: 'Change Password',
+            fp_no_account: 'No account found with that email.', fp_wrong_code: 'Incorrect code.',
+            fp_short_password: 'Password must be at least 4 characters.', fp_success: 'Password updated! You can now sign in.',
+            fp_sent: 'Code sent to'
         };
 
+        window.dictFR = {
+            menu_btn: 'Menu', catalogo_label: 'Catalogue', ver_todo: 'Tout voir', candiles: 'Lustres', arbotantes: 'Appliques',
+            espejos: 'Miroirs', lamp_mesa: 'Lampes de table', lamp_pie: 'Lampadaires', lamp_techo: 'Plafonniers', lamp_exterior: "Lampes d'extérieur",
+            proyectos: 'Projets spéciaux', volver: '← Retour',
+            settings_account: 'Compte', settings_language: 'Langue', settings_theme: 'Ton de la page', settings_animations: 'Animations', settings_privacy: 'Avis de confidentialité',
+            settings_no_session: "Vous n'êtes pas connecté.", settings_login: 'Se connecter', settings_name: 'Nom', settings_email: 'E-mail', settings_password: 'Mot de passe', settings_logout: 'Se déconnecter',
+            theme_dark: 'Sombre', theme_light: 'Clair', theme_auto: 'Automatique',
+            settings_animations_desc: 'Les animations sont activées par défaut. Vous pouvez les désactiver si vous préférez.', settings_animations_on: 'Animations : Activées', settings_animations_off: 'Animations : Désactivées',
+            privacy_cookies_text: 'Ce site utilise des cookies et le stockage local uniquement pour mémoriser votre session, votre panier de devis et vos préférences (langue, ton et animations). Nous ne partageons pas vos informations avec des tiers. Vous pouvez effacer ces données en vous déconnectant.',
+            nav_home: 'Accueil', nav_clientes: 'Clients', nav_disenador: 'Le Designer', nav_marca: 'Marque', nav_social: 'Réseaux sociaux',
+            search_placeholder: 'Rechercher pièce, modèle ou SKU...', btn_buscar: 'Rechercher',
+            hero_subtitle: "Sculpter l'obscurité avec des pièces de design intemporelles. Fait main au Mexique.",
+            ver_coleccion_btn: 'VOIR LA COLLECTION', contacto_directo_btn: 'CONTACT DIRECT',
+            clientes_label: 'Une confiance qui illumine', clientes_title: 'Nos clients',
+            disenador_quote: '« La lumière est l\'âme de l\'architecture. »',
+            disenador_bio: "Designer basé à Guadalajara, Jalisco. Son travail explore l'intersection entre le brutalisme et l'artisanat mexicain, forgeant le métal et la lumière pour redéfinir l'espace contemporain.",
+            marca_label: 'La marque', marca_clientes: 'Clients', marca_clientes_lower: 'clients', marca_experiencia: 'Expérience', marca_anios: 'ans', marca_de_experiencia: "d'expérience",
+            marca_proyectos: 'Projets', marca_proyectos_lower: 'projets', marca_empresa: 'Entreprise', marca_empresa_tapatia: 'entreprise de Guadalajara',
+            marca_filosofia_label: 'Philosophie de la marque',
+            marca_filosofia_heading: 'Nous ne fabriquons pas des lampes. Nous créons des points focaux qui transforment le quotidien en quelque chose d\'<span class="italic text-brand-gold glow-gold">extraordinaire</span>.',
+            footer_tagline: 'Éclairage haut de gamme et objets de design.', footer_estudio: 'Studio', footer_social: 'Réseaux',
+            login_title: 'Identifiants', login_gender_label: 'Genre', login_gender_f: 'Féminin', login_gender_m: 'Masculin',
+            login_name_placeholder: 'Nom complet ou cabinet', login_email_placeholder: 'Adresse e-mail', login_password_placeholder: 'Mot de passe',
+            login_address_placeholder: 'Adresse / Ville (Facultatif)', login_validation_error: 'Veuillez remplir tous les champs requis.', login_accept_btn: 'Accepter et entrer',
+            login_cancel_btn: 'Annuler', login_prompt_title: 'Souhaitez-vous vous connecter ?', login_prompt_advantage_label: 'Avantages de votre compte',
+            login_prompt_text: 'En vous connectant, vous pouvez <strong class="text-white">enregistrer vos conversations</strong> avec DAMASO AI, conserver votre panier de devis et remplir automatiquement vos PDF.',
+            cookie_title: 'Avis sur les cookies', cookie_text: 'Nous utilisons des cookies et le stockage local pour mémoriser votre session et vos préférences.',
+            cookie_agree: "J'accepte", cookie_read_btn: 'Lire la politique de cookies',
+            cookie_accept: 'Accepter et continuer', cart_title: 'Panier de devis', cart_empty: 'Votre panier est vide.', cart_send: 'Envoyer la demande de devis',
+            bot_status: 'BOT CONNECTÉ', chat_placeholder: 'Écrivez votre question...',
+            catalog_title_all: 'Catalogue complet', collection_2026: 'Collection 2026',
+            collection_complete: 'Collection complète', search_results: 'Résultats',
+            search_prefix: 'Recherche :',
+            spec_sku: 'Code SKU :', spec_desc: 'Description :', spec_light: 'Specs lumineuses :', spec_electr: 'Électrification :',
+            spec_dims: 'Dimensions :', dim_ancho: 'Largeur :', dim_alto: 'Hauteur :', dim_fondo: 'Profondeur :', dim_diametro: 'Diamètre :',
+            spec_peso: 'Poids :', spec_mat: 'Matériaux :', spec_fin: 'Finitions :', modal_quote: 'Au devis', modal_download: 'Télécharger',
+            forgot_password: 'Mot de passe oublié ?', fp_title: 'Récupérer le mot de passe',
+            fp_desc: 'Nous enverrons un code de sécurité aléatoire à votre e-mail enregistré.', fp_send_code: 'Envoyer le code',
+            fp_code_placeholder: 'Code à 6 chiffres', fp_new_password: 'Nouveau mot de passe', fp_change: 'Changer le mot de passe',
+            fp_no_account: 'Aucun compte trouvé avec cet e-mail.', fp_wrong_code: 'Code incorrect.',
+            fp_short_password: 'Le mot de passe doit contenir au moins 4 caractères.', fp_success: 'Mot de passe mis à jour ! Vous pouvez maintenant vous connecter.',
+            fp_sent: 'Code envoyé à'
+        };
+
+        window.dictZH = {
+            menu_btn: '菜单', catalogo_label: '产品目录', ver_todo: '查看全部', candiles: '吊灯', arbotantes: '壁灯',
+            espejos: '镜子', lamp_mesa: '台灯', lamp_pie: '落地灯', lamp_techo: '吸顶灯', lamp_exterior: '户外灯',
+            proyectos: '特别项目', volver: '← 返回',
+            settings_account: '账户', settings_language: '语言', settings_theme: '页面色调', settings_animations: '动画', settings_privacy: '隐私声明',
+            settings_no_session: '您尚未登录。', settings_login: '登录', settings_name: '姓名', settings_email: '邮箱', settings_password: '密码', settings_logout: '退出登录',
+            theme_dark: '深色', theme_light: '浅色', theme_auto: '自动',
+            settings_animations_desc: '动画默认开启。如果您愿意，可以将其关闭。', settings_animations_on: '动画：开启', settings_animations_off: '动画：关闭',
+            privacy_cookies_text: '本网站仅使用 Cookie 和本地存储来记住您的会话、报价购物车和偏好设置（语言、色调和动画）。我们不会与第三方分享您的信息。您可以通过退出登录来清除这些数据。',
+            nav_home: '首页', nav_clientes: '客户', nav_disenador: '设计师', nav_marca: '品牌', nav_social: '社交媒体',
+            search_placeholder: '搜索产品、型号或SKU...', btn_buscar: '搜索',
+            hero_subtitle: '以永恒的设计作品雕刻黑暗。墨西哥手工制作。',
+            ver_coleccion_btn: '查看系列', contacto_directo_btn: '直接联系',
+            clientes_label: '照亮信任', clientes_title: '我们的客户',
+            disenador_quote: '“光是建筑的灵魂。”',
+            disenador_bio: '设计师常驻哈利斯科州瓜达拉哈拉。他的作品探索粗犷主义与墨西哥手工艺的交汇，锻造金属与光线，重新定义当代空间。',
+            marca_label: '品牌', marca_clientes: '客户', marca_clientes_lower: '位客户', marca_experiencia: '经验', marca_anios: '年', marca_de_experiencia: '经验',
+            marca_proyectos: '项目', marca_proyectos_lower: '个项目', marca_empresa: '公司', marca_empresa_tapatia: '瓜达拉哈拉公司',
+            marca_filosofia_label: '品牌理念',
+            marca_filosofia_heading: '我们不只是制造灯具。我们创造将日常变为<span class="italic text-brand-gold glow-gold">非凡</span>的焦点。',
+            footer_tagline: '高端照明与设计品。', footer_estudio: '工作室', footer_social: '社交媒体',
+            login_title: '账户信息', login_gender_label: '性别', login_gender_f: '女', login_gender_m: '男',
+            login_name_placeholder: '全名或公司名称', login_email_placeholder: '电子邮箱', login_password_placeholder: '密码',
+            login_address_placeholder: '地址/城市（可选）', login_validation_error: '请填写所有必填项。', login_accept_btn: '接受并进入',
+            login_cancel_btn: '取消', login_prompt_title: '要登录吗？', login_prompt_advantage_label: '账户优势',
+            login_prompt_text: '登录后您可以<strong class="text-white">保存与 DAMASO AI 的对话</strong>、保留报价购物车并自动填写 PDF。',
+            cookie_title: 'Cookie 声明', cookie_text: '我们使用 Cookie 和本地存储来记住您的会话和偏好。',
+            cookie_agree: '我同意', cookie_read_btn: '阅读 Cookie 政策',
+            cookie_accept: '接受并继续', cart_title: '报价购物车', cart_empty: '您的购物车是空的。', cart_send: '发送报价请求',
+            bot_status: '机器人已连接', chat_placeholder: '输入您的问题...',
+            catalog_title_all: '完整目录', collection_2026: '2026系列',
+            collection_complete: '完整系列', search_results: '搜索结果',
+            search_prefix: '搜索：',
+            spec_sku: 'SKU编号：', spec_desc: '描述：', spec_light: '灯光规格：', spec_electr: '电气认证：',
+            spec_dims: '尺寸：', dim_ancho: '宽：', dim_alto: '高：', dim_fondo: '深：', dim_diametro: '直径：',
+            spec_peso: '重量：', spec_mat: '材质：', spec_fin: '表面处理：', modal_quote: '加入报价', modal_download: '下载',
+            forgot_password: '忘记密码？', fp_title: '找回密码',
+            fp_desc: '我们将向您注册的邮箱发送随机安全码。', fp_send_code: '发送验证码',
+            fp_code_placeholder: '6位验证码', fp_new_password: '新密码', fp_change: '更改密码',
+            fp_no_account: '未找到使用该邮箱的账户。', fp_wrong_code: '验证码不正确。',
+            fp_short_password: '密码至少需要4个字符。', fp_success: '密码已更新！现在可以登录了。',
+            fp_sent: '验证码已发送至'
+        };
+
+        window.dicts = { en: window.dictEN, fr: window.dictFR, zh: window.dictZH };
+
         window.t = function(key, esFallback) {
-            if (window.appLang === 'en' && window.dictEN[key]) return window.dictEN[key];
-            return esFallback;
+            const dict = window.dicts[window.appLang];
+            return (dict && dict[key]) ? dict[key] : esFallback;
         };
 
         window.applyStaticTranslations = function() {
+            const dict = window.dicts[window.appLang] || null;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (el.dataset.i18nOrig === undefined) el.dataset.i18nOrig = el.innerText;
-                el.innerText = (window.appLang === 'en' && window.dictEN[key]) ? window.dictEN[key] : el.dataset.i18nOrig;
+                el.innerText = (dict && dict[key]) ? dict[key] : el.dataset.i18nOrig;
             });
             document.querySelectorAll('[data-i18n-html]').forEach(el => {
                 const key = el.getAttribute('data-i18n-html');
                 if (el.dataset.i18nOrig === undefined) el.dataset.i18nOrig = el.innerHTML;
-                el.innerHTML = (window.appLang === 'en' && window.dictEN[key]) ? window.dictEN[key] : el.dataset.i18nOrig;
+                el.innerHTML = (dict && dict[key]) ? dict[key] : el.dataset.i18nOrig;
             });
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-i18n-placeholder');
                 if (el.dataset.i18nOrig === undefined) el.dataset.i18nOrig = el.getAttribute('placeholder') || '';
-                el.setAttribute('placeholder', (window.appLang === 'en' && window.dictEN[key]) ? window.dictEN[key] : el.dataset.i18nOrig);
+                el.setAttribute('placeholder', (dict && dict[key]) ? dict[key] : el.dataset.i18nOrig);
             });
-            document.getElementById('lang-opt-es')?.querySelector('.lang-check')?.replaceChildren(document.createTextNode(window.appLang === 'es' ? '✓' : ''));
-            document.getElementById('lang-opt-en')?.querySelector('.lang-check')?.replaceChildren(document.createTextNode(window.appLang === 'en' ? '✓' : ''));
+            ['es', 'en', 'fr', 'zh'].forEach(code => {
+                document.getElementById('lang-opt-' + code)?.querySelector('.lang-check')?.replaceChildren(document.createTextNode(window.appLang === code ? '✓' : ''));
+            });
         };
 
         window.setAppLanguage = function(code) {
-            window.appLang = code === 'en' ? 'en' : 'es';
+            window.appLang = ['en', 'fr', 'zh'].includes(code) ? code : 'es';
             localStorage.setItem('damaso_lang', window.appLang);
             window.applyStaticTranslations();
             if (window.renderCatalog && window.dbProducts) {
@@ -1841,6 +2316,20 @@
 
         // ── ANIMACIÓN DE CATEGORÍA MEJORADA — PANTALLA COMPLETA ──
         window.filterCatalogWithAnimation = function(cat) {
+            // Con las animaciones apagadas: ir directo a la categoría, sin overlay negro
+            if (!window.animationsEnabled) {
+                const menu = document.getElementById('dropdown-menu');
+                if (menu) { menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2'); menu.classList.remove('translate-y-0', 'opacity-100'); }
+                const searchInput = document.getElementById('live-search');
+                if (searchInput) searchInput.value = '';
+                document.getElementById('btn-piece-search')?.classList.add('opacity-0', 'pointer-events-none', 'scale-90');
+                const filtered = cat === 'all' ? window.dbProducts : window.dbProducts.filter(p => p.category === cat);
+                window.renderCatalog(filtered);
+                document.getElementById('catalog-title').innerText = cat === 'all' ? window.t('catalog_title_all', 'Catálogo Completo') : window.catLabel(cat);
+                document.getElementById('catalog-subtitle').innerText = window.t('collection_2026', 'Colección 2026');
+                document.getElementById('coleccion')?.scrollIntoView({ behavior: 'auto' });
+                return;
+            }
             // Evitar doble-click
             if (window._catAnimating) return;
             window._catAnimating = true;
@@ -1948,20 +2437,20 @@
             document.getElementById('modal-img-element').src = p.img;
             const nSpn = document.getElementById('modal-img-name');
             if (nSpn) nSpn.innerText = p.img;
-            document.getElementById('modal-title').innerText = p.name;
-            document.getElementById('modal-desc').innerText = p.desc;
+            document.getElementById('modal-title').innerText = window.trPhrase(p.name);
+            document.getElementById('modal-desc').innerText = window.trPhrase(p.desc);
             document.getElementById('modal-sku').innerText = p.sku;
-            document.getElementById('modal-luz').innerText = p.specsLight;
+            document.getElementById('modal-luz').innerText = window.trPhrase(p.specsLight);
             const luzLabel = document.getElementById('modal-luz-label');
-            if (luzLabel) luzLabel.innerText = (p.category === 'arbotantes') ? 'Descripción:' : 'Specs Lumínicas:';
-            document.getElementById('modal-cable').innerText = p.cable;
+            if (luzLabel) luzLabel.innerText = (p.category === 'arbotantes') ? window.t('spec_desc', 'Descripción:') : window.t('spec_light', 'Specs Lumínicas:');
+            document.getElementById('modal-cable').innerText = window.trPhrase(p.cable);
             document.getElementById('modal-w').innerText = p.dims.w;
             document.getElementById('modal-h').innerText = p.dims.h;
             document.getElementById('modal-d').innerText = p.dims.d;
             document.getElementById('modal-dia').innerText = p.dims.dia;
             document.getElementById('modal-peso').innerText = p.peso;
-            document.getElementById('modal-mat').innerText = p.mat;
-            document.getElementById('modal-fin').innerText = p.fin;
+            document.getElementById('modal-mat').innerText = window.trPhrase(p.mat);
+            document.getElementById('modal-fin').innerText = window.trPhrase(p.fin);
             window.updateModalQtyDisplay();
             const modalMsgs = document.getElementById('modal-ai-messages');
             if (modalMsgs) modalMsgs.innerHTML = '';
@@ -2046,7 +2535,7 @@
                     <div class="flex items-center gap-4 border-b border-brand-border pb-4">
                         <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded-sm" alt="">
                         <div class="flex-1 min-w-0">
-                            <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${item.name}</h4>
+                            <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${window.trPhrase(item.name)}</h4>
                             <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
                         </div>
                         <button onclick="window.removeFromCart(${item.id})" class="glass-btn p-2 rounded-full text-brand-muted hover:text-red-400 transition-colors shrink-0">
@@ -3432,10 +3921,10 @@ NORMAS:
                 if (subtitle) subtitle.innerText = window.t('collection_2026', 'Colección 2026');
                 return;
             }
-            const results = window.dbProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+            const results = window.dbProducts.filter(p => p.name.toLowerCase().includes(q) || window.trPhrase(p.name).toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q) || window.catLabel(p.category).toLowerCase().includes(q));
             window.renderCatalog(results);
             if (title) title.innerText = window.t('search_results', 'Resultados');
-            if (subtitle) subtitle.innerText = (window.appLang === 'en' ? `Search: "${q}"` : `Búsqueda: "${q}"`);
+            if (subtitle) subtitle.innerText = window.t('search_prefix', 'Búsqueda:') + ' "' + q + '"';
             if (results.length > 0) {
                 setTimeout(() => {
                     document.getElementById('product-card-' + results[0].id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
