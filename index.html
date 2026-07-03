@@ -591,6 +591,7 @@
         </div>
         <div class="category-divider" id="entry-divider"></div>
         <span id="entry-studio" class="opacity-0 transition-all duration-1000 font-editorial italic text-brand-gold mt-2 glow-gold" style="font-size: clamp(1.8rem, 5vw, 4rem);">Studio</span>
+        <button type="button" onclick="window.skipEntryAnimation()" class="glass-gold absolute left-1/2 -translate-x-1/2 text-brand-gold px-10 py-3 rounded-full text-[11px] tracking-[0.25em] uppercase font-bold shadow-[0_0_20px_rgba(212,175,55,0.35)] hover:scale-105 transition-transform" style="bottom: calc(2.5rem + env(safe-area-inset-bottom));" data-i18n="skip_btn">Saltar</button>
     </div>
 
     <!-- ── MODALES INICIO ── -->
@@ -749,7 +750,7 @@
                     <a href="#coleccion" onclick="window.filterCatalogWithAnimation('mesa')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="lamp_mesa">Lámparas de mesa</a>
                     <a href="#coleccion" onclick="window.filterCatalogWithAnimation('pie')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="lamp_pie">Lámparas de pie</a>
                     <a href="#coleccion" onclick="window.filterCatalogWithAnimation('techo')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="lamp_techo">Lámparas de techo</a>
-                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('exterior')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="lamp_exterior">Lámparas de exterior</a>
+                    <a href="#coleccion" onclick="window.filterCatalogWithAnimation('briseras')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="briseras_menu">Briseras</a>
                     <a href="#coleccion" onclick="window.filterCatalogWithAnimation('proyectos')" class="block px-6 py-3 text-xs tracking-widest text-brand-muted hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="proyectos">Proyectos especiales</a>
                 </div>
                 <div id="settings-panel" class="hidden">
@@ -1273,6 +1274,7 @@
             { id: 84, name: "Candil Marino", category: "candiles", price: 65000, img: "20200121_085904.png", sku: "DM-CAN-007", desc: "Una obra monumental para proyectos a gran escala.", specsLight: "candil, fabricado con cuerdas, marinas y remo de madera con iluminación", cable: "certificado UL y NOM", dims: { w: "1.20 m", h: "2.50 m", d: "2.90 m", dia: "N/A" }, peso: "80 kg", volt: "110-240V", mat: "fabricado en aluminio con cuerda marina, con remos de madera de rosa morada", fin: "pintura, electrostática, madera tratada", time: "8 a 10 semanas", cert: "NOM" },
             { id: 85, name: "Candil Órbitas", category: "candiles", price: 48000, img: "Image_7.png", sku: "DM-CAN-008", desc: "Aros monumentales suspendidos en diferentes ejes.", specsLight: "candil fabricado en madera, con difusor en acrílico", cable: "certificado UL y NOM", dims: { w: "150 cm", h: "3 m", d: "150 cm", dia: "N/A" }, peso: "30 kg", volt: "110-240V", mat: "madera/acrílico", fin: "pintura automotriz", time: "5 a 6 semanas", cert: "NOM" },
             { id: 98, name: "Candil Radiante", category: "candiles", price: 38500, img: "Unknown-2.png", sku: "DM-CAN-009", desc: "Candil monumental starburst en latón brillante con esferas de cristal soplado.", specsLight: "candil fabricado en Laton, con esferas de vidrio", cable: "certificado UL y NOM", dims: { w: "60 cm", h: "120 cm", d: "60 cm", dia: "60 cm" }, peso: "10 kg", volt: "110-120V", mat: "laton y vidrio", fin: "pulido", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 131, name: "Candil Cilindros de Cristal", category: "candiles", price: 18500, img: "candil_10.png", sku: "DM-CAN-010", desc: "Candil de cuatro brazos en latón satinado con cilindros de cristal transparente.", specsLight: "candil fabricado en Laton, con pantallas de vidrio", cable: "certificado UL y NOM", dims: { w: "70 cm", h: "45 cm", d: "70 cm", dia: "N/A" }, peso: "8 kg", volt: "110-120V", mat: "Laton/vidrio", fin: "Laton satinado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 5, name: "Arbotante recinto", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Lámpara fabricada con recinto y acero inoxidable con pantalla en vidrio", specsLight: "Lámpara fabricada con recinto y acero inoxidable con pantalla en vidrio", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "40 cm", d: "15 cm", dia: "12 cm" }, peso: "5 kg", volt: "110-120V", mat: "Acero inoxidable/recinto/vidrio", fin: "Recinto natural/Pulido", time: "3 a 4 semanas", cert: "NOM" },
             { id: 6, name: "Arbotante, Marco", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-002", desc: "Lámpara fabricada en aluminio, con terminado en pintura electrostática y pantalla de vidrio blanco", specsLight: "Lámpara fabricada en aluminio, con terminado en pintura electrostática y pantalla de vidrio blanco", cable: "Certificado UL y NOM", dims: { w: "25 cm", h: "50 cm", d: "25 cm", dia: "12 cm" }, peso: "5 kg", volt: "110-120V", mat: "Aluminio/vidrio", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
             { id: 7, name: "Arbotante esferas", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-003", desc: "Lámpara fabricada en aluminio, terminado en pintura electrostática y pantalla de vidrio", specsLight: "Lámpara fabricada en aluminio, terminado en pintura electrostática y pantalla de vidrio", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "1 m", d: "50 cm", dia: "20 cm" }, peso: "10 kg", volt: "110-240V", mat: "Aluminio/vidrio", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
@@ -1298,6 +1300,7 @@
             { id: 125, name: "Arbotante escudo", category: "arbotantes", price: 8600, img: "arbotante_13.jpeg", sku: "DM-ARB-023", desc: "Lámpara fabricada en metal con pantalla en vidrio opalino", specsLight: "Lámpara fabricada en metal con pantalla en vidrio opalino", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "45 cm", d: "12 cm", dia: "15 cm" }, peso: "4 kg", volt: "110-120V", mat: "Metal/vidrio", fin: "Bronce/negro mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 126, name: "Arbotante hoja", category: "arbotantes", price: 12500, img: "arbotante_14.png", sku: "DM-ARB-024", desc: "Lámpara fabricada en metal con pantallas en vidrio opalino", specsLight: "Lámpara fabricada en metal con pantallas en vidrio opalino", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "120 cm", d: "15 cm", dia: "N/A" }, peso: "8 kg", volt: "110-120V", mat: "Metal/vidrio", fin: "Negro mate", time: "4 a 5 semanas", cert: "NOM" },
             { id: 127, name: "Arbotante madera doble", category: "arbotantes", price: 7200, img: "arbotante_15.jpeg", sku: "DM-ARB-025", desc: "Lámpara fabricada en madera con pantallas en vidrio opalino", specsLight: "Lámpara fabricada en madera con pantallas en vidrio opalino", cable: "Certificado UL/NOM", dims: { w: "12 cm", h: "45 cm", d: "10 cm", dia: "10 cm" }, peso: "3 kg", volt: "110-120V", mat: "Madera/vidrio", fin: "Madera natural", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 128, name: "Arbotante acanalado", category: "arbotantes", price: 11800, img: "arbotante_16.jpeg", sku: "DM-ARB-026", desc: "Lámpara fabricada en metal con difusor en vidrio", specsLight: "Lámpara fabricada en metal con difusor en vidrio", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "90 cm", d: "20 cm", dia: "N/A" }, peso: "6 kg", volt: "110-120V", mat: "Metal/vidrio", fin: "Bronce cepillado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
             { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "ESPEJO_1.PNG", sku: "DM-ESP-002", desc: "Espejo cápsula con retroiluminación LED perimetral.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante", time: "3 a 4 semanas", cert: "NOM" },
             { id: 11, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Cristal envejecido artesanalmente con marco de acero.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
@@ -1340,6 +1343,9 @@
             { id: 109, name: "Lámpara Mesa Geométrica Madera y Níquel", category: "mesa", price: 5900, img: "lampara_de_mesa_9.png", sku: "DM-MES-020", desc: "Base geométrica de madera oscura y marco rectangular de níquel con pantalla rectangular de lino.", specsLight: "1x E26 LED 9W, 2700K", cable: "Cable textil negro 1.8m", dims: { w: "35 cm", h: "58 cm", d: "20 cm", dia: "N/A" }, peso: "3.8 kg", volt: "110-120V", mat: "Madera oscura, níquel cepillado y lino", fin: "Madera ébano y níquel cepillado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 110, name: "Lámpara Mesa Jaula Metálica", category: "mesa", price: 4800, img: "lampara_de_mesa_10.png", sku: "DM-MES-021", desc: "Base de varillas de acero entrelazadas en forma de urna con pantalla cilíndrica de lino taupe.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable textil negro 1.8m", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "30 cm" }, peso: "2.6 kg", volt: "110-120V", mat: "Acero forjado y lino", fin: "Negro mate forjado", time: "3 semanas", cert: "NOM" },
             { id: 111, name: "Lámpara Mesa Urna Torneada", category: "mesa", price: 5600, img: "lampara_de_mesa_11.png", sku: "DM-MES-022", desc: "Base de madera torneada en forma de urna con pantalla cónica color marfil.", specsLight: "1x E26 LED 9W, 2700K", cable: "Cable textil café 1.8m", dims: { w: "33 cm", h: "65 cm", d: "33 cm", dia: "33 cm" }, peso: "4.4 kg", volt: "110-120V", mat: "Madera torneada maciza y satén", fin: "Madera nogal envejecido", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 129, name: "Lámpara Mesa Trompeta Latón", category: "mesa", price: 5800, img: "lampara_de_mesa_12.jpeg", sku: "DM-MES-023", desc: "Base tipo trompeta en latón satinado con acentos negros y pantalla de tambor en tela blanca.", specsLight: "1x E26 LED 9W, 2700K", cable: "Cable textil negro 1.8m", dims: { w: "35 cm", h: "62 cm", d: "35 cm", dia: "35 cm" }, peso: "3.5 kg", volt: "110-120V", mat: "Latón/tela", fin: "Latón satinado y negro mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 130, name: "Lámpara Mesa Contrapeso Negra", category: "mesa", price: 6400, img: "lampara_de_mesa_13.jpeg", sku: "DM-MES-024", desc: "Estructura en T de acero negro con remates de latón moleteado y pantalla cónica con interior dorado.", specsLight: "1x E26 LED 9W, 2700K", cable: "Cable textil negro 1.8m", dims: { w: "45 cm", h: "70 cm", d: "30 cm", dia: "30 cm" }, peso: "4 kg", volt: "110-120V", mat: "Acero/latón/tela", fin: "Negro mate e interior dorado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 132, name: "Lámpara Mesa Tallos Duales", category: "mesa", price: 6900, img: "lampara_de_mesa_14.png", sku: "DM-MES-025", desc: "Base rectangular con dos tallos ramificados en acero gris y pantallas cilíndricas de lino texturizado.", specsLight: "2x E26 LED 8W, 2700K", cable: "Cable textil gris 1.8m", dims: { w: "30 cm", h: "75 cm", d: "18 cm", dia: "15 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero/lino", fin: "Gris grafito mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 35, name: "Lámpara de Buró Texturizada", category: "pie", price: 4200, img: "lampara_de_mesa_3.png", sku: "DM-PIE-001", desc: "Base sólida en forma de gota texturizada.", specsLight: "1x E26 LED 6W, 2700K", cable: "Cable blanco 1.5m", dims: { w: "30 cm", h: "85 cm", d: "30 cm", dia: "30 cm" }, peso: "4.2 kg", volt: "110-120V", mat: "Pasta de estuco y lino", fin: "Crema texturizado", time: "2 a 3 semanas", cert: "NOM" },
             { id: 36, name: "Lámpara de Pie Esferas", category: "pie", price: 9200, img: "nueva_foto_1.png", sku: "DM-PIE-002", desc: "Mástil de esferas de madera de nogal torneadas a mano.", specsLight: "1x E26 LED 12W, 2700K cálida", cable: "Cable textil negro 2.5m", dims: { w: "40 cm", h: "160 cm", d: "40 cm", dia: "40 cm" }, peso: "5 kg", volt: "110-120V", mat: "Nogal sólido y lino", fin: "Nogal mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 53, name: "Lámpara de Pie Botánica", category: "pie", price: 12500, img: "053C59D3-9C3F-4B14-8290-4514331538F9.png", sku: "DM-PIE-003", desc: "Mástil orgánico inspirado en la naturaleza, forjado en latón mate.", specsLight: "1x E26 LED 10W, 2700K cálida", cable: "Cable textil dorado 2m", dims: { w: "45 cm", h: "165 cm", d: "45 cm", dia: "45 cm" }, peso: "6.5 kg", volt: "110-120V", mat: "Latón sólido y pantalla de lino natural", fin: "Latón dorado mate", time: "4 a 5 semanas", cert: "NOM" },
@@ -1375,10 +1381,10 @@
             { id: 117, name: "Clúster Esferas de Cristal Colgantes", category: "techo", price: 14200, img: "lampara_de_techo_3.png", sku: "DM-TEC-026", desc: "Conjunto de esferas de cristal soplado a distintas alturas suspendidas de cables textiles blancos.", specsLight: "6x G9 LED 3W cálida", cable: "Cables textiles blancos a distintas longitudes", dims: { w: "70 cm", h: "A medida", d: "40 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Cristal soplado y cable textil", fin: "Cristal transparente y blanco", time: "4 a 5 semanas", cert: "NOM" },
             { id: 118, name: "Colgante Globo Madera y Negro", category: "techo", price: 5400, img: "lampara_de_techo_4.png", sku: "DM-TEC-027", desc: "Globo de cristal opalino suspendido de varilla negra con collarín de madera natural.", specsLight: "1x E26 LED Globo 9W cálida", cable: "Varilla rígida ajustable negra", dims: { w: "25 cm", h: "60 cm", d: "25 cm", dia: "25 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero negro, madera natural y cristal opalino", fin: "Negro mate y madera natural", time: "3 a 4 semanas", cert: "NOM" },
             { id: 119, name: "Colgante Pantalla Ratán Bicolor", category: "techo", price: 4600, img: "lampara_de_techo_5.png", sku: "DM-TEC-028", desc: "Pantalla acampanada de ratán tejido con franja inferior color turquesa.", specsLight: "1x E26 LED 8W, 2700K", cable: "Cable textil blanco ajustable", dims: { w: "38 cm", h: "26 cm", d: "38 cm", dia: "38 cm" }, peso: "1.4 kg", volt: "110-120V", mat: "Ratán tejido natural", fin: "Natural y turquesa", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 46, name: "Farol Exterior Negro", category: "exterior", price: 5200, img: "IMG_2012.png", sku: "DM-EXT-001", desc: "Farol de piso o mesa para terrazas exteriores.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero treated y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
-            { id: 47, name: "Lámpara Exterior Rústica Cuerda", category: "exterior", price: 3600, img: "IMG_2020.png", sku: "DM-EXT-002", desc: "Luminaria exterior con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
-            { id: 86, name: "Farol Linterna Latón", category: "exterior", price: 6800, img: "image_exterior.png", sku: "DM-EXT-003", desc: "Farol negro mate con corona de latón pulido.", specsLight: "1x E26 LED 8W cálida", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero tratado, latón macizo y cristal templado", fin: "Negro mate exterior y latón brillante", time: "3 a 4 semanas", cert: "NOM, IP65" },
-            { id: 112, name: "Farol Linterna Asa de Cuero", category: "exterior", price: 4200, img: "lampara_exterior_4.png", sku: "DM-EXT-004", desc: "Farol portátil de acero negro con asa de piel y compartimento de vela.", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "20 cm", h: "40 cm", d: "20 cm", dia: "N/A" }, peso: "2.8 kg", volt: "N/A", mat: "Acero tratado y piel natural", fin: "Negro mate exterior", time: "2 a 3 semanas", cert: "NOM, IP65" },
+            { id: 46, name: "Farol Exterior Negro", category: "briseras", price: 5200, img: "IMG_2012.png", sku: "DM-BRI-001", desc: "Farol de piso o mesa para terrazas exteriores.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero treated y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
+            { id: 47, name: "Lámpara Exterior Rústica Cuerda", category: "briseras", price: 3600, img: "IMG_2020.png", sku: "DM-BRI-002", desc: "Luminaria exterior con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
+            { id: 86, name: "Farol Linterna Latón", category: "briseras", price: 6800, img: "image_exterior.png", sku: "DM-BRI-003", desc: "Farol negro mate con corona de latón pulido.", specsLight: "1x E26 LED 8W cálida", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero tratado, latón macizo y cristal templado", fin: "Negro mate exterior y latón brillante", time: "3 a 4 semanas", cert: "NOM, IP65" },
+            { id: 112, name: "Farol Linterna Asa de Cuero", category: "briseras", price: 4200, img: "lampara_exterior_4.png", sku: "DM-BRI-004", desc: "Farol portátil de acero negro con asa de piel y compartimento de vela.", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "20 cm", h: "40 cm", d: "20 cm", dia: "N/A" }, peso: "2.8 kg", volt: "N/A", mat: "Acero tratado y piel natural", fin: "Negro mate exterior", time: "2 a 3 semanas", cert: "NOM, IP65" },
             { id: 48, name: "Instalación Globos Vidrio", category: "proyectos", price: 85000, img: "IMG_2013.png", sku: "DM-PRO-001", desc: "Instalación artística de esferas de vidrio soplado de colores.", specsLight: "Módulos LED 3W internos x 15", cable: "Instalación a plafón oculto", dims: { w: "200 cm", h: "100 cm", d: "200 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Vidrio soplado artesanal", fin: "Colores translúcidos variados", time: "8 a 10 semanas", cert: "NOM" },
             { id: 49, name: "Arbotante Esferas Cruz", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-PRO-002", desc: "Cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
             { id: 50, name: "Lámpara de Pie Minimalista", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-003", desc: "Perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
@@ -1396,22 +1402,22 @@
         window.catMap = {
             candiles: "Candiles", arbotantes: "Arbotantes", espejos: "Espejos",
             mesa: "Lámparas de Mesa", pie: "Lámparas de Pie", techo: "Lámparas de Techo",
-            exterior: "Lámparas de Exterior", proyectos: "Proyectos Especiales"
+            briseras: "Briseras", proyectos: "Proyectos Especiales"
         };
         window.catMapEN = {
             candiles: "Chandeliers", arbotantes: "Wall Sconces", espejos: "Mirrors",
             mesa: "Table Lamps", pie: "Floor Lamps", techo: "Ceiling Lamps",
-            exterior: "Outdoor Lamps", proyectos: "Special Projects"
+            briseras: "Hurricane Lamps", proyectos: "Special Projects"
         };
         window.catMapFR = {
             candiles: "Lustres", arbotantes: "Appliques", espejos: "Miroirs",
             mesa: "Lampes de table", pie: "Lampadaires", techo: "Plafonniers",
-            exterior: "Lampes d'extérieur", proyectos: "Projets spéciaux"
+            briseras: "Photophores", proyectos: "Projets spéciaux"
         };
         window.catMapZH = {
             candiles: "吊灯", arbotantes: "壁灯", espejos: "镜子",
             mesa: "台灯", pie: "落地灯", techo: "吸顶灯",
-            exterior: "户外灯", proyectos: "特别项目"
+            briseras: "防风灯", proyectos: "特别项目"
         };
         window.catLabel = function(key) {
             const maps = { en: window.catMapEN, fr: window.catMapFR, zh: window.catMapZH };
@@ -1533,6 +1539,13 @@
             ["escalera", "ladder", "échelle", "梯形"],
             ["escudo", "shield", "bouclier", "盾形"],
             ["hoja", "leaf", "feuille", "叶形"],
+            ["acanalado", "fluted", "cannelée", "凹槽"],
+            ["trompeta", "trumpet", "trompette", "喇叭形"],
+            ["contrapeso", "counterweight", "contrepoids", "平衡臂"],
+            ["tallos", "stems", "tiges", "枝干"],
+            ["cilindros", "cylinders", "cylindres", "圆柱"],
+            ["Farol", "Lantern", "Lanterne", "灯笼"],
+            ["difusor en vidrio", "with glass diffuser", "avec diffuseur en verre", "，玻璃扩散罩"],
             ["cascada", "cascade", "cascade", "瀑布"],
             ["placa", "plate", "plaque", "面板"],
             ["tallo", "stem", "tige", "枝干"],
@@ -1919,12 +1932,30 @@
         };
 
         // ── ANIMACIÓN DE ENTRADA MEJORADA ──
-        window.startAppAnimation = function() {
+        // Cierra la animación de entrada y continúa el flujo normal (bienvenida o cookies).
+        // fast=true (botón Saltar): sin deslizamiento, pasa directo a lo de siempre.
+        window._entryDone = false;
+        window.finishEntryAnimation = function(fast) {
+            if (window._entryDone) return;
+            window._entryDone = true;
             const entry = document.getElementById('entry-animation');
+            const cookieModal = document.getElementById('cookie-modal');
+            const proceed = () => {
+                if (entry) entry.style.display = 'none';
+                if (window.userSession) { window.showWelcomeAnimation(window.userSession.name, window.userSession.gender); }
+                else if (cookieModal) { cookieModal.classList.remove('hidden'); void cookieModal.offsetWidth; cookieModal.classList.remove('opacity-0', 'pointer-events-none'); }
+            };
+            if (fast || !entry) { proceed(); return; }
+            entry.style.transition = 'transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            entry.style.transform = 'translateY(-100%)';
+            setTimeout(proceed, 1500);
+        };
+        window.skipEntryAnimation = function() { window.finishEntryAnimation(true); };
+
+        window.startAppAnimation = function() {
             const letters = Array.from(document.querySelectorAll('#entry-damaso-letters .entry-letter'));
             const studio = document.getElementById('entry-studio');
             const divider = document.getElementById('entry-divider');
-            const cookieModal = document.getElementById('cookie-modal');
 
             // Animar letras con stagger
             setTimeout(() => {
@@ -1941,18 +1972,8 @@
                         studio.style.filter = 'blur(0)';
                     }
                 }, letters.length * 120 + 300);
-                // Salida
-                setTimeout(() => {
-                    entry.style.transition = 'transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                    entry.style.transform = 'translateY(-100%)';
-                    setTimeout(() => {
-                        entry.style.display = 'none';
-                        if (window.userSession) { window.showWelcomeAnimation(window.userSession.name, window.userSession.gender); }
-                        else {
-                            if (cookieModal) { cookieModal.classList.remove('hidden'); void cookieModal.offsetWidth; cookieModal.classList.remove('opacity-0', 'pointer-events-none'); }
-                        }
-                    }, 1500);
-                }, letters.length * 120 + 2500);
+                // Salida — la animación completa dura 10 segundos (o antes con el botón Saltar)
+                setTimeout(() => window.finishEntryAnimation(false), 8200);
             }, 300);
         };
 
@@ -2134,7 +2155,8 @@
             fp_code_placeholder: '6-digit code', fp_new_password: 'New password', fp_change: 'Change Password',
             fp_no_account: 'No account found with that email.', fp_wrong_code: 'Incorrect code.',
             fp_short_password: 'Password must be at least 4 characters.', fp_success: 'Password updated! You can now sign in.',
-            fp_sent: 'Code sent to'
+            fp_sent: 'Code sent to',
+            briseras_menu: 'Hurricane Lamps', skip_btn: 'Skip'
         };
 
         window.dictFR = {
@@ -2178,7 +2200,8 @@
             fp_code_placeholder: 'Code à 6 chiffres', fp_new_password: 'Nouveau mot de passe', fp_change: 'Changer le mot de passe',
             fp_no_account: 'Aucun compte trouvé avec cet e-mail.', fp_wrong_code: 'Code incorrect.',
             fp_short_password: 'Le mot de passe doit contenir au moins 4 caractères.', fp_success: 'Mot de passe mis à jour ! Vous pouvez maintenant vous connecter.',
-            fp_sent: 'Code envoyé à'
+            fp_sent: 'Code envoyé à',
+            briseras_menu: 'Photophores', skip_btn: 'Passer'
         };
 
         window.dictZH = {
@@ -2222,7 +2245,8 @@
             fp_code_placeholder: '6位验证码', fp_new_password: '新密码', fp_change: '更改密码',
             fp_no_account: '未找到使用该邮箱的账户。', fp_wrong_code: '验证码不正确。',
             fp_short_password: '密码至少需要4个字符。', fp_success: '密码已更新！现在可以登录了。',
-            fp_sent: '验证码已发送至'
+            fp_sent: '验证码已发送至',
+            briseras_menu: '防风灯', skip_btn: '跳过'
         };
 
         window.dicts = { en: window.dictEN, fr: window.dictFR, zh: window.dictZH };
@@ -3714,7 +3738,7 @@ NORMAS:
         window.catalogCountsReply = function(question) {
             const q = ' ' + (question || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '') + ' ';
             const asksCount = /(cuant[ao]s?|numero de|cantidad de|how many|combien|多少|几款|几个)/.test(q);
-            const mentionsPieces = /(pieza|producto|lampara|modelo|articulo|arbotante|candil|espejo|catalogo|coleccion|piece|product|lamp|model|sconce|chandelier|mirror|catalog|collection|applique|lustre|miroir|lampe|produit|catalogue|产品|灯|件|款|目录)/.test(q);
+            const mentionsPieces = /(pieza|producto|lampara|modelo|articulo|arbotante|candil|espejo|brisera|catalogo|coleccion|piece|product|lamp|model|sconce|chandelier|mirror|catalog|collection|applique|lustre|miroir|lampe|produit|catalogue|产品|灯|件|款|目录)/.test(q);
             if (!asksCount || !mentionsPieces) return null;
             const counts = Object.keys(window.catMap)
                 .map(k => ({ k, n: window.dbProducts.filter(p => p.category === k).length }))
@@ -3728,7 +3752,7 @@ NORMAS:
                 mesa: [' mesa', 'table lamp', 'lampe de table', '台灯'],
                 pie: ['de pie', 'floor lamp', 'lampadaire', '落地'],
                 techo: ['techo', 'ceiling', 'plafonnier', '吸顶'],
-                exterior: ['exterior', 'outdoor', 'exterieur', '户外'],
+                briseras: ['brisera', 'exterior', 'outdoor', 'hurricane', 'photophore', '防风', '户外'],
                 proyectos: ['proyecto', 'project', 'projet', '项目']
             };
             for (const [k, words] of Object.entries(catKeywords)) {
