@@ -224,6 +224,10 @@
         /* Las palabras largas bajan completas al siguiente renglón, sin partirse con guion */
         .break-words-custom { overflow-wrap: break-word; word-break: normal; hyphens: none; white-space: normal; }
 
+        /* Protección de imágenes: sin menú de "guardar imagen" en long-press,
+           sin arrastrar y sin selección */
+        img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
+
         /* ── LIQUID GLASS ── */
         .glass-btn {
             background: rgba(255,255,255,0.08);
@@ -692,6 +696,13 @@
             <p id="fp-success" class="hidden text-[#22c55e] text-[9px] uppercase tracking-widest mt-4"></p>
         </div>
     </div>
+    <!-- ── GUARDIÁN ANTI-CAPTURA: cubre la pantalla si intentan capturar/guardar imágenes ── -->
+    <div id="screenshot-guard" class="fixed inset-0 z-[2147483000] hidden flex-col items-center justify-center text-center px-8" style="background:#030303;">
+        <span class="font-editorial font-bold text-brand-gold glow-gold leading-none" style="font-size: clamp(7rem, 34vw, 16rem);">D</span>
+        <span style="font-size: clamp(3.5rem, 14vw, 7rem);" aria-hidden="true">✋</span>
+        <p class="text-white text-xs sm:text-base tracking-[0.25em] uppercase mt-6">Descargue la imagen por seguridad</p>
+    </div>
+
     <!-- Notificación del correo con el código de seguridad -->
     <div id="fp-email-toast" class="fixed left-1/2 -translate-x-1/2 z-[10000000] hidden w-[92%] max-w-sm border border-brand-gold/60 rounded-lg p-4 shadow-[0_8px_40px_rgba(0,0,0,0.8)]" style="top: calc(1rem + env(safe-area-inset-top)); background:#101010;">
         <div class="flex items-start gap-3">
@@ -958,8 +969,11 @@
                 <button id="modal-ai-btn" onclick="window.openModalAI()" class="absolute top-4 right-4 md:top-6 md:right-6 z-20 w-12 h-12 rounded-full glass-gold flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 transition-transform pointer-events-auto" title="Consultar a DAMASO AI sobre esta pieza">
                     <span class="font-editorial font-bold text-lg">AI</span>
                 </button>
-                <a id="modal-img-link" href="#" target="_blank" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
+                <a id="modal-img-link" href="#" onclick="return false;" class="w-full flex items-center justify-center relative h-full">
                     <img id="modal-img-element" src="" class="w-full max-h-[50vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
+                    <span class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center" aria-hidden="true">
+                        <span class="font-editorial italic font-bold whitespace-nowrap" style="color: rgba(212,175,55,0.30); transform: rotate(-30deg); font-size: clamp(3rem, 9vw, 7rem); letter-spacing: 0.08em; text-shadow: 0 2px 14px rgba(0,0,0,0.45);">DAMASO</span>
+                    </span>
                 </a>
             </div>
             <div class="w-full md:w-1/2 p-6 sm:p-12 text-sm font-light flex flex-col bg-[#0a0a0a] border-t-4 md:border-t-0 md:border-l-4 border-brand-gold relative shrink-0">
@@ -2491,7 +2505,6 @@
             window._navLockedByOverlay = true;
             window.toggleNavbarState(false);
 
-            document.getElementById('modal-img-link').href = p.img;
             document.getElementById('modal-img-element').src = p.img;
             const nSpn = document.getElementById('modal-img-name');
             if (nSpn) nSpn.innerText = p.img;
@@ -2687,12 +2700,32 @@
             img.onload = function() {
                 canvas.width = img.width; canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
-                const size = Math.max(28, canvas.width * 0.05);
+                // Marca de agua central diagonal, grande y translúcida
+                ctx.save();
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(-Math.PI / 6);
+                const bigSize = Math.max(72, canvas.width * 0.16);
+                ctx.font = `italic bold ${bigSize}px "Playfair Display", serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+                ctx.lineWidth = Math.max(3, bigSize / 22);
+                ctx.strokeText('DAMASO', 0, 0);
+                ctx.fillStyle = 'rgba(255,255,255,0.32)';
+                ctx.fillText('DAMASO', 0, 0);
+                ctx.restore();
+                // Firma inferior más grande y gruesa
+                const size = Math.max(48, canvas.width * 0.085);
                 ctx.font = `italic bold ${size}px "Playfair Display", serif`;
-                ctx.fillStyle = 'rgba(255,255,255,0.85)';
-                ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 8;
-                ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
-                ctx.fillText('DAMASO Studio', Math.max(15, canvas.width * 0.02), canvas.height - Math.max(15, canvas.height * 0.03));
+                ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 12;
+                ctx.shadowOffsetX = 3; ctx.shadowOffsetY = 3;
+                ctx.strokeStyle = 'rgba(0,0,0,0.85)';
+                ctx.lineWidth = Math.max(3, size / 14);
+                const wmX = Math.max(15, canvas.width * 0.02);
+                const wmY = canvas.height - Math.max(20, canvas.height * 0.035);
+                ctx.strokeText('DAMASO Studio', wmX, wmY);
+                ctx.fillStyle = 'rgba(255,255,255,0.95)';
+                ctx.fillText('DAMASO Studio', wmX, wmY);
                 const link = document.createElement('a');
                 link.download = name.replace('.png','') + '_damaso.png';
                 link.href = canvas.toDataURL('image/png');
@@ -2708,6 +2741,59 @@
                 document.body.removeChild(fallbackLink);
             };
             img.src = imgEl.src;
+        };
+
+        // ── PROTECCIÓN DE IMÁGENES / GUARDIÁN ANTI-CAPTURA ──
+        // Muestra la pantalla de advertencia (D dorada + mano de alto) cuando se
+        // detecta un intento de guardar o capturar imágenes; se oculta sola a los
+        // segundos y vuelve a aparecer con cada nuevo intento.
+        window.showScreenshotGuard = function(duration) {
+            const g = document.getElementById('screenshot-guard');
+            if (!g) return;
+            g.classList.remove('hidden');
+            g.classList.add('flex');
+            clearTimeout(window._guardTimer);
+            window._guardTimer = setTimeout(() => {
+                g.classList.add('hidden');
+                g.classList.remove('flex');
+            }, duration || 2600);
+        };
+
+        window.initImageProtection = function() {
+            // Clic derecho / "guardar imagen" sobre cualquier imagen
+            document.addEventListener('contextmenu', function(e) {
+                const t = e.target;
+                if (t && (t.tagName === 'IMG' || (t.closest && t.closest('#modal-img-link')))) {
+                    e.preventDefault();
+                    window.showScreenshotGuard();
+                }
+            });
+            // Dejar presionada la imagen en celular (menú de guardar / preparar captura)
+            let pressTimer = null;
+            document.addEventListener('touchstart', function(e) {
+                const t = e.target;
+                if (t && (t.tagName === 'IMG' || (t.closest && t.closest('#modal-img-link')))) {
+                    clearTimeout(pressTimer);
+                    pressTimer = setTimeout(() => window.showScreenshotGuard(), 500);
+                }
+            }, { passive: true });
+            ['touchend', 'touchmove', 'touchcancel'].forEach(ev =>
+                document.addEventListener(ev, () => clearTimeout(pressTimer), { passive: true })
+            );
+            // Tecla Imprimir Pantalla en escritorio (además se limpia el portapapeles)
+            document.addEventListener('keyup', function(e) {
+                if (e.key === 'PrintScreen') {
+                    window.showScreenshotGuard();
+                    try { navigator.clipboard.writeText('DAMASO Studio — Descargue la imagen por seguridad'); } catch(err) {}
+                }
+            });
+            // Atajos comunes de captura/guardado en escritorio
+            document.addEventListener('keydown', function(e) {
+                if ((e.metaKey || e.ctrlKey) && e.shiftKey && ['3', '4', '5', 's', 'S'].includes(e.key)) {
+                    e.preventDefault();
+                    window.showScreenshotGuard();
+                }
+            });
         };
 
         // ── FALLBACK ENGINE v2 — Motor de respaldo offline ──
@@ -4108,11 +4194,25 @@ NORMAS:
             return { doc, clientName, clientEmail };
         };
 
+        // Descarga real del archivo (igual que las imágenes): enlace con atributo
+        // download y blob local, en lugar de abrir el visor de PDF del navegador.
+        window.forceDownloadBlob = function(blob, fileName) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.rel = 'noopener';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
+        };
+
         window.checkoutPDF = function(e) {
             if (e) e.preventDefault();
             if (window.cart.length === 0) { alert('Agregue piezas a su selección antes de descargar.'); return; }
             const { doc, clientName } = window.buildQuotePDF();
-            doc.save(`DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}_${Date.now()}.pdf`);
+            window.forceDownloadBlob(doc.output('blob'), `DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}_${Date.now()}.pdf`);
         };
 
         // Enviar por correo: en móvil usa la hoja de compartir del sistema para
@@ -4126,19 +4226,27 @@ NORMAS:
             const subject = `Cotización DAMASO - ${clientName}`;
             const fileName = `DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}.pdf`;
             const bodyBase = `Hola,\n\nSolicitud de cotización generada en DAMASO Studio:\n\n${itemsList}\n\nNombre: ${clientName}${clientEmail ? `\nCorreo: ${clientEmail}` : ''}`;
-            // 1) Compartir con adjunto (iOS/Android): el PDF viaja pegado al correo
+            // 1) Compartir con adjunto (iOS/Android): el PDF viaja pegado al correo.
+            //    La hoja de compartir del sistema no permite prellenar el campo "Para",
+            //    así que copiamos el correo al portapapeles y lo ponemos al inicio del
+            //    texto; el título se usa como asunto en Mail.
             try {
                 const blob = doc.output('blob');
                 const file = new File([blob], fileName, { type: 'application/pdf' });
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({ files: [file], title: subject, text: bodyBase + `\n\nEnviar a: ${window.DAMASO_EMAIL}` });
+                    try { await navigator.clipboard.writeText(window.DAMASO_EMAIL); } catch(clipErr) {}
+                    await navigator.share({
+                        files: [file],
+                        title: subject,
+                        text: `Para: ${window.DAMASO_EMAIL} (correo copiado — péguelo en el campo "Para")\nAsunto: ${subject}\n\n${bodyBase}`
+                    });
                     return;
                 }
             } catch(err) {
                 if (err && err.name === 'AbortError') return; // el usuario cerró la hoja de compartir
             }
-            // 2) Respaldo: descargar el PDF y abrir el correo dirigido a DAMASO
-            doc.save(fileName);
+            // 2) Respaldo: descargar el PDF y abrir el correo con Para y Asunto ya llenos
+            window.forceDownloadBlob(doc.output('blob'), fileName);
             const body = bodyBase + '\n\n(El PDF se descargó automáticamente — favor de adjuntarlo a este correo antes de enviarlo.)';
             window.location.href = `mailto:${window.DAMASO_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         };
@@ -4210,6 +4318,7 @@ NORMAS:
             window.applyAnimationsSetting();
             window.applyStaticTranslations();
             window.preloadAllImages();
+            window.initImageProtection();
             window.renderCatalog(window.dbProducts);
             window.updateCartUI();
             window.startAppAnimation();
