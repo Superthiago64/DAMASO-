@@ -1055,7 +1055,7 @@
                 <button id="btn-ai-proposal" onclick="window.generateAIProposal()" class="w-full glass-btn py-3 text-[9px] tracking-[0.2em] text-brand-gold uppercase font-bold flex justify-center items-center gap-2 rounded-sm mb-3 hover:border-brand-gold/50 transition-all">
                     ✨ Generar Concepto de Diseño
                 </button>
-                <div class="flex justify-between text-brand-gold font-editorial text-xl mb-6 glow-gold"><span>Subtotal Estimado</span><span id="cart-total">$0 MXN</span></div>
+                <div class="hidden"><span id="cart-total"></span></div>
                 <button id="btn-download-pdf" onclick="window.checkoutPDF(event)" class="w-full glass-gold py-4 text-[10px] tracking-[0.2em] uppercase font-bold flex justify-center items-center gap-2 rounded-sm">
                     <svg class="pointer-events-none" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Descargar PDF
                 </button>
@@ -1926,8 +1926,14 @@
         };
         window.showWelcomeAnimation = function(userName, gender) {
             const loading = document.getElementById('login-loading-modal');
-            if (loading) { loading.classList.remove('hidden', 'opacity-0', 'pointer-events-none'); }
-            // "Preparando su experiencia..." dura 10 segundos; el botón Saltar
+            // Aparece con fundido suave (la clase hidden se quita primero y la
+            // opacidad transiciona en el siguiente frame)
+            if (loading) {
+                loading.classList.remove('hidden');
+                void loading.offsetWidth;
+                loading.classList.remove('opacity-0', 'pointer-events-none');
+            }
+            // "Preparando su experiencia..." dura 7 segundos; el botón Saltar
             // brinca directo a la bienvenida y de ahí todo sigue normal.
             window._loadingDone = false;
             window._proceedToWelcome = () => {
@@ -1956,7 +1962,7 @@
                     }, letters.length * 80 + 1200);
                 }, 300);
             };
-            window._loadingTimer = setTimeout(window._proceedToWelcome, 10000);
+            window._loadingTimer = setTimeout(window._proceedToWelcome, 7000);
         };
         window.skipLoadingAnimation = function() {
             if (window._proceedToWelcome) window._proceedToWelcome();
@@ -2608,26 +2614,22 @@
             countCont.style.opacity = totalItems > 0 ? '1' : '0';
             if (window.cart.length === 0) {
                 itemsCont.innerHTML = '<p class="text-brand-gold text-sm text-center mt-10 uppercase tracking-widest glow-gold">Tu selección está vacía</p>';
-                totalCont.innerText = '$0 MXN'; return;
+                return;
             }
-            let total = 0;
             itemsCont.innerHTML = '';
             window.cart.forEach(item => {
-                const itemTotal = Number(item.price) * item.qty;
-                total += itemTotal;
                 itemsCont.innerHTML += `
                     <div class="flex items-center gap-4 border-b border-brand-border pb-4">
                         <img src="${item.img}" class="w-16 h-16 object-cover grayscale rounded-sm" alt="">
                         <div class="flex-1 min-w-0">
                             <h4 class="font-editorial text-white text-sm break-words-custom pr-2">${window.trPhrase(item.name)}</h4>
-                            <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty} | $${itemTotal.toLocaleString()}</p>
+                            <p class="text-[10px] text-brand-gold uppercase tracking-widest mt-1 glow-gold">Cant: ${item.qty}</p>
                         </div>
                         <button onclick="window.removeFromCart(${item.id})" class="glass-btn p-2 rounded-full text-brand-muted hover:text-red-400 transition-colors shrink-0">
                             <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                         </button>
                     </div>`;
             });
-            totalCont.innerText = `$${total.toLocaleString()} MXN`;
         };
 
         window.toggleCart = function() {
@@ -4204,23 +4206,11 @@ NORMAS:
             return { doc, clientName, clientEmail };
         };
 
-        // Descarga real del PDF con el MISMO mecanismo que las imágenes:
-        // enlace con atributo download y data URI, directo a la carpeta
-        // de Descargas en lugar de abrir el visor del navegador.
-        window.forceDownloadPDF = function(doc, fileName) {
-            const link = document.createElement('a');
-            link.download = fileName;
-            link.href = doc.output('datauristring');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-
         window.checkoutPDF = function(e) {
             if (e) e.preventDefault();
             if (window.cart.length === 0) { alert('Agregue piezas a su selección antes de descargar.'); return; }
             const { doc, clientName } = window.buildQuotePDF();
-            window.forceDownloadPDF(doc, `DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}_${Date.now()}.pdf`);
+            doc.save(`DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}_${Date.now()}.pdf`);
         };
 
         // Enviar por correo: en móvil usa la hoja de compartir del sistema para
@@ -4254,7 +4244,7 @@ NORMAS:
                 if (err && err.name === 'AbortError') return; // el usuario cerró la hoja de compartir
             }
             // 2) Respaldo: descargar el PDF y abrir el correo con Para y Asunto ya llenos
-            window.forceDownloadPDF(doc, fileName);
+            doc.save(fileName);
             const body = bodyBase + '\n\n(El PDF se descargó automáticamente — favor de adjuntarlo a este correo antes de enviarlo.)';
             window.location.href = `mailto:${window.DAMASO_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         };
