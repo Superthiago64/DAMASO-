@@ -106,6 +106,11 @@
         html.theme-light #welcome-animation-overlay .text-white,
         html.theme-light #category-transition-overlay .text-white { color: #f2f2f2 !important; }
 
+        /* Con el modal de specs CERRADO, ninguno de sus botones (cerrar, AI…)
+           debe capturar clics: su "pointer-events-auto" invisible tapaba la
+           mitad izquierda del botón Menú del navbar. */
+        #spec-modal.pointer-events-none * { pointer-events: none !important; }
+
         /* ── MENÚ DESPLEGABLE: más opaco para mejor contraste en desktop ── */
         #dropdown-menu {
             background: rgba(12, 12, 12, 0.97) !important;
@@ -4066,10 +4071,8 @@ NORMAS:
             if (arrow) arrow.style.transform = collapsed ? 'rotate(-180deg)' : 'rotate(0deg)';
         };
 
-        // ── PDF ──
-        window.checkoutPDF = function(e) {
-            if (e) e.preventDefault();
-            if (window.cart.length === 0) { alert('Agregue piezas a su selección antes de descargar.'); return; }
+        // ── PDF (sin precios: solo piezas, cantidades y tiempos de entrega) ──
+        window.buildQuotePDF = function() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
             const clientName = document.getElementById('client-name')?.value || window.getUserFirstName();
@@ -4085,44 +4088,59 @@ NORMAS:
             doc.text('+52 33 3870 3071', 15, 36);
             doc.setTextColor(50, 50, 50);
             doc.setFontSize(11); doc.setFont('helvetica', 'bold');
-            doc.text('COTIZACIÓN', 15, 55);
+            doc.text('SOLICITUD DE COTIZACIÓN', 15, 55);
             doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
             doc.text(`Cliente: ${clientName}`, 15, 63);
             if (clientEmail) doc.text(`Email: ${clientEmail}`, 15, 69);
             doc.text(`Fecha: ${dateStr}`, 15, clientEmail ? 75 : 69);
             doc.setDrawColor(212, 175, 55); doc.setLineWidth(0.5);
             doc.line(15, 82, 195, 82);
-            const tableData = window.cart.map(item => [item.sku || '', item.name, `$${Number(item.price).toLocaleString()} MXN`, item.qty, `$${(Number(item.price) * item.qty).toLocaleString()} MXN`, item.time || '']);
-            const total = window.cart.reduce((s, i) => s + Number(i.price) * i.qty, 0);
-            doc.autoTable({ startY: 88, head: [['SKU', 'Pieza', 'Precio Unit.', 'Cant.', 'Subtotal', 'Entrega']], body: tableData, theme: 'striped', headStyles: { fillColor: [3,3,3], textColor: [212,175,55], fontStyle: 'bold', fontSize: 8 }, bodyStyles: { fontSize: 8, textColor: [40,40,40] }, alternateRowStyles: { fillColor: [248,248,248] }, columnStyles: { 0: { cellWidth: 28 }, 1: { cellWidth: 65 }, 2: { cellWidth: 30 }, 3: { cellWidth: 15 }, 4: { cellWidth: 30 }, 5: { cellWidth: 25 } }, margin: { left: 15, right: 15 } });
+            const tableData = window.cart.map(item => [item.sku || '', item.name, item.qty, item.time || '']);
+            doc.autoTable({ startY: 88, head: [['SKU', 'Pieza', 'Cant.', 'Entrega']], body: tableData, theme: 'striped', headStyles: { fillColor: [3,3,3], textColor: [212,175,55], fontStyle: 'bold', fontSize: 8 }, bodyStyles: { fontSize: 8, textColor: [40,40,40] }, alternateRowStyles: { fillColor: [248,248,248] }, columnStyles: { 0: { cellWidth: 30 }, 1: { cellWidth: 95 }, 2: { cellWidth: 15 }, 3: { cellWidth: 35 } }, margin: { left: 15, right: 15 } });
             const finalY = doc.lastAutoTable.finalY + 10;
-            doc.setFillColor(3, 3, 3);
-            doc.rect(120, finalY, 75, 12, 'F');
-            doc.setTextColor(212, 175, 55); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
-            doc.text(`TOTAL: $${total.toLocaleString()} MXN`, 125, finalY + 8);
             doc.setTextColor(120, 120, 120); doc.setFontSize(7.5); doc.setFont('helvetica', 'italic');
-            doc.text('Nota: Los precios son referenciales en MXN. El tiempo de entrega inicia tras confirmación y anticipo del 50%.', 15, finalY + 22, { maxWidth: 180 });
-            doc.text('Los colores y acabados pueden presentar ligeras variaciones al ser piezas artesanales.', 15, finalY + 28, { maxWidth: 180 });
+            doc.text('Nota: El tiempo de entrega inicia tras confirmación y anticipo del 50%. Precios bajo cotización.', 15, finalY + 6, { maxWidth: 180 });
+            doc.text('Los colores y acabados pueden presentar ligeras variaciones al ser piezas artesanales.', 15, finalY + 12, { maxWidth: 180 });
             doc.setDrawColor(212, 175, 55);
             doc.line(15, 285, 195, 285);
             doc.setTextColor(212, 175, 55); doc.setFontSize(7); doc.setFont('helvetica', 'normal');
             doc.text('DAMASO STUDIO · instagram: @damaso_lamparas · wa.me/523338703071 · Guadalajara, Jalisco, México', 105, 290, { align: 'center' });
+            return { doc, clientName, clientEmail };
+        };
+
+        window.checkoutPDF = function(e) {
+            if (e) e.preventDefault();
+            if (window.cart.length === 0) { alert('Agregue piezas a su selección antes de descargar.'); return; }
+            const { doc, clientName } = window.buildQuotePDF();
             doc.save(`DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}_${Date.now()}.pdf`);
         };
 
-        // Genera/descarga el PDF y abre el cliente de correo con los datos de la
-        // cotización listos para enviar (los mailto: no soportan adjuntar archivos,
-        // así que se le pide al usuario adjuntar el PDF recién descargado).
-        window.sendPDFByEmail = function() {
+        // Enviar por correo: en móvil usa la hoja de compartir del sistema para
+        // adjuntar el PDF directamente al correo; si no está disponible, descarga
+        // el PDF y abre el cliente de correo ya dirigido a DAMASO Studio.
+        window.DAMASO_EMAIL = 'dogma.dogma@hotmail.com';
+        window.sendPDFByEmail = async function() {
             if (window.cart.length === 0) { alert('Agregue piezas a su selección antes de enviar.'); return; }
-            window.checkoutPDF();
-            const clientName = document.getElementById('client-name')?.value || window.getUserFirstName();
-            const clientEmail = document.getElementById('client-email')?.value || '';
-            const total = window.cart.reduce((s, i) => s + Number(i.price) * i.qty, 0);
+            const { doc, clientName, clientEmail } = window.buildQuotePDF();
             const itemsList = window.cart.map(i => `- ${i.name} (SKU ${i.sku || 'N/A'}) x${i.qty}`).join('\n');
             const subject = `Cotización DAMASO - ${clientName}`;
-            const body = `Hola,\n\nCotización generada en DAMASO Studio:\n\n${itemsList}\n\nTotal estimado: $${total.toLocaleString()} MXN\n\nNombre: ${clientName}${clientEmail ? `\nCorreo: ${clientEmail}` : ''}\n\n(El PDF se descargó automáticamente — favor de adjuntarlo a este correo antes de enviarlo.)`;
-            window.location.href = `mailto:dogma.dogma@hotmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            const fileName = `DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}.pdf`;
+            const bodyBase = `Hola,\n\nSolicitud de cotización generada en DAMASO Studio:\n\n${itemsList}\n\nNombre: ${clientName}${clientEmail ? `\nCorreo: ${clientEmail}` : ''}`;
+            // 1) Compartir con adjunto (iOS/Android): el PDF viaja pegado al correo
+            try {
+                const blob = doc.output('blob');
+                const file = new File([blob], fileName, { type: 'application/pdf' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({ files: [file], title: subject, text: bodyBase + `\n\nEnviar a: ${window.DAMASO_EMAIL}` });
+                    return;
+                }
+            } catch(err) {
+                if (err && err.name === 'AbortError') return; // el usuario cerró la hoja de compartir
+            }
+            // 2) Respaldo: descargar el PDF y abrir el correo dirigido a DAMASO
+            doc.save(fileName);
+            const body = bodyBase + '\n\n(El PDF se descargó automáticamente — favor de adjuntarlo a este correo antes de enviarlo.)';
+            window.location.href = `mailto:${window.DAMASO_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         };
 
         // ── SCROLL REVEAL ──
