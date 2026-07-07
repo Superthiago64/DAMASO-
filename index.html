@@ -971,9 +971,6 @@
                 </button>
                 <a id="modal-img-link" href="#" onclick="return false;" class="w-full flex items-center justify-center relative h-full">
                     <img id="modal-img-element" src="" class="w-full max-h-[50vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
-                    <span class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center" aria-hidden="true">
-                        <span class="font-editorial italic font-bold whitespace-nowrap" style="color: rgba(212,175,55,0.30); transform: rotate(-30deg); font-size: clamp(3rem, 9vw, 7rem); letter-spacing: 0.08em; text-shadow: 0 2px 14px rgba(0,0,0,0.45);">DAMASO</span>
-                    </span>
                 </a>
             </div>
             <div class="w-full md:w-1/2 p-6 sm:p-12 text-sm font-light flex flex-col bg-[#0a0a0a] border-t-4 md:border-t-0 md:border-l-4 border-brand-gold relative shrink-0">
@@ -1015,13 +1012,16 @@
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]" data-i18n="spec_mat">Materiales:</span><span class="col-span-2 text-white" id="modal-mat"></span></div>
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]" data-i18n="spec_fin">Acabados:</span><span class="col-span-2 text-white" id="modal-fin"></span></div>
                 </div>
-                <div class="mt-4 pt-6 border-t border-brand-gold flex items-center justify-between pb-8 relative z-10 shrink-0">
-                    <span class="text-[10px] tracking-[0.2em] text-brand-gold uppercase font-bold" data-i18n="modal_quote">En Cotización</span>
-                    <div class="flex items-center gap-4">
-                        <button id="modal-qty-minus" onclick="window.modalChangeQty(-1)" aria-label="Quitar pieza" class="glass-btn w-9 h-9 rounded-full flex items-center justify-center text-brand-gold text-lg font-bold hover:bg-brand-gold hover:text-black transition-colors">−</button>
-                        <span id="modal-qty-count" class="text-white text-base font-bold w-6 text-center">0</span>
-                        <button id="modal-qty-plus" onclick="window.modalChangeQty(1)" aria-label="Agregar pieza" class="glass-gold w-9 h-9 rounded-full flex items-center justify-center text-lg font-bold">+</button>
+                <div class="mt-4 pt-6 border-t border-brand-gold pb-8 relative z-10 shrink-0">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] tracking-[0.2em] text-brand-gold uppercase font-bold" data-i18n="modal_quote">En Cotización</span>
+                        <div class="flex items-center gap-4">
+                            <button id="modal-qty-minus" onclick="window.modalChangeQty(-1)" aria-label="Quitar pieza" class="glass-btn w-9 h-9 rounded-full flex items-center justify-center text-brand-gold text-lg font-bold hover:bg-brand-gold hover:text-black transition-colors">−</button>
+                            <span id="modal-qty-count" class="text-white text-base font-bold w-6 text-center">1</span>
+                            <button id="modal-qty-plus" onclick="window.modalChangeQty(1)" aria-label="Agregar pieza" class="glass-gold w-9 h-9 rounded-full flex items-center justify-center text-lg font-bold">+</button>
+                        </div>
                     </div>
+                    <button id="modal-add-btn" type="button" onclick="window.modalAddToCart()" class="w-full mt-4 py-3 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm" data-i18n="modal_add">Agregar</button>
                 </div>
             </div>
         </div>
@@ -2197,7 +2197,8 @@
             fp_no_account: 'No account found with that email.', fp_wrong_code: 'Incorrect code.',
             fp_short_password: 'Password must be at least 4 characters.', fp_success: 'Password updated! You can now sign in.',
             fp_sent: 'Code sent to',
-            briseras_menu: 'Hurricane Lamps', skip_btn: 'Skip'
+            briseras_menu: 'Hurricane Lamps', skip_btn: 'Skip',
+            modal_add: 'Add', modal_added: 'Added ✓'
         };
 
         window.dictFR = {
@@ -2242,7 +2243,8 @@
             fp_no_account: 'Aucun compte trouvé avec cet e-mail.', fp_wrong_code: 'Code incorrect.',
             fp_short_password: 'Le mot de passe doit contenir au moins 4 caractères.', fp_success: 'Mot de passe mis à jour ! Vous pouvez maintenant vous connecter.',
             fp_sent: 'Code envoyé à',
-            briseras_menu: 'Photophores', skip_btn: 'Passer'
+            briseras_menu: 'Photophores', skip_btn: 'Passer',
+            modal_add: 'Ajouter', modal_added: 'Ajouté ✓'
         };
 
         window.dictZH = {
@@ -2287,7 +2289,8 @@
             fp_no_account: '未找到使用该邮箱的账户。', fp_wrong_code: '验证码不正确。',
             fp_short_password: '密码至少需要4个字符。', fp_success: '密码已更新！现在可以登录了。',
             fp_sent: '验证码已发送至',
-            briseras_menu: '防风灯', skip_btn: '跳过'
+            briseras_menu: '防风灯', skip_btn: '跳过',
+            modal_add: '加入', modal_added: '已加入 ✓'
         };
 
         window.dicts = { en: window.dictEN, fr: window.dictFR, zh: window.dictZH };
@@ -2524,6 +2527,9 @@
             document.getElementById('modal-peso').innerText = p.peso;
             document.getElementById('modal-mat').innerText = window.trPhrase(p.mat);
             document.getElementById('modal-fin').innerText = window.trPhrase(p.fin);
+            window._modalPendingQty = 1;
+            const addBtn = document.getElementById('modal-add-btn');
+            if (addBtn) addBtn.innerText = window.t('modal_add', 'Agregar');
             window.updateModalQtyDisplay();
             const modalMsgs = document.getElementById('modal-ai-messages');
             if (modalMsgs) modalMsgs.innerHTML = '';
@@ -2560,29 +2566,34 @@
 
         // Stepper +/- de la modal de especificaciones: lee/escribe directamente
         // sobre window.cart para mantenerse sincronizado con el carrito.
+        // El stepper elige la cantidad deseada; solo se agrega al carrito
+        // cuando se presiona el botón "Agregar".
         window.modalChangeQty = function(delta) {
-            const p = window.currentModalProduct;
-            if (!p) return;
             window.playClickSound();
-            const exist = window.cart.find(i => i.id === p.id);
-            const newQty = Math.max(0, (exist ? exist.qty : 0) + delta);
-            if (newQty === 0) {
-                if (exist) window.removeFromCart(p.id);
-            } else if (exist) {
-                exist.qty = newQty;
-                window.updateCartUI();
-            } else {
-                window.cart.push({ ...p, qty: newQty });
-                window.updateCartUI();
-            }
+            window._modalPendingQty = Math.max(1, (window._modalPendingQty || 1) + delta);
+            const el = document.getElementById('modal-qty-count');
+            if (el) el.innerText = window._modalPendingQty;
         };
 
         window.updateModalQtyDisplay = function() {
-            const p = window.currentModalProduct;
             const el = document.getElementById('modal-qty-count');
-            if (!el || !p) return;
+            if (el) el.innerText = window._modalPendingQty || 1;
+        };
+
+        window.modalAddToCart = function() {
+            const p = window.currentModalProduct;
+            if (!p) return;
+            window.playClickSound();
+            const qty = Math.max(1, window._modalPendingQty || 1);
             const exist = window.cart.find(i => i.id === p.id);
-            el.innerText = exist ? exist.qty : 0;
+            if (exist) exist.qty += qty; else window.cart.push({ ...p, qty });
+            window.updateCartUI();
+            const btn = document.getElementById('modal-add-btn');
+            if (btn) {
+                btn.innerText = window.t('modal_added', 'Agregado ✓');
+                clearTimeout(window._modalAddTimer);
+                window._modalAddTimer = setTimeout(() => { btn.innerText = window.t('modal_add', 'Agregar'); }, 1400);
+            }
         };
 
         window.updateCartUI = function() {
@@ -2700,18 +2711,17 @@
             img.onload = function() {
                 canvas.width = img.width; canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
-                // Marca de agua central diagonal, grande y translúcida
+                // Marca de agua central horizontal, blanca y suavemente difuminada:
+                // visible pero sin estorbar la pieza
                 ctx.save();
                 ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.rotate(-Math.PI / 6);
                 const bigSize = Math.max(72, canvas.width * 0.16);
                 ctx.font = `italic bold ${bigSize}px "Playfair Display", serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-                ctx.lineWidth = Math.max(3, bigSize / 22);
-                ctx.strokeText('DAMASO', 0, 0);
-                ctx.fillStyle = 'rgba(255,255,255,0.32)';
+                ctx.shadowColor = 'rgba(255,255,255,0.6)';
+                ctx.shadowBlur = Math.max(14, bigSize / 5);
+                ctx.fillStyle = 'rgba(255,255,255,0.34)';
                 ctx.fillText('DAMASO', 0, 0);
                 ctx.restore();
                 // Firma inferior más grande y gruesa
@@ -4194,25 +4204,23 @@ NORMAS:
             return { doc, clientName, clientEmail };
         };
 
-        // Descarga real del archivo (igual que las imágenes): enlace con atributo
-        // download y blob local, en lugar de abrir el visor de PDF del navegador.
-        window.forceDownloadBlob = function(blob, fileName) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = fileName;
-            a.rel = 'noopener';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 5000);
+        // Descarga real del PDF con el MISMO mecanismo que las imágenes:
+        // enlace con atributo download y data URI, directo a la carpeta
+        // de Descargas en lugar de abrir el visor del navegador.
+        window.forceDownloadPDF = function(doc, fileName) {
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = doc.output('datauristring');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         };
 
         window.checkoutPDF = function(e) {
             if (e) e.preventDefault();
             if (window.cart.length === 0) { alert('Agregue piezas a su selección antes de descargar.'); return; }
             const { doc, clientName } = window.buildQuotePDF();
-            window.forceDownloadBlob(doc.output('blob'), `DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}_${Date.now()}.pdf`);
+            window.forceDownloadPDF(doc, `DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}_${Date.now()}.pdf`);
         };
 
         // Enviar por correo: en móvil usa la hoja de compartir del sistema para
@@ -4246,7 +4254,7 @@ NORMAS:
                 if (err && err.name === 'AbortError') return; // el usuario cerró la hoja de compartir
             }
             // 2) Respaldo: descargar el PDF y abrir el correo con Para y Asunto ya llenos
-            window.forceDownloadBlob(doc.output('blob'), fileName);
+            window.forceDownloadPDF(doc, fileName);
             const body = bodyBase + '\n\n(El PDF se descargó automáticamente — favor de adjuntarlo a este correo antes de enviarlo.)';
             window.location.href = `mailto:${window.DAMASO_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         };
