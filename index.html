@@ -984,7 +984,7 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span id="modal-luz-label" class="text-brand-gold font-medium uppercase tracking-widest text-[10px]">Descripción:</span><span class="col-span-2 text-white" id="modal-luz"></span></div>
-                    <div class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]" data-i18n="spec_electr">Electrificación:</span><span class="col-span-2 text-white" id="modal-cable"></span></div>
+                    <div id="modal-cable-row" class="grid grid-cols-3 border-b border-brand-border pb-2"><span class="text-brand-gold font-medium uppercase tracking-widest text-[10px]" data-i18n="spec_electr">Electrificación:</span><span class="col-span-2 text-white" id="modal-cable"></span></div>
                     <div class="py-2">
                         <span class="text-brand-gold font-medium uppercase tracking-widest text-[10px] block mb-2" data-i18n="spec_dims">Dimensiones:</span>
                         <div class="grid grid-cols-2 gap-2 pl-4 text-xs">
@@ -1304,12 +1304,12 @@
             { id: 126, name: "Arbotante hoja", category: "arbotantes", price: 12500, img: "arbotante_14.png", sku: "DM-ARB-024", desc: "Lámpara fabricada en metal con pantallas en vidrio opalino", specsLight: "Lámpara fabricada en metal con pantallas en vidrio opalino", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "120 cm", d: "15 cm", dia: "N/A" }, peso: "8 kg", volt: "110-120V", mat: "Metal/vidrio", fin: "Negro mate", time: "4 a 5 semanas", cert: "NOM" },
             { id: 127, name: "Arbotante madera doble", category: "arbotantes", price: 7200, img: "arbotante_15.jpeg", sku: "DM-ARB-025", desc: "Lámpara fabricada en madera con pantallas en vidrio opalino", specsLight: "Lámpara fabricada en madera con pantallas en vidrio opalino", cable: "Certificado UL/NOM", dims: { w: "12 cm", h: "45 cm", d: "10 cm", dia: "10 cm" }, peso: "3 kg", volt: "110-120V", mat: "Madera/vidrio", fin: "Madera natural", time: "3 a 4 semanas", cert: "NOM" },
             { id: 128, name: "Arbotante acanalado", category: "arbotantes", price: 11800, img: "arbotante_16.jpeg", sku: "DM-ARB-026", desc: "Lámpara fabricada en metal con difusor en vidrio", specsLight: "Lámpara fabricada en metal con difusor en vidrio", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "90 cm", d: "20 cm", dia: "N/A" }, peso: "6 kg", volt: "110-120V", mat: "Metal/vidrio", fin: "Bronce cepillado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 9, name: "Espejo Globo Ámbar", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo decorativo con pantalla esférica de cristal color ámbar.", specsLight: "1x G9 LED 5W cálida", cable: "Conexión directa a muro", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal ámbar y latón", fin: "Ámbar traslúcido, latón cepillado", time: "3 semanas", cert: "NOM" },
-            { id: 10, name: "Espejo Cápsula Retroiluminado", category: "espejos", price: 18500, img: "ESPEJO_1.PNG", sku: "DM-ESP-002", desc: "Espejo cápsula con retroiluminación LED perimetral.", specsLight: "Tira LED 12V 4000K perimetral oculta", cable: "Conexión directa a registro", dims: { w: "60 cm", h: "160 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Cristal plata 6mm inastillable", fin: "Canto pulido brillante", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 11, name: "Espejo Vintage Noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Cristal envejecido artesanalmente con marco de acero.", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "200 cm", d: "3 cm", dia: "N/A" }, peso: "35 kg", volt: "N/A", mat: "Cristal envejecido, marco de acero", fin: "Marco negro mate texturizado", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 12, name: "Espejo Roble Natural", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-004", desc: "Marco biselado de madera sólida de roble.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Cristal plata alta claridad", fin: "Madera barnizada", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 13, name: "Espejo Píldora Nogal", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-005", desc: "Espejo de cuerpo entero ovalado en chapa de nogal.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "180 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata 6mm, chapa de nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
-            { id: 14, name: "Espejo Piso Orgánico", category: "espejos", price: 17800, img: "espejo_5.png", sku: "DM-ESP-006", desc: "Espejo de piso en forma de gota alargada en nogal.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "190 cm", d: "4 cm", dia: "N/A" }, peso: "21 kg", volt: "N/A", mat: "Cristal plata, nogal", fin: "Nogal cálido natural", time: "4 semanas", cert: "N/A" },
+            { id: 9, name: "Espejo irregular", category: "espejos", price: 5800, img: "nueva_foto_2.png", sku: "DM-ESP-001", desc: "Espejo, fabricado en madera de parota con espejo de 6 mm tropicalizado, con bisel 1/2", specsLight: "Espejo, fabricado en madera de parota con espejo de 6 mm tropicalizado, con bisel 1/2", cable: "N/A", dims: { w: "50 cm", h: "1 m", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Espejo, barra, madera", fin: "Cera", time: "3 semanas", cert: "NOM" },
+            { id: 10, name: "Espejo, inclinado", category: "espejos", price: 18500, img: "ESPEJO_1.PNG", sku: "DM-ESP-002", desc: "Espejo, tropicalizado, 6 mm, con bisel 1/2 con inclinación", specsLight: "Espejo, tropicalizado, 6 mm, con bisel 1/2 con inclinación", cable: "N/A", dims: { w: "60 cm", h: "90 cm", d: "30 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Espejo/aluminio", fin: "Natural", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 11, name: "Espejo noir", category: "espejos", price: 22000, img: "espejo_2.png", sku: "DM-ESP-003", desc: "Espejo, tropicalizado, 6 mm, con bisel con terminado, anticado y Marco de aluminio", specsLight: "Espejo, tropicalizado, 6 mm, con bisel con terminado, anticado y Marco de aluminio", cable: "N/A", dims: { w: "60 cm", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "20 kg", volt: "N/A", mat: "Cristal/aluminio", fin: "Pintura electrostática", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 12, name: "Espejo, cuadro", category: "espejos", price: 14800, img: "espejo_3.png", sku: "DM-ESP-004", desc: "Espejo, tropicalizado, 6 mm con bisel 1/2 con Marco de Rosa morada", specsLight: "Espejo, tropicalizado, 6 mm con bisel 1/2 con Marco de Rosa morada", cable: "N/A", dims: { w: "1 m", h: "1 m", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "N/A", mat: "Espejo/madera", fin: "Barniz", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 13, name: "Espejo, óvalo", category: "espejos", price: 16200, img: "espejo_4.png", sku: "DM-ESP-005", desc: "Espejo, tropicalizado de 6 mm con bisel 1/2 con Marco en madera, rosa morada", specsLight: "Espejo, tropicalizado de 6 mm con bisel 1/2 con Marco en madera, rosa morada", cable: "N/A", dims: { w: "50 cm", h: "90 cm", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "N/A", mat: "Espejo/madera", fin: "Barniz", time: "4 semanas", cert: "N/A" },
+            { id: 14, name: "Espejo, telaraña", category: "espejos", price: 17800, img: "espejo_5.png", sku: "DM-ESP-006", desc: "Espejo, tropicalizado de 6 mm con Marco en metal", specsLight: "Espejo, tropicalizado de 6 mm con Marco en metal", cable: "N/A", dims: { w: "N/A", h: "120 cm", d: "5 cm", dia: "N/A" }, peso: "30 kg", volt: "N/A", mat: "Espejo/metal", fin: "Pintura electrostática", time: "4 semanas", cert: "N/A" },
             { id: 15, name: "Espejo Óvalo Lisse", category: "espejos", price: 13500, img: "espejo_6.png", sku: "DM-ESP-007", desc: "Marco de encino natural estilo escandinavo.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "14 kg", volt: "N/A", mat: "Cristal plata, madera encino", fin: "Madera mate", time: "3 a 4 semanas", cert: "N/A" },
             { id: 16, name: "Espejo Óvalo Contour", category: "espejos", price: 15200, img: "espejo_7.png", sku: "DM-ESP-008", desc: "Perfil ultra delgado de latón cobrizado.", specsLight: "N/A", cable: "N/A", dims: { w: "70 cm", h: "160 cm", d: "2.5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata, herraje de latón macizo", fin: "Latón cobrizado", time: "4 semanas", cert: "N/A" },
             { id: 17, name: "Espejo Rectangular Antiquité", category: "espejos", price: 17500, img: "espejo_8.png", sku: "DM-ESP-009", desc: "Marco de latón y cristal envejecido químicamente.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "140 cm", d: "4 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal envejecido, latón", fin: "Latón mate", time: "4 a 5 semanas", cert: "N/A" },
@@ -1440,6 +1440,8 @@
             ["Lámpara fabricada en", "Lamp made of", "Lampe fabriquée en", "灯具，材质："],
             ["Lámpara fabricaba en", "Lamp made of", "Lampe fabriquée en", "灯具，材质："],
             ["candil fabricado en", "chandelier made of", "lustre fabriqué en", "吊灯，材质："],
+            ["fabricado en", "made of", "fabriqué en", "材质："],
+            ["fabricada en", "made of", "fabriquée en", "材质："],
             ["con terminado en pintura electrostática", "with electrostatic paint finish", "avec finition en peinture électrostatique", "，静电喷涂饰面"],
             ["terminado en pintura electrostática", "electrostatic paint finish", "finition en peinture électrostatique", "静电喷涂饰面"],
             ["determinado en pintura electrostática", "with electrostatic paint finish", "avec finition en peinture électrostatique", "，静电喷涂饰面"],
@@ -1543,6 +1545,19 @@
             ["escudo", "shield", "bouclier", "盾形"],
             ["hoja", "leaf", "feuille", "叶形"],
             ["acanalado", "fluted", "cannelée", "凹槽"],
+            ["madera de parota", "parota wood", "bois de parota", "帕罗塔木"],
+            ["rosa morada", "rosa morada wood", "bois de rosa morada", "紫檀玫瑰木"],
+            ["tropicalizado", "tropicalized", "tropicalisé", "防潮处理"],
+            ["con bisel", "with bevel", "avec biseau", "，带斜边"],
+            ["bisel", "bevel", "biseau", "斜边"],
+            ["anticado", "antiqued", "patiné", "做旧"],
+            ["inclinación", "tilt", "inclinaison", "倾斜角"],
+            ["inclinado", "tilted", "incliné", "倾斜"],
+            ["telaraña", "spiderweb", "toile d'araignée", "蛛网"],
+            ["irregular", "irregular", "irrégulier", "不规则"],
+            ["cuadro", "square", "carré", "方形"],
+            ["barniz", "varnish", "vernis", "清漆"],
+            ["cera", "wax", "cire", "蜡"],
             ["trompeta", "trumpet", "trompette", "喇叭形"],
             ["contrapeso", "counterweight", "contrepoids", "平衡臂"],
             ["tallos", "stems", "tiges", "枝干"],
@@ -1592,6 +1607,8 @@
             ["cuero", "leather", "cuir", "皮革"],
             ["difusor", "diffuser", "diffuseur", "扩散罩"],
             ["de", "of", "en", "·"],
+            ["con", "with", "avec", "配"],
+            ["en", "in", "en", ""],
             ["y", "and", "et", "和"],
             ["o", "or", "ou", "或"]
         ];
@@ -2478,8 +2495,10 @@
             document.getElementById('modal-sku').innerText = p.sku;
             document.getElementById('modal-luz').innerText = window.trPhrase(p.specsLight);
             const luzLabel = document.getElementById('modal-luz-label');
-            if (luzLabel) luzLabel.innerText = (p.category === 'arbotantes') ? window.t('spec_desc', 'Descripción:') : window.t('spec_light', 'Specs Lumínicas:');
+            if (luzLabel) luzLabel.innerText = window.t('spec_desc', 'Descripción:');
             document.getElementById('modal-cable').innerText = window.trPhrase(p.cable);
+            // Los espejos no llevan fila de electrificación
+            document.getElementById('modal-cable-row')?.classList.toggle('hidden', p.category === 'espejos');
             document.getElementById('modal-w').innerText = p.dims.w;
             document.getElementById('modal-h').innerText = p.dims.h;
             document.getElementById('modal-d').innerText = p.dims.d;
