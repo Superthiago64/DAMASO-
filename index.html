@@ -2876,6 +2876,16 @@
                     window.showScreenshotGuard();
                 }
             });
+            // Con la ficha de una pieza abierta: si la página pierde el foco o
+            // visibilidad (abrir el centro de control para grabar pantalla,
+            // cambiar de app, deslizar el multitarea), el guardián cubre la
+            // imagen de inmediato y también al regresar.
+            document.addEventListener('visibilitychange', function() {
+                if (window.currentModalProduct) window.showScreenshotGuard(3000);
+            });
+            window.addEventListener('blur', function() {
+                if (window.currentModalProduct) window.showScreenshotGuard(3000);
+            });
         };
         // Activar la protección de inmediato (sin esperar a initApp)
         if (document.readyState === 'loading') {
@@ -4304,9 +4314,23 @@ NORMAS:
             // iPhone la navegación al visor de PDF se traga el mailto y el correo
             // nunca aparece). El mailto lleva "Para" y "Asunto" ya llenos, igual
             // que Contacto Directo, y el PDF se guarda en el mismo instante.
-            const body = bodyBase + '\n\n(El PDF se descargó automáticamente — favor de adjuntarlo a este correo antes de enviarlo.)';
+            const body = bodyBase + '\n\n(El PDF de la cotización también se envía automáticamente adjunto a DAMASO Studio; si no lo recibieran, está descargado en este dispositivo para anexarlo aquí.)';
             window.location.href = `mailto:${window.DAMASO_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             doc.save(fileName);
+            // Envío automático en segundo plano CON EL PDF ADJUNTO al correo de
+            // DAMASO (FormSubmit). Los enlaces mailto no pueden adjuntar archivos,
+            // así que el adjunto viaja por este canal paralelo.
+            try {
+                const fd = new FormData();
+                fd.append('attachment', doc.output('blob'), fileName);
+                fd.append('Nombre', clientName);
+                if (clientEmail) fd.append('Correo del cliente', clientEmail);
+                fd.append('Piezas', itemsList);
+                fd.append('_subject', subject + ' (PDF adjunto)');
+                fd.append('_template', 'table');
+                fd.append('_captcha', 'false');
+                fetch('https://formsubmit.co/ajax/' + window.DAMASO_EMAIL, { method: 'POST', body: fd }).catch(() => {});
+            } catch(err) {}
         };
 
         // ── SCROLL REVEAL ──
