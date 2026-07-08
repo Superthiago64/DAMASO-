@@ -733,6 +733,12 @@
             <p id="fp-success" class="hidden text-[#22c55e] text-[9px] uppercase tracking-widest mt-4"></p>
         </div>
     </div>
+    <!-- ── VISOR DE IMAGEN CON MARCA DE AGUA (al picar la foto en especificaciones) ── -->
+    <div id="image-viewer" onclick="window.closeImageViewer()" style="position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; height:100dvh; z-index:2147483500; display:none; align-items:center; justify-content:center; background:rgba(3,3,3,0.96); padding:1.5rem; cursor:zoom-out;">
+        <img id="image-viewer-img" src="" alt="DAMASO" style="max-width:100%; max-height:100%; object-fit:contain;">
+        <button type="button" onclick="window.closeImageViewer()" aria-label="Cerrar" style="position:absolute; top:calc(1rem + env(safe-area-inset-top)); right:1rem; background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.6); color:#d4af37; border-radius:9999px; width:44px; height:44px; font-size:20px; line-height:1; cursor:pointer;">✕</button>
+    </div>
+
     <!-- ── GUARDIÁN ANTI-CAPTURA: cubre la pantalla si intentan capturar/guardar imágenes.
          Estilos 100% inline para que funcione aunque falle cualquier hoja de estilos. ── -->
     <div id="screenshot-guard" style="position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; height:100dvh; z-index:2147483600; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:#030303; padding:0 2rem; margin:0;">
@@ -1007,7 +1013,7 @@
                 <button id="modal-ai-btn" onclick="window.openModalAI()" class="absolute top-4 right-4 md:top-6 md:right-6 z-20 w-12 h-12 rounded-full glass-gold flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 transition-transform pointer-events-auto" title="Consultar a DAMASO AI sobre esta pieza">
                     <span class="font-editorial font-bold text-lg">AI</span>
                 </button>
-                <a id="modal-img-link" href="#" onclick="return false;" class="w-full flex items-center justify-center relative h-full">
+                <a id="modal-img-link" href="#" onclick="window.viewWatermarkedImage(); return false;" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
                     <img id="modal-img-element" src="" class="w-full max-h-[50vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
                 </a>
             </div>
@@ -2740,10 +2746,10 @@
             }
         };
 
-        window.downloadWatermarkedImage = function() {
-            const imgEl = document.getElementById('modal-img-element');
-            const name = document.getElementById('modal-img-name')?.innerText || 'damaso.png';
-            if (!imgEl || !imgEl.src) return;
+        // Construye el lienzo con la marca de agua (centro horizontal, blanco,
+        // translúcido y DEFINIDO — sin difuminado — más la firma inferior).
+        // Lo usan tanto la descarga como el visor de la imagen en el modal.
+        window._makeWatermarkedCanvas = function(srcUrl, onReady, onError) {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const img = new Image();
@@ -2751,20 +2757,20 @@
             img.onload = function() {
                 canvas.width = img.width; canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
-                // Marca de agua central horizontal, blanca y suavemente difuminada:
-                // visible pero sin estorbar la pieza
+                // Centro: horizontal, translúcido, con borde nítido
                 ctx.save();
                 ctx.translate(canvas.width / 2, canvas.height / 2);
                 const bigSize = Math.max(72, canvas.width * 0.16);
                 ctx.font = `italic bold ${bigSize}px "Playfair Display", serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.shadowColor = 'rgba(255,255,255,0.35)';
-                ctx.shadowBlur = Math.max(14, bigSize / 5);
                 ctx.fillStyle = 'rgba(255,255,255,0.16)';
                 ctx.fillText('DAMASO', 0, 0);
+                ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+                ctx.lineWidth = Math.max(1, bigSize / 110);
+                ctx.strokeText('DAMASO', 0, 0);
                 ctx.restore();
-                // Firma inferior más grande y gruesa
+                // Firma inferior
                 const size = Math.max(48, canvas.width * 0.085);
                 ctx.font = `italic bold ${size}px "Playfair Display", serif`;
                 ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 12;
@@ -2776,12 +2782,22 @@
                 ctx.strokeText('DAMASO Studio', wmX, wmY);
                 ctx.fillStyle = 'rgba(255,255,255,0.75)';
                 ctx.fillText('DAMASO Studio', wmX, wmY);
+                onReady(canvas);
+            };
+            img.onerror = function() { if (onError) onError(); };
+            img.src = srcUrl;
+        };
+
+        window.downloadWatermarkedImage = function() {
+            const imgEl = document.getElementById('modal-img-element');
+            const name = document.getElementById('modal-img-name')?.innerText || 'damaso.png';
+            if (!imgEl || !imgEl.src) return;
+            window._makeWatermarkedCanvas(imgEl.src, function(canvas) {
                 const link = document.createElement('a');
                 link.download = name.replace('.png','') + '_damaso.png';
                 link.href = canvas.toDataURL('image/png');
                 document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            };
-            img.onerror = function() {
+            }, function() {
                 const fallbackLink = document.createElement('a');
                 fallbackLink.download = name.replace('.png','') + '_damaso.png';
                 fallbackLink.href = imgEl.src;
@@ -2789,8 +2805,25 @@
                 document.body.appendChild(fallbackLink);
                 fallbackLink.click();
                 document.body.removeChild(fallbackLink);
-            };
-            img.src = imgEl.src;
+            });
+        };
+
+        // Visor de imagen en el modal: al picarle a la foto se ve en grande,
+        // siempre CON la marca de agua (nunca el archivo original limpio).
+        window.viewWatermarkedImage = function() {
+            const imgEl = document.getElementById('modal-img-element');
+            if (!imgEl || !imgEl.src) return;
+            window._makeWatermarkedCanvas(imgEl.src, function(canvas) {
+                const viewer = document.getElementById('image-viewer');
+                const vimg = document.getElementById('image-viewer-img');
+                if (!viewer || !vimg) return;
+                vimg.src = canvas.toDataURL('image/png');
+                viewer.style.display = 'flex';
+            }, function() {});
+        };
+        window.closeImageViewer = function() {
+            const v = document.getElementById('image-viewer');
+            if (v) v.style.display = 'none';
         };
 
         // ── PROTECCIÓN DE IMÁGENES / GUARDIÁN ANTI-CAPTURA ──
@@ -4310,27 +4343,28 @@ NORMAS:
             const subject = `Cotización DAMASO - ${clientName}`;
             const fileName = `DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}.pdf`;
             const bodyBase = `Hola,\n\nSolicitud de cotización generada en DAMASO Studio:\n\n${itemsList}\n\nNombre: ${clientName}${clientEmail ? `\nCorreo: ${clientEmail}` : ''}`;
-            // IMPORTANTE: el correo se abre PRIMERO (si el PDF se abre antes, en
-            // iPhone la navegación al visor de PDF se traga el mailto y el correo
-            // nunca aparece). El mailto lleva "Para" y "Asunto" ya llenos, igual
-            // que Contacto Directo, y el PDF se guarda en el mismo instante.
-            const body = bodyBase + '\n\n(El PDF de la cotización también se envía automáticamente adjunto a DAMASO Studio; si no lo recibieran, está descargado en este dispositivo para anexarlo aquí.)';
+            // 1) Hoja de compartir (iOS/Android): el PDF viaja ADJUNTO al correo.
+            //    El sistema no permite prellenar el destinatario, así que el correo
+            //    de DAMASO se copia al portapapeles y el mensaje pide pegarlo en "Para".
+            try {
+                const blob = doc.output('blob');
+                const file = new File([blob], fileName, { type: 'application/pdf' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try { await navigator.clipboard.writeText(window.DAMASO_EMAIL); } catch(clipErr) {}
+                    await navigator.share({
+                        files: [file],
+                        title: subject,
+                        text: `Rellene el campo "Para" con: ${window.DAMASO_EMAIL} (ya quedó copiado — solo péguelo)\nAsunto: ${subject}\n\n${bodyBase}`
+                    });
+                    return;
+                }
+            } catch(err) {
+                if (err && err.name === 'AbortError') return; // el usuario cerró la hoja de compartir
+            }
+            // 2) Respaldo (escritorio): descarga el PDF y abre el correo dirigido a DAMASO
+            const body = bodyBase + '\n\n(El PDF se descargó automáticamente — favor de adjuntarlo a este correo antes de enviarlo.)';
             window.location.href = `mailto:${window.DAMASO_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             doc.save(fileName);
-            // Envío automático en segundo plano CON EL PDF ADJUNTO al correo de
-            // DAMASO (FormSubmit). Los enlaces mailto no pueden adjuntar archivos,
-            // así que el adjunto viaja por este canal paralelo.
-            try {
-                const fd = new FormData();
-                fd.append('attachment', doc.output('blob'), fileName);
-                fd.append('Nombre', clientName);
-                if (clientEmail) fd.append('Correo del cliente', clientEmail);
-                fd.append('Piezas', itemsList);
-                fd.append('_subject', subject + ' (PDF adjunto)');
-                fd.append('_template', 'table');
-                fd.append('_captcha', 'false');
-                fetch('https://formsubmit.co/ajax/' + window.DAMASO_EMAIL, { method: 'POST', body: fd }).catch(() => {});
-            } catch(err) {}
         };
 
         // ── SCROLL REVEAL ──
