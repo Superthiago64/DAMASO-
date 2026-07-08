@@ -3,7 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>DAMASO | Alta Iluminación Editorial</title>
+    <title>DAMASO | Lámparas e Iluminación de Diseño · Guadalajara, Jalisco, México</title>
+
+    <!-- ── ICONO DEL SITIO (D dorada) ── -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon-96.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <!-- ── SEO ── -->
+    <meta name="description" content="DAMASO Studio: lámparas e iluminación de diseño hechas a mano en Guadalajara, Jalisco, México. Candiles, arbotantes, espejos, briseras y lámparas de hotelería para proyectos residenciales y comerciales.">
+    <meta name="keywords" content="lámparas Jalisco, lámparas DAMASO, lámparas México, iluminación, diseño, lámparas de hotelería, candiles, arbotantes, espejos, briseras, lámparas Guadalajara, iluminación artesanal">
+    <link rel="canonical" href="https://damasostudio.com/">
+    <meta property="og:site_name" content="DAMASO Studio">
+    <meta property="og:title" content="DAMASO | Lámparas e Iluminación de Diseño · Guadalajara, Jalisco">
+    <meta property="og:description" content="Lámparas de diseño hechas a mano en México: candiles, arbotantes, espejos e iluminación para hotelería.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://damasostudio.com/">
+    <meta property="og:image" content="https://damasostudio.com/favicon-512.png">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "DAMASO Studio",
+        "alternateName": "DAMASO Lámparas",
+        "description": "Lámparas e iluminación de diseño hechas a mano en Guadalajara, Jalisco, México: candiles, arbotantes, espejos, briseras y lámparas de hotelería.",
+        "url": "https://damasostudio.com/",
+        "logo": "https://damasostudio.com/favicon-512.png",
+        "image": "https://damasostudio.com/favicon-512.png",
+        "email": "dogma.dogma@hotmail.com",
+        "telephone": "+52 33 3870 3071",
+        "address": { "@type": "PostalAddress", "addressLocality": "Guadalajara", "addressRegion": "Jalisco", "addressCountry": "MX" },
+        "areaServed": "México",
+        "sameAs": ["https://www.instagram.com/damaso_lamparas", "https://wa.me/523338703071"],
+        "keywords": "lámparas Jalisco, lámparas DAMASO, lámparas México, iluminación, diseño, lámparas de hotelería"
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -2778,25 +2815,50 @@
         window.initImageProtection = function() {
             if (window._imgProtInit) return;
             window._imgProtInit = true;
-            // Clic derecho / "guardar imagen"
+            // Mantener presionada una imagen (catálogo o especificaciones).
+            // Clave: los micro-movimientos del dedo NO cancelan el temporizador
+            // (antes cualquier touchmove lo mataba y por eso nunca aparecía);
+            // solo se cancela si el dedo se desplaza de verdad (scroll) o se suelta.
+            let pressTimer = null, startX = 0, startY = 0;
+            const cancelPress = () => { clearTimeout(pressTimer); pressTimer = null; };
+            const startPress = (x, y, target) => {
+                if (!window._isProtectedImageTarget(target)) return;
+                startX = x; startY = y;
+                clearTimeout(pressTimer);
+                pressTimer = setTimeout(() => { pressTimer = null; window.showScreenshotGuard(); }, 300);
+            };
+            const movedTooFar = (x, y) => Math.abs(x - startX) > 14 || Math.abs(y - startY) > 14;
+            if (window.PointerEvent) {
+                document.addEventListener('pointerdown', e => startPress(e.clientX, e.clientY, e.target), true);
+                document.addEventListener('pointermove', e => { if (pressTimer && movedTooFar(e.clientX, e.clientY)) cancelPress(); }, true);
+                document.addEventListener('pointerup', cancelPress, true);
+                // pointercancel llega cuando iOS toma el gesto (callout/captura):
+                // si el dedo seguía sobre la imagen, mostrar el guardián de inmediato
+                document.addEventListener('pointercancel', () => {
+                    if (pressTimer) { cancelPress(); window.showScreenshotGuard(); }
+                }, true);
+            } else {
+                document.addEventListener('touchstart', e => {
+                    const t = e.touches && e.touches[0];
+                    if (t) startPress(t.clientX, t.clientY, e.target);
+                }, { passive: true, capture: true });
+                document.addEventListener('touchmove', e => {
+                    const t = e.touches && e.touches[0];
+                    if (pressTimer && t && movedTooFar(t.clientX, t.clientY)) cancelPress();
+                }, { passive: true, capture: true });
+                document.addEventListener('touchend', cancelPress, { passive: true, capture: true });
+                document.addEventListener('touchcancel', () => {
+                    if (pressTimer) { cancelPress(); window.showScreenshotGuard(); }
+                }, { passive: true, capture: true });
+            }
+            // Clic derecho / menú "guardar imagen"
             document.addEventListener('contextmenu', function(e) {
                 if (window._isProtectedImageTarget(e.target)) {
                     e.preventDefault();
                     window.showScreenshotGuard();
                 }
             });
-            // Dejar presionada la imagen en celular (menú de guardar / preparar captura)
-            let pressTimer = null;
-            document.addEventListener('touchstart', function(e) {
-                if (window._isProtectedImageTarget(e.target)) {
-                    clearTimeout(pressTimer);
-                    pressTimer = setTimeout(() => window.showScreenshotGuard(), 350);
-                }
-            }, { passive: true, capture: true });
-            ['touchend', 'touchmove', 'touchcancel'].forEach(ev =>
-                document.addEventListener(ev, () => clearTimeout(pressTimer), { passive: true, capture: true })
-            );
-            // Arrastrar o seleccionar la imagen
+            // Arrastrar la imagen
             document.addEventListener('dragstart', function(e) {
                 if (window._isProtectedImageTarget(e.target)) { e.preventDefault(); window.showScreenshotGuard(); }
             });
@@ -4238,12 +4300,13 @@ NORMAS:
             const subject = `Cotización DAMASO - ${clientName}`;
             const fileName = `DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}.pdf`;
             const bodyBase = `Hola,\n\nSolicitud de cotización generada en DAMASO Studio:\n\n${itemsList}\n\nNombre: ${clientName}${clientEmail ? `\nCorreo: ${clientEmail}` : ''}`;
-            // Descarga el PDF y abre el correo con "Para" y "Asunto" ya llenos,
-            // igual que el botón de Contacto Directo (mailto no permite adjuntar,
-            // así que el PDF descargado se anexa manualmente).
-            doc.save(fileName);
+            // IMPORTANTE: el correo se abre PRIMERO (si el PDF se abre antes, en
+            // iPhone la navegación al visor de PDF se traga el mailto y el correo
+            // nunca aparece). El mailto lleva "Para" y "Asunto" ya llenos, igual
+            // que Contacto Directo, y el PDF se guarda en el mismo instante.
             const body = bodyBase + '\n\n(El PDF se descargó automáticamente — favor de adjuntarlo a este correo antes de enviarlo.)';
             window.location.href = `mailto:${window.DAMASO_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            doc.save(fileName);
         };
 
         // ── SCROLL REVEAL ──
