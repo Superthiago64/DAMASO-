@@ -503,7 +503,7 @@
             bottom: 0;
             width: 100vw;
             height: 100vh;
-            min-height: 100dvh;
+            height: 100dvh; /* centrado real en el área visible de cualquier dispositivo */
             margin: 0;
             padding: 0;
             z-index: 9999999;
@@ -539,7 +539,7 @@
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             width: 100vw; height: 100vh;
-            min-height: 100dvh;
+            height: 100dvh; /* centrado real en el área visible */
             margin: 0; padding: 0;
             overflow: hidden;
         }
@@ -549,7 +549,7 @@
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             width: 100vw; height: 100vh;
-            min-height: 100dvh;
+            height: 100dvh; /* centrado real en el área visible */
             margin: 0; padding: 0;
             overflow: hidden;
         }
@@ -696,11 +696,12 @@
             <p id="fp-success" class="hidden text-[#22c55e] text-[9px] uppercase tracking-widest mt-4"></p>
         </div>
     </div>
-    <!-- ── GUARDIÁN ANTI-CAPTURA: cubre la pantalla si intentan capturar/guardar imágenes ── -->
-    <div id="screenshot-guard" class="fixed inset-0 z-[2147483000] hidden flex-col items-center justify-center text-center px-8" style="background:#030303;">
-        <span class="font-editorial font-bold text-brand-gold glow-gold leading-none" style="font-size: clamp(7rem, 34vw, 16rem);">D</span>
-        <span style="font-size: clamp(3.5rem, 14vw, 7rem);" aria-hidden="true">✋</span>
-        <p class="text-white text-xs sm:text-base tracking-[0.25em] uppercase mt-6">Descargue la imagen por seguridad</p>
+    <!-- ── GUARDIÁN ANTI-CAPTURA: cubre la pantalla si intentan capturar/guardar imágenes.
+         Estilos 100% inline para que funcione aunque falle cualquier hoja de estilos. ── -->
+    <div id="screenshot-guard" style="position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; height:100dvh; z-index:2147483600; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:#030303; padding:0 2rem; margin:0;">
+        <span style="font-family:'Playfair Display',serif; font-weight:700; color:#d4af37; line-height:1; font-size:clamp(7rem, 34vw, 16rem); text-shadow:0 0 30px rgba(212,175,55,0.6);">D</span>
+        <span style="font-size:clamp(3.5rem, 14vw, 7rem); line-height:1.2;" aria-hidden="true">✋</span>
+        <p style="color:#f2f2f2; font-size:clamp(0.7rem, 3vw, 1rem); letter-spacing:0.25em; text-transform:uppercase; margin-top:1.5rem;">Descargue la imagen por seguridad</p>
     </div>
 
     <!-- Notificación del correo con el código de seguridad -->
@@ -719,7 +720,7 @@
             <span class="d-loader font-editorial" aria-hidden="true">D</span>
         </div>
         <p class="font-editorial text-brand-gold text-xl tracking-[0.2em] italic glow-gold">Preparando su experiencia...</p>
-        <button type="button" onclick="window.skipLoadingAnimation()" class="glass-gold absolute left-1/2 -translate-x-1/2 text-brand-gold px-10 py-3 rounded-full text-[11px] tracking-[0.25em] uppercase font-bold shadow-[0_0_20px_rgba(212,175,55,0.35)] hover:scale-105 transition-transform" style="bottom: calc(2.5rem + env(safe-area-inset-bottom));" data-i18n="skip_btn">Saltar</button>
+        <button type="button" onclick="window.skipLoadingAnimation()" class="glass-gold mt-12 text-brand-gold px-10 py-3 rounded-full text-[11px] tracking-[0.25em] uppercase font-bold shadow-[0_0_20px_rgba(212,175,55,0.35)] hover:scale-105 transition-transform shrink-0" data-i18n="skip_btn">Saltar</button>
     </div>
 
     <div id="welcome-animation-overlay" class="fixed inset-0 z-[9999999] bg-[#030303] flex flex-col items-center justify-center pointer-events-none opacity-0 hidden">
@@ -2721,9 +2722,9 @@
                 ctx.font = `italic bold ${bigSize}px "Playfair Display", serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.shadowColor = 'rgba(255,255,255,0.6)';
+                ctx.shadowColor = 'rgba(255,255,255,0.35)';
                 ctx.shadowBlur = Math.max(14, bigSize / 5);
-                ctx.fillStyle = 'rgba(255,255,255,0.34)';
+                ctx.fillStyle = 'rgba(255,255,255,0.16)';
                 ctx.fillText('DAMASO', 0, 0);
                 ctx.restore();
                 // Firma inferior más grande y gruesa
@@ -2731,12 +2732,12 @@
                 ctx.font = `italic bold ${size}px "Playfair Display", serif`;
                 ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 12;
                 ctx.shadowOffsetX = 3; ctx.shadowOffsetY = 3;
-                ctx.strokeStyle = 'rgba(0,0,0,0.85)';
+                ctx.strokeStyle = 'rgba(0,0,0,0.5)';
                 ctx.lineWidth = Math.max(3, size / 14);
                 const wmX = Math.max(15, canvas.width * 0.02);
                 const wmY = canvas.height - Math.max(20, canvas.height * 0.035);
                 ctx.strokeText('DAMASO Studio', wmX, wmY);
-                ctx.fillStyle = 'rgba(255,255,255,0.95)';
+                ctx.fillStyle = 'rgba(255,255,255,0.75)';
                 ctx.fillText('DAMASO Studio', wmX, wmY);
                 const link = document.createElement('a');
                 link.download = name.replace('.png','') + '_damaso.png';
@@ -2762,20 +2763,24 @@
         window.showScreenshotGuard = function(duration) {
             const g = document.getElementById('screenshot-guard');
             if (!g) return;
-            g.classList.remove('hidden');
-            g.classList.add('flex');
+            g.style.display = 'flex';
             clearTimeout(window._guardTimer);
-            window._guardTimer = setTimeout(() => {
-                g.classList.add('hidden');
-                g.classList.remove('flex');
-            }, duration || 2600);
+            window._guardTimer = setTimeout(() => { g.style.display = 'none'; }, duration || 2600);
+        };
+
+        // ¿El toque/clic cae sobre una imagen protegida? (tarjetas del catálogo
+        // y la imagen grande del modal de especificaciones)
+        window._isProtectedImageTarget = function(t) {
+            if (!t || !t.closest) return false;
+            return !!(t.tagName === 'IMG' || t.closest('#modal-img-link') || t.closest('[id^="product-card-"]'));
         };
 
         window.initImageProtection = function() {
-            // Clic derecho / "guardar imagen" sobre cualquier imagen
+            if (window._imgProtInit) return;
+            window._imgProtInit = true;
+            // Clic derecho / "guardar imagen"
             document.addEventListener('contextmenu', function(e) {
-                const t = e.target;
-                if (t && (t.tagName === 'IMG' || (t.closest && t.closest('#modal-img-link')))) {
+                if (window._isProtectedImageTarget(e.target)) {
                     e.preventDefault();
                     window.showScreenshotGuard();
                 }
@@ -2783,15 +2788,18 @@
             // Dejar presionada la imagen en celular (menú de guardar / preparar captura)
             let pressTimer = null;
             document.addEventListener('touchstart', function(e) {
-                const t = e.target;
-                if (t && (t.tagName === 'IMG' || (t.closest && t.closest('#modal-img-link')))) {
+                if (window._isProtectedImageTarget(e.target)) {
                     clearTimeout(pressTimer);
-                    pressTimer = setTimeout(() => window.showScreenshotGuard(), 500);
+                    pressTimer = setTimeout(() => window.showScreenshotGuard(), 350);
                 }
-            }, { passive: true });
+            }, { passive: true, capture: true });
             ['touchend', 'touchmove', 'touchcancel'].forEach(ev =>
-                document.addEventListener(ev, () => clearTimeout(pressTimer), { passive: true })
+                document.addEventListener(ev, () => clearTimeout(pressTimer), { passive: true, capture: true })
             );
+            // Arrastrar o seleccionar la imagen
+            document.addEventListener('dragstart', function(e) {
+                if (window._isProtectedImageTarget(e.target)) { e.preventDefault(); window.showScreenshotGuard(); }
+            });
             // Tecla Imprimir Pantalla en escritorio (además se limpia el portapapeles)
             document.addEventListener('keyup', function(e) {
                 if (e.key === 'PrintScreen') {
@@ -2807,6 +2815,12 @@
                 }
             });
         };
+        // Activar la protección de inmediato (sin esperar a initApp)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => window.initImageProtection());
+        } else {
+            window.initImageProtection();
+        }
 
         // ── FALLBACK ENGINE v2 — Motor de respaldo offline ──
         // Se activa automáticamente cuando la IA principal (función de Netlify) no
@@ -4224,26 +4238,9 @@ NORMAS:
             const subject = `Cotización DAMASO - ${clientName}`;
             const fileName = `DAMASO_Cotizacion_${clientName.replace(/\s+/g,'_')}.pdf`;
             const bodyBase = `Hola,\n\nSolicitud de cotización generada en DAMASO Studio:\n\n${itemsList}\n\nNombre: ${clientName}${clientEmail ? `\nCorreo: ${clientEmail}` : ''}`;
-            // 1) Compartir con adjunto (iOS/Android): el PDF viaja pegado al correo.
-            //    La hoja de compartir del sistema no permite prellenar el campo "Para",
-            //    así que copiamos el correo al portapapeles y lo ponemos al inicio del
-            //    texto; el título se usa como asunto en Mail.
-            try {
-                const blob = doc.output('blob');
-                const file = new File([blob], fileName, { type: 'application/pdf' });
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    try { await navigator.clipboard.writeText(window.DAMASO_EMAIL); } catch(clipErr) {}
-                    await navigator.share({
-                        files: [file],
-                        title: subject,
-                        text: `Para: ${window.DAMASO_EMAIL} (correo copiado — péguelo en el campo "Para")\nAsunto: ${subject}\n\n${bodyBase}`
-                    });
-                    return;
-                }
-            } catch(err) {
-                if (err && err.name === 'AbortError') return; // el usuario cerró la hoja de compartir
-            }
-            // 2) Respaldo: descargar el PDF y abrir el correo con Para y Asunto ya llenos
+            // Descarga el PDF y abre el correo con "Para" y "Asunto" ya llenos,
+            // igual que el botón de Contacto Directo (mailto no permite adjuntar,
+            // así que el PDF descargado se anexa manualmente).
             doc.save(fileName);
             const body = bodyBase + '\n\n(El PDF se descargó automáticamente — favor de adjuntarlo a este correo antes de enviarlo.)';
             window.location.href = `mailto:${window.DAMASO_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
