@@ -734,9 +734,12 @@
         </div>
     </div>
     <!-- ── VISOR DE IMAGEN CON MARCA DE AGUA (al picar la foto en especificaciones) ── -->
-    <div id="image-viewer" onclick="window.closeImageViewer()" style="position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; height:100dvh; z-index:2147483500; display:none; align-items:center; justify-content:center; background:rgba(3,3,3,0.96); padding:1.5rem; cursor:zoom-out;">
-        <img id="image-viewer-img" src="" alt="DAMASO" style="max-width:100%; max-height:100%; object-fit:contain;">
-        <button type="button" onclick="window.closeImageViewer()" aria-label="Cerrar" style="position:absolute; top:calc(1rem + env(safe-area-inset-top)); right:1rem; background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.6); color:#d4af37; border-radius:9999px; width:44px; height:44px; font-size:20px; line-height:1; cursor:pointer;">✕</button>
+    <div id="image-viewer" onclick="if(event.target===this) window.closeImageViewer()" style="position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; height:100dvh; z-index:2147483500; display:none; align-items:center; justify-content:center; padding:5vh 5vw; cursor:zoom-out;">
+        <div id="image-viewer-backdrop" style="position:absolute; inset:0; background:rgba(3,3,3,0.8); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); opacity:0; transition:opacity 0.35s ease;"></div>
+        <img id="image-viewer-img" src="" alt="DAMASO" style="position:relative; max-width:100%; max-height:100%; object-fit:contain; opacity:0; transform:scale(0.88); transition:opacity 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1); cursor:zoom-out; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+        <button type="button" onclick="window.closeImageViewer()" aria-label="Cerrar" class="hover:scale-110 transition-transform" style="position:absolute; top:calc(1rem + env(safe-area-inset-top)); left:1rem; z-index:2; background:rgba(212,175,55,0.15); backdrop-filter:blur(16px); border:1px solid rgba(212,175,55,0.6); color:#d4af37; border-radius:9999px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 20px rgba(212,175,55,0.4); cursor:pointer;">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </button>
     </div>
 
     <!-- ── GUARDIÁN ANTI-CAPTURA: cubre la pantalla si intentan capturar/guardar imágenes.
@@ -2810,20 +2813,33 @@
 
         // Visor de imagen en el modal: al picarle a la foto se ve en grande,
         // siempre CON la marca de agua (nunca el archivo original limpio).
+        // Ya trae la marca visible, así que el guardián anti-captura no se activa
+        // aquí dentro — solo se usa para proteger la imagen "limpia" del catálogo.
         window.viewWatermarkedImage = function() {
             const imgEl = document.getElementById('modal-img-element');
             if (!imgEl || !imgEl.src) return;
             window._makeWatermarkedCanvas(imgEl.src, function(canvas) {
                 const viewer = document.getElementById('image-viewer');
+                const backdrop = document.getElementById('image-viewer-backdrop');
                 const vimg = document.getElementById('image-viewer-img');
                 if (!viewer || !vimg) return;
                 vimg.src = canvas.toDataURL('image/png');
                 viewer.style.display = 'flex';
+                // Forzar reflow para que la transición de entrada sea suave
+                void viewer.offsetWidth;
+                if (backdrop) backdrop.style.opacity = '1';
+                vimg.style.opacity = '1';
+                vimg.style.transform = 'scale(1)';
             }, function() {});
         };
         window.closeImageViewer = function() {
             const v = document.getElementById('image-viewer');
-            if (v) v.style.display = 'none';
+            const backdrop = document.getElementById('image-viewer-backdrop');
+            const vimg = document.getElementById('image-viewer-img');
+            if (!v) return;
+            if (backdrop) backdrop.style.opacity = '0';
+            if (vimg) { vimg.style.opacity = '0'; vimg.style.transform = 'scale(0.88)'; }
+            setTimeout(() => { v.style.display = 'none'; }, 350);
         };
 
         // ── PROTECCIÓN DE IMÁGENES / GUARDIÁN ANTI-CAPTURA ──
@@ -2839,9 +2855,12 @@
         };
 
         // ¿El toque/clic cae sobre una imagen protegida? (tarjetas del catálogo
-        // y la imagen grande del modal de especificaciones)
+        // y la imagen grande del modal de especificaciones). El visor con marca
+        // de agua (#image-viewer) queda fuera: ya se ve marcada, no hace falta
+        // tapar la pantalla ahí y así se puede seguir usando la página al cerrarlo.
         window._isProtectedImageTarget = function(t) {
             if (!t || !t.closest) return false;
+            if (t.closest('#image-viewer')) return false;
             return !!(t.tagName === 'IMG' || t.closest('#modal-img-link') || t.closest('[id^="product-card-"]'));
         };
 
