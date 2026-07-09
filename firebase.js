@@ -1,17 +1,23 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC4SRh7GKB8KkDYao6aw0S1JnLzNOjRcY0",
-  authDomain: "damaso-978c9.firebaseapp.com",
-  projectId: "damaso-978c9",
-  storageBucket: "damaso-978c9.firebasestorage.app",
-  messagingSenderId: "545014965592",
-  appId: "1:545014965592:web:58aec27da0472c6ace712d",
-  measurementId: "G-GGC2PTKLS8"
+    apiKey: "AIzaSyBuH4-Ydh2j4OAQaQSPrqO56PqHTfs-w-U",
+    authDomain: "damaso-b5d5a.firebaseapp.com",
+    projectId: "damaso-b5d5a",
+    storageBucket: "damaso-b5d5a.firebasestorage.app",
+    messagingSenderId: "514653959267",
+    appId: "1:514653959267:web:c8a31b702d8f14f2957456",
+    measurementId: "G-2J1ERD5NCB"
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
-export { app };
+let analytics;
+try {
+    analytics = getAnalytics(app);
+} catch (e) {
+    console.warn("Firebase Analytics no se pudo inicializar:", e);
+}
+
+export { app, analytics };
