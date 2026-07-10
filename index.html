@@ -742,14 +742,6 @@
         </button>
     </div>
 
-    <!-- ── GUARDIÁN ANTI-CAPTURA: cubre la pantalla si intentan capturar/guardar imágenes.
-         Estilos 100% inline para que funcione aunque falle cualquier hoja de estilos. ── -->
-    <div id="screenshot-guard" style="position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; height:100dvh; z-index:2147483600; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:#030303; padding:0 2rem; margin:0;">
-        <span style="font-family:'Playfair Display',serif; font-weight:700; color:#d4af37; line-height:1; font-size:clamp(7rem, 34vw, 16rem); text-shadow:0 0 30px rgba(212,175,55,0.6);">D</span>
-        <span style="font-size:clamp(3.5rem, 14vw, 7rem); line-height:1.2;" aria-hidden="true">✋</span>
-        <p style="color:#f2f2f2; font-size:clamp(0.7rem, 3vw, 1rem); letter-spacing:0.25em; text-transform:uppercase; margin-top:1.5rem;">Descargue la imagen por seguridad</p>
-    </div>
-
     <!-- Notificación del correo con el código de seguridad -->
     <div id="fp-email-toast" class="fixed left-1/2 -translate-x-1/2 z-[10000000] hidden w-[92%] max-w-sm border border-brand-gold/60 rounded-lg p-4 shadow-[0_8px_40px_rgba(0,0,0,0.8)]" style="top: calc(1rem + env(safe-area-inset-top)); background:#101010;">
         <div class="flex items-start gap-3">
@@ -1191,29 +1183,29 @@
 
     <!-- ── MARCA ── -->
     <section id="marca" class="py-32 bg-brand-surface border-y border-brand-border text-center">
-        <div class="max-w-5xl mx-auto px-6">
+        <div class="max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto px-6">
             <p class="text-[10px] tracking-[0.5em] text-brand-gold uppercase mb-6 glow-gold scroll-reveal" data-i18n="marca_label">La marca</p>
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold uppercase mb-20 scroll-reveal">Damaso</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-20">
-                <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
+                <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
                     <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_clientes">Clientes</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="100">0</span>+</p>
-                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest" data-i18n="marca_clientes_lower">clientes</p>
+                    <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_clientes_lower">clientes</p>
                 </div>
-                <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
+                <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
                     <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_experiencia">Experiencia</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="25">0</span> <span class="text-brand-gold glow-gold" data-i18n="marca_anios">años</span></p>
-                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest" data-i18n="marca_de_experiencia">de experiencia</p>
+                    <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_de_experiencia">de experiencia</p>
                 </div>
-                <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
+                <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
                     <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_proyectos">Proyectos</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="200">0</span>+</p>
-                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest" data-i18n="marca_proyectos_lower">proyectos</p>
+                    <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_proyectos_lower">proyectos</p>
                 </div>
-                <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 scroll-reveal">
+                <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
                     <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_empresa">Empresa</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="100">0</span><span class="text-brand-gold glow-gold">%</span></p>
-                    <p class="text-brand-muted text-sm mt-2 uppercase tracking-widest" data-i18n="marca_empresa_tapatia">empresa tapatía</p>
+                    <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_empresa_tapatia">empresa tapatía</p>
                 </div>
             </div>
             <div class="max-w-4xl mx-auto px-6 scroll-reveal">
@@ -1384,11 +1376,11 @@
             { id: 20, name: "Espejo angular", category: "espejos", price: 17200, img: "nuevo_espejo_3.png", sku: "DM-ESP-012", desc: "Espejo, 6 mm natural con terminado en pintura electrostática, con tira de LED", specsLight: "Espejo, 6 mm natural con terminado en pintura electrostática, con tira de LED", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "1.20 m" }, peso: "20 kg", volt: "N/A", mat: "Espejo/Marco de metal", fin: "Pintura electrostática", time: "4 semanas", cert: "N/A" },
             { id: 21, name: "Espejo, lunar", category: "espejos", price: 19800, img: "nuevo_espejo_4.png", sku: "DM-ESP-013", desc: "Espejo doble Luna de 6 mm, natural y espejo humo con Marco de metal.", specsLight: "Espejo doble Luna de 6 mm, natural y espejo humo con Marco de metal.", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "5 cm", dia: "1.5 m" }, peso: "50 kg", volt: "N/A", mat: "Espejo/metal", fin: "Natural/humo/pintura automotriz", time: "3 a 4 semanas", cert: "N/A" },
             { id: 22, name: "Espejo Redondo Geométrico", category: "espejos", price: 18500, img: "IMG_2007.png", sku: "DM-ESP-014", desc: "Patrón de varillas de acero formando rombos.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "115 cm" }, peso: "18 kg", volt: "N/A", mat: "Acero y cristal plata", fin: "Negro electrostático", time: "4 a 5 semanas", cert: "N/A" },
-            { id: 23, name: "Espejo Sol Madera", category: "espejos", price: 16500, img: "IMG_2056.png", sku: "DM-ESP-015", desc: "Marco tallado imitando rayos del sol.", specsLight: "N/A", cable: "N/A", dims: { w: "100 cm", h: "100 cm", d: "4 cm", dia: "100 cm" }, peso: "12 kg", volt: "N/A", mat: "Madera tallada y cristal plata", fin: "Madera natural cálida", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 24, name: "Espejo Hexagonal Trasluz", category: "espejos", price: 19500, img: "IMG_2069.png", sku: "DM-ESP-016", desc: "Forma hexagonal irregular con retroiluminación.", specsLight: "Tira LED 12V 4000K", cable: "Conexión directa a registro", dims: { w: "80 cm", h: "110 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "110-120V", mat: "Cristal inastillable", fin: "Luz neutra", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 25, name: "Espejo Circular Panorama", category: "espejos", price: 15500, img: "IMG_2124.PNG", sku: "DM-ESP-017", desc: "Gran formato con marco metálico ultra fino en bronce.", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "2 cm", dia: "120 cm" }, peso: "16 kg", volt: "N/A", mat: "Cristal plata, marco de acero", fin: "Bronce sutil mate", time: "3 a 4 semanas", cert: "N/A" },
-            { id: 26, name: "Espejo Óvalo Arquitectónico", category: "espejos", price: 18900, img: "IMG_2126.PNG", sku: "DM-ESP-018", desc: "Doble marco flotante en latón avejentado.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "130 cm", d: "5 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Cristal plata, marco doble de latón", fin: "Latón cobrizado oscuro", time: "4 semanas", cert: "N/A" },
-            { id: 27, name: "Espejo Reflejo Profundo", category: "espejos", price: 18500, img: "IMG_2029.png", sku: "DM-ESP-019", desc: "Profundidad visual inigualable en cristal inastillable.", specsLight: "N/A", cable: "N/A", dims: { w: "80 cm", h: "120 cm", d: "4 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Cristal inastillable", fin: "Canto pulido", time: "4 semanas", cert: "N/A" },
+            { id: 23, name: "Espejo sol", category: "espejos", price: 16500, img: "IMG_2056.png", sku: "DM-ESP-015", desc: "Espejo, 6 mm con bisel 1/2 con Marco en madera de Parota, con perímetro en metal", specsLight: "Espejo, 6 mm con bisel 1/2 con Marco en madera de Parota, con perímetro en metal", cable: "N/A", dims: { w: "1 m", h: "90 cm", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "N/A", mat: "Espejo/madera/metal", fin: "Madera con terminado, cera/metal, pintura electrostática", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 24, name: "Espejo hexagonal", category: "espejos", price: 19500, img: "IMG_2069.png", sku: "DM-ESP-016", desc: "Espejo, 6 mm con bisel 1/2 con tira de LED posterior", specsLight: "Espejo, 6 mm con bisel 1/2 con tira de LED posterior", cable: "N/A", dims: { w: "50 cm", h: "80 cm", d: "5 cm", dia: "N/A" }, peso: "15 kg", volt: "N/A", mat: "Espejo/tira de LED", fin: "Espejo, natural", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 25, name: "Espejo panorama", category: "espejos", price: 15500, img: "IMG_2124.PNG", sku: "DM-ESP-017", desc: "Espejo, 6 mm con bisel 1/2 con Marco de metal con terminado en pintura automotriz", specsLight: "Espejo, 6 mm con bisel 1/2 con Marco de metal con terminado en pintura automotriz", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "4 cm", dia: "1.20 m" }, peso: "10 kg", volt: "N/A", mat: "Espejo/Marco de metal", fin: "Pintura electrostática", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 26, name: "Espejo, óvalo", category: "espejos", price: 18900, img: "IMG_2126.PNG", sku: "DM-ESP-018", desc: "Espejo, 6 mm con bisel 1/2 con doble Marco con metal con terminado en pintura automotriz", specsLight: "Espejo, 6 mm con bisel 1/2 con doble Marco con metal con terminado en pintura automotriz", cable: "N/A", dims: { w: "60 cm", h: "1.20 m", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "N/A", mat: "Espejo/metal", fin: "Pintura automotriz", time: "4 semanas", cert: "N/A" },
+            { id: 27, name: "Espejo reflejo", category: "espejos", price: 18500, img: "IMG_2029.png", sku: "DM-ESP-019", desc: "Espejo, 6 mm natural con perímetro en Reflector bronce, con marco en madera", specsLight: "Espejo, 6 mm natural con perímetro en Reflector bronce, con marco en madera", cable: "N/A", dims: { w: "80 cm", h: "1.40 m", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "N/A", mat: "Espejo/reflectar, bronce/madera", fin: "Laca color, chocolate", time: "4 semanas", cert: "N/A" },
             { id: 28, name: "Espejo Vanguardia Luz", category: "espejos", price: 24500, img: "IMG_2149.png", sku: "DM-ESP-020", desc: "Monumental con iluminación posterior y acento negro.", specsLight: "Tira LED 12V 3000K perimetral", cable: "Conexión a registro", dims: { w: "100 cm", h: "180 cm", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "110-120V", mat: "Cristal inastillable, acero", fin: "Negro mate texturizado", time: "4 semanas", cert: "NOM" },
             { id: 29, name: "Lámpara Mesa Cilíndrica", category: "mesa", price: 3600, img: "nueva_foto_6.png", sku: "DM-MES-001", desc: "Cilíndrica y delgada para iluminación focal.", specsLight: "Módulo LED 5W 3000K", cable: "Cable directo con clavija", dims: { w: "8 cm", h: "30 cm", d: "10 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Aluminio inyectado", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
             { id: 30, name: "Lámpara Mesa Alabastro", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", sku: "DM-MES-002", desc: "Base cónica de alabastro natural translúcido.", specsLight: "1x E26 LED 8W, 3000K", cable: "Cable transparente 1.8m", dims: { w: "30 cm", h: "50 cm", d: "30 cm", dia: "30 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Alabastro pulido y lino", fin: "Blanco veteado natural", time: "3 semanas", cert: "NOM" },
@@ -1626,6 +1618,10 @@
             ["reflector", "reflector", "réflecteur", "反射器"],
             ["lunar", "moon-shaped", "en forme de lune", "月形"],
             ["espejo humo", "smoked mirror", "miroir fumé", "烟色镜面"],
+            ["perímetro", "perimeter", "périmètre", "边缘"],
+            ["laca color", "colored lacquer", "laque colorée", "彩色漆"],
+            ["laca", "lacquer", "laque", "漆"],
+            ["panorama", "panorama", "panorama", "全景"],
             ["humo", "smoke-tinted", "fumé", "烟色"],
             ["anti", "antique", "antique", "古董"],
             ["angular", "angular", "angulaire", "棱角"],
@@ -2786,36 +2782,17 @@
             img.onload = function() {
                 canvas.width = img.width; canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
-                // Centro: horizontal, muy translúcido pero con borde definido
-                // (sin difuminado alguno: nada de shadowBlur en este bloque)
-                ctx.save();
-                ctx.shadowColor = 'transparent';
-                ctx.shadowBlur = 0;
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                const bigSize = Math.max(72, canvas.width * 0.16);
-                ctx.font = `italic bold ${bigSize}px "Playfair Display", serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-                ctx.lineWidth = Math.max(1.5, bigSize / 80);
-                ctx.strokeText('DAMASO', 0, 0);
-                ctx.fillStyle = 'rgba(255,255,255,0.1)';
-                ctx.fillText('DAMASO', 0, 0);
-                ctx.restore();
-                // Firma inferior: contorno definido, sombra mínima solo para
-                // separarla del fondo sin verse difuminada
+                // Solo firma inferior izquierda, MUY translúcida y sin difuminado
                 const size = Math.max(48, canvas.width * 0.085);
                 ctx.font = `italic bold ${size}px "Playfair Display", serif`;
-                ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 3;
-                ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 1;
-                ctx.strokeStyle = 'rgba(0,0,0,0.45)';
-                ctx.lineWidth = Math.max(2.5, size / 18);
+                ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+                ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+                ctx.lineWidth = Math.max(2, size / 22);
                 const wmX = Math.max(15, canvas.width * 0.02);
                 const wmY = canvas.height - Math.max(20, canvas.height * 0.035);
                 ctx.strokeText('DAMASO Studio', wmX, wmY);
-                ctx.fillStyle = 'rgba(255,255,255,0.65)';
+                ctx.fillStyle = 'rgba(255,255,255,0.28)';
                 ctx.fillText('DAMASO Studio', wmX, wmY);
-                ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
                 onReady(canvas);
             };
             img.onerror = function() { if (onError) onError(); };
@@ -2873,109 +2850,6 @@
             setTimeout(() => { v.style.display = 'none'; }, 350);
         };
 
-        // ── PROTECCIÓN DE IMÁGENES / GUARDIÁN ANTI-CAPTURA ──
-        // Muestra la pantalla de advertencia (D dorada + mano de alto) cuando se
-        // detecta un intento de guardar o capturar imágenes; se oculta sola a los
-        // segundos y vuelve a aparecer con cada nuevo intento.
-        window.showScreenshotGuard = function(duration) {
-            const g = document.getElementById('screenshot-guard');
-            if (!g) return;
-            g.style.display = 'flex';
-            clearTimeout(window._guardTimer);
-            window._guardTimer = setTimeout(() => { g.style.display = 'none'; }, duration || 2600);
-        };
-
-        // ¿El toque/clic cae sobre una imagen protegida? (tarjetas del catálogo
-        // y la imagen grande del modal de especificaciones). El visor con marca
-        // de agua (#image-viewer) queda fuera: ya se ve marcada, no hace falta
-        // tapar la pantalla ahí y así se puede seguir usando la página al cerrarlo.
-        window._isProtectedImageTarget = function(t) {
-            if (!t || !t.closest) return false;
-            if (t.closest('#image-viewer')) return false;
-            return !!(t.tagName === 'IMG' || t.closest('#modal-img-link') || t.closest('[id^="product-card-"]'));
-        };
-
-        window.initImageProtection = function() {
-            if (window._imgProtInit) return;
-            window._imgProtInit = true;
-            // Mantener presionada una imagen (catálogo o especificaciones).
-            // Clave: los micro-movimientos del dedo NO cancelan el temporizador
-            // (antes cualquier touchmove lo mataba y por eso nunca aparecía);
-            // solo se cancela si el dedo se desplaza de verdad (scroll) o se suelta.
-            let pressTimer = null, startX = 0, startY = 0;
-            const cancelPress = () => { clearTimeout(pressTimer); pressTimer = null; };
-            const startPress = (x, y, target) => {
-                if (!window._isProtectedImageTarget(target)) return;
-                startX = x; startY = y;
-                clearTimeout(pressTimer);
-                pressTimer = setTimeout(() => { pressTimer = null; window.showScreenshotGuard(); }, 300);
-            };
-            const movedTooFar = (x, y) => Math.abs(x - startX) > 14 || Math.abs(y - startY) > 14;
-            if (window.PointerEvent) {
-                document.addEventListener('pointerdown', e => startPress(e.clientX, e.clientY, e.target), true);
-                document.addEventListener('pointermove', e => { if (pressTimer && movedTooFar(e.clientX, e.clientY)) cancelPress(); }, true);
-                document.addEventListener('pointerup', cancelPress, true);
-                // pointercancel llega cuando iOS toma el gesto (callout/captura):
-                // si el dedo seguía sobre la imagen, mostrar el guardián de inmediato
-                document.addEventListener('pointercancel', () => {
-                    if (pressTimer) { cancelPress(); window.showScreenshotGuard(); }
-                }, true);
-            } else {
-                document.addEventListener('touchstart', e => {
-                    const t = e.touches && e.touches[0];
-                    if (t) startPress(t.clientX, t.clientY, e.target);
-                }, { passive: true, capture: true });
-                document.addEventListener('touchmove', e => {
-                    const t = e.touches && e.touches[0];
-                    if (pressTimer && t && movedTooFar(t.clientX, t.clientY)) cancelPress();
-                }, { passive: true, capture: true });
-                document.addEventListener('touchend', cancelPress, { passive: true, capture: true });
-                document.addEventListener('touchcancel', () => {
-                    if (pressTimer) { cancelPress(); window.showScreenshotGuard(); }
-                }, { passive: true, capture: true });
-            }
-            // Clic derecho / menú "guardar imagen"
-            document.addEventListener('contextmenu', function(e) {
-                if (window._isProtectedImageTarget(e.target)) {
-                    e.preventDefault();
-                    window.showScreenshotGuard();
-                }
-            });
-            // Arrastrar la imagen
-            document.addEventListener('dragstart', function(e) {
-                if (window._isProtectedImageTarget(e.target)) { e.preventDefault(); window.showScreenshotGuard(); }
-            });
-            // Tecla Imprimir Pantalla en escritorio (además se limpia el portapapeles)
-            document.addEventListener('keyup', function(e) {
-                if (e.key === 'PrintScreen') {
-                    window.showScreenshotGuard();
-                    try { navigator.clipboard.writeText('DAMASO Studio — Descargue la imagen por seguridad'); } catch(err) {}
-                }
-            });
-            // Atajos comunes de captura/guardado en escritorio
-            document.addEventListener('keydown', function(e) {
-                if ((e.metaKey || e.ctrlKey) && e.shiftKey && ['3', '4', '5', 's', 'S'].includes(e.key)) {
-                    e.preventDefault();
-                    window.showScreenshotGuard();
-                }
-            });
-            // Con la ficha de una pieza abierta: si la página pierde el foco o
-            // visibilidad (abrir el centro de control para grabar pantalla,
-            // cambiar de app, deslizar el multitarea), el guardián cubre la
-            // imagen de inmediato y también al regresar.
-            document.addEventListener('visibilitychange', function() {
-                if (window.currentModalProduct) window.showScreenshotGuard(3000);
-            });
-            window.addEventListener('blur', function() {
-                if (window.currentModalProduct) window.showScreenshotGuard(3000);
-            });
-        };
-        // Activar la protección de inmediato (sin esperar a initApp)
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => window.initImageProtection());
-        } else {
-            window.initImageProtection();
-        }
 
         // ── FALLBACK ENGINE v2 — Motor de respaldo offline ──
         // Se activa automáticamente cuando la IA principal (función de Netlify) no
@@ -4498,7 +4372,6 @@ NORMAS:
             window.applyAnimationsSetting();
             window.applyStaticTranslations();
             window.preloadAllImages();
-            window.initImageProtection();
             window.renderCatalog(window.dbProducts);
             window.updateCartUI();
             window.startAppAnimation();
