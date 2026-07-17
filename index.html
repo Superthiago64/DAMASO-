@@ -2930,15 +2930,12 @@
             img.onload = function() {
                 canvas.width = img.width; canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
-                // Solo firma inferior izquierda, MUY translúcida y sin difuminado
+                // Solo firma inferior izquierda, MUY translúcida, sin difuminado y sin contorno
                 const size = Math.max(48, canvas.width * 0.085);
                 ctx.font = `italic bold ${size}px "Playfair Display", serif`;
                 ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
-                ctx.strokeStyle = 'rgba(0,0,0,0.18)';
-                ctx.lineWidth = Math.max(2, size / 22);
                 const wmX = Math.max(15, canvas.width * 0.02);
                 const wmY = canvas.height - Math.max(20, canvas.height * 0.035);
-                ctx.strokeText('DAMASO Studio', wmX, wmY);
                 ctx.fillStyle = 'rgba(255,255,255,0.28)';
                 ctx.fillText('DAMASO Studio', wmX, wmY);
                 onReady(canvas);
