@@ -765,6 +765,19 @@
         <div id="welcome-letters" class="flex flex-wrap justify-center items-center text-center px-4 max-w-[95%] mb-2 leading-tight"></div>
     </div>
 
+    <!-- ── AVISO DE PÁGINA ACTUALIZADA (una sola vez por versión) ── -->
+    <div id="update-notice-modal" class="fixed inset-0 z-[9999996] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-500 hidden">
+        <div class="bg-brand-surface border border-brand-gold p-6 sm:p-10 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.15)] relative rounded-sm max-h-[85vh] overflow-y-auto">
+            <h2 class="font-editorial text-3xl sm:text-4xl text-brand-gold glow-gold uppercase tracking-widest mb-4" data-i18n="update_notice_title">Página Actualizada</h2>
+            <p id="update-notice-subtitle" class="text-brand-muted text-sm leading-relaxed mb-6"></p>
+            <div id="update-notice-info" class="hidden text-left bg-[#0a0a0a] border border-brand-border rounded-sm p-4 mb-6"></div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mt-2">
+                <button type="button" id="update-notice-more-btn" onclick="window.toggleUpdateNoticeInfo()" class="glass-btn px-6 py-3 text-brand-gold text-[10px] uppercase tracking-widest rounded-sm" data-i18n="update_notice_more_btn">Más información</button>
+                <button type="button" onclick="window.acceptUpdateNotice()" class="px-6 py-3 bg-brand-gold text-black text-[10px] uppercase font-bold tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] rounded-sm" data-i18n="update_notice_accept_btn">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ── TRANSICIÓN DE CATEGORÍA — PANTALLA COMPLETA ── -->
     <div id="category-transition-overlay">
         <div id="menu-damaso-letters" class="mb-3">
@@ -1395,6 +1408,7 @@
             { id: 26, name: "Espejo, óvalo", category: "espejos", price: 18900, img: "IMG_2126.PNG", sku: "DM-ESP-018", desc: "Espejo, 6 mm con bisel 1/2 con doble Marco con metal con terminado en pintura automotriz", specsLight: "Espejo, 6 mm con bisel 1/2 con doble Marco con metal con terminado en pintura automotriz", cable: "N/A", dims: { w: "60 cm", h: "1.20 m", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "N/A", mat: "Espejo/metal", fin: "Pintura automotriz", time: "4 semanas", cert: "N/A" },
             { id: 27, name: "Espejo reflejo", category: "espejos", price: 18500, img: "IMG_2029.png", sku: "DM-ESP-019", desc: "Espejo, 6 mm natural con perímetro en Reflector bronce, con marco en madera", specsLight: "Espejo, 6 mm natural con perímetro en Reflector bronce, con marco en madera", cable: "N/A", dims: { w: "80 cm", h: "1.40 m", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "N/A", mat: "Espejo/reflectar, bronce/madera", fin: "Laca color, chocolate", time: "4 semanas", cert: "N/A" },
             { id: 28, name: "Espejo Arco con Repisa", category: "espejos", price: 18500, img: "IMG_2149.png", sku: "DM-ESP-020", desc: "Espejo de forma arco con Marco de madera y repisa superior integrada", specsLight: "Espejo de forma arco con Marco de madera y repisa superior integrada", cable: "N/A", dims: { w: "70 cm", h: "110 cm", d: "15 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Espejo/madera", fin: "Madera natural", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 156, name: "Espejo Orgánico Marco Negro", category: "espejos", price: 8200, img: "espejo_9.jpeg", sku: "DM-ESP-021", desc: "Espejo de forma orgánica con marco delgado en metal negro y herrajes en latón", specsLight: "Espejo de forma orgánica con marco delgado en metal negro y herrajes en latón", cable: "N/A", dims: { w: "50 cm", h: "70 cm", d: "3 cm", dia: "N/A" }, peso: "8 kg", volt: "N/A", mat: "Espejo/metal", fin: "Negro mate/latón", time: "3 a 4 semanas", cert: "N/A" },
             { id: 29, name: "Lámpara Silueta en Madera", category: "mesa", price: 3600, img: "nueva_foto_6.png", sku: "DM-MES-001", desc: "Lámpara de mesa, fabricada, madera de Fresno, torneada con base en acrílico, con pantallas en tela poliéster", specsLight: "Lámpara de mesa, fabricada, madera de Fresno, torneada con base en acrílico, con pantallas en tela poliéster", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "70 cm", d: "20 cm", dia: "60 cm" }, peso: "5 kg", volt: "110-240V", mat: "Madera/acrílico/poliéster", fin: "Barniz mate/tela", time: "2 semanas", cert: "NOM" },
             { id: 30, name: "Lámpara Vesta en Mármol y Latón", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", sku: "DM-MES-002", desc: "Lámpara fabricado en mármol, torneado con Laton y base acrílico con pantalla en tela", specsLight: "Lámpara fabricado en mármol, torneado con Laton y base acrílico con pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "55 cm", d: "15 cm", dia: "25 cm" }, peso: "7 kg", volt: "110-120V", mat: "Mármol/Laton/tela/acrílico", fin: "Cepillado/poliéster", time: "3 semanas", cert: "NOM" },
             { id: 31, name: "Lámpara Ritmo en Madera y Acero Inoxidable", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png", sku: "DM-MES-003", desc: "Lámpara fabricada en madera, con tubos de metal con pantalla en tela", specsLight: "Lámpara fabricada en madera, con tubos de metal con pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "60 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Madera/metal/tela", fin: "Barniz/cromado/poliéster", time: "3 semanas", cert: "NOM" },
@@ -1477,6 +1491,10 @@
             { id: 47, name: "Brisera Vigía", category: "briseras", price: 3600, img: "IMG_2020.png", sku: "DM-BRI-002", desc: "Luminaria exterior con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
             { id: 86, name: "Farol Linterna Latón", category: "briseras", price: 6800, img: "image_exterior.png", sku: "DM-BRI-003", desc: "Farol negro mate con corona de latón pulido.", specsLight: "1x E26 LED 8W cálida", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero tratado, latón macizo y cristal templado", fin: "Negro mate exterior y latón brillante", time: "3 a 4 semanas", cert: "NOM, IP65" },
             { id: 112, name: "Farol Linterna Asa de Cuero", category: "briseras", price: 4200, img: "lampara_exterior_4.png", sku: "DM-BRI-004", desc: "Farol portátil de acero negro con asa de piel y compartimento de vela.", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "20 cm", h: "40 cm", d: "20 cm", dia: "N/A" }, peso: "2.8 kg", volt: "N/A", mat: "Acero tratado y piel natural", fin: "Negro mate exterior", time: "2 a 3 semanas", cert: "NOM, IP65" },
+            { id: 157, name: "Farol Marco Madera y Cristal Esmerilado", category: "briseras", price: 4800, img: "brisera_5.jpeg", sku: "DM-BRI-005", desc: "Farol de piso o mesa con estructura de metal negro, remates de madera y paneles de cristal esmerilado", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "18 cm", h: "35 cm", d: "18 cm", dia: "N/A" }, peso: "3 kg", volt: "N/A", mat: "Metal/madera/cristal esmerilado", fin: "Negro mate/madera natural", time: "3 a 4 semanas", cert: "NOM, IP65" },
+            { id: 158, name: "Farol Marco Abierto Cristal Ahumado", category: "briseras", price: 3200, img: "brisera_6.jpeg", sku: "DM-BRI-006", desc: "Farol decorativo de estructura abierta en metal negro con cilindro de cristal ahumado", specsLight: "Vela (no incluida)", cable: "N/A", dims: { w: "15 cm", h: "40 cm", d: "12 cm", dia: "N/A" }, peso: "2 kg", volt: "N/A", mat: "Metal/cristal ahumado", fin: "Negro mate", time: "2 a 3 semanas", cert: "N/A" },
+            { id: 159, name: "Farol Tejido Ratán con Asa", category: "briseras", price: 3800, img: "brisera_7.jpeg", sku: "DM-BRI-007", desc: "Farol portátil tejido en ratán natural con asa y compartimento de vela", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "25 cm", h: "35 cm", d: "25 cm", dia: "25 cm" }, peso: "1.8 kg", volt: "N/A", mat: "Ratán natural", fin: "Natural tostado", time: "3 a 4 semanas", cert: "NOM, IP65" },
+            { id: 160, name: "Farol Marco Esbelto Bronce", category: "briseras", price: 5600, img: "brisera_8.jpeg", sku: "DM-BRI-008", desc: "Farol portátil de líneas esbeltas en metal bronce con argolla superior y compartimento de vela", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "12 cm", h: "45 cm", d: "12 cm", dia: "N/A" }, peso: "1.5 kg", volt: "N/A", mat: "Metal/cristal", fin: "Bronce cepillado", time: "3 a 4 semanas", cert: "NOM, IP65" },
             { id: 48, name: "Candil Vitra", category: "proyectos", price: 85000, img: "IMG_2013.png", sku: "DM-PRO-001", desc: "Instalación artística de esferas de vidrio soplado de colores.", specsLight: "Módulos LED 3W internos x 15", cable: "Instalación a plafón oculto", dims: { w: "200 cm", h: "100 cm", d: "200 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Vidrio soplado artesanal", fin: "Colores translúcidos variados", time: "8 a 10 semanas", cert: "NOM" },
             { id: 49, name: "Candil Lazo", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-PRO-002", desc: "Cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
             { id: 50, name: "Farol Savia", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-003", desc: "Perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
@@ -1711,6 +1729,15 @@
             ["macramé", "macrame", "macramé", "宏结艺术"],
             ["repisa", "shelf", "étagère", "搁板"],
             ["enmarcado", "framed", "encadré", "装框"],
+            ["Espejo Orgánico Marco Negro", "Organic Black Frame Mirror", "Miroir Organique Cadre Noir", "有机黑框镜"],
+            ["Farol Marco Madera y Cristal Esmerilado", "Wood Frame Frosted Glass Lantern", "Lanterne Cadre Bois Verre Dépoli", "木框磨砂玻璃灯笼"],
+            ["Farol Marco Abierto Cristal Ahumado", "Open Frame Smoked Glass Lantern", "Lanterne Cadre Ouvert Verre Fumé", "开放式烟熏玻璃灯笼"],
+            ["Farol Tejido Ratán con Asa", "Woven Rattan Lantern with Handle", "Lanterne Tressée en Rotin avec Poignée", "带手柄藤编灯笼"],
+            ["Farol Marco Esbelto Bronce", "Slender Bronze Frame Lantern", "Lanterne Cadre Élancé en Bronze", "纤细青铜框灯笼"],
+            ["orgánica", "organic", "organique", "有机形"],
+            ["esmerilado", "frosted", "dépoli", "磨砂"],
+            ["ahumado", "smoked", "fumé", "烟熏"],
+            ["esbelto", "slender", "élancé", "纤细"],
             ["Doble Esfera Ratán", "Double Rattan Sphere", "Double Sphère en Rotin", "双球藤编"],
             ["Óvalo Tejido", "Woven Oval", "Ovale Tressé", "编织椭圆"],
             ["Jaula Textil", "Fabric Cage", "Cage en Tissu", "织物笼形"],
@@ -2152,6 +2179,92 @@
                 if (ce && window.userSession.email) ce.value = window.userSession.email;
             }
             setTimeout(() => document.querySelectorAll('.init-overlay').forEach(o => o.classList.add('hidden')), 1000);
+            setTimeout(() => { if (window.maybeShowUpdateNotice) window.maybeShowUpdateNotice(); }, 1200);
+        };
+
+        // ── AVISO DE PÁGINA ACTUALIZADA ──
+        // Cada publicación puede agregar una entrada aquí (imágenes/piezas nuevas
+        // y/o funciones nuevas). Se muestra UNA sola vez por versión: se compara
+        // el id de la última entrada contra lo guardado en localStorage, y solo
+        // se marca como "visto" cuando el usuario le da Aceptar.
+        window.updateLog = [
+            {
+                id: 'upd-2026-08-03-update-notice',
+                images: [
+                    { sku: 'DM-ESP-021', img: 'espejo_9.jpeg' },
+                    { sku: 'DM-BRI-005', img: 'brisera_5.jpeg' },
+                    { sku: 'DM-BRI-006', img: 'brisera_6.jpeg' },
+                    { sku: 'DM-BRI-007', img: 'brisera_7.jpeg' },
+                    { sku: 'DM-BRI-008', img: 'brisera_8.jpeg' }
+                ],
+                features: [
+                    { title: 'Aviso de página actualizada', desc: 'Cada vez que se publica una actualización en la página, aparece este aviso dorado una sola vez con el resumen de lo nuevo (imágenes y/o funciones agregadas). Toque "Más información" para ver el detalle: las imágenes nuevas con su código SKU, y una explicación de qué hace y cómo se usa cada función nueva. Toque "Aceptar" para cerrarlo; no se le volverá a mostrar hasta la siguiente actualización.' }
+                ]
+            }
+        ];
+        window.maybeShowUpdateNotice = function() {
+            if (!window.updateLog || !window.updateLog.length) return;
+            const entry = window.updateLog[window.updateLog.length - 1];
+            if (localStorage.getItem('damaso_last_seen_update') === entry.id) return;
+            const images = entry.images || [];
+            const features = entry.features || [];
+            if (!images.length && !features.length) return;
+
+            const parts = [];
+            if (images.length) parts.push(images.length === 1 ? 'se agregó 1 imagen nueva' : `se agregaron ${images.length} imágenes nuevas`);
+            if (features.length) parts.push(features.length === 1 ? 'se agregó 1 función nueva' : `se agregaron ${features.length} funciones nuevas`);
+            let subtitle = parts.length ? parts.join(' y ') + '.' : 'La página se actualizó.';
+            subtitle = subtitle.charAt(0).toUpperCase() + subtitle.slice(1);
+            const subEl = document.getElementById('update-notice-subtitle');
+            if (subEl) subEl.textContent = subtitle;
+
+            const infoEl = document.getElementById('update-notice-info');
+            if (infoEl) {
+                let html = '';
+                if (images.length) {
+                    html += '<div class="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-4">' + images.map(im => `
+                        <div class="text-center">
+                            <div class="w-full aspect-square rounded-md overflow-hidden bg-black/30 border border-brand-gold/20 mb-1">
+                                <img src="${im.img}" class="w-full h-full object-cover" alt="${im.sku}" loading="lazy">
+                            </div>
+                            <p class="text-[9px] text-brand-gold tracking-wide">${im.sku}</p>
+                        </div>
+                    `).join('') + '</div>';
+                }
+                if (features.length) {
+                    html += '<div class="space-y-3">' + features.map(f => `
+                        <div>
+                            <p class="text-brand-gold text-xs font-bold uppercase tracking-wide mb-1">${f.title}</p>
+                            <p class="text-brand-muted text-xs leading-relaxed">${f.desc}</p>
+                        </div>
+                    `).join('') + '</div>';
+                }
+                infoEl.innerHTML = html;
+                infoEl.classList.add('hidden');
+            }
+            const moreBtn = document.getElementById('update-notice-more-btn');
+            if (moreBtn) moreBtn.textContent = 'Más información';
+
+            const modal = document.getElementById('update-notice-modal');
+            if (!modal) return;
+            window._pendingUpdateNoticeId = entry.id;
+            modal.classList.remove('hidden');
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        };
+        window.toggleUpdateNoticeInfo = function() {
+            const info = document.getElementById('update-notice-info');
+            const btn = document.getElementById('update-notice-more-btn');
+            if (!info) return;
+            const willShow = info.classList.contains('hidden');
+            info.classList.toggle('hidden');
+            if (btn) btn.textContent = willShow ? 'Ocultar información' : 'Más información';
+        };
+        window.acceptUpdateNotice = function() {
+            const modal = document.getElementById('update-notice-modal');
+            if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+            if (window._pendingUpdateNoticeId) localStorage.setItem('damaso_last_seen_update', window._pendingUpdateNoticeId);
+            setTimeout(() => modal && modal.classList.add('hidden'), 600);
         };
         window.confirmLogout = function() {
             if (confirm('¿Cerrar sesión en DAMASO Studio? Se borrará tu información local.')) {
@@ -2413,6 +2526,7 @@
             fp_short_password: 'Password must be at least 4 characters.', fp_success: 'Password updated! You can now sign in.',
             fp_sent: 'Code sent to',
             briseras_menu: 'Hurricane Lamps', skip_btn: 'Skip',
+            update_notice_title: 'Site Updated', update_notice_more_btn: 'More Information', update_notice_accept_btn: 'Accept',
             modal_add: 'Add', modal_added: 'Added ✓'
         };
 
@@ -2465,6 +2579,7 @@
             fp_short_password: 'Le mot de passe doit contenir au moins 4 caractères.', fp_success: 'Mot de passe mis à jour ! Vous pouvez maintenant vous connecter.',
             fp_sent: 'Code envoyé à',
             briseras_menu: 'Photophores', skip_btn: 'Passer',
+            update_notice_title: 'Site Mis à Jour', update_notice_more_btn: 'Plus d\'Informations', update_notice_accept_btn: 'Accepter',
             modal_add: 'Ajouter', modal_added: 'Ajouté ✓'
         };
 
@@ -2517,6 +2632,7 @@
             fp_short_password: '密码至少需要4个字符。', fp_success: '密码已更新！现在可以登录了。',
             fp_sent: '验证码已发送至',
             briseras_menu: '防风灯', skip_btn: '跳过',
+            update_notice_title: '网站已更新', update_notice_more_btn: '更多信息', update_notice_accept_btn: '接受',
             modal_add: '加入', modal_added: '已加入 ✓'
         };
 
