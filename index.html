@@ -321,6 +321,26 @@
         .shape-1 { animation: shapeSwap1 2s cubic-bezier(0.4,0,0.2,1) infinite; }
         .shape-2 { animation: shapeSwap2 2s cubic-bezier(0.4,0,0.2,1) infinite; }
         .shape-3 { animation: shapeSwap3 2s cubic-bezier(0.4,0,0.2,1) infinite; }
+        /* Indicadores de imagen múltiple en especificaciones: números clicables
+           en computadora, puntitos (solo informativos, se navega con gesto) en
+           dispositivos táctiles. */
+        .modal-img-dot {
+            width: 24px; height: 24px; border-radius: 9999px;
+            border: 1px solid rgba(212,175,55,0.4); background: transparent;
+            color: #d4af37; font-size: 10px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+            padding: 0;
+        }
+        .modal-img-dot:hover { border-color: #d4af37; }
+        .modal-img-dot.active { background: #fff; color: #000; border-color: #fff; }
+        @media (pointer: coarse) {
+            .modal-img-dot {
+                width: 8px; height: 8px; font-size: 0; border: none;
+                background: rgba(255,255,255,0.3); pointer-events: none;
+            }
+            .modal-img-dot.active { background: #fff; }
+        }
 
         /* ── LOADER PRINCIPAL: D LUMINOSA (barrido de luz de abajo hacia arriba) ── */
         .d-loader {
@@ -1041,9 +1061,12 @@
                 <button id="modal-ai-btn" onclick="window.openModalAI()" class="absolute top-4 right-4 md:top-6 md:right-6 z-20 w-12 h-12 rounded-full glass-gold flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 transition-transform pointer-events-auto" title="Consultar a DAMASO AI sobre esta pieza">
                     <span class="font-editorial font-bold text-lg">AI</span>
                 </button>
-                <a id="modal-img-link" href="#" onclick="window.viewWatermarkedImage(); return false;" class="w-full flex items-center justify-center relative cursor-zoom-in h-full">
-                    <img id="modal-img-element" src="" class="w-full max-h-[50vh] md:max-h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
-                </a>
+                <div class="w-full h-full flex flex-col items-center justify-center gap-3">
+                    <a id="modal-img-link" href="#" onclick="window.viewWatermarkedImage(); return false;" class="w-full flex items-center justify-center relative cursor-zoom-in flex-1 min-h-0">
+                        <img id="modal-img-element" src="" class="w-full max-h-[50vh] md:max-h-full object-contain drop-shadow-[0_0_15px_rgba(212,175,55,0.1)]" alt="Especificaciones">
+                    </a>
+                    <div id="modal-img-dots" class="hidden flex-wrap items-center justify-center gap-2 shrink-0"></div>
+                </div>
             </div>
             <div class="w-full md:w-1/2 p-6 sm:p-12 text-sm font-light flex flex-col bg-[#0a0a0a] border-t-4 md:border-t-0 md:border-l-4 border-brand-gold relative shrink-0">
                 <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
@@ -1472,11 +1495,16 @@
             { id: 151, name: "Arbotante Cápsula Alabastro", category: "arbotantes", price: 8600, img: "arbotante_23.jpeg", sku: "DM-ARB-033", desc: "Lámpara fabricada en metal con pantalla en alabastro", specsLight: "Lámpara fabricada en metal con pantalla en alabastro", cable: "Certificado UL/NOM", dims: { w: "12 cm", h: "50 cm", d: "10 cm", dia: "N/A" }, peso: "3 kg", volt: "110-120V", mat: "Metal/alabastro", fin: "Bronce oscuro", time: "4 a 5 semanas", cert: "NOM" },
             { id: 180, name: "Arbotante Vela Piedra con Herrajes", category: "arbotantes", price: 5400, img: "arbotante_25.jpeg", sku: "DM-ARB-034", desc: "Arbotante fabricado en piedra natural con base de vela y herrajes en metal plateado", specsLight: "Arbotante fabricado en piedra natural con base de vela y herrajes en metal plateado", cable: "Certificado UL/NOM", dims: { w: "10 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.5 kg", volt: "110-120V", mat: "Piedra/metal", fin: "Piedra natural/plateado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 181, name: "Arbotante Tubo Curvo Cristal Esmerilado", category: "arbotantes", price: 4800, img: "arbotante_26.jpeg", altImg: "arbotante_26b.jpeg", sku: "DM-ARB-035", desc: "Arbotante fabricado en metal negro con brazo curvo y difusor tubular en cristal esmerilado", specsLight: "Arbotante fabricado en metal negro con brazo curvo y difusor tubular en cristal esmerilado", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "55 cm", d: "20 cm", dia: "N/A" }, peso: "2 kg", volt: "110-120V", mat: "Metal/cristal esmerilado", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 184, name: "Arbotante Triple Globo Latón", category: "arbotantes", price: 9800, img: "arbotante_27.jpeg", sku: "DM-ARB-036", desc: "Arbotante fabricado en latón con tres globos de cristal transparente", specsLight: "Arbotante fabricado en latón con tres globos de cristal transparente", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "60 cm", d: "20 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Latón/cristal", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 185, name: "Arbotante Brazo Bronce Esfera Alabastro", category: "arbotantes", price: 8600, img: "arbotante_28.jpeg", sku: "DM-ARB-037", desc: "Arbotante fabricado en bronce con brazo en ángulo y esfera colgante en alabastro", specsLight: "Arbotante fabricado en bronce con brazo en ángulo y esfera colgante en alabastro", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "45 cm", d: "15 cm", dia: "N/A" }, peso: "2.5 kg", volt: "110-120V", mat: "Bronce/alabastro", fin: "Bronce envejecido", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 186, name: "Arbotante Caja Cristal Doble Foco", category: "arbotantes", price: 6400, img: "arbotante_29.jpeg", sku: "DM-ARB-038", desc: "Arbotante fabricado en metal negro con caja de cristal y doble foco tipo Edison", specsLight: "Arbotante fabricado en metal negro con caja de cristal y doble foco tipo Edison", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "40 cm", d: "12 cm", dia: "N/A" }, peso: "2.8 kg", volt: "110-120V", mat: "Metal/cristal", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 134, name: "Lámpara Mesa Cilindro Negro", category: "mesa", price: 6200, img: "lampara_de_mesa_15.jpeg", sku: "DM-MES-028", desc: "Lámpara fabricada en metal con base en acrílico y pantalla en tela", specsLight: "Lámpara fabricada en metal con base en acrílico y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "35 cm" }, peso: "4 kg", volt: "110-120V", mat: "Metal/acrílico/tela", fin: "Negro mate/gris", time: "3 a 4 semanas", cert: "NOM" },
             { id: 135, name: "Lámpara Mesa Brazo Nogal", category: "mesa", price: 8600, img: "lampara_de_mesa_16.jpeg", sku: "DM-MES-029", desc: "Lámpara fabricada en madera de nogal con detalles en latón y pantalla en tela", specsLight: "Lámpara fabricada en madera de nogal con detalles en latón y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "40 cm", h: "55 cm", d: "25 cm", dia: "N/A" }, peso: "5 kg", volt: "110-120V", mat: "Madera de nogal/latón/tela", fin: "Nogal natural/latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 136, name: "Lámpara Mesa Jaula Dorada", category: "mesa", price: 7400, img: "lampara_de_mesa_17.jpeg", sku: "DM-MES-030", desc: "Lámpara fabricada en metal con detalles en latón y pantalla en tela", specsLight: "Lámpara fabricada en metal con detalles en latón y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Metal/latón/tela", fin: "Negro mate/latón dorado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 137, name: "Lámpara Mesa Óvalo Crema", category: "mesa", price: 5600, img: "lampara_de_mesa_18.jpeg", sku: "DM-MES-031", desc: "Lámpara fabricada en cerámica con base en acrílico y pantalla en tela", specsLight: "Lámpara fabricada en cerámica con base en acrílico y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "50 cm", d: "25 cm", dia: "30 cm" }, peso: "3.5 kg", volt: "110-120V", mat: "Cerámica/acrílico/tela", fin: "Crema mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 138, name: "Lámpara Mesa Rombos Madera", category: "mesa", price: 5900, img: "lampara_de_mesa_19.jpeg", sku: "DM-MES-032", desc: "Lámpara torneada en madera con pantalla en tela", specsLight: "Lámpara torneada en madera con pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "35 cm" }, peso: "4 kg", volt: "110-120V", mat: "Madera/tela", fin: "Madera natural", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 187, name: "Lámpara Mesa Torneada Pantalla Gris", category: "mesa", price: 4600, img: "lampara_de_mesa_21.jpeg", sku: "DM-MES-033", desc: "Lámpara torneada en madera oscura con pantalla en tela gris", specsLight: "Lámpara torneada en madera oscura con pantalla en tela gris", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "55 cm", d: "25 cm", dia: "30 cm" }, peso: "3.5 kg", volt: "110-120V", mat: "Madera/tela", fin: "Madera oscura", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 188, name: "Lámpara Mesa Brazo Articulado Latón", category: "mesa", price: 6800, img: "lampara_de_mesa_22.jpeg", sku: "DM-MES-034", desc: "Lámpara fabricada en latón con brazo articulado y pantalla en tela de lino", specsLight: "Lámpara fabricada en latón con brazo articulado y pantalla en tela de lino", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "50 cm", d: "20 cm", dia: "20 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Latón/tela de lino", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 130, name: "Lámpara Mesa Contrapeso Negra", category: "pie", price: 6400, img: "lampara_de_mesa_13.jpeg", sku: "DM-PIE-006", desc: "Estructura en T de acero negro con remates de latón moleteado y pantalla cónica con interior dorado.", specsLight: "1x E26 LED 9W, 2700K", cable: "Cable textil negro 1.8m", dims: { w: "45 cm", h: "70 cm", d: "30 cm", dia: "30 cm" }, peso: "4 kg", volt: "110-120V", mat: "Acero/latón/tela", fin: "Negro mate e interior dorado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 122, name: "Lámpara de Pie Brazo Latón Base Piedra", category: "pie", price: 15800, img: "lampara_de_pie_2.png", sku: "DM-PIE-007", desc: "Lámpara fabricada en madera y mármol, con brazo en metal con pantalla en tela", specsLight: "Lámpara fabricada en madera y mármol, con brazo en metal con pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "N/A", h: "2.25 m", d: "N/A", dia: "N/A" }, peso: "25 kg", volt: "110-120V", mat: "Madera/mármol/metal/tela", fin: "Barniz/blanco mate/pintura electrostática/poliéster", time: "4 a 5 semanas", cert: "NOM" },
             { id: 37, name: "Colgante Nido Mimbre", category: "techo", price: 4200, img: "IMG_2006.png", sku: "DM-TEC-001", desc: "Lámpara de metal con tejido en cuerda", specsLight: "Lámpara de metal con tejido en cuerda", cable: "Certificado UL/NOM", dims: { w: "N/A", h: "70 cm", d: "N/A", dia: "40 cm" }, peso: "5 kg", volt: "110-120V", mat: "Metal/tejido", fin: "Pintura electrostática/mate", time: "3 semanas", cert: "NOM" },
@@ -1822,6 +1850,13 @@
             ["herrajes", "hardware", "ferrures", "五金件"],
             ["globo", "globe", "globe", "球形"],
             ["suspendida", "suspended", "suspendue", "悬挂式"],
+            ["Triple Globo Latón", "Brass Triple Globe", "Triple Globe en Laiton", "三球黄铜形"],
+            ["Brazo Bronce Esfera Alabastro", "Bronze Arm Alabaster Sphere", "Bras en Bronze Sphère Albâtre", "青铜臂雪花石膏球形"],
+            ["Caja Cristal Doble Foco", "Double Bulb Glass Box", "Boîte en Verre Double Ampoule", "双灯泡玻璃箱形"],
+            ["Torneada Pantalla Gris", "Turned Grey Shade", "Tournée Abat-Jour Gris", "车制灰色灯罩形"],
+            ["Brazo Articulado Latón", "Brass Articulated Arm", "Bras Articulé en Laiton", "黄铜铰接臂形"],
+            ["articulado", "articulated", "articulé", "铰接式"],
+            ["torneada", "turned", "tournée", "车制"],
             ["Doble Esfera Ratán", "Double Rattan Sphere", "Double Sphère en Rotin", "双球藤编"],
             ["Óvalo Tejido", "Woven Oval", "Ovale Tressé", "编织椭圆"],
             ["Jaula Textil", "Fabric Cage", "Cage en Tissu", "织物笼形"],
@@ -2343,6 +2378,18 @@
                     { sku: 'DM-TEC-049', img: 'lampara_de_techo_26.jpeg' },
                     { sku: 'DM-ARB-034', img: 'arbotante_25.jpeg' },
                     { sku: 'DM-ARB-035', img: 'arbotante_26.jpeg' }
+                ],
+                features: []
+            },
+            {
+                id: 'upd-2026-08-03-arbotantes-mesa-7',
+                code: 'DMS-007',
+                images: [
+                    { sku: 'DM-ARB-036', img: 'arbotante_27.jpeg' },
+                    { sku: 'DM-ARB-037', img: 'arbotante_28.jpeg' },
+                    { sku: 'DM-ARB-038', img: 'arbotante_29.jpeg' },
+                    { sku: 'DM-MES-033', img: 'lampara_de_mesa_21.jpeg' },
+                    { sku: 'DM-MES-034', img: 'lampara_de_mesa_22.jpeg' }
                 ],
                 features: []
             }
@@ -3112,11 +3159,14 @@
             const p = window.dbProducts.find(x => x.id === parseInt(id));
             if (!p) return;
             window.currentModalProduct = p;
-            window._modalShowingAlt = false;
             window._navLockedByOverlay = true;
             window.toggleNavbarState(false);
 
-            document.getElementById('modal-img-element').src = p.img;
+            window._modalImgList = window._getProductImages(p);
+            window._modalImgIndex = 0;
+            const mainImgEl = document.getElementById('modal-img-element');
+            if (mainImgEl) { mainImgEl.style.cssText = ''; mainImgEl.src = window._modalImgList[0]; }
+            window._renderModalImgDots(window._modalImgList.length);
             const nSpn = document.getElementById('modal-img-name');
             const copyBtn = document.getElementById('modal-copy-btn');
             const isOwner = window._isOwnerAccount();
@@ -3169,46 +3219,91 @@
             window.currentModalProduct = null;
         };
 
-        // ── IMAGEN ALTERNA EN ESPECIFICACIONES (deslizar para ver la otra foto) ──
-        // Algunas piezas tienen una segunda foto de la misma pieza (p.altImg).
-        // Deslizar a la derecha sobre la imagen muestra esa foto alterna;
-        // deslizar a la izquierda (estando en la alterna) regresa a la principal.
-        window._modalShowingAlt = false;
-        window._showModalAltImage = function(showAlt) {
-            const p = window.currentModalProduct;
-            const imgEl = document.getElementById('modal-img-element');
-            if (!p || !imgEl) return;
-            if (showAlt && p.altImg) {
-                imgEl.src = p.altImg;
-                window._modalShowingAlt = true;
-            } else {
-                imgEl.src = p.img;
-                window._modalShowingAlt = false;
+        // ── CARRUSEL DE IMÁGENES EN ESPECIFICACIONES ──
+        // Cada pieza puede tener más de una foto (p.altImg, o p.images para 3+).
+        // En computadora salen números clicables debajo de la foto; en celular
+        // salen puntitos (el de la imagen activa en blanco) y se navega deslizando
+        // sobre la foto — deslizar a la derecha avanza, a la izquierda regresa.
+        // La transición simula un deslizamiento suave con la misma imagen (sin
+        // duplicar elementos), para no romper el resto del código que lee/asigna
+        // el src de #modal-img-element (descarga, visor, IA, etc.).
+        window._getProductImages = function(p) {
+            if (!p) return [];
+            if (Array.isArray(p.images) && p.images.length) return p.images;
+            return p.altImg ? [p.img, p.altImg] : [p.img];
+        };
+        window._modalImgList = [];
+        window._modalImgIndex = 0;
+        window._renderModalImgDots = function(count) {
+            const dotsEl = document.getElementById('modal-img-dots');
+            if (!dotsEl) return;
+            if (count <= 1) { dotsEl.innerHTML = ''; dotsEl.classList.add('hidden'); dotsEl.classList.remove('flex'); return; }
+            dotsEl.classList.remove('hidden'); dotsEl.classList.add('flex');
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                html += `<button type="button" onclick="window._goToModalImage(${i})" class="modal-img-dot${i === 0 ? ' active' : ''}" data-index="${i}">${i + 1}</button>`;
             }
+            dotsEl.innerHTML = html;
+        };
+        window._goToModalImage = function(newIndex, direction) {
+            const list = window._modalImgList;
+            if (!list || !list.length || newIndex < 0 || newIndex >= list.length || newIndex === window._modalImgIndex) return;
+            const dir = direction || (newIndex > window._modalImgIndex ? 1 : -1);
+            const imgEl = document.getElementById('modal-img-element');
+            if (!imgEl) return;
+            imgEl.style.transition = 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease';
+            imgEl.style.transform = `translateX(${dir * -40}px)`;
+            imgEl.style.opacity = '0';
+            setTimeout(() => {
+                window._modalImgIndex = newIndex;
+                imgEl.src = list[newIndex];
+                imgEl.style.transition = 'none';
+                imgEl.style.transform = `translateX(${dir * 40}px)`;
+                void imgEl.offsetWidth;
+                imgEl.style.transition = 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease';
+                imgEl.style.transform = 'translateX(0)';
+                imgEl.style.opacity = '1';
+                const dotsEl = document.getElementById('modal-img-dots');
+                if (dotsEl) dotsEl.querySelectorAll('.modal-img-dot').forEach((el, i) => el.classList.toggle('active', i === newIndex));
+                if (window._isOwnerAccount()) {
+                    const nSpn = document.getElementById('modal-img-name');
+                    if (nSpn) nSpn.innerText = list[newIndex];
+                }
+            }, 320);
         };
         (function() {
             const container = document.getElementById('modal-img-link');
             if (!container) return;
-            let startX = null, startY = null;
+            let startX = null, startY = null, moved = false;
             container.addEventListener('touchstart', function(e) {
                 if (!e.touches || !e.touches.length) return;
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
+                moved = false;
+            }, { passive: true });
+            container.addEventListener('touchmove', function(e) {
+                if (startX === null || !e.touches || !e.touches.length) return;
+                const dx = e.touches[0].clientX - startX;
+                const dy = e.touches[0].clientY - startY;
+                if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) moved = true;
             }, { passive: true });
             container.addEventListener('touchend', function(e) {
                 if (startX === null) return;
                 const t = (e.changedTouches && e.changedTouches[0]) || null;
                 const endX = t ? t.clientX : startX;
-                const endY = t ? t.clientY : startY;
                 const dx = endX - startX;
-                const dy = endY - startY;
-                startX = null; startY = null;
-                // Solo gestos predominantemente horizontales, para no interferir
-                // con el scroll vertical de la ficha.
-                if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-                if (!window.currentModalProduct) return;
-                window._showModalAltImage(dx > 0);
-            }, { passive: true });
+                const wasSwipe = moved && Math.abs(dx) >= 40;
+                startX = null; startY = null; moved = false;
+                if (wasSwipe) {
+                    // Gesto reconocido como deslizamiento: cambia de imagen y evita
+                    // que el click sintético que sigue abra el visor sin querer.
+                    e.preventDefault();
+                    const dir = dx > 0 ? 1 : -1;
+                    window._goToModalImage(window._modalImgIndex + dir, dir);
+                }
+                // Si no fue deslizamiento, se deja pasar el click normal
+                // (onclick="viewWatermarkedImage()" en el propio enlace).
+            }, { passive: false });
         })();
 
         // ── CART ──
@@ -3475,29 +3570,90 @@
         window.viewWatermarkedImage = function() {
             const imgEl = document.getElementById('modal-img-element');
             if (!imgEl || !imgEl.src) return;
-            // maxDim=1600: el visor solo necesita resolución de pantalla, nunca la
-            // foto completa. Generar un PNG sin comprimir a resolución original en
-            // fotos grandes puede saturar la memoria de la pestaña en móviles y
-            // hacer que el navegador la reinicie sola; con el límite + JPEG
-            // comprimido esto deja de pasar.
-            window._makeWatermarkedCanvas(imgEl.src, function(canvas) {
-                const viewer = document.getElementById('image-viewer');
-                const backdrop = document.getElementById('image-viewer-backdrop');
-                const vimg = document.getElementById('image-viewer-img');
-                if (!viewer || !vimg) return;
-                vimg.src = canvas.toDataURL('image/jpeg', 0.88);
-                viewer.style.display = 'flex';
-                // Forzar reflow para que la transición de entrada sea suave
-                void viewer.offsetWidth;
-                if (backdrop) backdrop.style.opacity = '1';
-                vimg.style.opacity = '1';
-                vimg.style.transform = 'scale(1)';
-            }, function() {}, 1600);
+            // El visor hereda la lista de imágenes de la pieza abierta (si tiene
+            // más de una foto) y arranca en la que se estaba viendo, para poder
+            // deslizar entre ellas ya en pantalla completa.
+            window._viewerImgList = (window._modalImgList && window._modalImgList.length) ? window._modalImgList : [imgEl.src];
+            window._viewerImgIndex = window._modalImgIndex || 0;
+            window._renderViewerImage(window._viewerImgIndex, true);
             // Atrapa el botón/gesto de "regresar" del sistema: en vez de sacar al
             // usuario de la página (porque no había ninguna entrada de historial
             // que consumir), simplemente cierra el visor, un paso a la vez.
             window._pushHistoryModal(window._closeImageViewerVisual);
         };
+        // maxDim=1600: el visor solo necesita resolución de pantalla, nunca la foto
+        // completa. Generar un PNG sin comprimir a resolución original en fotos
+        // grandes puede saturar la memoria de la pestaña en móviles y hacer que el
+        // navegador la reinicie sola; con el límite + JPEG comprimido esto no pasa.
+        window._renderViewerImage = function(index, isInitialOpen) {
+            const src = window._viewerImgList && window._viewerImgList[index];
+            if (!src) return;
+            window._makeWatermarkedCanvas(src, function(canvas) {
+                const viewer = document.getElementById('image-viewer');
+                const backdrop = document.getElementById('image-viewer-backdrop');
+                const vimg = document.getElementById('image-viewer-img');
+                if (!viewer || !vimg) return;
+                vimg.src = canvas.toDataURL('image/jpeg', 0.88);
+                if (isInitialOpen) {
+                    viewer.style.display = 'flex';
+                    // Forzar reflow para que la transición de entrada sea suave
+                    void viewer.offsetWidth;
+                    if (backdrop) backdrop.style.opacity = '1';
+                    vimg.style.opacity = '1';
+                    vimg.style.transform = 'scale(1)';
+                }
+            }, function() {}, 1600);
+        };
+        // Deslizar sobre la imagen en el visor de pantalla completa: misma
+        // convención que en especificaciones (derecha = siguiente, izquierda =
+        // regresa), con una transición de deslizamiento suave.
+        window._goToViewerImage = function(newIndex, direction) {
+            const list = window._viewerImgList;
+            if (!list || !list.length || newIndex < 0 || newIndex >= list.length || newIndex === window._viewerImgIndex) return;
+            const dir = direction || (newIndex > window._viewerImgIndex ? 1 : -1);
+            const vimg = document.getElementById('image-viewer-img');
+            if (!vimg) return;
+            vimg.style.transition = 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease';
+            vimg.style.transform = `scale(1) translateX(${dir * -60}px)`;
+            vimg.style.opacity = '0';
+            setTimeout(() => {
+                window._viewerImgIndex = newIndex;
+                window._renderViewerImage(newIndex, false);
+                vimg.style.transition = 'none';
+                vimg.style.transform = `scale(1) translateX(${dir * 60}px)`;
+                void vimg.offsetWidth;
+                vimg.style.transition = 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease';
+                vimg.style.transform = 'scale(1) translateX(0)';
+                vimg.style.opacity = '1';
+            }, 320);
+        };
+        (function() {
+            const vimg = document.getElementById('image-viewer-img');
+            if (!vimg) return;
+            let startX = null, startY = null, moved = false;
+            vimg.addEventListener('touchstart', function(e) {
+                if (!e.touches || !e.touches.length) return;
+                startX = e.touches[0].clientX; startY = e.touches[0].clientY; moved = false;
+            }, { passive: true });
+            vimg.addEventListener('touchmove', function(e) {
+                if (startX === null || !e.touches || !e.touches.length) return;
+                const dx = e.touches[0].clientX - startX;
+                const dy = e.touches[0].clientY - startY;
+                if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) moved = true;
+            }, { passive: true });
+            vimg.addEventListener('touchend', function(e) {
+                if (startX === null) return;
+                const t = (e.changedTouches && e.changedTouches[0]) || null;
+                const endX = t ? t.clientX : startX;
+                const dx = endX - startX;
+                const wasSwipe = moved && Math.abs(dx) >= 40;
+                startX = null; startY = null; moved = false;
+                if (wasSwipe) {
+                    const dir = dx > 0 ? 1 : -1;
+                    window._goToViewerImage(window._viewerImgIndex + dir, dir);
+                }
+            }, { passive: true });
+        })();
         window.closeImageViewer = function() {
             // Si el visor fue abierto con una entrada de historial pendiente,
             // se consume con history.back(); el popstate resultante dispara
