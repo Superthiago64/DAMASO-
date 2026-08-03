@@ -778,6 +778,25 @@
         </div>
     </div>
 
+    <!-- ── REGISTRO DE ACTUALIZACIONES (lista, pantalla completa) ── -->
+    <div id="updates-list-view" class="fixed inset-0 z-[9999995] bg-[#030303] p-6 hidden overflow-y-auto">
+        <div class="max-w-lg w-full mx-auto" style="padding-top: calc(2rem + env(safe-area-inset-top)); padding-bottom: 2.5rem;">
+            <button type="button" onclick="window.closeUpdatesListView()" class="flex items-center gap-2 mb-8 text-[10px] tracking-widest text-brand-gold uppercase hover:underline" data-i18n="volver">&larr; Volver</button>
+            <h2 class="font-editorial text-3xl text-brand-gold glow-gold uppercase tracking-widest mb-8 text-center" data-i18n="updates_registry_title">Registro de Actualizaciones</h2>
+            <div id="updates-list-items" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <!-- ── REGISTRO DE ACTUALIZACIONES (detalle de una actualización) ── -->
+    <div id="updates-detail-view" class="fixed inset-0 z-[9999996] bg-[#030303] p-6 hidden overflow-y-auto">
+        <div class="max-w-lg w-full mx-auto" style="padding-top: calc(2rem + env(safe-area-inset-top)); padding-bottom: 2.5rem;">
+            <button type="button" onclick="window.closeUpdateDetail()" class="flex items-center gap-2 mb-8 text-[10px] tracking-widest text-brand-gold uppercase hover:underline" data-i18n="regresar">&larr; Regresar</button>
+            <h2 id="update-detail-code" class="font-editorial text-2xl text-brand-gold glow-gold uppercase tracking-widest mb-2 text-center"></h2>
+            <p id="update-detail-subtitle" class="text-brand-muted text-sm text-center mb-6"></p>
+            <div id="update-detail-info" class="text-left bg-[#0a0a0a] border border-brand-border rounded-sm p-4"></div>
+        </div>
+    </div>
+
     <!-- ── TRANSICIÓN DE CATEGORÍA — PANTALLA COMPLETA ── -->
     <div id="category-transition-overlay">
         <div id="menu-damaso-letters" class="mb-3">
@@ -832,6 +851,7 @@
                         <button type="button" onclick="window.showSettingsView('theme')" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="settings_theme">Tono de la página</button>
                         <button type="button" onclick="window.showSettingsView('animations')" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="settings_animations">Animaciones</button>
                         <button type="button" onclick="window.showSettingsView('privacy')" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="settings_privacy">Avisos de Privacidad</button>
+                        <button type="button" onclick="window.openUpdatesListView()" class="w-full flex items-center justify-between px-6 py-3 text-xs tracking-widest text-white hover:bg-brand-gold hover:text-black uppercase transition-all" data-i18n="settings_updates">Actualizaciones</button>
                     </div>
                     <!-- ── Cuenta ── -->
                     <div id="settings-view-account" class="hidden">
@@ -1445,7 +1465,7 @@
             { id: 139, name: "Lámpara Mesa Listones Bronce", category: "mesa", price: 9800, img: "lampara_de_mesa_20.jpeg", sku: "DM-MES-027", desc: "Lámpara fabricada en metal con base en mármol", specsLight: "Lámpara fabricada en metal con base en mármol", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "35 cm", d: "25 cm", dia: "N/A" }, peso: "5 kg", volt: "110-120V", mat: "Metal/mármol", fin: "Bronce cepillado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 140, name: "Arbotante Trenza", category: "arbotantes", price: 8200, img: "arbotante_17.jpeg", sku: "DM-ARB-027", desc: "Lámpara fabricada en metal con pantalla en tela", specsLight: "Lámpara fabricada en metal con pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "60 cm", d: "20 cm", dia: "20 cm" }, peso: "3 kg", volt: "110-120V", mat: "Metal/tela", fin: "Bronce envejecido", time: "3 a 4 semanas", cert: "NOM" },
             { id: 141, name: "Arbotante Cono Azul", category: "arbotantes", price: 6400, img: "arbotante_18.jpeg", sku: "DM-ARB-028", desc: "Lámpara fabricada en metal con pantalla cónica", specsLight: "Lámpara fabricada en metal con pantalla cónica", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "35 cm", d: "25 cm", dia: "N/A" }, peso: "2 kg", volt: "110-120V", mat: "Metal", fin: "Azul brillante/latón", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 142, name: "Arbotante Tubo Esmerilado", category: "arbotantes", price: 7100, img: "arbotante_19.jpeg", sku: "DM-ARB-029", desc: "Lámpara fabricada en metal con pantalla en vidrio esmerilado", specsLight: "Lámpara fabricada en metal con pantalla en vidrio esmerilado", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "45 cm", d: "15 cm", dia: "N/A" }, peso: "2.5 kg", volt: "110-120V", mat: "Metal/vidrio", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 142, name: "Arbotante Tubo Esmerilado", category: "arbotantes", price: 7100, img: "arbotante_24.jpeg", sku: "DM-ARB-029", desc: "Lámpara fabricada en metal con pantalla en vidrio esmerilado", specsLight: "Lámpara fabricada en metal con pantalla en vidrio esmerilado", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "45 cm", d: "15 cm", dia: "N/A" }, peso: "2.5 kg", volt: "110-120V", mat: "Metal/vidrio", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 143, name: "Arbotante Cúpula Ratán", category: "arbotantes", price: 6800, img: "arbotante_20.jpeg", sku: "DM-ARB-030", desc: "Lámpara fabricada en metal con pantalla en ratán", specsLight: "Lámpara fabricada en metal con pantalla en ratán", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "40 cm", d: "30 cm", dia: "N/A" }, peso: "2.5 kg", volt: "110-120V", mat: "Metal/ratán", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 149, name: "Arbotante Marco Rectangular", category: "arbotantes", price: 6900, img: "arbotante_21.jpeg", sku: "DM-ARB-031", desc: "Lámpara fabricada en metal con pantalla en vidrio", specsLight: "Lámpara fabricada en metal con pantalla en vidrio", cable: "Certificado UL/NOM", dims: { w: "18 cm", h: "40 cm", d: "10 cm", dia: "N/A" }, peso: "2.5 kg", volt: "110-120V", mat: "Metal/vidrio", fin: "Bronce envejecido", time: "3 a 4 semanas", cert: "NOM" },
             { id: 150, name: "Arbotante Triple Esfera", category: "arbotantes", price: 9200, img: "arbotante_22.jpeg", sku: "DM-ARB-032", desc: "Lámpara fabricada en latón con esferas de vidrio", specsLight: "Lámpara fabricada en latón con esferas de vidrio", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "45 cm", d: "12 cm", dia: "N/A" }, peso: "3 kg", volt: "110-120V", mat: "Latón/vidrio", fin: "Latón envejecido", time: "4 a 5 semanas", cert: "NOM" },
@@ -1495,6 +1515,10 @@
             { id: 168, name: "Colgante Jaula Alambre Geométrica", category: "techo", price: 4200, img: "lampara_de_techo_13.jpeg", sku: "DM-TEC-036", desc: "Lámpara fabricada en alambre de acero con estructura geométrica tipo jaula", specsLight: "Lámpara fabricada en alambre de acero con estructura geométrica tipo jaula", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "50 cm", d: "35 cm", dia: "35 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Acero", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 169, name: "Colgante Ovoide Macramé", category: "techo", price: 7200, img: "lampara_de_techo_14.jpeg", sku: "DM-TEC-037", desc: "Lámpara fabricada en macramé tejido a mano con forma ovoide y argolla superior", specsLight: "Lámpara fabricada en macramé tejido a mano con forma ovoide y argolla superior", cable: "Certificado UL/NOM", dims: { w: "40 cm", h: "45 cm", d: "40 cm", dia: "40 cm" }, peso: "2 kg", volt: "110-120V", mat: "Macramé de yute", fin: "Natural", time: "4 a 5 semanas", cert: "NOM" },
             { id: 170, name: "Colgante Campana Ratán Bicolor Franjas", category: "techo", price: 6200, img: "lampara_de_techo_15.jpeg", sku: "DM-TEC-038", desc: "Lámpara fabricada en ratán tejido con franjas bicolor en tono negro y natural", specsLight: "Lámpara fabricada en ratán tejido con franjas bicolor en tono negro y natural", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "40 cm", d: "35 cm", dia: "35 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Ratán tejido", fin: "Negro/natural", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 171, name: "Colgante Silueta Textil Blanca", category: "techo", price: 8600, img: "lampara_de_techo_16.jpeg", sku: "DM-TEC-039", desc: "Lámpara fabricada en tela tensada con estructura de silueta escultórica", specsLight: "Lámpara fabricada en tela tensada con estructura de silueta escultórica", cable: "Certificado UL/NOM", dims: { w: "45 cm", h: "80 cm", d: "45 cm", dia: "45 cm" }, peso: "4 kg", volt: "110-120V", mat: "Tela/metal", fin: "Blanco", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 172, name: "Colgante Silueta Malla Negra", category: "techo", price: 6200, img: "lampara_de_techo_17.jpeg", sku: "DM-TEC-040", desc: "Lámpara fabricada en malla metálica con estructura de silueta escultórica", specsLight: "Lámpara fabricada en malla metálica con estructura de silueta escultórica", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "65 cm", d: "35 cm", dia: "35 cm" }, peso: "2 kg", volt: "110-120V", mat: "Malla metálica", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 173, name: "Colgante Brazo Curvo Vidrio Opalino", category: "techo", price: 9800, img: "lampara_de_techo_18.jpeg", sku: "DM-TEC-041", desc: "Lámpara fabricada en metal con brazo curvo y pantalla ovalada en vidrio opalino", specsLight: "Lámpara fabricada en metal con brazo curvo y pantalla ovalada en vidrio opalino", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "90 cm", d: "15 cm", dia: "N/A" }, peso: "3 kg", volt: "110-120V", mat: "Metal/vidrio opalino", fin: "Bronce oscuro", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 174, name: "Colgante Cilindro Cristal Degradado", category: "techo", price: 7400, img: "lampara_de_techo_19.jpeg", sku: "DM-TEC-042", desc: "Lámpara fabricada en cristal cilíndrico con acabado degradado y difusor interior", specsLight: "Lámpara fabricada en cristal cilíndrico con acabado degradado y difusor interior", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "25 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Cristal", fin: "Degradado humo/transparente", time: "4 a 5 semanas", cert: "NOM" },
             { id: 46, name: "Farol Exterior Negro", category: "briseras", price: 5200, img: "IMG_2012.png", sku: "DM-BRI-001", desc: "Farol de piso o mesa para terrazas exteriores.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero treated y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
             { id: 47, name: "Brisera Vigía", category: "briseras", price: 3600, img: "IMG_2020.png", sku: "DM-BRI-002", desc: "Luminaria exterior con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
             { id: 86, name: "Farol Linterna Latón", category: "briseras", price: 6800, img: "image_exterior.png", sku: "DM-BRI-003", desc: "Farol negro mate con corona de latón pulido.", specsLight: "1x E26 LED 8W cálida", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero tratado, latón macizo y cristal templado", fin: "Negro mate exterior y latón brillante", time: "3 a 4 semanas", cert: "NOM, IP65" },
@@ -1766,6 +1790,14 @@
             ["ovoide", "ovoid", "ovoïde", "卵形"],
             ["franjas", "stripes", "rayures", "条纹"],
             ["alambre", "wire", "fil de fer", "金属丝"],
+            ["Silueta Textil Blanca", "White Fabric Silhouette", "Silhouette en Tissu Blanc", "白色布艺剪影形"],
+            ["Silueta Malla Negra", "Black Mesh Silhouette", "Silhouette en Maille Noire", "黑色网纱剪影形"],
+            ["Brazo Curvo Vidrio Opalino", "Curved Arm Opal Glass", "Bras Courbe en Verre Opalin", "弧形臂乳白玻璃"],
+            ["Cilindro Cristal Degradado", "Ombre Glass Cylinder", "Cylindre en Verre Dégradé", "渐变色玻璃圆柱形"],
+            ["opalino", "opal", "opalin", "乳白色"],
+            ["degradado", "ombre", "dégradé", "渐变色"],
+            ["malla", "mesh", "maille", "网纱"],
+            ["silueta", "silhouette", "silhouette", "剪影形"],
             ["Doble Esfera Ratán", "Double Rattan Sphere", "Double Sphère en Rotin", "双球藤编"],
             ["Óvalo Tejido", "Woven Oval", "Ovale Tressé", "编织椭圆"],
             ["Jaula Textil", "Fabric Cage", "Cage en Tissu", "织物笼形"],
@@ -2218,6 +2250,7 @@
         window.updateLog = [
             {
                 id: 'upd-2026-08-03-update-notice',
+                code: 'DMS-001',
                 images: [
                     { sku: 'DM-ESP-021', img: 'espejo_9.jpeg' },
                     { sku: 'DM-BRI-005', img: 'brisera_5.jpeg' },
@@ -2231,6 +2264,7 @@
             },
             {
                 id: 'upd-2026-08-03-briseras-candiles-2',
+                code: 'DMS-002',
                 images: [
                     { sku: 'DM-BRI-009', img: 'brisera_9.jpeg' },
                     { sku: 'DM-BRI-010', img: 'brisera_10.jpeg' },
@@ -2242,6 +2276,7 @@
             },
             {
                 id: 'upd-2026-08-03-techo-3',
+                code: 'DMS-003',
                 images: [
                     { sku: 'DM-TEC-034', img: 'lampara_de_techo_11.jpeg' },
                     { sku: 'DM-TEC-035', img: 'lampara_de_techo_12.jpeg' },
@@ -2250,8 +2285,53 @@
                     { sku: 'DM-TEC-038', img: 'lampara_de_techo_15.jpeg' }
                 ],
                 features: []
+            },
+            {
+                id: 'upd-2026-08-03-techo-4',
+                code: 'DMS-004',
+                images: [
+                    { sku: 'DM-TEC-039', img: 'lampara_de_techo_16.jpeg' },
+                    { sku: 'DM-TEC-040', img: 'lampara_de_techo_17.jpeg' },
+                    { sku: 'DM-TEC-041', img: 'lampara_de_techo_18.jpeg' },
+                    { sku: 'DM-TEC-042', img: 'lampara_de_techo_19.jpeg' }
+                ],
+                features: []
             }
         ];
+        // Arma el subtítulo ("se agregaron X modelos...") y el HTML de detalle
+        // (imágenes+SKU y funciones) a partir de una entrada de window.updateLog.
+        // Lo comparten el aviso emergente y la vista de detalle del registro, para
+        // que ambos textos coincidan siempre sin duplicar la lógica.
+        window._buildUpdateSummary = function(entry) {
+            const images = entry.images || [];
+            const features = entry.features || [];
+            const parts = [];
+            if (images.length) parts.push(images.length === 1 ? 'se agregó 1 modelo nuevo' : `se agregaron ${images.length} modelos nuevos`);
+            if (features.length) parts.push(features.length === 1 ? 'se agregó 1 función nueva' : `se agregaron ${features.length} funciones nuevas`);
+            let subtitle = parts.length ? parts.join(' y ') + '.' : 'La página se actualizó.';
+            subtitle = subtitle.charAt(0).toUpperCase() + subtitle.slice(1);
+
+            let infoHtml = '';
+            if (images.length) {
+                infoHtml += '<div class="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-4">' + images.map(im => `
+                    <div class="text-center">
+                        <div class="w-full aspect-square rounded-md overflow-hidden bg-black/30 border border-brand-gold/20 mb-1">
+                            <img src="${im.img}" class="w-full h-full object-cover" alt="${im.sku}" loading="lazy">
+                        </div>
+                        <p class="text-[9px] text-brand-gold tracking-wide">${im.sku}</p>
+                    </div>
+                `).join('') + '</div>';
+            }
+            if (features.length) {
+                infoHtml += '<div class="space-y-3">' + features.map(f => `
+                    <div>
+                        <p class="text-brand-gold text-xs font-bold uppercase tracking-wide mb-1">${f.title}</p>
+                        <p class="text-brand-muted text-xs leading-relaxed">${f.desc}</p>
+                    </div>
+                `).join('') + '</div>';
+            }
+            return { subtitle, infoHtml };
+        };
         window.maybeShowUpdateNotice = function() {
             if (!window.updateLog || !window.updateLog.length) return;
             const entry = window.updateLog[window.updateLog.length - 1];
@@ -2260,40 +2340,14 @@
             const features = entry.features || [];
             if (!images.length && !features.length) return;
 
-            const parts = [];
-            if (images.length) parts.push(images.length === 1 ? 'se agregó 1 modelo nuevo' : `se agregaron ${images.length} modelos nuevos`);
-            if (features.length) parts.push(features.length === 1 ? 'se agregó 1 función nueva' : `se agregaron ${features.length} funciones nuevas`);
-            let subtitle = parts.length ? parts.join(' y ') + '.' : 'La página se actualizó.';
-            subtitle = subtitle.charAt(0).toUpperCase() + subtitle.slice(1);
+            const { subtitle, infoHtml } = window._buildUpdateSummary(entry);
             const subEl = document.getElementById('update-notice-subtitle');
             if (subEl) subEl.textContent = subtitle;
 
             const infoEl = document.getElementById('update-notice-info');
-            if (infoEl) {
-                let html = '';
-                if (images.length) {
-                    html += '<div class="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-4">' + images.map(im => `
-                        <div class="text-center">
-                            <div class="w-full aspect-square rounded-md overflow-hidden bg-black/30 border border-brand-gold/20 mb-1">
-                                <img src="${im.img}" class="w-full h-full object-cover" alt="${im.sku}" loading="lazy">
-                            </div>
-                            <p class="text-[9px] text-brand-gold tracking-wide">${im.sku}</p>
-                        </div>
-                    `).join('') + '</div>';
-                }
-                if (features.length) {
-                    html += '<div class="space-y-3">' + features.map(f => `
-                        <div>
-                            <p class="text-brand-gold text-xs font-bold uppercase tracking-wide mb-1">${f.title}</p>
-                            <p class="text-brand-muted text-xs leading-relaxed">${f.desc}</p>
-                        </div>
-                    `).join('') + '</div>';
-                }
-                infoEl.innerHTML = html;
-                infoEl.classList.add('hidden');
-            }
+            if (infoEl) { infoEl.innerHTML = infoHtml; infoEl.classList.add('hidden'); }
             const moreBtn = document.getElementById('update-notice-more-btn');
-            if (moreBtn) moreBtn.textContent = 'Más información';
+            if (moreBtn) moreBtn.textContent = window.t('update_notice_more_btn', 'Más información');
 
             const modal = document.getElementById('update-notice-modal');
             if (!modal) return;
@@ -2308,13 +2362,75 @@
             if (!info) return;
             const willShow = info.classList.contains('hidden');
             info.classList.toggle('hidden');
-            if (btn) btn.textContent = willShow ? 'Ocultar información' : 'Más información';
+            if (btn) btn.textContent = willShow ? window.t('update_notice_hide_btn', 'Ocultar información') : window.t('update_notice_more_btn', 'Más información');
         };
         window.acceptUpdateNotice = function() {
             const modal = document.getElementById('update-notice-modal');
             if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
             if (window._pendingUpdateNoticeId) localStorage.setItem('damaso_last_seen_update', window._pendingUpdateNoticeId);
             setTimeout(() => modal && modal.classList.add('hidden'), 600);
+        };
+
+        // ── REGISTRO DE ACTUALIZACIONES (Configuración > Actualizaciones) ──
+        // Lista de pantalla completa con todas las entradas de window.updateLog
+        // (más reciente primero), cada una mostrando solo su número (DMS-XXX).
+        // "Más información" lleva a una vista de detalle separada con el mismo
+        // resumen que usa el aviso emergente. Ambas vistas usan la trampa de
+        // historial para que el botón/gesto de regresar del sistema solo cierre
+        // un nivel en vez de sacar al usuario de la página.
+        window.openUpdatesListView = function() {
+            const wasSettingsOpen = !document.getElementById('settings-panel')?.classList.contains('hidden');
+            if (wasSettingsOpen) window.toggleSettingsPanel();
+            const listItems = document.getElementById('updates-list-items');
+            if (listItems) {
+                const entries = (window.updateLog || []).slice().reverse();
+                listItems.innerHTML = entries.length ? entries.map(entry => `
+                    <div class="glass-btn border border-brand-gold/20 rounded-sm p-4 flex items-center justify-between gap-3">
+                        <span class="text-white text-sm tracking-widest">${entry.code || entry.id}</span>
+                        <button type="button" onclick="window.openUpdateDetail('${entry.id}')" class="glass-gold px-4 py-2 text-[9px] uppercase tracking-widest rounded-sm shrink-0">${window.t('update_notice_more_btn', 'Más información')}</button>
+                    </div>
+                `).join('') : '<p class="text-brand-muted text-xs text-center italic">Aún no hay actualizaciones registradas.</p>';
+            }
+            const view = document.getElementById('updates-list-view');
+            if (!view) return;
+            view.classList.remove('hidden');
+            window._pushHistoryModal(window._closeUpdatesListViewVisual);
+        };
+        window.closeUpdatesListView = function() {
+            if (window._historyModalStack.length && window._historyModalStack[window._historyModalStack.length - 1] === window._closeUpdatesListViewVisual) {
+                history.back();
+            } else {
+                window._closeUpdatesListViewVisual();
+            }
+        };
+        window._closeUpdatesListViewVisual = function() {
+            document.getElementById('updates-list-view')?.classList.add('hidden');
+        };
+        window.openUpdateDetail = function(id) {
+            const entry = (window.updateLog || []).find(e => e.id === id);
+            if (!entry) return;
+            const codeEl = document.getElementById('update-detail-code');
+            if (codeEl) codeEl.textContent = entry.code || entry.id;
+            const { subtitle, infoHtml } = window._buildUpdateSummary(entry);
+            const subEl = document.getElementById('update-detail-subtitle');
+            if (subEl) subEl.textContent = subtitle;
+            const infoEl = document.getElementById('update-detail-info');
+            if (infoEl) infoEl.innerHTML = infoHtml || '<p class="text-brand-muted text-xs italic text-center">Sin detalles adicionales.</p>';
+
+            const view = document.getElementById('updates-detail-view');
+            if (!view) return;
+            view.classList.remove('hidden');
+            window._pushHistoryModal(window._closeUpdateDetailVisual);
+        };
+        window.closeUpdateDetail = function() {
+            if (window._historyModalStack.length && window._historyModalStack[window._historyModalStack.length - 1] === window._closeUpdateDetailVisual) {
+                history.back();
+            } else {
+                window._closeUpdateDetailVisual();
+            }
+        };
+        window._closeUpdateDetailVisual = function() {
+            document.getElementById('updates-detail-view')?.classList.add('hidden');
         };
         window.confirmLogout = function() {
             if (confirm('¿Cerrar sesión en DAMASO Studio? Se borrará tu información local.')) {
@@ -2576,7 +2692,8 @@
             fp_short_password: 'Password must be at least 4 characters.', fp_success: 'Password updated! You can now sign in.',
             fp_sent: 'Code sent to',
             briseras_menu: 'Hurricane Lamps', skip_btn: 'Skip',
-            update_notice_title: 'Site Updated', update_notice_more_btn: 'More Information', update_notice_accept_btn: 'Accept',
+            update_notice_title: 'Site Updated', update_notice_more_btn: 'More Information', update_notice_accept_btn: 'Accept', update_notice_hide_btn: 'Hide Information',
+            settings_updates: 'Updates', updates_registry_title: 'Update Log', regresar: 'Back',
             modal_add: 'Add', modal_added: 'Added ✓'
         };
 
@@ -2629,7 +2746,8 @@
             fp_short_password: 'Le mot de passe doit contenir au moins 4 caractères.', fp_success: 'Mot de passe mis à jour ! Vous pouvez maintenant vous connecter.',
             fp_sent: 'Code envoyé à',
             briseras_menu: 'Photophores', skip_btn: 'Passer',
-            update_notice_title: 'Site Mis à Jour', update_notice_more_btn: 'Plus d\'Informations', update_notice_accept_btn: 'Accepter',
+            update_notice_title: 'Site Mis à Jour', update_notice_more_btn: 'Plus d\'Informations', update_notice_accept_btn: 'Accepter', update_notice_hide_btn: 'Masquer les Informations',
+            settings_updates: 'Mises à Jour', updates_registry_title: 'Registre des Mises à Jour', regresar: 'Retour',
             modal_add: 'Ajouter', modal_added: 'Ajouté ✓'
         };
 
@@ -2682,7 +2800,8 @@
             fp_short_password: '密码至少需要4个字符。', fp_success: '密码已更新！现在可以登录了。',
             fp_sent: '验证码已发送至',
             briseras_menu: '防风灯', skip_btn: '跳过',
-            update_notice_title: '网站已更新', update_notice_more_btn: '更多信息', update_notice_accept_btn: '接受',
+            update_notice_title: '网站已更新', update_notice_more_btn: '更多信息', update_notice_accept_btn: '接受', update_notice_hide_btn: '隐藏信息',
+            settings_updates: '更新记录', updates_registry_title: '更新记录', regresar: '返回',
             modal_add: '加入', modal_added: '已加入 ✓'
         };
 
@@ -3089,17 +3208,47 @@
             }
         };
 
+        // ── TRAMPA DE HISTORIAL PARA MODALES DE PANTALLA COMPLETA ──
+        // Sin esto, el gesto/botón de "regresar" del sistema (o del navegador) no
+        // tiene ninguna entrada de historial propia que consumir, así que saca al
+        // usuario directo de la página en vez de solo cerrar el visor/modal que
+        // tiene abierto. Al abrir uno de estos modales se agrega una entrada de
+        // historial "vacía"; si el usuario regresa sin usar el botón de la propia
+        // interfaz, el popstate resultante cierra el modal en vez de salir del sitio.
+        window._historyModalStack = [];
+        window._pushHistoryModal = function(onClose) {
+            window._historyModalStack.push(onClose);
+            try { history.pushState({ damasoModal: true, depth: window._historyModalStack.length }, ''); } catch(e) {}
+        };
+        window.addEventListener('popstate', function() {
+            if (window._historyModalStack.length > 0) {
+                const onClose = window._historyModalStack.pop();
+                if (typeof onClose === 'function') onClose();
+            }
+        });
+
         // Construye el lienzo con la marca de agua (centro horizontal, blanco,
         // translúcido y DEFINIDO — sin difuminado — más la firma inferior).
         // Lo usan tanto la descarga como el visor de la imagen en el modal.
-        window._makeWatermarkedCanvas = function(srcUrl, onReady, onError) {
+        window._makeWatermarkedCanvas = function(srcUrl, onReady, onError, maxDim) {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const img = new Image();
             img.crossOrigin = 'anonymous';
             img.onload = function() {
-                canvas.width = img.width; canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
+                // Si se pide un límite de resolución (visor en pantalla, que nunca
+                // necesita más píxeles que el propio dispositivo), se reduce el
+                // canvas proporcionalmente. Esto evita picos de memoria al generar
+                // un PNG sin comprimir de fotos muy grandes, que en móviles puede
+                // saturar la pestaña y hacer que el navegador la recargue sola.
+                let w = img.width, h = img.height;
+                if (maxDim && Math.max(w, h) > maxDim) {
+                    const scale = maxDim / Math.max(w, h);
+                    w = Math.round(w * scale);
+                    h = Math.round(h * scale);
+                }
+                canvas.width = w; canvas.height = h;
+                ctx.drawImage(img, 0, 0, w, h);
                 // Solo firma inferior izquierda, MUY translúcida, sin difuminado y sin contorno
                 const size = Math.max(48, canvas.width * 0.085);
                 ctx.font = `italic bold ${size}px "Playfair Display", serif`;
@@ -3141,21 +3290,40 @@
         window.viewWatermarkedImage = function() {
             const imgEl = document.getElementById('modal-img-element');
             if (!imgEl || !imgEl.src) return;
+            // maxDim=1600: el visor solo necesita resolución de pantalla, nunca la
+            // foto completa. Generar un PNG sin comprimir a resolución original en
+            // fotos grandes puede saturar la memoria de la pestaña en móviles y
+            // hacer que el navegador la reinicie sola; con el límite + JPEG
+            // comprimido esto deja de pasar.
             window._makeWatermarkedCanvas(imgEl.src, function(canvas) {
                 const viewer = document.getElementById('image-viewer');
                 const backdrop = document.getElementById('image-viewer-backdrop');
                 const vimg = document.getElementById('image-viewer-img');
                 if (!viewer || !vimg) return;
-                vimg.src = canvas.toDataURL('image/png');
+                vimg.src = canvas.toDataURL('image/jpeg', 0.88);
                 viewer.style.display = 'flex';
                 // Forzar reflow para que la transición de entrada sea suave
                 void viewer.offsetWidth;
                 if (backdrop) backdrop.style.opacity = '1';
                 vimg.style.opacity = '1';
                 vimg.style.transform = 'scale(1)';
-            }, function() {});
+            }, function() {}, 1600);
+            // Atrapa el botón/gesto de "regresar" del sistema: en vez de sacar al
+            // usuario de la página (porque no había ninguna entrada de historial
+            // que consumir), simplemente cierra el visor, un paso a la vez.
+            window._pushHistoryModal(window._closeImageViewerVisual);
         };
         window.closeImageViewer = function() {
+            // Si el visor fue abierto con una entrada de historial pendiente,
+            // se consume con history.back(); el popstate resultante dispara
+            // _closeImageViewerVisual() y mantiene el historial limpio.
+            if (window._historyModalStack.length && window._historyModalStack[window._historyModalStack.length - 1] === window._closeImageViewerVisual) {
+                history.back();
+            } else {
+                window._closeImageViewerVisual();
+            }
+        };
+        window._closeImageViewerVisual = function() {
             const v = document.getElementById('image-viewer');
             const backdrop = document.getElementById('image-viewer-backdrop');
             const vimg = document.getElementById('image-viewer-img');
