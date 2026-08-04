@@ -336,51 +336,23 @@
             padding-top: env(safe-area-inset-top);
         }
 
-        /* ── NAVBAR: evitar que en pantallas angostas los íconos de la derecha
-           (sesión, IA, bolsa de cotización) se salgan de la pantalla ──
-           Los elementos flex no encogen por debajo de su ancho de contenido
-           mínimo por defecto; si el cúmulo izquierdo (botón Menú + "Damaso")
-           y el derecho (sesión/IA/bolsa) suman más que el viewport, el
-           excedente termina fuera del área visible (el body usa
-           overflow-x:hidden), y como no hay sesión iniciada el botón extra de
-           "Iniciar Sesión" agranda aún más el cúmulo derecho. La solución:
-           el cúmulo derecho nunca encoge (flex-shrink:0, siempre visible por
-           completo), y es el cúmulo izquierdo el que reduce tamaño de letra y
-           relleno progresivamente en pantallas angostas para dejarle espacio. */
-        #navbar-right-cluster,
+        /* ── NAVBAR: evitar que en pantallas angostas los botones de IA y
+           bolsa de cotización se salgan de la pantalla ── El botón Menú y el
+           wordmark "Damaso" se dejan siempre a su tamaño original (no se
+           tocan, no todos los teléfonos tienen el problema y achicarlos se
+           veía mal en los que sí cabían bien). En vez de eso, únicamente los
+           botones de IA y bolsa se hacen un poco más pequeños, y solo en
+           pantallas realmente angostas donde de verdad no caben. */
         #navbar-right-cluster > button {
             flex-shrink: 0;
         }
-        @media (max-width: 480px) {
-            #navbar-left-cluster { min-width: 0; }
-            #btn-menu { padding-left: 1rem; padding-right: 1rem; font-size: 10px; letter-spacing: 0.15em; }
-            #navbar-wordmark { font-size: clamp(1.05rem, 5.2vw, 1.5rem); letter-spacing: 0.16em; margin-left: 0.4rem; }
+        @media (max-width: 400px) {
+            #nav-ai-btn, #nav-cart-btn { width: 2.25rem; height: 2.25rem; }
+            #navbar-right-cluster > :not([hidden]) ~ :not([hidden]) { margin-left: 0.4rem !important; }
         }
-        @media (max-width: 380px) {
-            #btn-menu { padding-left: 0.75rem; padding-right: 0.75rem; font-size: 9px; }
-            #navbar-wordmark { font-size: clamp(0.95rem, 5vw, 1.3rem); letter-spacing: 0.12em; margin-left: 0.3rem; }
-            #navbar-right-cluster > :not([hidden]) ~ :not([hidden]) { margin-left: 0.35rem !important; }
-            #navbar-right-cluster > button { width: 2.15rem; height: 2.15rem; padding: 0.4rem; }
-        }
-
-        /* ── SECCIÓN MARCA: los títulos de los 4 cuadritos (Clientes,
-           Experiencia, Proyectos, Empresa) ── Con clases de Tailwind por
-           punto de quiebre, el tamaño de letra saltaba en un punto que no
-           coincidía con el ancho real del cuadro (el grid pasa a 4 columnas
-           antes de que el contenedor sea lo bastante ancho), y el texto
-           terminaba envolviéndose a una segunda línea por debajo del
-           cuadro. Con font-size fluido (ligado al ancho del viewport) el
-           texto cabe en una sola línea en casi todos los anchos; y como
-           respaldo final ante un caso extremo, no se envuelve (nowrap) y si
-           aun así no cupiera se recorta con puntos suspensivos en vez de
-           desbordarse o pasar a otra línea. */
-        .marca-stat-title {
-            font-size: clamp(1rem, 2.6vw, 2.25rem);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
-            display: block;
+        @media (max-width: 345px) {
+            #nav-ai-btn, #nav-cart-btn { width: 2rem; height: 2rem; padding: 0.35rem; }
+            #navbar-right-cluster > :not([hidden]) ~ :not([hidden]) { margin-left: 0.3rem !important; }
         }
 
         /* ── ANIMACIONES LOADER ── */
@@ -409,6 +381,28 @@
                 background: rgba(255,255,255,0.3); pointer-events: none;
             }
             .modal-img-dot.active { background: #fff; }
+        }
+        /* Flechas para cambiar entre las fotos de una pieza, sobre la imagen
+           agrandada — en la ficha de especificaciones y en el visor a
+           pantalla completa. Solo en computadora: en táctil se navega
+           deslizando (igual que con los puntitos), así que se ocultan por
+           completo sin importar lo que diga su estilo en línea. La
+           visibilidad según el índice actual (si hay foto anterior/siguiente)
+           la controla JS con display:none/flex directo en el elemento. */
+        .modal-img-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            z-index: 15; width: 40px; height: 40px; border-radius: 9999px;
+            background: rgba(212,175,55,0.15); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(212,175,55,0.5); color: #d4af37;
+            align-items: center; justify-content: center; cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+            padding: 0;
+        }
+        .modal-img-arrow:hover { background: rgba(212,175,55,0.32); }
+        .modal-img-arrow-left { left: 0.5rem; }
+        .modal-img-arrow-right { right: 0.5rem; }
+        @media (pointer: coarse) {
+            .modal-img-arrow { display: none !important; }
         }
 
         /* ── LOADER PRINCIPAL: D LUMINOSA (barrido de luz de abajo hacia arriba) ── */
@@ -830,6 +824,13 @@
              ficha de especificaciones, así que se reutiliza la MISMA flecha
              dorada de esa ficha (ver #spec-modal-close-btn), que se mantiene
              visible y en su misma posición en vez de mostrar una segunda. -->
+        <!-- Mismas flechas que en especificaciones, solo en computadora. -->
+        <button type="button" id="viewer-img-arrow-left" onclick="window._goToViewerImage(window._viewerImgIndex - 1, -1)" class="modal-img-arrow modal-img-arrow-left" style="display:none;" aria-label="Imagen anterior">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button type="button" id="viewer-img-arrow-right" onclick="window._goToViewerImage(window._viewerImgIndex + 1, 1)" class="modal-img-arrow modal-img-arrow-right" style="display:none;" aria-label="Imagen siguiente">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
     </div>
 
     <!-- Notificación del correo con el código de seguridad -->
@@ -1032,10 +1033,10 @@
                         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line>
                     </svg>
                 </button>
-                <button onclick="window.toggleChatbot(event)" class="glass-gold flex items-center justify-center p-2 rounded-full w-10 h-10 cursor-pointer" aria-label="Asistente Virtual">
+                <button id="nav-ai-btn" onclick="window.toggleChatbot(event)" class="glass-gold flex items-center justify-center p-2 rounded-full w-10 h-10 cursor-pointer" aria-label="Asistente Virtual">
                     <span class="font-editorial text-lg font-bold tracking-[0.1em] drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">AI</span>
                 </button>
-                <button onclick="window.toggleCart()" class="glass-gold relative p-2 rounded-full w-10 h-10 flex items-center justify-center">
+                <button id="nav-cart-btn" onclick="window.toggleCart()" class="glass-gold relative p-2 rounded-full w-10 h-10 flex items-center justify-center">
                     <svg class="pointer-events-none drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-brand-gold text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0 transition-opacity pointer-events-none shadow-[0_0_10px_rgba(212,175,55,0.8)]">0</span>
                 </button>
@@ -1140,6 +1141,15 @@
             <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
                 <button id="modal-ai-btn" onclick="window.openModalAI()" class="absolute top-4 right-4 md:top-6 md:right-6 z-20 w-12 h-12 rounded-full glass-gold flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 transition-transform pointer-events-auto" title="Consultar a DAMASO AI sobre esta pieza">
                     <span class="font-editorial font-bold text-lg">AI</span>
+                </button>
+                <!-- Flechas para cambiar entre las fotos de una pieza — solo en
+                     computadora (en táctil se navega deslizando, como los
+                     puntitos). Se muestran/ocultan por índice desde JS. -->
+                <button type="button" id="modal-img-arrow-left" onclick="window._goToModalImage(window._modalImgIndex - 1, -1)" class="modal-img-arrow modal-img-arrow-left" style="display:none;" aria-label="Imagen anterior">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button type="button" id="modal-img-arrow-right" onclick="window._goToModalImage(window._modalImgIndex + 1, 1)" class="modal-img-arrow modal-img-arrow-right" style="display:none;" aria-label="Imagen siguiente">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
                 <div class="w-full h-full flex flex-col items-center justify-center gap-3">
                     <a id="modal-img-link" href="#" onclick="window.viewWatermarkedImage(); return false;" class="w-full flex items-center justify-center relative cursor-zoom-in flex-1 min-h-0">
@@ -1324,22 +1334,22 @@
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold uppercase mb-20 scroll-reveal">Damaso</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-20">
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial marca-stat-title text-white uppercase tracking-wide mb-6" data-i18n="marca_clientes">Clientes</p>
+                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_clientes">Clientes</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="100">0</span>+</p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_clientes_lower">clientes</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial marca-stat-title text-white uppercase tracking-wide mb-6" data-i18n="marca_experiencia">Experiencia</p>
+                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_experiencia">Experiencia</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="25">0</span> <span class="text-brand-gold glow-gold" data-i18n="marca_anios">años</span></p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_de_experiencia">de experiencia</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial marca-stat-title text-white uppercase tracking-wide mb-6" data-i18n="marca_proyectos">Proyectos</p>
+                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_proyectos">Proyectos</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="200">0</span>+</p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_proyectos_lower">proyectos</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial marca-stat-title text-white uppercase tracking-wide mb-6" data-i18n="marca_empresa">Empresa</p>
+                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_empresa">Empresa</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="100">0</span><span class="text-brand-gold glow-gold">%</span></p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_empresa_tapatia">tapatía</p>
                 </div>
@@ -1652,6 +1662,11 @@
             { id: 179, name: "Colgante Cono Bronce Ahumado", category: "techo", price: 4600, img: "lampara_de_techo_24.jpeg", sku: "DM-TEC-047", desc: "Lámpara fabricada en metal cónico con acabado bronce y interior dorado", specsLight: "Lámpara fabricada en metal cónico con acabado bronce y interior dorado", cable: "Certificado UL/NOM", dims: { w: "18 cm", h: "22 cm", d: "18 cm", dia: "18 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Metal", fin: "Bronce ahumado/interior dorado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 182, name: "Colgante Globo Cristal con Cadena", category: "techo", price: 6800, img: "lampara_de_techo_25.jpeg", sku: "DM-TEC-048", desc: "Lámpara fabricada en metal con globo de cristal transparente y cadena", specsLight: "Lámpara fabricada en metal con globo de cristal transparente y cadena", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "35 cm", d: "30 cm", dia: "30 cm" }, peso: "3 kg", volt: "110-120V", mat: "Metal/cristal", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 183, name: "Colgante Esfera Alabastro Suspendida", category: "techo", price: 12500, img: "lampara_de_techo_26.jpeg", sku: "DM-TEC-049", desc: "Lámpara fabricada en alabastro natural con forma de esfera suspendida de cable delgado", specsLight: "Lámpara fabricada en alabastro natural con forma de esfera suspendida de cable delgado", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "35 cm", d: "35 cm", dia: "35 cm" }, peso: "4 kg", volt: "110-120V", mat: "Alabastro", fin: "Alabastro natural", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 208, name: "Colgante Domo Latón", category: "techo", price: 9800, img: "lampara_de_techo_27.jpeg", sku: "DM-TEC-050", desc: "Lámpara fabricada en latón sólido con pantalla en forma de domo y remate cónico", specsLight: "Lámpara fabricada en latón sólido con pantalla en forma de domo y remate cónico", cable: "Certificado UL/NOM", dims: { w: "45 cm", h: "25 cm", d: "45 cm", dia: "45 cm" }, peso: "3.5 kg", volt: "110-120V", mat: "Latón sólido", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 209, name: "Colgante Cilindro Lino Latón", category: "techo", price: 4200, img: "lampara_de_techo_28.jpeg", sku: "DM-TEC-051", desc: "Lámpara fabricada en latón con pantalla cilíndrica en tela de lino", specsLight: "Lámpara fabricada en latón con pantalla cilíndrica en tela de lino", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "20 cm", d: "15 cm", dia: "15 cm" }, peso: "1.2 kg", volt: "110-120V", mat: "Latón/tela de lino", fin: "Latón cepillado/crudo", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 210, name: "Colgante Tambor Lino Bronce", category: "techo", price: 5600, img: "lampara_de_techo_29.webp", sku: "DM-TEC-052", desc: "Lámpara fabricada en metal bronce con pantalla tipo tambor en tela de lino", specsLight: "Lámpara fabricada en metal bronce con pantalla tipo tambor en tela de lino", cable: "Certificado UL/NOM", dims: { w: "40 cm", h: "22 cm", d: "40 cm", dia: "40 cm" }, peso: "3 kg", volt: "110-120V", mat: "Metal/tela de lino", fin: "Bronce envejecido", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 211, name: "Colgante Doble Campana Níquel", category: "techo", price: 6400, img: "lampara_de_techo_30.jpeg", sku: "DM-TEC-053", desc: "Lámpara fabricada en metal con doble pantalla en forma de campana y foco globo expuesto", specsLight: "Lámpara fabricada en metal con doble pantalla en forma de campana y foco globo expuesto", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "30 cm", d: "35 cm", dia: "35 cm" }, peso: "2.6 kg", volt: "110-120V", mat: "Metal", fin: "Níquel cepillado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 212, name: "Colgante Facetado Cristal Tallado", category: "techo", price: 8600, img: "lampara_de_techo_31.jpeg", sku: "DM-TEC-054", desc: "Lámpara fabricada en metal con pantalla en cristal tallado en patrón facetado", specsLight: "Lámpara fabricada en metal con pantalla en cristal tallado en patrón facetado", cable: "Certificado UL/NOM", dims: { w: "22 cm", h: "30 cm", d: "22 cm", dia: "22 cm" }, peso: "2.2 kg", volt: "110-120V", mat: "Metal/cristal tallado", fin: "Bronce oscuro/cristal transparente", time: "4 a 5 semanas", cert: "NOM" },
             { id: 46, name: "Farol Exterior Negro", category: "briseras", price: 5200, img: "IMG_2012.png", sku: "DM-BRI-001", desc: "Farol de piso o mesa para terrazas exteriores.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero treated y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
             { id: 47, name: "Brisera Vigía", category: "briseras", price: 3600, img: "IMG_2020.png", sku: "DM-BRI-002", desc: "Luminaria exterior con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
             { id: 86, name: "Farol Linterna Latón", category: "briseras", price: 6800, img: "image_exterior.png", sku: "DM-BRI-003", desc: "Farol negro mate con corona de latón pulido.", specsLight: "1x E26 LED 8W cálida", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero tratado, latón macizo y cristal templado", fin: "Negro mate exterior y latón brillante", time: "3 a 4 semanas", cert: "NOM, IP65" },
@@ -1852,6 +1867,16 @@
             ["Eclipse de Dos Luces", "Two-Light Eclipse", "Éclipse à Deux Lumières", "双光日食"],
             ["de Dos Luces", "Two-Light", "à Deux Lumières", "双光"],
             ["Colgante Marea", "Tide Pendant", "Suspension Marée", "潮汐吊灯"],
+            ["Colgante Domo Latón", "Brass Dome Pendant", "Suspension Dôme en Laiton", "黄铜圆顶吊灯"],
+            ["Colgante Cilindro Lino Latón", "Brass Linen Cylinder Pendant", "Suspension Cylindre Lin et Laiton", "黄铜亚麻圆柱吊灯"],
+            ["Colgante Tambor Lino Bronce", "Bronze Linen Drum Pendant", "Suspension Tambour Lin et Bronze", "青铜亚麻鼓形吊灯"],
+            ["Colgante Doble Campana Níquel", "Nickel Double Bell Pendant", "Suspension Double Cloche en Nickel", "镍双钟形吊灯"],
+            ["Colgante Facetado Cristal Tallado", "Faceted Cut Glass Pendant", "Suspension Verre Taillé à Facettes", "刻面切割玻璃吊灯"],
+            ["domo", "dome", "dôme", "圆顶"],
+            ["tambor", "drum", "tambour", "鼓形"],
+            ["campana", "bell", "cloche", "钟形"],
+            ["facetado", "faceted", "à facettes", "刻面"],
+            ["lino", "linen", "lin", "亚麻"],
             ["Tótem", "Totem", "Totem", "图腾"],
             ["Cadencia", "Cadence", "Cadence", "韵律"],
             ["Vértice", "Vertex", "Sommet", "顶点"],
@@ -2591,8 +2616,21 @@
                     { sku: 'DM-CAN-020', img: 'candil_20.jpeg' }
                 ],
                 features: [
-                    { type: 'fix', title: 'Títulos de la sección Marca podían pasar a otra línea', desc: 'Los títulos "Clientes", "Experiencia", "Proyectos" y "Empresa" de la sección Marca, si no cabían, podían continuar en una segunda línea debajo del cuadro. Ahora el tamaño de letra se ajusta para que el texto siempre entre en una sola línea dentro de su cuadro.' },
                     { type: 'fix', title: 'Carrusel de "Nuestros Clientes" con las animaciones apagadas', desc: 'El carrusel de logos que se desplaza en la sección "Nuestros Clientes" se veía afectado por el interruptor de animaciones y podía quedarse detenido a medio recorrido, dejando algunos logos fuera de la vista. Ahora sigue moviéndose igual, con animaciones encendidas o apagadas.' }
+                ]
+            },
+            {
+                id: 'upd-2026-08-04-techo-13-arrows',
+                code: 'DMS-013',
+                images: [
+                    { sku: 'DM-TEC-050', img: 'lampara_de_techo_27.jpeg' },
+                    { sku: 'DM-TEC-051', img: 'lampara_de_techo_28.jpeg' },
+                    { sku: 'DM-TEC-052', img: 'lampara_de_techo_29.webp' },
+                    { sku: 'DM-TEC-053', img: 'lampara_de_techo_30.jpeg' },
+                    { sku: 'DM-TEC-054', img: 'lampara_de_techo_31.jpeg' }
+                ],
+                features: [
+                    { title: 'Flechas para cambiar de foto en computadora', desc: 'En piezas con más de una foto, al verlas en grande desde computadora ahora aparecen flechas a los costados de la imagen para cambiar entre ellas con un clic, además de los puntos indicadores. Funciona tanto en la ficha de especificaciones como en el visor de imagen a pantalla completa.' }
                 ]
             }
         ];
@@ -3393,6 +3431,7 @@
             const mainImgEl = document.getElementById('modal-img-element');
             if (mainImgEl) { mainImgEl.style.cssText = ''; mainImgEl.src = window._modalImgList[0]; }
             window._renderModalImgDots(window._modalImgList.length);
+            window._updateModalImgArrows();
             const nSpn = document.getElementById('modal-img-name');
             const copyBtn = document.getElementById('modal-copy-btn');
             const isOwner = window._isOwnerAccount();
@@ -3488,6 +3527,20 @@
             }
             dotsEl.innerHTML = html;
         };
+        // Muestra/oculta las flechas de cambio de imagen según el índice
+        // actual: la primera foto solo muestra la flecha derecha (avanzar),
+        // la última solo la izquierda (regresar), y las de en medio ambas.
+        // Si la pieza tiene una sola foto, ambas se ocultan.
+        window._updateModalImgArrows = function() {
+            const list = window._modalImgList;
+            const idx = window._modalImgIndex;
+            const left = document.getElementById('modal-img-arrow-left');
+            const right = document.getElementById('modal-img-arrow-right');
+            if (!left || !right) return;
+            const hasMultiple = !!(list && list.length > 1);
+            left.style.display = (hasMultiple && idx > 0) ? 'flex' : 'none';
+            right.style.display = (hasMultiple && idx < list.length - 1) ? 'flex' : 'none';
+        };
         window._goToModalImage = function(newIndex, direction) {
             const list = window._modalImgList;
             if (!list || !list.length || newIndex < 0 || newIndex >= list.length || newIndex === window._modalImgIndex) return;
@@ -3508,6 +3561,7 @@
                 imgEl.style.opacity = '1';
                 const dotsEl = document.getElementById('modal-img-dots');
                 if (dotsEl) dotsEl.querySelectorAll('.modal-img-dot').forEach((el, i) => el.classList.toggle('active', i === newIndex));
+                window._updateModalImgArrows();
                 if (window._isOwnerAccount()) {
                     const nSpn = document.getElementById('modal-img-name');
                     if (nSpn) nSpn.innerText = list[newIndex];
@@ -3821,6 +3875,7 @@
             window._viewerImgList = (window._modalImgList && window._modalImgList.length) ? window._modalImgList : [imgEl.src];
             window._viewerImgIndex = window._modalImgIndex || 0;
             window._renderViewerImage(window._viewerImgIndex, true);
+            window._updateViewerImgArrows();
             // Atrapa el botón/gesto de "regresar" del sistema: en vez de sacar al
             // usuario de la página (porque no había ninguna entrada de historial
             // que consumir), simplemente cierra el visor, un paso a la vez.
@@ -3849,6 +3904,18 @@
                 }
             }, function() {}, 1600);
         };
+        // Misma lógica que en especificaciones: primera foto solo flecha
+        // derecha, última solo flecha izquierda, una sola foto = ninguna.
+        window._updateViewerImgArrows = function() {
+            const list = window._viewerImgList;
+            const idx = window._viewerImgIndex;
+            const left = document.getElementById('viewer-img-arrow-left');
+            const right = document.getElementById('viewer-img-arrow-right');
+            if (!left || !right) return;
+            const hasMultiple = !!(list && list.length > 1);
+            left.style.display = (hasMultiple && idx > 0) ? 'flex' : 'none';
+            right.style.display = (hasMultiple && idx < list.length - 1) ? 'flex' : 'none';
+        };
         // Deslizar sobre la imagen en el visor de pantalla completa: misma
         // convención que en especificaciones (derecha = siguiente, izquierda =
         // regresa), con una transición de deslizamiento suave.
@@ -3864,6 +3931,7 @@
             setTimeout(() => {
                 window._viewerImgIndex = newIndex;
                 window._renderViewerImage(newIndex, false);
+                window._updateViewerImgArrows();
                 vimg.style.transition = 'none';
                 vimg.style.transform = `scale(1) translateX(${dir * 60}px)`;
                 void vimg.offsetWidth;
