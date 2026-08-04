@@ -355,6 +355,16 @@
             #navbar-right-cluster > :not([hidden]) ~ :not([hidden]) { margin-left: 0.3rem !important; }
         }
 
+        /* ── SECCIÓN MARCA: en computadora, "EXPERIENCIA" y un poco "PROYECTOS"
+           se salían de su recuadro por la derecha. Se recorren levemente a
+           la izquierda (más "Experiencia" que "Proyectos", por ser más
+           largo) sin tocar tamaño de letra ni nada más. Solo aplica desde
+           el punto en que el texto crece (md:), como en celular no ocurre. */
+        @media (min-width: 768px) {
+            #marca-title-experiencia { transform: translateX(-10px); }
+            #marca-title-proyectos { transform: translateX(-5px); }
+        }
+
         /* ── ANIMACIONES LOADER ── */
         @keyframes shapeSwap1 { 0%,100% { transform: translate(0px,-35%); } 33.33% { transform: translate(35%,35%); } 66.66% { transform: translate(-35%,35%); } }
         @keyframes shapeSwap2 { 0%,100% { transform: translate(35%,35%); } 33.33% { transform: translate(-35%,35%); } 66.66% { transform: translate(0px,-35%); } }
@@ -857,7 +867,7 @@
     </div>
 
     <!-- ── AVISO DE PÁGINA ACTUALIZADA (una sola vez por versión) ── -->
-    <div id="update-notice-modal" class="fixed inset-0 z-[9999996] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-500 hidden">
+    <div id="update-notice-modal" class="fixed inset-0 z-[9999999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-500 hidden">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-10 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.15)] relative rounded-sm max-h-[85vh] overflow-y-auto">
             <h2 class="font-editorial text-3xl sm:text-4xl text-brand-gold glow-gold uppercase tracking-widest mb-4" data-i18n="update_notice_title">Página Actualizada</h2>
             <p id="update-notice-subtitle" class="text-brand-muted text-sm leading-relaxed mb-6"></p>
@@ -1339,12 +1349,12 @@
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_clientes_lower">clientes</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_experiencia">Experiencia</p>
+                    <p id="marca-title-experiencia" class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_experiencia">Experiencia</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="25">0</span> <span class="text-brand-gold glow-gold" data-i18n="marca_anios">años</span></p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_de_experiencia">de experiencia</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_proyectos">Proyectos</p>
+                    <p id="marca-title-proyectos" class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_proyectos">Proyectos</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="200">0</span>+</p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_proyectos_lower">proyectos</p>
                 </div>
@@ -1671,6 +1681,10 @@
             { id: 214, name: "Colgante Domo Tejido Ratán Bicolor", category: "techo", price: 5400, img: "lampara_de_techo_33.jpeg", sku: "DM-TEC-056", desc: "Lámpara fabricada en ratán tejido con pantalla en forma de domo y panel superior en tela color turquesa", specsLight: "Lámpara fabricada en ratán tejido con pantalla en forma de domo y panel superior en tela color turquesa", cable: "Certificado UL/NOM", dims: { w: "40 cm", h: "30 cm", d: "40 cm", dia: "40 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Ratán natural/tela", fin: "Ratán natural/turquesa", time: "4 a 5 semanas", cert: "NOM" },
             { id: 215, name: "Plafón Tambor Listones Entrelazados", category: "techo", price: 4200, img: "lampara_de_techo_34.jpeg", sku: "DM-TEC-057", desc: "Lámpara de techo tipo plafón con pantalla en listones de tela entrelazados en espiral", specsLight: "Lámpara de techo tipo plafón con pantalla en listones de tela entrelazados en espiral", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "25 cm", d: "35 cm", dia: "35 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Tela/metal", fin: "Crudo/blanco", time: "3 a 4 semanas", cert: "NOM" },
             { id: 216, name: "Plafón Bloques Ónix Cruzados", category: "techo", price: 9800, img: "lampara_de_techo_35.jpeg", sku: "DM-TEC-058", desc: "Lámpara de techo con bloques de ónix natural sostenidos por estructura de metal en cruz", specsLight: "Lámpara de techo con bloques de ónix natural sostenidos por estructura de metal en cruz", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "20 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Ónix natural/metal", fin: "Ónix miel/níquel pulido", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 217, name: "Colgante Disco Latón con Globo", category: "techo", price: 5800, img: "lampara_de_techo_37.jpeg", sku: "DM-TEC-059", desc: "Lámpara fabricada en latón con disco plano suspendido sobre globo de cristal opalino expuesto", specsLight: "Lámpara fabricada en latón con disco plano suspendido sobre globo de cristal opalino expuesto", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "20 cm", d: "35 cm", dia: "35 cm" }, peso: "2 kg", volt: "110-120V", mat: "Latón/cristal opalino", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 218, name: "Colgante Jarra Cristal Esmerilado", category: "techo", price: 4200, img: "lampara_de_techo_38.jpeg", sku: "DM-TEC-060", desc: "Lámpara fabricada en metal con pantalla en forma de jarra en cristal esmerilado", specsLight: "Lámpara fabricada en metal con pantalla en forma de jarra en cristal esmerilado", cable: "Certificado UL/NOM", dims: { w: "18 cm", h: "24 cm", d: "18 cm", dia: "18 cm" }, peso: "1.6 kg", volt: "110-120V", mat: "Metal/cristal esmerilado", fin: "Madera natural/blanco", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 219, name: "Colgante Pétalos Latón con Globo", category: "techo", price: 7200, img: "lampara_de_techo_39.jpeg", sku: "DM-TEC-061", desc: "Lámpara fabricada en latón con difusor en forma de pétalos y globo de cristal opalino expuesto", specsLight: "Lámpara fabricada en latón con difusor en forma de pétalos y globo de cristal opalino expuesto", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "25 cm", d: "30 cm", dia: "30 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Latón/cristal opalino", fin: "Latón envejecido/negro mate", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 220, name: "Colgante Domo Cuentas de Madera", category: "techo", price: 8600, img: "lampara_de_techo_40.jpeg", sku: "DM-TEC-062", desc: "Lámpara fabricada en cuentas de madera ensartadas formando un domo, colgada de cadena", specsLight: "Lámpara fabricada en cuentas de madera ensartadas formando un domo, colgada de cadena", cable: "Certificado UL/NOM", dims: { w: "60 cm", h: "35 cm", d: "60 cm", dia: "60 cm" }, peso: "5 kg", volt: "110-120V", mat: "Madera/metal", fin: "Madera natural/gris", time: "5 a 6 semanas", cert: "NOM" },
             { id: 46, name: "Farol Exterior Negro", category: "briseras", price: 5200, img: "IMG_2012.png", sku: "DM-BRI-001", desc: "Farol de piso o mesa para terrazas exteriores.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero treated y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
             { id: 47, name: "Brisera Vigía", category: "briseras", price: 3600, img: "IMG_2020.png", sku: "DM-BRI-002", desc: "Luminaria exterior con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
             { id: 86, name: "Farol Linterna Latón", category: "briseras", price: 6800, img: "image_exterior.png", sku: "DM-BRI-003", desc: "Farol negro mate con corona de latón pulido.", specsLight: "1x E26 LED 8W cálida", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero tratado, latón macizo y cristal templado", fin: "Negro mate exterior y latón brillante", time: "3 a 4 semanas", cert: "NOM, IP65" },
@@ -1880,6 +1894,14 @@
             ["Colgante Domo Tejido Ratán Bicolor", "Two-Tone Woven Rattan Dome Pendant", "Suspension Dôme en Rotin Tressé Bicolore", "双色藤编圆顶吊灯"],
             ["Plafón Tambor Listones Entrelazados", "Interlaced Ribbon Drum Flush Mount", "Plafonnier Tambour à Rubans Entrelacés", "交织缎带鼓形吸顶灯"],
             ["Plafón Bloques Ónix Cruzados", "Crossed Onyx Block Flush Mount", "Plafonnier Blocs d'Onyx Croisés", "交叉玛瑙块吸顶灯"],
+            ["Colgante Disco Latón con Globo", "Brass Disc Pendant with Globe", "Suspension Disque en Laiton avec Globe", "带球形黄铜圆盘吊灯"],
+            ["Colgante Jarra Cristal Esmerilado", "Frosted Glass Jar Pendant", "Suspension Bocal en Verre Dépoli", "磨砂玻璃罐形吊灯"],
+            ["Colgante Pétalos Latón con Globo", "Brass Petal Pendant with Globe", "Suspension Pétales en Laiton avec Globe", "带球形黄铜花瓣吊灯"],
+            ["Colgante Domo Cuentas de Madera", "Wood Bead Dome Pendant", "Suspension Dôme à Perles de Bois", "木珠圆顶吊灯"],
+            ["pétalos", "petals", "pétales", "花瓣"],
+            ["jarra", "jar", "bocal", "罐形"],
+            ["disco", "disc", "disque", "圆盘"],
+            ["globo de cristal opalino", "opaline glass globe", "globe en verre opalin", "乳白玻璃球"],
             ["plafón", "flush mount", "plafonnier", "吸顶灯"],
             ["listones entrelazados", "interlaced ribbons", "rubans entrelacés", "交织缎带"],
             ["bloques cruzados", "crossed blocks", "blocs croisés", "交叉块"],
@@ -2486,7 +2508,13 @@
                 if (ce && window.userSession.email) ce.value = window.userSession.email;
             }
             setTimeout(() => document.querySelectorAll('.init-overlay').forEach(o => o.classList.add('hidden')), 1000);
-            setTimeout(() => { if (window.maybeShowUpdateNotice) window.maybeShowUpdateNotice(); }, 1200);
+            // Antes esperaba 1200ms extra después de que la página ya estaba
+            // abierta (y de que, si hubo animación de bienvenida, ya había
+            // terminado de decir "Bienvenido..."), por lo que el aviso de
+            // página actualizada aparecía tarde, como algo aparte y
+            // desconectado. Ahora sale enseguida, ya como parte de la
+            // apertura, justo después del "Bienvenido".
+            setTimeout(() => { if (window.maybeShowUpdateNotice) window.maybeShowUpdateNotice(); }, 300);
         };
 
         // ── AVISO DE PÁGINA ACTUALIZADA ──
@@ -2673,6 +2701,20 @@
                 ],
                 features: [
                     { title: 'El logo DAMASO ahora también reinicia el catálogo', desc: 'Al picarle al wordmark "DAMASO" de la barra superior, además de regresar al inicio de la página, el catálogo vuelve a mostrarse completo, sin ningún filtro ni búsqueda activos.' }
+                ]
+            },
+            {
+                id: 'upd-2026-08-04-techo-15',
+                code: 'DMS-015',
+                images: [
+                    { sku: 'DM-TEC-059', img: 'lampara_de_techo_37.jpeg' },
+                    { sku: 'DM-TEC-060', img: 'lampara_de_techo_38.jpeg' },
+                    { sku: 'DM-TEC-061', img: 'lampara_de_techo_39.jpeg' },
+                    { sku: 'DM-TEC-062', img: 'lampara_de_techo_40.jpeg' }
+                ],
+                features: [
+                    { type: 'fix', title: 'Cambio de foto en piezas con más de una imagen', desc: 'En piezas con dos o más fotos, la primera vez que se cambiaba de imagen a veces se veía la animación pero la foto no cambiaba de verdad (el segundo intento sí funcionaba). Ahora cambia bien siempre, sin importar el intento.' },
+                    { type: 'fix', title: 'Títulos "Experiencia" y "Proyectos" en la sección Marca', desc: 'En computadora podían salirse un poco de su recuadro. Se ajustó su posición para que queden dentro por completo.' }
                 ]
             }
         ];
@@ -3927,7 +3969,7 @@
         // completa. Generar un PNG sin comprimir a resolución original en fotos
         // grandes puede saturar la memoria de la pestaña en móviles y hacer que el
         // navegador la reinicie sola; con el límite + JPEG comprimido esto no pasa.
-        window._renderViewerImage = function(index, isInitialOpen) {
+        window._renderViewerImage = function(index, isInitialOpen, onDone) {
             const src = window._viewerImgList && window._viewerImgList[index];
             if (!src) return;
             window._makeWatermarkedCanvas(src, function(canvas) {
@@ -3944,7 +3986,8 @@
                     vimg.style.opacity = '1';
                     vimg.style.transform = 'scale(1)';
                 }
-            }, function() {}, 1600);
+                if (onDone) onDone();
+            }, function() { if (onDone) onDone(); }, 1600);
         };
         // Misma lógica que en especificaciones: primera foto solo flecha
         // derecha, última solo flecha izquierda, una sola foto = ninguna.
@@ -3972,14 +4015,24 @@
             vimg.style.opacity = '0';
             setTimeout(() => {
                 window._viewerImgIndex = newIndex;
-                window._renderViewerImage(newIndex, false);
-                window._updateViewerImgArrows();
-                vimg.style.transition = 'none';
-                vimg.style.transform = `scale(1) translateX(${dir * 60}px)`;
-                void vimg.offsetWidth;
-                vimg.style.transition = 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease';
-                vimg.style.transform = 'scale(1) translateX(0)';
-                vimg.style.opacity = '1';
+                // La marca de agua se genera de forma asíncrona (crea una
+                // Image(), la dibuja en un canvas). Si la nueva foto no
+                // estaba ya en caché, esto podía tardar más que esta misma
+                // transición: antes se deslizaba de regreso al toque, con la
+                // foto ANTERIOR todavía puesta, y la nueva aparecía de golpe
+                // ya terminada la animación — parecía que "no cambiaba" la
+                // primera vez. Ahora el deslizamiento de regreso espera a que
+                // la nueva imagen ya esté lista y asignada, sin importar
+                // cuánto tarde, así siempre se ve la imagen correcta viniendo.
+                window._renderViewerImage(newIndex, false, () => {
+                    window._updateViewerImgArrows();
+                    vimg.style.transition = 'none';
+                    vimg.style.transform = `scale(1) translateX(${dir * 60}px)`;
+                    void vimg.offsetWidth;
+                    vimg.style.transition = 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease';
+                    vimg.style.transform = 'scale(1) translateX(0)';
+                    vimg.style.opacity = '1';
+                });
             }, 320);
         };
         (function() {
