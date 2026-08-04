@@ -180,6 +180,14 @@
         html.animations-off .whatsapp-float-ring {
             animation-duration: 2.2s !important;
         }
+        /* Excepción: el carrusel de logos de "Nuestros Clientes" también se
+           deja igual, con o sin animaciones encendidas. Al forzar su
+           animación infinita a 1ms se quedaba pegada en un punto del
+           recorrido (se "bugueaba"), dejando algunos logos fuera de la vista
+           sin poder verse. */
+        html.animations-off .marquee-content {
+            animation-duration: 40s !important;
+        }
 
         body {
             background-color: #030303;
@@ -353,6 +361,26 @@
             #navbar-wordmark { font-size: clamp(0.95rem, 5vw, 1.3rem); letter-spacing: 0.12em; margin-left: 0.3rem; }
             #navbar-right-cluster > :not([hidden]) ~ :not([hidden]) { margin-left: 0.35rem !important; }
             #navbar-right-cluster > button { width: 2.15rem; height: 2.15rem; padding: 0.4rem; }
+        }
+
+        /* ── SECCIÓN MARCA: los títulos de los 4 cuadritos (Clientes,
+           Experiencia, Proyectos, Empresa) ── Con clases de Tailwind por
+           punto de quiebre, el tamaño de letra saltaba en un punto que no
+           coincidía con el ancho real del cuadro (el grid pasa a 4 columnas
+           antes de que el contenedor sea lo bastante ancho), y el texto
+           terminaba envolviéndose a una segunda línea por debajo del
+           cuadro. Con font-size fluido (ligado al ancho del viewport) el
+           texto cabe en una sola línea en casi todos los anchos; y como
+           respaldo final ante un caso extremo, no se envuelve (nowrap) y si
+           aun así no cupiera se recorta con puntos suspensivos en vez de
+           desbordarse o pasar a otra línea. */
+        .marca-stat-title {
+            font-size: clamp(1rem, 2.6vw, 2.25rem);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            display: block;
         }
 
         /* ── ANIMACIONES LOADER ── */
@@ -1296,22 +1324,22 @@
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold uppercase mb-20 scroll-reveal">Damaso</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-20">
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial text-3xl lg:text-4xl text-white uppercase tracking-wide mb-6 break-words" data-i18n="marca_clientes">Clientes</p>
+                    <p class="font-editorial marca-stat-title text-white uppercase tracking-wide mb-6" data-i18n="marca_clientes">Clientes</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="100">0</span>+</p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_clientes_lower">clientes</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial text-3xl lg:text-4xl text-white uppercase tracking-wide mb-6 break-words" data-i18n="marca_experiencia">Experiencia</p>
+                    <p class="font-editorial marca-stat-title text-white uppercase tracking-wide mb-6" data-i18n="marca_experiencia">Experiencia</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="25">0</span> <span class="text-brand-gold glow-gold" data-i18n="marca_anios">años</span></p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_de_experiencia">de experiencia</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial text-3xl lg:text-4xl text-white uppercase tracking-wide mb-6 break-words" data-i18n="marca_proyectos">Proyectos</p>
+                    <p class="font-editorial marca-stat-title text-white uppercase tracking-wide mb-6" data-i18n="marca_proyectos">Proyectos</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="200">0</span>+</p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_proyectos_lower">proyectos</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial text-3xl lg:text-4xl text-white uppercase tracking-wide mb-6 break-words" data-i18n="marca_empresa">Empresa</p>
+                    <p class="font-editorial marca-stat-title text-white uppercase tracking-wide mb-6" data-i18n="marca_empresa">Empresa</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="100">0</span><span class="text-brand-gold glow-gold">%</span></p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_empresa_tapatia">tapatía</p>
                 </div>
@@ -1460,6 +1488,9 @@
             { id: 161, name: "Candil Diamante Facetado", category: "candiles", price: 42000, img: "candil_15.jpeg", sku: "DM-CAN-015", desc: "Candil fabricado en metal negro con múltiples paneles de vidrio facetado en forma de diamante", specsLight: "Candil fabricado en metal negro con múltiples paneles de vidrio facetado en forma de diamante", cable: "Certificado UL/NOM", dims: { w: "60 cm", h: "90 cm", d: "60 cm", dia: "N/A" }, peso: "12 kg", volt: "110-120V", mat: "Metal/vidrio", fin: "Negro mate", time: "6 a 8 semanas", cert: "NOM" },
             { id: 162, name: "Candil Esfera Tejida con Hilos", category: "candiles", price: 36000, img: "candil_16.jpeg", sku: "DM-CAN-016", desc: "Candil fabricado en cuerda tejida con hilos colgantes formando una esfera orgánica", specsLight: "Candil fabricado en cuerda tejida con hilos colgantes formando una esfera orgánica", cable: "Certificado UL/NOM", dims: { w: "90 cm", h: "120 cm", d: "90 cm", dia: "90 cm" }, peso: "10 kg", volt: "110-120V", mat: "Cuerda/fibra natural", fin: "Natural", time: "5 a 6 semanas", cert: "NOM" },
             { id: 163, name: "Candil Cascada de Cilindros", category: "candiles", price: 58000, img: "candil_17.jpeg", sku: "DM-CAN-017", desc: "Candil fabricado en metal con múltiples cilindros facetados suspendidos a distintas alturas en cascada", specsLight: "Candil fabricado en metal con múltiples cilindros facetados suspendidos a distintas alturas en cascada", cable: "Certificado UL/NOM", dims: { w: "70 cm", h: "110 cm", d: "70 cm", dia: "N/A" }, peso: "15 kg", volt: "110-120V", mat: "Metal/vidrio facetado", fin: "Níquel pulido", time: "6 a 8 semanas", cert: "NOM" },
+            { id: 205, name: "Candil Sputnik Brazos Cruzados", category: "candiles", price: 38000, img: "candil_18.jpeg", sku: "DM-CAN-018", desc: "Candil fabricado en metal color cobre con brazos cruzados en ángulo y difusores en cristal esmerilado", specsLight: "Candil fabricado en metal color cobre con brazos cruzados en ángulo y difusores en cristal esmerilado", cable: "Certificado UL/NOM", dims: { w: "1 m", h: "20 cm", d: "1 m", dia: "N/A" }, peso: "6 kg", volt: "110-120V", mat: "Metal/cristal esmerilado", fin: "Cobre cepillado", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 206, name: "Candil Cuentas de Madera", category: "candiles", price: 34000, img: "candil_19.webp", sku: "DM-CAN-019", desc: "Candil fabricado en cuentas de madera ensartadas formando una silueta tipo canasta, colgado de cadena", specsLight: "Candil fabricado en cuentas de madera ensartadas formando una silueta tipo canasta, colgado de cadena", cable: "Certificado UL/NOM", dims: { w: "70 cm", h: "90 cm", d: "70 cm", dia: "N/A" }, peso: "7 kg", volt: "110-120V", mat: "Madera/metal", fin: "Madera natural", time: "5 a 6 semanas", cert: "NOM" },
+            { id: 207, name: "Candil Espiral Tejido Ratán", category: "candiles", price: 26000, img: "candil_20.jpeg", sku: "DM-CAN-020", desc: "Candil fabricado en ratán tejido en forma de espiral escultórica", specsLight: "Candil fabricado en ratán tejido en forma de espiral escultórica", cable: "Certificado UL/NOM", dims: { w: "80 cm", h: "45 cm", d: "60 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Ratán natural", fin: "Natural tostado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 5, name: "Arbotante recinto", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Lámpara fabricada con recinto y acero inoxidable con pantalla en vidrio", specsLight: "Lámpara fabricada con recinto y acero inoxidable con pantalla en vidrio", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "40 cm", d: "15 cm", dia: "12 cm" }, peso: "5 kg", volt: "110-120V", mat: "Acero inoxidable/recinto/vidrio", fin: "Recinto natural/Pulido", time: "3 a 4 semanas", cert: "NOM" },
             { id: 6, name: "Arbotante, Marco", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-002", desc: "Lámpara fabricada en aluminio, con terminado en pintura electrostática y pantalla de vidrio blanco", specsLight: "Lámpara fabricada en aluminio, con terminado en pintura electrostática y pantalla de vidrio blanco", cable: "Certificado UL y NOM", dims: { w: "25 cm", h: "50 cm", d: "25 cm", dia: "12 cm" }, peso: "5 kg", volt: "110-120V", mat: "Aluminio/vidrio", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
             { id: 7, name: "Arbotante esferas", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-003", desc: "Lámpara fabricada en aluminio, terminado en pintura electrostática y pantalla de vidrio", specsLight: "Lámpara fabricada en aluminio, terminado en pintura electrostática y pantalla de vidrio", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "1 m", d: "50 cm", dia: "20 cm" }, peso: "10 kg", volt: "110-240V", mat: "Aluminio/vidrio", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
@@ -1631,6 +1662,8 @@
             { id: 160, name: "Farol Marco Esbelto Bronce", category: "briseras", price: 5600, img: "brisera_8.jpeg", sku: "DM-BRI-008", desc: "Farol portátil de líneas esbeltas en metal bronce con argolla superior y compartimento de vela", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "12 cm", h: "45 cm", d: "12 cm", dia: "N/A" }, peso: "1.5 kg", volt: "N/A", mat: "Metal/cristal", fin: "Bronce cepillado", time: "3 a 4 semanas", cert: "NOM, IP65" },
             { id: 164, name: "Farol Marco Bronce Tapa Madera", category: "briseras", price: 4600, img: "brisera_9.jpeg", sku: "DM-BRI-009", desc: "Farol portátil de metal bronce con tapa de madera y panel corredizo", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "15 cm", h: "30 cm", d: "15 cm", dia: "N/A" }, peso: "1.8 kg", volt: "N/A", mat: "Metal/madera/cristal", fin: "Bronce envejecido/madera natural", time: "3 a 4 semanas", cert: "NOM, IP65" },
             { id: 165, name: "Farol Cúpula Bronce con Vela", category: "briseras", price: 5200, img: "brisera_10.jpeg", sku: "DM-BRI-010", desc: "Farol de piso con remate en forma de cúpula, paneles de cristal y compartimento para vela", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "20 cm", h: "35 cm", d: "20 cm", dia: "N/A" }, peso: "2.5 kg", volt: "N/A", mat: "Metal/cristal", fin: "Bronce envejecido", time: "3 a 4 semanas", cert: "NOM, IP65" },
+            { id: 203, name: "Farol Tejido Ratán con Patas de Madera", category: "briseras", price: 4200, img: "brisera_11.jpeg", sku: "DM-BRI-011", desc: "Farol de piso tejido en ratán natural sobre tres patas de madera", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "22 cm", h: "48 cm", d: "22 cm", dia: "N/A" }, peso: "2.2 kg", volt: "N/A", mat: "Ratán natural/madera", fin: "Natural tostado", time: "3 a 4 semanas", cert: "NOM, IP65" },
+            { id: 204, name: "Farol Marco Madera Puerta Cristal", category: "briseras", price: 5800, img: "brisera_12.jpeg", sku: "DM-BRI-012", desc: "Farol portátil de marco en madera con remate en metal negro, puerta y paneles de cristal", specsLight: "Vela o módulo LED recargable opcional", cable: "Sin cable / uso portátil", dims: { w: "22 cm", h: "38 cm", d: "22 cm", dia: "N/A" }, peso: "2.8 kg", volt: "N/A", mat: "Madera/metal/cristal", fin: "Madera natural/negro mate", time: "3 a 4 semanas", cert: "NOM, IP65" },
             { id: 48, name: "Candil Vitra", category: "proyectos", price: 85000, img: "IMG_2013.png", sku: "DM-PRO-001", desc: "Instalación artística de esferas de vidrio soplado de colores.", specsLight: "Módulos LED 3W internos x 15", cable: "Instalación a plafón oculto", dims: { w: "200 cm", h: "100 cm", d: "200 cm", dia: "N/A" }, peso: "45 kg", volt: "110-240V", mat: "Vidrio soplado artesanal", fin: "Colores translúcidos variados", time: "8 a 10 semanas", cert: "NOM" },
             { id: 49, name: "Candil Lazo", category: "proyectos", price: 7400, img: "IMG_2018.png", sku: "DM-PRO-002", desc: "Cruz metálica que sostiene esferas blancas difusoras.", specsLight: "8x G9 LED 3W cálida", cable: "Instalación a registro", dims: { w: "30 cm", h: "80 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Acero pintado y cristal opalino", fin: "Rojo y negro brillante", time: "4 semanas", cert: "NOM" },
             { id: 50, name: "Farol Savia", category: "proyectos", price: 8500, img: "lampara_de_piso_1.png", sku: "DM-PRO-003", desc: "Perfil metálico ultra delgado con luz dirigida.", specsLight: "Módulo LED Integrado 10W", cable: "Cable negro 2m con pedal", dims: { w: "25 cm", h: "150 cm", d: "25 cm", dia: "N/A" }, peso: "4 kg", volt: "110-240V", mat: "Acero al carbón", fin: "Negro mate", time: "3 semanas", cert: "NOM" },
@@ -1883,6 +1916,14 @@
             ["Farol Marco Abierto Cristal Ahumado", "Open Frame Smoked Glass Lantern", "Lanterne Cadre Ouvert Verre Fumé", "开放式烟熏玻璃灯笼"],
             ["Farol Tejido Ratán con Asa", "Woven Rattan Lantern with Handle", "Lanterne Tressée en Rotin avec Poignée", "带手柄藤编灯笼"],
             ["Farol Marco Esbelto Bronce", "Slender Bronze Frame Lantern", "Lanterne Cadre Élancé en Bronze", "纤细青铜框灯笼"],
+            ["Farol Tejido Ratán con Patas de Madera", "Woven Rattan Lantern with Wood Legs", "Lanterne Tressée en Rotin sur Pieds en Bois", "木腿藤编灯笼"],
+            ["Farol Marco Madera Puerta Cristal", "Wood Frame Lantern with Glass Door", "Lanterne Cadre Bois Porte en Verre", "木框玻璃门灯笼"],
+            ["Candil Sputnik Brazos Cruzados", "Crossed-Arm Sputnik Chandelier", "Lustre Sputnik Bras Croisés", "交叉臂卫星形吊灯"],
+            ["Candil Cuentas de Madera", "Wood Bead Chandelier", "Lustre à Perles de Bois", "木珠吊灯"],
+            ["Candil Espiral Tejido Ratán", "Woven Rattan Spiral Chandelier", "Lustre Spirale en Rotin Tressé", "藤编螺旋吊灯"],
+            ["cuentas de madera", "wood beads", "perles de bois", "木珠"],
+            ["brazos cruzados", "crossed arms", "bras croisés", "交叉臂"],
+            ["patas de madera", "wood legs", "pieds en bois", "木腿"],
             ["orgánica", "organic", "organique", "有机形"],
             ["esmerilado", "frosted", "dépoli", "磨砂"],
             ["ahumado", "smoked", "fumé", "烟熏"],
@@ -2460,7 +2501,8 @@
                     { sku: 'DM-TEC-047', img: 'lampara_de_techo_24.jpeg' }
                 ],
                 features: [
-                    { title: 'Corrección de errores de navegación', desc: 'Se corrigieron dos errores reportados: (1) al ver una imagen en grande, si no se usaba el botón dorado de regresar, el botón o gesto de regresar del sistema sacaba al usuario de la página por completo; ahora ese gesto solo cierra un paso a la vez, como una navegación normal. (2) ver una imagen en grande a veces reiniciaba la página desde cero; se optimizó cómo se genera esa vista ampliada para que no sature la memoria del navegador en celulares.' }
+                    { type: 'fix', title: 'El botón de regresar del sistema sacaba al usuario de la página', desc: 'Al ver una imagen en grande, si no se usaba el botón dorado de regresar, el botón o gesto de regresar del sistema sacaba al usuario de la página por completo; ahora ese gesto solo cierra un paso a la vez, como una navegación normal.' },
+                    { type: 'fix', title: 'Ver una imagen en grande reiniciaba la página', desc: 'Ver una imagen en grande a veces reiniciaba la página desde cero; se optimizó cómo se genera esa vista ampliada para que no sature la memoria del navegador en celulares.' }
                 ]
             },
             {
@@ -2497,7 +2539,7 @@
                     { sku: 'DM-MES-039', img: 'lampara_de_mesa_27.jpeg' }
                 ],
                 features: [
-                    { title: 'Corrección del gesto en piezas con más de una foto', desc: 'En celular, el gesto para cambiar entre las fotos de una misma pieza estaba invertido. Ahora deslizar a la izquierda avanza a la siguiente foto y deslizar a la derecha regresa a la principal, tanto en especificaciones como en el visor de imagen a pantalla completa.' }
+                    { type: 'fix', title: 'Corrección del gesto en piezas con más de una foto', desc: 'En celular, el gesto para cambiar entre las fotos de una misma pieza estaba invertido. Ahora deslizar a la izquierda avanza a la siguiente foto y deslizar a la derecha regresa a la principal, tanto en especificaciones como en el visor de imagen a pantalla completa.' }
                 ]
             },
             {
@@ -2517,7 +2559,7 @@
                     { sku: 'DM-PRO-014', img: 'proyecto_especial_6.jpeg' }
                 ],
                 features: [
-                    { title: 'Corrección del botón de regresar al ampliar una imagen', desc: 'Al ver una imagen en grande a veces parecía aparecer una segunda flecha dorada de regresar, en una posición distinta a la de especificaciones. Ahora es un solo botón, siempre en el mismo lugar, tanto en la ficha de especificaciones como en el visor de imagen a pantalla completa.' }
+                    { type: 'fix', title: 'Corrección del botón de regresar al ampliar una imagen', desc: 'Al ver una imagen en grande a veces parecía aparecer una segunda flecha dorada de regresar, en una posición distinta a la de especificaciones. Ahora es un solo botón, siempre en el mismo lugar, tanto en la ficha de especificaciones como en el visor de imagen a pantalla completa.' }
                 ]
             },
             {
@@ -2531,7 +2573,26 @@
                     { sku: 'DM-ESP-026', img: 'espejo_14.jpeg' }
                 ],
                 features: [
-                    { title: 'Corrección de errores visuales', desc: 'En algunos celulares, los botones de iniciar sesión, asistente IA y bolsa de cotización de la barra superior podían quedar fuera de la pantalla, sobre todo sin sesión iniciada. En computadora, los títulos "Experiencia" y "Proyectos" de la sección Marca podían salirse de su recuadro. Se corrigieron ambos casos.' }
+                    { type: 'fix', title: 'Íconos fuera de la pantalla en celular', desc: 'En algunos celulares, los botones de iniciar sesión, asistente IA y bolsa de cotización de la barra superior podían quedar fuera de la pantalla, sobre todo sin sesión iniciada.' },
+                    { type: 'fix', title: 'Ondas de WhatsApp con las animaciones apagadas', desc: 'Las ondas del botón flotante de WhatsApp se apagaban como efecto secundario del interruptor de animaciones. Ahora siguen pulsando igual, con animaciones encendidas o apagadas.' },
+                    { type: 'fix', title: 'Títulos de la sección Marca fuera de su recuadro', desc: 'En computadora, los títulos "Experiencia" y "Proyectos" de la sección Marca podían salirse de su recuadro.' },
+                    { type: 'fix', title: 'Texto repetido en el cuadro de Empresa', desc: 'El texto bajo "Empresa · 100%" decía "empresa tapatía", repitiendo la palabra "Empresa" que ya aparece como título. Ahora solo dice "tapatía".' },
+                    { type: 'fix', title: 'Etiquetas de tema ilegibles en modo Blanco', desc: 'En tema de página "Blanco", las palabras "Oscuro/Blanco/Automático" del panel de configuración quedaban en negro sobre el fondo oscuro de ese panel, ilegibles. Ahora se mantienen en blanco siempre.' }
+                ]
+            },
+            {
+                id: 'upd-2026-08-04-briseras-candiles-12',
+                code: 'DMS-012',
+                images: [
+                    { sku: 'DM-BRI-011', img: 'brisera_11.jpeg' },
+                    { sku: 'DM-BRI-012', img: 'brisera_12.jpeg' },
+                    { sku: 'DM-CAN-018', img: 'candil_18.jpeg' },
+                    { sku: 'DM-CAN-019', img: 'candil_19.webp' },
+                    { sku: 'DM-CAN-020', img: 'candil_20.jpeg' }
+                ],
+                features: [
+                    { type: 'fix', title: 'Títulos de la sección Marca podían pasar a otra línea', desc: 'Los títulos "Clientes", "Experiencia", "Proyectos" y "Empresa" de la sección Marca, si no cabían, podían continuar en una segunda línea debajo del cuadro. Ahora el tamaño de letra se ajusta para que el texto siempre entre en una sola línea dentro de su cuadro.' },
+                    { type: 'fix', title: 'Carrusel de "Nuestros Clientes" con las animaciones apagadas', desc: 'El carrusel de logos que se desplaza en la sección "Nuestros Clientes" se veía afectado por el interruptor de animaciones y podía quedarse detenido a medio recorrido, dejando algunos logos fuera de la vista. Ahora sigue moviéndose igual, con animaciones encendidas o apagadas.' }
                 ]
             }
         ];
@@ -2539,13 +2600,27 @@
         // (imágenes+SKU y funciones) a partir de una entrada de window.updateLog.
         // Lo comparten el aviso emergente y la vista de detalle del registro, para
         // que ambos textos coincidan siempre sin duplicar la lógica.
+        // Une una lista de frases en español con comas y una "y" final
+        // ("A", "A y B", "A, B y C") para el subtítulo del aviso.
+        window._joinPartsEs = function(parts) {
+            if (parts.length <= 1) return parts.join('');
+            if (parts.length === 2) return parts.join(' y ');
+            return parts.slice(0, -1).join(', ') + ' y ' + parts[parts.length - 1];
+        };
         window._buildUpdateSummary = function(entry) {
             const images = entry.images || [];
-            const features = entry.features || [];
+            const allItems = entry.features || [];
+            // "features" (funciones nuevas de verdad) y "fixes" (correcciones de
+            // errores) se anuncian por separado: nunca se le llama "función
+            // nueva" a una corrección, y si se corrigió más de un error se dice
+            // el número real, no "un error" genérico.
+            const features = allItems.filter(f => f.type !== 'fix');
+            const fixes = allItems.filter(f => f.type === 'fix');
             const parts = [];
             if (images.length) parts.push(images.length === 1 ? 'se agregó 1 modelo nuevo' : `se agregaron ${images.length} modelos nuevos`);
             if (features.length) parts.push(features.length === 1 ? 'se agregó 1 función nueva' : `se agregaron ${features.length} funciones nuevas`);
-            let subtitle = parts.length ? parts.join(' y ') + '.' : 'La página se actualizó.';
+            if (fixes.length) parts.push(fixes.length === 1 ? 'se corrigió 1 error' : `se corrigieron ${fixes.length} errores`);
+            let subtitle = parts.length ? window._joinPartsEs(parts) + '.' : 'La página se actualizó.';
             subtitle = subtitle.charAt(0).toUpperCase() + subtitle.slice(1);
 
             let infoHtml = '';
@@ -2583,13 +2658,23 @@
                 `;
                 }).join('') + '</div>';
             }
-            if (features.length) {
-                infoHtml += '<div class="space-y-3">' + features.map(f => `
+            // Si hay de los dos tipos, se separan bajo su propio encabezado para
+            // no mezclar "función nueva" con "corrección de error" en la lista.
+            const renderItems = list => '<div class="space-y-3">' + list.map(f => `
                     <div>
                         <p class="text-brand-gold text-xs font-bold uppercase tracking-wide mb-1">${f.title}</p>
                         <p class="text-brand-muted text-xs leading-relaxed">${f.desc}</p>
                     </div>
                 `).join('') + '</div>';
+            const showLabels = features.length > 0 && fixes.length > 0;
+            if (features.length) {
+                if (showLabels) infoHtml += '<p class="text-[10px] text-brand-muted uppercase tracking-widest mb-2">Funciones nuevas</p>';
+                infoHtml += renderItems(features);
+            }
+            if (fixes.length) {
+                if (showLabels) infoHtml += '<p class="text-[10px] text-brand-muted uppercase tracking-widest mt-4 mb-2">Corrección de errores</p>';
+                else if (features.length) infoHtml += '<div class="mt-4"></div>';
+                infoHtml += renderItems(fixes);
             }
             return { subtitle, infoHtml };
         };
