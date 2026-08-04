@@ -142,6 +142,15 @@
         html.theme-light .init-overlay .bg-\[\#0a0a0a\] { background-color: #0a0a0a !important; }
         html.theme-light #welcome-animation-overlay .text-white,
         html.theme-light #category-transition-overlay .text-white { color: #f2f2f2 !important; }
+        /* El panel de configuración (dentro de #dropdown-menu) conserva su fondo
+           oscuro aunque el tono de página esté en "Blanco" (bg-brand-surface/90
+           no lo alcanza el override de bg-brand-surface). Sin esta regla, las
+           palabras "Oscuro/Blanco/Automático" heredarían el color de texto
+           forzado a negro del tema blanco y quedarían negro sobre fondo oscuro,
+           ilegibles. Se mantienen en blanco siempre. */
+        html.theme-light [data-i18n="theme_dark"],
+        html.theme-light [data-i18n="theme_light"],
+        html.theme-light [data-i18n="theme_auto"] { color: #f2f2f2 !important; }
 
         /* Con el modal de specs CERRADO, ninguno de sus botones (cerrar, AI…)
            debe capturar clics: su "pointer-events-auto" invisible tapaba la
@@ -165,6 +174,11 @@
         html.animations-off *, html.animations-off *::before, html.animations-off *::after {
             animation-duration: 1ms !important;
             transition-duration: 1ms !important;
+        }
+        /* Excepción: las ondas del botón flotante de WhatsApp se dejan igual
+           que siempre, con o sin animaciones encendidas. */
+        html.animations-off .whatsapp-float-ring {
+            animation-duration: 2.2s !important;
         }
 
         body {
@@ -312,6 +326,33 @@
         #navbar {
             /* Empujar el navbar debajo del notch en iOS */
             padding-top: env(safe-area-inset-top);
+        }
+
+        /* ── NAVBAR: evitar que en pantallas angostas los íconos de la derecha
+           (sesión, IA, bolsa de cotización) se salgan de la pantalla ──
+           Los elementos flex no encogen por debajo de su ancho de contenido
+           mínimo por defecto; si el cúmulo izquierdo (botón Menú + "Damaso")
+           y el derecho (sesión/IA/bolsa) suman más que el viewport, el
+           excedente termina fuera del área visible (el body usa
+           overflow-x:hidden), y como no hay sesión iniciada el botón extra de
+           "Iniciar Sesión" agranda aún más el cúmulo derecho. La solución:
+           el cúmulo derecho nunca encoge (flex-shrink:0, siempre visible por
+           completo), y es el cúmulo izquierdo el que reduce tamaño de letra y
+           relleno progresivamente en pantallas angostas para dejarle espacio. */
+        #navbar-right-cluster,
+        #navbar-right-cluster > button {
+            flex-shrink: 0;
+        }
+        @media (max-width: 480px) {
+            #navbar-left-cluster { min-width: 0; }
+            #btn-menu { padding-left: 1rem; padding-right: 1rem; font-size: 10px; letter-spacing: 0.15em; }
+            #navbar-wordmark { font-size: clamp(1.05rem, 5.2vw, 1.5rem); letter-spacing: 0.16em; margin-left: 0.4rem; }
+        }
+        @media (max-width: 380px) {
+            #btn-menu { padding-left: 0.75rem; padding-right: 0.75rem; font-size: 9px; }
+            #navbar-wordmark { font-size: clamp(0.95rem, 5vw, 1.3rem); letter-spacing: 0.12em; margin-left: 0.3rem; }
+            #navbar-right-cluster > :not([hidden]) ~ :not([hidden]) { margin-left: 0.35rem !important; }
+            #navbar-right-cluster > button { width: 2.15rem; height: 2.15rem; padding: 0.4rem; }
         }
 
         /* ── ANIMACIONES LOADER ── */
@@ -837,9 +878,9 @@
     <!-- ── NAVBAR ── -->
     <nav class="fixed top-0 left-0 right-0 w-full z-[100] glass-nav flex flex-col" id="navbar" style="transform: translate3d(0,0,0);">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
-            <div class="flex items-center space-x-4 sm:space-x-6">
+            <div id="navbar-left-cluster" class="flex items-center space-x-4 sm:space-x-6">
                 <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center" data-i18n="menu_btn">Menú</button>
-                <a href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text navbar-wordmark-pulse uppercase font-bold ml-2">
+                <a id="navbar-wordmark" href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text navbar-wordmark-pulse uppercase font-bold ml-2">
                     <span>Damaso</span>
                     <span id="navbar-wordmark-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true">Damaso</span>
                 </a>
@@ -957,7 +998,7 @@
                 <a href="#social" onclick="window.scrollToSection(event, 'social')" class="text-[11px] tracking-[0.2em] text-white hover:text-brand-gold transition-colors uppercase font-medium cursor-pointer" data-i18n="nav_social">Redes Sociales</a>
             </div>
 
-            <div class="flex items-center space-x-2 sm:space-x-4">
+            <div id="navbar-right-cluster" class="flex items-center space-x-2 sm:space-x-4">
                 <button id="nav-login-btn" onclick="window.showLoginForm()" class="glass-btn hidden text-[#22c55e] hover:text-white transition-colors flex items-center justify-center p-2 rounded-full" aria-label="Iniciar Sesión">
                     <svg class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line>
@@ -1255,24 +1296,24 @@
             <h2 class="font-editorial text-5xl md:text-8xl text-brand-gold glow-gold uppercase mb-20 scroll-reveal">Damaso</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-20">
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_clientes">Clientes</p>
+                    <p class="font-editorial text-3xl lg:text-4xl text-white uppercase tracking-wide mb-6 break-words" data-i18n="marca_clientes">Clientes</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="100">0</span>+</p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_clientes_lower">clientes</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_experiencia">Experiencia</p>
+                    <p class="font-editorial text-3xl lg:text-4xl text-white uppercase tracking-wide mb-6 break-words" data-i18n="marca_experiencia">Experiencia</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="25">0</span> <span class="text-brand-gold glow-gold" data-i18n="marca_anios">años</span></p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_de_experiencia">de experiencia</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_proyectos">Proyectos</p>
+                    <p class="font-editorial text-3xl lg:text-4xl text-white uppercase tracking-wide mb-6 break-words" data-i18n="marca_proyectos">Proyectos</p>
                     <p class="text-4xl md:text-5xl text-brand-gold glow-gold font-bold"><span class="count-up" data-count-target="200">0</span>+</p>
                     <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_proyectos_lower">proyectos</p>
                 </div>
                 <div class="glass-btn border border-brand-gold/30 rounded-lg py-12 px-8 lg:px-10 scroll-reveal">
-                    <p class="font-editorial text-3xl md:text-4xl text-white uppercase tracking-wide mb-6" data-i18n="marca_empresa">Empresa</p>
+                    <p class="font-editorial text-3xl lg:text-4xl text-white uppercase tracking-wide mb-6 break-words" data-i18n="marca_empresa">Empresa</p>
                     <p class="text-4xl md:text-5xl text-white font-bold"><span class="count-up" data-count-target="100">0</span><span class="text-brand-gold glow-gold">%</span></p>
-                    <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_empresa_tapatia">empresa tapatía</p>
+                    <p class="text-brand-muted text-xs sm:text-sm mt-2 uppercase tracking-wide sm:tracking-widest break-words" data-i18n="marca_empresa_tapatia">tapatía</p>
                 </div>
             </div>
             <div class="max-w-4xl mx-auto px-6 scroll-reveal">
@@ -1466,6 +1507,11 @@
             { id: 27, name: "Espejo reflejo", category: "espejos", price: 18500, img: "IMG_2029.png", sku: "DM-ESP-019", desc: "Espejo, 6 mm natural con perímetro en Reflector bronce, con marco en madera", specsLight: "Espejo, 6 mm natural con perímetro en Reflector bronce, con marco en madera", cable: "N/A", dims: { w: "80 cm", h: "1.40 m", d: "5 cm", dia: "N/A" }, peso: "25 kg", volt: "N/A", mat: "Espejo/reflectar, bronce/madera", fin: "Laca color, chocolate", time: "4 semanas", cert: "N/A" },
             { id: 28, name: "Espejo Arco con Repisa", category: "espejos", price: 18500, img: "IMG_2149.png", sku: "DM-ESP-020", desc: "Espejo de forma arco con Marco de madera y repisa superior integrada", specsLight: "Espejo de forma arco con Marco de madera y repisa superior integrada", cable: "N/A", dims: { w: "70 cm", h: "110 cm", d: "15 cm", dia: "N/A" }, peso: "18 kg", volt: "N/A", mat: "Espejo/madera", fin: "Madera natural", time: "4 a 5 semanas", cert: "N/A" },
             { id: 156, name: "Espejo Orgánico Marco Negro", category: "espejos", price: 8200, img: "espejo_9.jpeg", sku: "DM-ESP-021", desc: "Espejo de forma orgánica con marco delgado en metal negro y herrajes en latón", specsLight: "Espejo de forma orgánica con marco delgado en metal negro y herrajes en latón", cable: "N/A", dims: { w: "50 cm", h: "70 cm", d: "3 cm", dia: "N/A" }, peso: "8 kg", volt: "N/A", mat: "Espejo/metal", fin: "Negro mate/latón", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 198, name: "Espejo de Pie Doble Marco", category: "espejos", price: 22500, img: "espejo_10.jpeg", sku: "DM-ESP-022", desc: "Espejo de piso rectangular con doble marco, uno en madera y otro en metal, sobre base giratoria de metal", specsLight: "N/A", cable: "N/A", dims: { w: "55 cm", h: "1.70 m", d: "40 cm", dia: "N/A" }, peso: "22 kg", volt: "N/A", mat: "Espejo/madera/metal", fin: "Madera natural/metal bronce envejecido", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 199, name: "Espejo Redondo Marco Latón", category: "espejos", price: 12800, img: "espejo_11.jpeg", sku: "DM-ESP-023", desc: "Espejo redondo con marco delgado en latón cepillado", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "80 cm" }, peso: "9 kg", volt: "N/A", mat: "Espejo/latón", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 200, name: "Espejo Redondo Correa de Piel", category: "espejos", price: 9800, img: "espejo_12.jpeg", sku: "DM-ESP-024", desc: "Espejo redondo con marco en metal negro y correa de piel para colgar", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "60 cm" }, peso: "6 kg", volt: "N/A", mat: "Espejo/metal/piel", fin: "Negro mate/piel café", time: "3 semanas", cert: "N/A" },
+            { id: 201, name: "Espejo Orgánico Marco Madera", category: "espejos", price: 15600, img: "espejo_13.jpeg", sku: "DM-ESP-025", desc: "Espejo de forma orgánica con marco grueso en madera oscura", specsLight: "N/A", cable: "N/A", dims: { w: "1.10 m", h: "85 cm", d: "5 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Espejo/madera", fin: "Madera oscura", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 202, name: "Espejo Redondo Colgante de Techo", category: "espejos", price: 17200, img: "espejo_14.jpeg", sku: "DM-ESP-026", desc: "Espejo redondo con marco delgado en metal negro, suspendido de techo mediante varilla", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "70 cm" }, peso: "8 kg", volt: "N/A", mat: "Espejo/metal", fin: "Negro mate", time: "3 a 4 semanas", cert: "N/A" },
             { id: 29, name: "Lámpara Silueta en Madera", category: "mesa", price: 3600, img: "nueva_foto_6.png", sku: "DM-MES-001", desc: "Lámpara de mesa, fabricada, madera de Fresno, torneada con base en acrílico, con pantallas en tela poliéster", specsLight: "Lámpara de mesa, fabricada, madera de Fresno, torneada con base en acrílico, con pantallas en tela poliéster", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "70 cm", d: "20 cm", dia: "60 cm" }, peso: "5 kg", volt: "110-240V", mat: "Madera/acrílico/poliéster", fin: "Barniz mate/tela", time: "2 semanas", cert: "NOM" },
             { id: 30, name: "Lámpara Vesta en Mármol y Latón", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", altImg: "lampara_de_mesa_30.jpeg", sku: "DM-MES-002", desc: "Lámpara fabricado en mármol, torneado con Laton y base acrílico con pantalla en tela", specsLight: "Lámpara fabricado en mármol, torneado con Laton y base acrílico con pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "55 cm", d: "15 cm", dia: "25 cm" }, peso: "7 kg", volt: "110-120V", mat: "Mármol/Laton/tela/acrílico", fin: "Cepillado/poliéster", time: "3 semanas", cert: "NOM" },
             { id: 31, name: "Lámpara Ritmo en Madera y Acero Inoxidable", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png", sku: "DM-MES-003", desc: "Lámpara fabricada en madera, con tubos de metal con pantalla en tela", specsLight: "Lámpara fabricada en madera, con tubos de metal con pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "60 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Madera/metal/tela", fin: "Barniz/cromado/poliéster", time: "3 semanas", cert: "NOM" },
@@ -1824,6 +1870,15 @@
             ["repisa", "shelf", "étagère", "搁板"],
             ["enmarcado", "framed", "encadré", "装框"],
             ["Espejo Orgánico Marco Negro", "Organic Black Frame Mirror", "Miroir Organique Cadre Noir", "有机黑框镜"],
+            ["Espejo de Pie Doble Marco", "Double Frame Floor Mirror", "Miroir sur Pied Double Cadre", "双框落地镜"],
+            ["Espejo Redondo Marco Latón", "Round Brass Frame Mirror", "Miroir Rond Cadre Laiton", "黄铜框圆镜"],
+            ["Espejo Redondo Correa de Piel", "Round Mirror with Leather Strap", "Miroir Rond avec Sangle en Cuir", "皮带圆镜"],
+            ["Espejo Orgánico Marco Madera", "Organic Wood Frame Mirror", "Miroir Organique Cadre Bois", "有机木框镜"],
+            ["Espejo Redondo Colgante de Techo", "Round Ceiling-Hung Mirror", "Miroir Rond Suspendu au Plafond", "吊顶圆镜"],
+            ["correa de piel", "leather strap", "sangle en cuir", "皮带"],
+            ["colgante de techo", "ceiling-hung", "suspendu au plafond", "吊顶式"],
+            ["doble marco", "double frame", "double cadre", "双框"],
+            ["giratoria", "swivel", "pivotant", "旋转式"],
             ["Farol Marco Madera y Cristal Esmerilado", "Wood Frame Frosted Glass Lantern", "Lanterne Cadre Bois Verre Dépoli", "木框磨砂玻璃灯笼"],
             ["Farol Marco Abierto Cristal Ahumado", "Open Frame Smoked Glass Lantern", "Lanterne Cadre Ouvert Verre Fumé", "开放式烟熏玻璃灯笼"],
             ["Farol Tejido Ratán con Asa", "Woven Rattan Lantern with Handle", "Lanterne Tressée en Rotin avec Poignée", "带手柄藤编灯笼"],
@@ -2464,6 +2519,20 @@
                 features: [
                     { title: 'Corrección del botón de regresar al ampliar una imagen', desc: 'Al ver una imagen en grande a veces parecía aparecer una segunda flecha dorada de regresar, en una posición distinta a la de especificaciones. Ahora es un solo botón, siempre en el mismo lugar, tanto en la ficha de especificaciones como en el visor de imagen a pantalla completa.' }
                 ]
+            },
+            {
+                id: 'upd-2026-08-04-espejos-11-visual-fixes',
+                code: 'DMS-011',
+                images: [
+                    { sku: 'DM-ESP-022', img: 'espejo_10.jpeg' },
+                    { sku: 'DM-ESP-023', img: 'espejo_11.jpeg' },
+                    { sku: 'DM-ESP-024', img: 'espejo_12.jpeg' },
+                    { sku: 'DM-ESP-025', img: 'espejo_13.jpeg' },
+                    { sku: 'DM-ESP-026', img: 'espejo_14.jpeg' }
+                ],
+                features: [
+                    { title: 'Corrección de errores visuales', desc: 'En algunos celulares, los botones de iniciar sesión, asistente IA y bolsa de cotización de la barra superior podían quedar fuera de la pantalla, sobre todo sin sesión iniciada. En computadora, los títulos "Experiencia" y "Proyectos" de la sección Marca podían salirse de su recuadro. Se corrigieron ambos casos.' }
+                ]
             }
         ];
         // Arma el subtítulo ("se agregaron X modelos...") y el HTML de detalle
@@ -2864,7 +2933,7 @@
             disenador_quote: '"Light is the soul of architecture."',
             disenador_bio: 'Industrial designers based in Guadalajara, Jalisco. Their work explores the intersection between brutalism and Mexican craftsmanship, forging metal and light to redefine contemporary space.',
             marca_label: 'The brand', marca_clientes: 'Clients', marca_clientes_lower: 'clients', marca_experiencia: 'Experience', marca_anios: 'years', marca_de_experiencia: 'of experience',
-            marca_proyectos: 'Projects', marca_proyectos_lower: 'projects', marca_empresa: 'Company', marca_empresa_tapatia: 'company from Guadalajara',
+            marca_proyectos: 'Projects', marca_proyectos_lower: 'projects', marca_empresa: 'Company', marca_empresa_tapatia: 'from Guadalajara',
             marca_filosofia_label: 'Brand philosophy',
             marca_filosofia_heading: 'We don\'t make lamps. We create focal points that transform the everyday into something <span class="italic text-brand-gold glow-gold">extraordinary</span>.',
             historia_label: 'Our Story',
@@ -2918,7 +2987,7 @@
             disenador_quote: '« La lumière est l\'âme de l\'architecture. »',
             disenador_bio: "Designers industriels basés à Guadalajara, Jalisco. Leur travail explore l'intersection entre le brutalisme et l'artisanat mexicain, forgeant le métal et la lumière pour redéfinir l'espace contemporain.",
             marca_label: 'La marque', marca_clientes: 'Clients', marca_clientes_lower: 'clients', marca_experiencia: 'Expérience', marca_anios: 'ans', marca_de_experiencia: "d'expérience",
-            marca_proyectos: 'Projets', marca_proyectos_lower: 'projets', marca_empresa: 'Entreprise', marca_empresa_tapatia: 'entreprise de Guadalajara',
+            marca_proyectos: 'Projets', marca_proyectos_lower: 'projets', marca_empresa: 'Entreprise', marca_empresa_tapatia: 'de Guadalajara',
             marca_filosofia_label: 'Philosophie de la marque',
             marca_filosofia_heading: 'Nous ne fabriquons pas des lampes. Nous créons des points focaux qui transforment le quotidien en quelque chose d\'<span class="italic text-brand-gold glow-gold">extraordinaire</span>.',
             historia_label: 'Notre Histoire',
@@ -2972,7 +3041,7 @@
             disenador_quote: '“光是建筑的灵魂。”',
             disenador_bio: '工业设计师，常驻哈利斯科州瓜达拉哈拉。他们的作品探索粗犷主义与墨西哥手工艺的交汇，锻造金属与光线，重新定义当代空间。',
             marca_label: '品牌', marca_clientes: '客户', marca_clientes_lower: '位客户', marca_experiencia: '经验', marca_anios: '年', marca_de_experiencia: '经验',
-            marca_proyectos: '项目', marca_proyectos_lower: '个项目', marca_empresa: '公司', marca_empresa_tapatia: '瓜达拉哈拉公司',
+            marca_proyectos: '项目', marca_proyectos_lower: '个项目', marca_empresa: '公司', marca_empresa_tapatia: '瓜达拉哈拉',
             marca_filosofia_label: '品牌理念',
             marca_filosofia_heading: '我们不只是制造灯具。我们创造将日常变为<span class="italic text-brand-gold glow-gold">非凡</span>的焦点。',
             historia_label: '我们的故事',
