@@ -357,12 +357,13 @@
 
         /* ── SECCIÓN MARCA: en computadora, "EXPERIENCIA" y un poco "PROYECTOS"
            se salían de su recuadro por la derecha. Se recorren levemente a
-           la izquierda (más "Experiencia" que "Proyectos", por ser más
-           largo) sin tocar tamaño de letra ni nada más. Solo aplica desde
-           el punto en que el texto crece (md:), como en celular no ocurre. */
+           la izquierda (una letra completa "Experiencia", media letra
+           "Proyectos", por ser más corto) sin tocar tamaño de letra ni nada
+           más. Solo aplica desde el punto en que el texto crece (md:), como
+           en celular no ocurre — ahí los nombres ya caben bien. */
         @media (min-width: 768px) {
-            #marca-title-experiencia { transform: translateX(-10px); }
-            #marca-title-proyectos { transform: translateX(-5px); }
+            #marca-title-experiencia { transform: translateX(-20px); }
+            #marca-title-proyectos { transform: translateX(-10px); }
         }
 
         /* ── ANIMACIONES LOADER ── */
@@ -1607,6 +1608,7 @@
             { id: 185, name: "Arbotante Brazo Bronce Esfera Alabastro", category: "arbotantes", price: 8600, img: "arbotante_28.jpeg", sku: "DM-ARB-037", desc: "Arbotante fabricado en bronce con brazo en ángulo y esfera colgante en alabastro", specsLight: "Arbotante fabricado en bronce con brazo en ángulo y esfera colgante en alabastro", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "45 cm", d: "15 cm", dia: "N/A" }, peso: "2.5 kg", volt: "110-120V", mat: "Bronce/alabastro", fin: "Bronce envejecido", time: "4 a 5 semanas", cert: "NOM" },
             { id: 186, name: "Arbotante Caja Cristal Doble Foco", category: "arbotantes", price: 6400, img: "arbotante_29.jpeg", sku: "DM-ARB-038", desc: "Arbotante fabricado en metal negro con caja de cristal y doble foco tipo Edison", specsLight: "Arbotante fabricado en metal negro con caja de cristal y doble foco tipo Edison", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "40 cm", d: "12 cm", dia: "N/A" }, peso: "2.8 kg", volt: "110-120V", mat: "Metal/cristal", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 196, name: "Arbotante Cilindro Calado Geométrico", category: "arbotantes", price: 7200, img: "arbotante_30.jpeg", altImg: "arbotante_30b.jpeg", sku: "DM-ARB-039", desc: "Arbotante fabricado en metal negro con cuerpo cilíndrico calado en patrón geométrico y difusor interior esmerilado", specsLight: "Arbotante fabricado en metal negro con cuerpo cilíndrico calado en patrón geométrico y difusor interior esmerilado", cable: "Certificado UL/NOM", dims: { w: "12 cm", h: "50 cm", d: "10 cm", dia: "N/A" }, peso: "2.4 kg", volt: "110-120V", mat: "Metal/cristal esmerilado", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 221, name: "Arbotante Tubo Cristal Placa Metal", category: "arbotantes", price: 6800, img: "arbotante_31.jpeg", images: ["arbotante_31.jpeg", "arbotante_32.jpeg", "arbotante_33.jpeg"], sku: "DM-ARB-040", desc: "Arbotante fabricado en metal negro con placa rectangular de montaje y difusor tubular de cristal", specsLight: "Arbotante fabricado en metal negro con placa rectangular de montaje y difusor tubular de cristal", cable: "Certificado UL/NOM", dims: { w: "12 cm", h: "55 cm", d: "10 cm", dia: "N/A" }, peso: "2.2 kg", volt: "110-120V", mat: "Metal/cristal", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 134, name: "Lámpara Mesa Cilindro Negro", category: "mesa", price: 6200, img: "lampara_de_mesa_15.jpeg", sku: "DM-MES-028", desc: "Lámpara fabricada en metal con base en acrílico y pantalla en tela", specsLight: "Lámpara fabricada en metal con base en acrílico y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "35 cm" }, peso: "4 kg", volt: "110-120V", mat: "Metal/acrílico/tela", fin: "Negro mate/gris", time: "3 a 4 semanas", cert: "NOM" },
             { id: 135, name: "Lámpara Mesa Brazo Nogal", category: "mesa", price: 8600, img: "lampara_de_mesa_16.jpeg", altImg: "lampara_de_mesa_29.jpeg", sku: "DM-MES-029", desc: "Lámpara fabricada en madera de nogal con detalles en latón y pantalla en tela", specsLight: "Lámpara fabricada en madera de nogal con detalles en latón y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "40 cm", h: "55 cm", d: "25 cm", dia: "N/A" }, peso: "5 kg", volt: "110-120V", mat: "Madera de nogal/latón/tela", fin: "Nogal natural/latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 136, name: "Lámpara Mesa Jaula Dorada", category: "mesa", price: 7400, img: "lampara_de_mesa_17.jpeg", sku: "DM-MES-030", desc: "Lámpara fabricada en metal con detalles en latón y pantalla en tela", specsLight: "Lámpara fabricada en metal con detalles en latón y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Metal/latón/tela", fin: "Negro mate/latón dorado", time: "3 a 4 semanas", cert: "NOM" },
@@ -1620,6 +1622,7 @@
             { id: 192, name: "Lámpara Mesa Varilla Acero Pantalla Blanca", category: "mesa", price: 3600, img: "lampara_de_mesa_26.jpeg", sku: "DM-MES-038", desc: "Lámpara fabricada en acero cepillado con pantalla en tela blanca", specsLight: "Lámpara fabricada en acero cepillado con pantalla en tela blanca", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "55 cm", d: "20 cm", dia: "30 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Acero/tela", fin: "Acero cepillado", time: "2 a 3 semanas", cert: "NOM" },
             { id: 193, name: "Lámpara Mesa Base Mármol Negro", category: "mesa", price: 4200, img: "lampara_de_mesa_27.jpeg", sku: "DM-MES-039", desc: "Lámpara fabricada en acero con base de mármol negro y pantalla en tela de lino", specsLight: "Lámpara fabricada en acero con base de mármol negro y pantalla en tela de lino", cable: "Certificado UL/NOM", dims: { w: "18 cm", h: "58 cm", d: "18 cm", dia: "26 cm" }, peso: "2.5 kg", volt: "110-120V", mat: "Acero/mármol/lino", fin: "Acero/mármol negro", time: "3 a 4 semanas", cert: "NOM" },
             { id: 194, name: "Lámpara Mesa Botella Bronce Pantalla Lino", category: "mesa", price: 6200, img: "lampara_de_mesa_28.jpeg", sku: "DM-MES-040", desc: "Lámpara fabricada en metal bronce con forma de botella y pantalla en tela de lino", specsLight: "Lámpara fabricada en metal bronce con forma de botella y pantalla en tela de lino", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "65 cm", d: "25 cm", dia: "35 cm" }, peso: "3.5 kg", volt: "110-120V", mat: "Metal/tela de lino", fin: "Bronce oscuro", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 222, name: "Lámpara Mesa Torneada Escultórica", category: "mesa", price: 6600, img: "lampara_de_mesa_31.jpeg", sku: "DM-MES-041", desc: "Lámpara torneada en madera con formas escultóricas apiladas y pantalla cilíndrica en tela", specsLight: "Lámpara torneada en madera con formas escultóricas apiladas y pantalla cilíndrica en tela", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "60 cm", d: "25 cm", dia: "30 cm" }, peso: "4 kg", volt: "110-120V", mat: "Madera/tela", fin: "Madera natural/blanco", time: "3 a 4 semanas", cert: "NOM" },
             { id: 130, name: "Lámpara Mesa Contrapeso Negra", category: "pie", price: 6400, img: "lampara_de_mesa_13.jpeg", sku: "DM-PIE-006", desc: "Estructura en T de acero negro con remates de latón moleteado y pantalla cónica con interior dorado.", specsLight: "1x E26 LED 9W, 2700K", cable: "Cable textil negro 1.8m", dims: { w: "45 cm", h: "70 cm", d: "30 cm", dia: "30 cm" }, peso: "4 kg", volt: "110-120V", mat: "Acero/latón/tela", fin: "Negro mate e interior dorado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 122, name: "Lámpara de Pie Brazo Latón Base Piedra", category: "pie", price: 15800, img: "lampara_de_pie_2.png", sku: "DM-PIE-007", desc: "Lámpara fabricada en madera y mármol, con brazo en metal con pantalla en tela", specsLight: "Lámpara fabricada en madera y mármol, con brazo en metal con pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "N/A", h: "2.25 m", d: "N/A", dia: "N/A" }, peso: "25 kg", volt: "110-120V", mat: "Madera/mármol/metal/tela", fin: "Barniz/blanco mate/pintura electrostática/poliéster", time: "4 a 5 semanas", cert: "NOM" },
             { id: 195, name: "Lámpara de Pie Viga Madera Recuperada", category: "pie", price: 13500, img: "lampara_de_pie_9.jpeg", sku: "DM-PIE-009", desc: "Lámpara fabricada en viga de madera recuperada con cubierta de cristal tipo hurricane", specsLight: "Lámpara fabricada en viga de madera recuperada con cubierta de cristal tipo hurricane", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "1.10 m", d: "20 cm", dia: "N/A" }, peso: "18 kg", volt: "110-120V", mat: "Madera recuperada/cristal/metal", fin: "Madera envejecida/bronce", time: "5 a 6 semanas", cert: "NOM" },
@@ -2035,6 +2038,11 @@
             ["Cilindro Calado Geométrico", "Geometric Cutwork Cylinder", "Cylindre Ajouré Géométrique", "几何镂空圆柱形"],
             ["calado", "cutwork", "ajouré", "镂空"],
             ["geométrico", "geometric", "géométrique", "几何形"],
+            ["Tubo Cristal Placa Metal", "Glass Tube Metal Plate", "Tube en Verre Plaque Métallique", "玻璃管金属板形"],
+            ["placa de montaje", "mounting plate", "plaque de montage", "安装板"],
+            ["Lámpara Mesa Torneada Escultórica", "Sculptural Turned Table Lamp", "Lampe de Table Tournée Sculpturale", "雕塑车制台灯"],
+            ["escultórica", "sculptural", "sculpturale", "雕塑感"],
+            ["apiladas", "stacked", "empilées", "堆叠"],
             ["Torneada Pantalla Gris", "Turned Grey Shade", "Tournée Abat-Jour Gris", "车制灰色灯罩形"],
             ["Brazo Articulado Latón", "Brass Articulated Arm", "Bras Articulé en Laiton", "黄铜铰接臂形"],
             ["articulado", "articulated", "articulé", "铰接式"],
@@ -2716,6 +2724,15 @@
                     { type: 'fix', title: 'Cambio de foto en piezas con más de una imagen', desc: 'En piezas con dos o más fotos, la primera vez que se cambiaba de imagen a veces se veía la animación pero la foto no cambiaba de verdad (el segundo intento sí funcionaba). Ahora cambia bien siempre, sin importar el intento.' },
                     { type: 'fix', title: 'Títulos "Experiencia" y "Proyectos" en la sección Marca', desc: 'En computadora podían salirse un poco de su recuadro. Se ajustó su posición para que queden dentro por completo.' }
                 ]
+            },
+            {
+                id: 'upd-2026-08-05-arbotante-mesa-16',
+                code: 'DMS-016',
+                images: [
+                    { sku: 'DM-ARB-040', img: 'arbotante_31.jpeg' },
+                    { sku: 'DM-MES-041', img: 'lampara_de_mesa_31.jpeg' }
+                ],
+                features: []
             }
         ];
         // Arma el subtítulo ("se agregaron X modelos...") y el HTML de detalle
