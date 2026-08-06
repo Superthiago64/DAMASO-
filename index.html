@@ -3697,19 +3697,33 @@
             imgEl.style.opacity = '0';
             setTimeout(() => {
                 window._modalImgIndex = newIndex;
+                const finishSlideIn = () => {
+                    imgEl.style.transition = 'none';
+                    imgEl.style.transform = `translateX(${dir * 40}px)`;
+                    void imgEl.offsetWidth;
+                    imgEl.style.transition = 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease';
+                    imgEl.style.transform = 'translateX(0)';
+                    imgEl.style.opacity = '1';
+                    const dotsEl = document.getElementById('modal-img-dots');
+                    if (dotsEl) dotsEl.querySelectorAll('.modal-img-dot').forEach((el, i) => el.classList.toggle('active', i === newIndex));
+                    window._updateModalImgArrows();
+                    if (window._isOwnerAccount()) {
+                        const nSpn = document.getElementById('modal-img-name');
+                        if (nSpn) nSpn.innerText = list[newIndex];
+                    }
+                };
+                // Con la precarga en segundo plano, casi siempre ya está en
+                // caché (.complete queda true de inmediato). Si por algún
+                // motivo todavía no, se espera a que realmente cargue antes
+                // de deslizarla de regreso, para que nunca "se quede" en la
+                // foto anterior el primer intento.
+                imgEl.onload = null; imgEl.onerror = null;
                 imgEl.src = list[newIndex];
-                imgEl.style.transition = 'none';
-                imgEl.style.transform = `translateX(${dir * 40}px)`;
-                void imgEl.offsetWidth;
-                imgEl.style.transition = 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease';
-                imgEl.style.transform = 'translateX(0)';
-                imgEl.style.opacity = '1';
-                const dotsEl = document.getElementById('modal-img-dots');
-                if (dotsEl) dotsEl.querySelectorAll('.modal-img-dot').forEach((el, i) => el.classList.toggle('active', i === newIndex));
-                window._updateModalImgArrows();
-                if (window._isOwnerAccount()) {
-                    const nSpn = document.getElementById('modal-img-name');
-                    if (nSpn) nSpn.innerText = list[newIndex];
+                if (imgEl.complete) {
+                    finishSlideIn();
+                } else {
+                    imgEl.onload = finishSlideIn;
+                    imgEl.onerror = finishSlideIn;
                 }
             }, 320);
         };
@@ -5766,7 +5780,22 @@ NORMAS:
         // las tarjetas visibles además cargan aparte con loading="lazy".
         window.preloadAllImages = function() {
             if (!window.dbProducts) return;
-            const urls = window.dbProducts.map(p => p.img).filter(Boolean);
+            const primaryUrls = window.dbProducts.map(p => p.img).filter(Boolean);
+            // Fotos secundarias/terciarias de piezas con más de una imagen: se
+            // precargan DESPUÉS de las principales (para no atrasar las
+            // miniaturas del catálogo), pero igual en segundo plano desde
+            // que carga la página. Así, para cuando alguien realmente abra
+            // una ficha y cambie de foto, ya está en la caché del navegador
+            // y el cambio se ve bien desde el primer intento — antes, si
+            // nadie había pedido esa foto todavía, el primer cambio podía
+            // tardar en cargar y parecía que se quedaba en la misma imagen
+            // hasta el segundo intento.
+            const extraUrls = [];
+            window.dbProducts.forEach(p => {
+                const imgs = window._getProductImages ? window._getProductImages(p) : [];
+                imgs.slice(1).forEach(u => { if (u) extraUrls.push(u); });
+            });
+            const urls = primaryUrls.concat(extraUrls);
             const concurrency = 4;
             let idx = 0;
             function next() {
