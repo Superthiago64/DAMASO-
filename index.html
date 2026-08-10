@@ -417,6 +417,31 @@
             .modal-img-arrow { display: none !important; }
         }
 
+        /* ── ANIMACIÓN DE ENTRADA DE LA FICHA DE ESPECIFICACIONES (computadora) ──
+           Al abrir una pieza: la imagen "crece" a su lugar y, justo después,
+           el panel de especificaciones se desliza suavemente desde la
+           izquierda (por debajo de la imagen, en el orden del documento)
+           hacia su posición final a la derecha — quedando organizado igual
+           que ya se tenía, solo con una entrada más viva. Solo en
+           computadora: en celular, imagen y specs van apiladas una debajo de
+           otra, así que la noción de "izquierda/derecha" no aplica. */
+        @media (min-width: 768px) {
+            @keyframes specModalImageGrow {
+                0% { opacity: 0; transform: scale(0.82); }
+                100% { opacity: 1; transform: scale(1); }
+            }
+            @keyframes specModalPanelSlideIn {
+                0% { opacity: 0; transform: translateX(-36px); }
+                100% { opacity: 1; transform: translateX(0); }
+            }
+            #spec-modal.spec-modal-opening .spec-modal-image-col {
+                animation: specModalImageGrow 0.5s cubic-bezier(0.16,1,0.3,1) both;
+            }
+            #spec-modal.spec-modal-opening .spec-modal-specs-col {
+                animation: specModalPanelSlideIn 0.55s cubic-bezier(0.16,1,0.3,1) 0.18s both;
+            }
+        }
+
         /* ── LOADER PRINCIPAL: D LUMINOSA (barrido de luz de abajo hacia arriba) ── */
         .d-loader {
             font-size: 7rem;
@@ -1149,8 +1174,8 @@
             </div>
         </div>
 
-        <div class="bg-[#050505] border border-brand-gold/30 w-full max-w-6xl h-full sm:h-auto max-h-[100vh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.15)] rounded-none sm:rounded-xl overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
-            <div class="w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
+        <div class="bg-[#050505] border border-brand-gold/30 w-full max-w-6xl h-full sm:h-auto max-h-[100vh] sm:max-h-[90vh] flex flex-col md:flex-row relative shadow-[0_0_40px_rgba(212,175,55,0.15)] rounded-none sm:rounded-xl overflow-hidden">
+            <div class="spec-modal-image-col w-full md:w-1/2 relative flex items-center justify-center group bg-transparent p-6 md:p-8 shrink-0 min-h-[50vh] md:min-h-0">
                 <button id="modal-ai-btn" onclick="window.openModalAI()" class="absolute top-4 right-4 md:top-6 md:right-6 z-20 w-12 h-12 rounded-full glass-gold flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-110 transition-transform pointer-events-auto" title="Consultar a DAMASO AI sobre esta pieza">
                     <span class="font-editorial font-bold text-lg">AI</span>
                 </button>
@@ -1170,7 +1195,7 @@
                     <div id="modal-img-dots" class="hidden flex-wrap items-center justify-center gap-2 shrink-0"></div>
                 </div>
             </div>
-            <div class="w-full md:w-1/2 p-6 sm:p-12 text-sm font-light flex flex-col bg-[#0a0a0a] border-t-4 md:border-t-0 md:border-l-4 border-brand-gold relative shrink-0">
+            <div class="spec-modal-specs-col w-full md:w-1/2 p-6 sm:p-12 text-sm font-light flex flex-col bg-[#0a0a0a] border-t-4 md:border-t-0 md:border-l-4 border-brand-gold relative flex-1 min-h-0 md:flex-none md:shrink-0 overflow-y-auto" style="-webkit-overflow-scrolling: touch;">
                 <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                     <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20M2 12h20"></path></svg>
                 </div>
@@ -1565,6 +1590,8 @@
             { id: 200, name: "Espejo Redondo Correa de Piel", category: "espejos", price: 9800, img: "espejo_12.jpeg", sku: "DM-ESP-024", desc: "Espejo redondo con marco en metal negro y correa de piel para colgar", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "60 cm" }, peso: "6 kg", volt: "N/A", mat: "Espejo/metal/piel", fin: "Negro mate/piel café", time: "3 semanas", cert: "N/A" },
             { id: 201, name: "Espejo Orgánico Marco Madera", category: "espejos", price: 15600, img: "espejo_13.jpeg", sku: "DM-ESP-025", desc: "Espejo de forma orgánica con marco grueso en madera oscura", specsLight: "N/A", cable: "N/A", dims: { w: "1.10 m", h: "85 cm", d: "5 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Espejo/madera", fin: "Madera oscura", time: "4 a 5 semanas", cert: "N/A" },
             { id: 202, name: "Espejo Redondo Colgante de Techo", category: "espejos", price: 17200, img: "espejo_14.jpeg", sku: "DM-ESP-026", desc: "Espejo redondo con marco delgado en metal negro, suspendido de techo mediante varilla", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "70 cm" }, peso: "8 kg", volt: "N/A", mat: "Espejo/metal", fin: "Negro mate", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 230, name: "Espejo Orgánico Marco Latón", category: "espejos", price: 21500, img: "espejo_15.jpeg", sku: "DM-ESP-027", desc: "Espejo de forma orgánica ovalada con marco grueso en latón", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "1.60 m", d: "3 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Espejo/latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "N/A" },
+            { id: 231, name: "Espejo Ovalado Doble Marco", category: "espejos", price: 24500, img: "espejo_16.jpeg", sku: "DM-ESP-028", desc: "Espejo ovalado de gran formato con doble marco en metal oscuro", specsLight: "N/A", cable: "N/A", dims: { w: "1.10 m", h: "1.80 m", d: "4 cm", dia: "N/A" }, peso: "22 kg", volt: "N/A", mat: "Espejo/metal", fin: "Grafito cepillado", time: "5 a 6 semanas", cert: "N/A" },
             { id: 29, name: "Lámpara Silueta en Madera", category: "mesa", price: 3600, img: "nueva_foto_6.png", sku: "DM-MES-001", desc: "Lámpara de mesa, fabricada, madera de Fresno, torneada con base en acrílico, con pantallas en tela poliéster", specsLight: "Lámpara de mesa, fabricada, madera de Fresno, torneada con base en acrílico, con pantallas en tela poliéster", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "70 cm", d: "20 cm", dia: "60 cm" }, peso: "5 kg", volt: "110-240V", mat: "Madera/acrílico/poliéster", fin: "Barniz mate/tela", time: "2 semanas", cert: "NOM" },
             { id: 30, name: "Lámpara Vesta en Mármol y Latón", category: "mesa", price: 6200, img: "lampara_de_mesa_2.png", altImg: "lampara_de_mesa_30.jpeg", sku: "DM-MES-002", desc: "Lámpara fabricado en mármol, torneado con Laton y base acrílico con pantalla en tela", specsLight: "Lámpara fabricado en mármol, torneado con Laton y base acrílico con pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "55 cm", d: "15 cm", dia: "25 cm" }, peso: "7 kg", volt: "110-120V", mat: "Mármol/Laton/tela/acrílico", fin: "Cepillado/poliéster", time: "3 semanas", cert: "NOM" },
             { id: 31, name: "Lámpara Ritmo en Madera y Acero Inoxidable", category: "mesa", price: 4700, img: "lampara_de_mesa_4.png", sku: "DM-MES-003", desc: "Lámpara fabricada en madera, con tubos de metal con pantalla en tela", specsLight: "Lámpara fabricada en madera, con tubos de metal con pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "60 cm", d: "15 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Madera/metal/tela", fin: "Barniz/cromado/poliéster", time: "3 semanas", cert: "NOM" },
@@ -1979,6 +2006,8 @@
             ["Espejo Redondo Correa de Piel", "Round Mirror with Leather Strap", "Miroir Rond avec Sangle en Cuir", "皮带圆镜"],
             ["Espejo Orgánico Marco Madera", "Organic Wood Frame Mirror", "Miroir Organique Cadre Bois", "有机木框镜"],
             ["Espejo Redondo Colgante de Techo", "Round Ceiling-Hung Mirror", "Miroir Rond Suspendu au Plafond", "吊顶圆镜"],
+            ["Espejo Orgánico Marco Latón", "Organic Brass Frame Mirror", "Miroir Organique Cadre Laiton", "有机黄铜框镜"],
+            ["Espejo Ovalado Doble Marco", "Oval Double Frame Mirror", "Miroir Ovale Double Cadre", "双框椭圆镜"],
             ["correa de piel", "leather strap", "sangle en cuir", "皮带"],
             ["colgante de techo", "ceiling-hung", "suspendu au plafond", "吊顶式"],
             ["doble marco", "double frame", "double cadre", "双框"],
@@ -2785,6 +2814,18 @@
                 features: [
                     { type: 'fix', title: 'Cambio de foto en piezas con más de una imagen', desc: 'En piezas con más de una foto, la primera vez que se cambiaba de imagen a veces se veía la animación pero la foto seguía siendo la misma. Ahora todas las fotos de una pieza se precargan de antemano, así el cambio se ve bien desde el primer intento.' }
                 ]
+            },
+            {
+                id: 'upd-2026-08-10-espejos-20-spec-redesign',
+                code: 'DMS-020',
+                images: [
+                    { sku: 'DM-ESP-027', img: 'espejo_15.jpeg' },
+                    { sku: 'DM-ESP-028', img: 'espejo_16.jpeg' }
+                ],
+                features: [
+                    { title: 'Nueva forma de abrir las especificaciones', desc: 'Ya no aparece un recuadro oscuro con dos botones sobre la imagen del catálogo: ahora se ve limpia siempre y basta con tocarla para abrir las especificaciones de la pieza. En celular se agregó un botón de "Ver Especificaciones" debajo de la imagen, para no taparla.' },
+                    { title: 'Especificaciones con la imagen fija al deslizar', desc: 'Dentro de la ficha de especificaciones, en computadora, la imagen ya no se mueve al deslizar hacia abajo para ver más datos — solo se desplaza el lado de las especificaciones. Además, al abrir una pieza ahora se ve una animación de entrada: la imagen crece a su lugar y las especificaciones se deslizan suavemente desde la izquierda.' }
+                ]
             }
         ];
         // Arma el subtítulo ("se agregaron X modelos...") y el HTML de detalle
@@ -3078,7 +3119,7 @@
                 catProducts.forEach(p => {
                     html += `
                         <div class="group scroll-reveal" id="product-card-${p.id}">
-                            <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg">
+                            <div class="relative overflow-hidden bg-[#050505] aspect-square flex items-center justify-center cursor-pointer transition-transform duration-500 rounded-lg" onclick="window.openSpecModal(${p.id})">
                                 <div id="loader-${p.id}" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0a0a] z-20 transition-opacity duration-500 pointer-events-none">
                                     <svg viewBox="0 0 100 50" class="w-24 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[120%] opacity-80">
                                         <path id="curve-${p.id}" d="M 10 40 Q 50 -10 90 40" fill="transparent" />
@@ -3092,15 +3133,12 @@
                                     <span class="text-[9px] tracking-widest text-brand-muted mt-8 uppercase">${p.img}</span>
                                 </div>
                                 <img src="${p.img}" id="img-${p.id}" loading="lazy" decoding="async" onload="window.imageLoaded(${p.id})" onerror="window.handleImgError(${p.id}, '${p.img}')" class="w-full h-full object-contain transition-all duration-700 group-hover:scale-105 opacity-0" alt="${p.name}">
-                                <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity flex flex-col justify-center items-center p-8 z-30 pointer-events-none">
-                                    <button class="glass-btn text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 mb-3 hover:border-brand-gold/70 transition-all rounded-sm" onclick="window.openSpecModal(${p.id})">Ver Specs</button>
-                                    <button onclick="window.addToCart(${p.id})" class="glass-gold text-[10px] tracking-[0.2em] uppercase font-bold px-8 py-3 transition-all rounded-sm">Agregar Cotización</button>
-                                </div>
                             </div>
                             <div class="mt-6">
                                 <h3 class="font-editorial text-2xl text-white cursor-pointer hover:text-brand-gold transition-colors leading-tight break-words-custom" onclick="window.openSpecModal(${p.id})">${window.trPhrase(p.name)}</h3>
                                 <p class="text-[10px] tracking-[0.2em] text-brand-gold uppercase mt-2 glow-gold">${catTitle}</p>
                             </div>
+                            <button type="button" onclick="window.openSpecModal(${p.id})" class="md:hidden mt-3 w-full glass-btn text-brand-gold text-[10px] tracking-[0.2em] uppercase font-bold px-6 py-2.5 rounded-sm hover:border-brand-gold/50 transition-all">${window.t('card_ver_specs', 'Ver Especificaciones')}</button>
                         </div>`;
                 });
             }
@@ -3243,7 +3281,7 @@
             briseras_menu: 'Hurricane Lamps', skip_btn: 'Skip',
             update_notice_title: 'Site Updated', update_notice_more_btn: 'More Information', update_notice_accept_btn: 'Accept', update_notice_hide_btn: 'Hide Information',
             settings_updates: 'Updates', updates_registry_title: 'Update Log', regresar: 'Back',
-            modal_add: 'Add', modal_added: 'Added ✓'
+            modal_add: 'Add', modal_added: 'Added ✓', card_ver_specs: 'View Specifications'
         };
 
         window.dictFR = {
@@ -3297,7 +3335,7 @@
             briseras_menu: 'Photophores', skip_btn: 'Passer',
             update_notice_title: 'Site Mis à Jour', update_notice_more_btn: 'Plus d\'Informations', update_notice_accept_btn: 'Accepter', update_notice_hide_btn: 'Masquer les Informations',
             settings_updates: 'Mises à Jour', updates_registry_title: 'Registre des Mises à Jour', regresar: 'Retour',
-            modal_add: 'Ajouter', modal_added: 'Ajouté ✓'
+            modal_add: 'Ajouter', modal_added: 'Ajouté ✓', card_ver_specs: 'Voir les Spécifications'
         };
 
         window.dictZH = {
@@ -3351,7 +3389,7 @@
             briseras_menu: '防风灯', skip_btn: '跳过',
             update_notice_title: '网站已更新', update_notice_more_btn: '更多信息', update_notice_accept_btn: '接受', update_notice_hide_btn: '隐藏信息',
             settings_updates: '更新记录', updates_registry_title: '更新记录', regresar: '返回',
-            modal_add: '加入', modal_added: '已加入 ✓'
+            modal_add: '加入', modal_added: '已加入 ✓', card_ver_specs: '查看规格'
         };
 
         window.dicts = { en: window.dictEN, fr: window.dictFR, zh: window.dictZH };
@@ -3612,8 +3650,23 @@
             window.updateModalQtyDisplay();
             const modalMsgs = document.getElementById('modal-ai-messages');
             if (modalMsgs) modalMsgs.innerHTML = '';
+            const specsCol = document.querySelector('.spec-modal-specs-col');
+            if (specsCol) specsCol.scrollTop = 0;
             const modal = document.getElementById('spec-modal');
-            if (modal) { modal.classList.remove('opacity-0', 'pointer-events-none'); document.body.style.overflow = 'hidden'; }
+            if (modal) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'hidden';
+                // Animación de entrada (computadora): la imagen crece y las
+                // especificaciones se deslizan suavemente hasta su lugar.
+                // Se retira la clase y se fuerza un reflow antes de
+                // agregarla de nuevo, por si se reabre muy rápido, para que
+                // la animación siempre vuelva a arrancar desde el principio.
+                modal.classList.remove('spec-modal-opening');
+                void modal.offsetWidth;
+                modal.classList.add('spec-modal-opening');
+                clearTimeout(window._specModalOpenAnimTimer);
+                window._specModalOpenAnimTimer = setTimeout(() => modal.classList.remove('spec-modal-opening'), 900);
+            }
             document.getElementById('spec-modal-close-btn')?.classList.remove('hidden');
             document.getElementById('spec-modal-close-btn')?.classList.add('flex');
             window._pushHistoryModal(window._closeSpecModalVisual);
@@ -5786,25 +5839,8 @@ NORMAS:
         // red — por eso fallaban imágenes distintas según dispositivo/navegador,
         // no porque estuvieran rotas. Ahora solo unas cuantas viajan a la vez;
         // las tarjetas visibles además cargan aparte con loading="lazy".
-        window.preloadAllImages = function() {
-            if (!window.dbProducts) return;
-            const primaryUrls = window.dbProducts.map(p => p.img).filter(Boolean);
-            // Fotos secundarias/terciarias de piezas con más de una imagen: se
-            // precargan DESPUÉS de las principales (para no atrasar las
-            // miniaturas del catálogo), pero igual en segundo plano desde
-            // que carga la página. Así, para cuando alguien realmente abra
-            // una ficha y cambie de foto, ya está en la caché del navegador
-            // y el cambio se ve bien desde el primer intento — antes, si
-            // nadie había pedido esa foto todavía, el primer cambio podía
-            // tardar en cargar y parecía que se quedaba en la misma imagen
-            // hasta el segundo intento.
-            const extraUrls = [];
-            window.dbProducts.forEach(p => {
-                const imgs = window._getProductImages ? window._getProductImages(p) : [];
-                imgs.slice(1).forEach(u => { if (u) extraUrls.push(u); });
-            });
-            const urls = primaryUrls.concat(extraUrls);
-            const concurrency = 4;
+        // Cola de precarga con concurrencia limitada, reutilizable.
+        window._preloadQueue = function(urls, concurrency) {
             let idx = 0;
             function next() {
                 if (idx >= urls.length) return;
@@ -5814,6 +5850,27 @@ NORMAS:
                 img.src = url;
             }
             for (let i = 0; i < concurrency; i++) next();
+        };
+        window.preloadAllImages = function() {
+            if (!window.dbProducts) return;
+            const primaryUrls = window.dbProducts.map(p => p.img).filter(Boolean);
+            // Fotos secundarias/terciarias de piezas con más de una imagen: se
+            // precargan en su PROPIA cola, en paralelo con las principales (no
+            // esperan a que esas terminen) — así, mientras se ve la animación
+            // de entrada ("Preparando su experiencia..." o el splash inicial),
+            // el tiempo también se aprovecha para adelantar justo esas fotos
+            // "de más" (segunda, tercera...). Con una concurrencia menor para
+            // no competir de más con las miniaturas del catálogo, que son las
+            // que se ven primero. Para cuando alguien realmente abra una
+            // ficha y cambie de foto, ya está en la caché del navegador y el
+            // cambio se ve bien desde el primer intento.
+            const extraUrls = [];
+            window.dbProducts.forEach(p => {
+                const imgs = window._getProductImages ? window._getProductImages(p) : [];
+                imgs.slice(1).forEach(u => { if (u) extraUrls.push(u); });
+            });
+            window._preloadQueue(primaryUrls, 4);
+            window._preloadQueue(extraUrls, 2);
         };
 
         function initApp() {
