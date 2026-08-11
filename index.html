@@ -4073,10 +4073,28 @@
             const name = document.getElementById('modal-img-name')?.innerText || 'damaso.png';
             if (!imgEl || !imgEl.src) return;
             window._makeWatermarkedCanvas(imgEl.src, function(canvas) {
-                const link = document.createElement('a');
-                link.download = name.replace('.png','') + '_damaso.png';
-                link.href = canvas.toDataURL('image/png');
-                document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                // canvas.toBlob() + URL.createObjectURL(), no un data URI: en
+                // iOS Safari, un enlace de descarga con href="data:..." muy
+                // pesado (foto sin comprimir) suele mostrar el cartel de
+                // "¿Quieres descargar...?" pero no llega a guardar nada — la
+                // descarga falla en silencio. Con blob: sí es confiable.
+                const doDownload = function(url, isBlob) {
+                    const link = document.createElement('a');
+                    link.download = name.replace('.png', '') + '_damaso.png';
+                    link.href = url;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    if (isBlob) setTimeout(() => URL.revokeObjectURL(url), 4000);
+                };
+                if (canvas.toBlob) {
+                    canvas.toBlob(function(blob) {
+                        if (blob) doDownload(URL.createObjectURL(blob), true);
+                        else doDownload(canvas.toDataURL('image/png'), false);
+                    }, 'image/png');
+                } else {
+                    doDownload(canvas.toDataURL('image/png'), false);
+                }
             }, function() {
                 const fallbackLink = document.createElement('a');
                 fallbackLink.download = name.replace('.png','') + '_damaso.png';
