@@ -999,6 +999,7 @@
                                     </button>
                                 </div>
                             </div>
+                            <button type="button" id="dev-mode-toggle-btn" onclick="window.toggleDevMode()" class="hidden w-full py-3 border border-brand-gold text-brand-gold text-[10px] uppercase font-bold tracking-widest hover:bg-brand-gold hover:text-black transition-all rounded-sm mt-2"></button>
                             <button type="button" onclick="window.confirmLogout()" class="w-full py-3 border border-[#ff4444] text-[#ff4444] text-[10px] uppercase font-bold tracking-widest hover:bg-[#ff4444] hover:text-white transition-all rounded-sm mt-2" data-i18n="settings_logout">Cerrar Sesión</button>
                         </div>
                     </div>
@@ -1644,6 +1645,7 @@
             { id: 196, name: "Arbotante Cilindro Calado Geométrico", category: "arbotantes", price: 7200, img: "arbotante_30.jpeg", altImg: "arbotante_30b.jpeg", sku: "DM-ARB-039", desc: "Arbotante fabricado en metal negro con cuerpo cilíndrico calado en patrón geométrico y difusor interior esmerilado", specsLight: "Arbotante fabricado en metal negro con cuerpo cilíndrico calado en patrón geométrico y difusor interior esmerilado", cable: "Certificado UL/NOM", dims: { w: "12 cm", h: "50 cm", d: "10 cm", dia: "N/A" }, peso: "2.4 kg", volt: "110-120V", mat: "Metal/cristal esmerilado", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 221, name: "Arbotante Tubo Cristal Placa Metal", category: "arbotantes", price: 6800, img: "arbotante_31.jpeg", images: ["arbotante_31.jpeg", "arbotante_32.jpeg", "arbotante_33.jpeg"], sku: "DM-ARB-040", desc: "Arbotante fabricado en metal negro con placa rectangular de montaje y difusor tubular de cristal", specsLight: "Arbotante fabricado en metal negro con placa rectangular de montaje y difusor tubular de cristal", cable: "Certificado UL/NOM", dims: { w: "12 cm", h: "55 cm", d: "10 cm", dia: "N/A" }, peso: "2.2 kg", volt: "110-120V", mat: "Metal/cristal", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
             { id: 229, name: "Arbotante Farol Jaula Náutico", category: "arbotantes", price: 5400, img: "arbotante_34.jpeg", images: ["arbotante_34.jpeg", "arbotante_35.jpeg", "arbotante_36.jpeg"], sku: "DM-ARB-041", desc: "Arbotante fabricado en metal negro estilo náutico con jaula protectora y difusor de cristal cilíndrico", specsLight: "Arbotante fabricado en metal negro estilo náutico con jaula protectora y difusor de cristal cilíndrico", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "28 cm", d: "15 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-120V", mat: "Metal/cristal", fin: "Negro envejecido", time: "3 a 4 semanas", cert: "NOM, IP65" },
+            { id: 245, name: "Arbotante Poste Cuerda Vintage", category: "arbotantes", price: 4400, img: "arbotante_37.jpeg", sku: "DM-ARB-042", desc: "Arbotante fabricado en metal negro con poste envuelto en cuerda natural y foco expuesto", specsLight: "Arbotante fabricado en metal negro con poste envuelto en cuerda natural y foco expuesto", cable: "Certificado UL/NOM", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.5 kg", volt: "110-120V", mat: "Metal/cuerda", fin: "Negro mate/cuerda natural", time: "3 a 4 semanas", cert: "NOM" },
             { id: 134, name: "Lámpara Mesa Cilindro Negro", category: "mesa", price: 6200, img: "lampara_de_mesa_15.jpeg", sku: "DM-MES-028", desc: "Lámpara fabricada en metal con base en acrílico y pantalla en tela", specsLight: "Lámpara fabricada en metal con base en acrílico y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "35 cm" }, peso: "4 kg", volt: "110-120V", mat: "Metal/acrílico/tela", fin: "Negro mate/gris", time: "3 a 4 semanas", cert: "NOM" },
             { id: 135, name: "Lámpara Mesa Brazo Nogal", category: "mesa", price: 8600, img: "lampara_de_mesa_16.jpeg", altImg: "lampara_de_mesa_29.jpeg", sku: "DM-MES-029", desc: "Lámpara fabricada en madera de nogal con detalles en latón y pantalla en tela", specsLight: "Lámpara fabricada en madera de nogal con detalles en latón y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "40 cm", h: "55 cm", d: "25 cm", dia: "N/A" }, peso: "5 kg", volt: "110-120V", mat: "Madera de nogal/latón/tela", fin: "Nogal natural/latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 136, name: "Lámpara Mesa Jaula Dorada", category: "mesa", price: 7400, img: "lampara_de_mesa_17.jpeg", sku: "DM-MES-030", desc: "Lámpara fabricada en metal con detalles en latón y pantalla en tela", specsLight: "Lámpara fabricada en metal con detalles en latón y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Metal/latón/tela", fin: "Negro mate/latón dorado", time: "3 a 4 semanas", cert: "NOM" },
@@ -1731,6 +1733,10 @@
             { id: 220, name: "Colgante Domo Cuentas de Madera", category: "techo", price: 8600, img: "lampara_de_techo_40.jpeg", sku: "DM-TEC-062", desc: "Lámpara fabricada en cuentas de madera ensartadas formando un domo, colgada de cadena", specsLight: "Lámpara fabricada en cuentas de madera ensartadas formando un domo, colgada de cadena", cable: "Certificado UL/NOM", dims: { w: "60 cm", h: "35 cm", d: "60 cm", dia: "60 cm" }, peso: "5 kg", volt: "110-120V", mat: "Madera/metal", fin: "Madera natural/gris", time: "5 a 6 semanas", cert: "NOM" },
             { id: 239, name: "Colgante Reloj de Arena Tejido Ratán", category: "techo", price: 9800, img: "lampara_de_techo_41.jpeg", sku: "DM-TEC-063", desc: "Lámpara fabricada en ratán tejido con silueta escultórica tipo reloj de arena", specsLight: "Lámpara fabricada en ratán tejido con silueta escultórica tipo reloj de arena", cable: "Certificado UL/NOM", dims: { w: "45 cm", h: "80 cm", d: "45 cm", dia: "45 cm" }, peso: "5 kg", volt: "110-120V", mat: "Ratán natural", fin: "Natural tostado", time: "5 a 6 semanas", cert: "NOM" },
             { id: 240, name: "Colgante Circular Cinco Globos", category: "techo", price: 11200, img: "lampara_de_techo_42.jpeg", sku: "DM-TEC-064", desc: "Lámpara fabricada en metal negro con estructura circular y cinco globos difusores en cristal opalino", specsLight: "Lámpara fabricada en metal negro con estructura circular y cinco globos difusores en cristal opalino", cable: "Certificado UL/NOM", dims: { w: "80 cm", h: "20 cm", d: "80 cm", dia: "80 cm" }, peso: "6 kg", volt: "110-120V", mat: "Metal/cristal opalino", fin: "Negro mate", time: "4 a 5 semanas", cert: "NOM" },
+            { id: 241, name: "Colgante Diamante en Tela", category: "techo", price: 6200, img: "lampara_de_techo_43.jpeg", sku: "DM-TEC-065", desc: "Lámpara fabricada en tela plisada con silueta tipo diamante", specsLight: "Lámpara fabricada en tela plisada con silueta tipo diamante", cable: "Certificado UL/NOM", dims: { w: "45 cm", h: "35 cm", d: "45 cm", dia: "45 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Tela plisada", fin: "Beige natural", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 242, name: "Colgante Cilíndrico Escalonado en Tela", category: "techo", price: 7400, img: "lampara_de_techo_44.jpeg", sku: "DM-TEC-066", desc: "Lámpara fabricada en tela plisada con cuerpo cilíndrico escalonado en dos niveles", specsLight: "Lámpara fabricada en tela plisada con cuerpo cilíndrico escalonado en dos niveles", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "60 cm", d: "25 cm", dia: "25 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Tela plisada", fin: "Beige natural", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 243, name: "Colgante Zigzag Tres Niveles en Tela", category: "techo", price: 8200, img: "lampara_de_techo_45.jpeg", sku: "DM-TEC-067", desc: "Lámpara fabricada en tela plisada con silueta escalonada en zigzag de tres niveles", specsLight: "Lámpara fabricada en tela plisada con silueta escalonada en zigzag de tres niveles", cable: "Certificado UL/NOM", dims: { w: "55 cm", h: "40 cm", d: "55 cm", dia: "55 cm" }, peso: "2 kg", volt: "110-120V", mat: "Tela plisada", fin: "Beige natural", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 244, name: "Colgante Rueda de Alambre", category: "techo", price: 13600, img: "lampara_de_techo_46.jpeg", sku: "DM-TEC-068", desc: "Lámpara fabricada en varillas de metal formando una rueda radial de gran formato", specsLight: "Lámpara fabricada en varillas de metal formando una rueda radial de gran formato", cable: "Certificado UL/NOM", dims: { w: "90 cm", h: "15 cm", d: "90 cm", dia: "90 cm" }, peso: "3 kg", volt: "110-120V", mat: "Metal", fin: "Bronce envejecido", time: "4 a 5 semanas", cert: "NOM" },
             { id: 46, name: "Farol Exterior Negro", category: "briseras", price: 5200, img: "IMG_2012.png", sku: "DM-BRI-001", desc: "Farol de piso o mesa para terrazas exteriores.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero treated y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
             { id: 47, name: "Brisera Vigía", category: "briseras", price: 3600, img: "IMG_2020.png", sku: "DM-BRI-002", desc: "Luminaria exterior con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
             { id: 86, name: "Farol Linterna Latón", category: "briseras", price: 6800, img: "image_exterior.png", sku: "DM-BRI-003", desc: "Farol negro mate con corona de latón pulido.", specsLight: "1x E26 LED 8W cálida", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "40 cm", d: "25 cm", dia: "N/A" }, peso: "4.5 kg", volt: "110-120V", mat: "Acero tratado, latón macizo y cristal templado", fin: "Negro mate exterior y latón brillante", time: "3 a 4 semanas", cert: "NOM, IP65" },
@@ -2042,6 +2048,13 @@
             ["Candil Ratán Tejido Campana", "Woven Rattan Bell Chandelier", "Lustre en Rotin Tressé Forme Cloche", "藤编钟形吊灯"],
             ["Colgante Reloj de Arena Tejido Ratán", "Woven Rattan Hourglass Pendant", "Suspension Sablier en Rotin Tressé", "藤编沙漏形吊灯"],
             ["Colgante Circular Cinco Globos", "Circular Five-Globe Pendant", "Suspension Circulaire à Cinq Globes", "五球圆形吊灯"],
+            ["Colgante Diamante en Tela", "Fabric Diamond Pendant", "Suspension Diamant en Tissu", "布艺钻石形吊灯"],
+            ["Colgante Cilíndrico Escalonado en Tela", "Fabric Stepped Cylinder Pendant", "Suspension Cylindrique Étagée en Tissu", "布艺阶梯圆柱吊灯"],
+            ["Colgante Zigzag Tres Niveles en Tela", "Fabric Three-Tier Zigzag Pendant", "Suspension Zigzag Trois Niveaux en Tissu", "布艺三层锯齿吊灯"],
+            ["Colgante Rueda de Alambre", "Wire Wheel Pendant", "Suspension Roue en Fil de Fer", "金属线轮形吊灯"],
+            ["tela plisada", "pleated fabric", "tissu plissé", "褶皱布艺"],
+            ["diamante", "diamond", "diamant", "钻石形"],
+            ["rueda de alambre", "wire wheel", "roue en fil de fer", "金属线轮形"],
             ["escalonado", "stepped", "étagé", "分层"],
             ["cónico", "conical", "conique", "锥形"],
             ["reloj de arena", "hourglass", "sablier", "沙漏形"],
@@ -2109,6 +2122,9 @@
             ["Lámpara Mesa Esfera Cerámica", "Ceramic Sphere Table Lamp", "Lampe de Table Sphère en Céramique", "陶瓷球形台灯"],
             ["Lámpara de Pie Torneada Latón", "Turned Brass Ring Floor Lamp", "Lampadaire Tourné Anneaux en Laiton", "黄铜环车制落地灯"],
             ["Arbotante Farol Jaula Náutico", "Nautical Cage Lantern Sconce", "Applique Lanterne Cage Nautique", "航海笼形灯笼壁灯"],
+            ["Arbotante Poste Cuerda Vintage", "Vintage Rope-Wrapped Post Sconce", "Applique Poteau Corde Vintage", "复古麻绳柱壁灯"],
+            ["poste cuerda", "rope-wrapped post", "poteau en corde", "麻绳柱"],
+            ["vintage", "vintage", "vintage", "复古"],
             ["Lámpara de Pie Cono Doble Plato", "Inverted Cone Disc Top Floor Lamp", "Lampadaire Cône Inversé Plateau", "倒锥形圆盘落地灯"],
             ["náutico", "nautical", "nautique", "航海风格"],
             ["jaula protectora", "protective cage", "cage de protection", "保护笼"],
@@ -2882,6 +2898,18 @@
                     { sku: 'DM-TEC-064', img: 'lampara_de_techo_42.jpeg' }
                 ],
                 features: []
+            },
+            {
+                id: 'upd-2026-08-17-techo-arbotante-24',
+                code: 'DMS-024',
+                images: [
+                    { sku: 'DM-TEC-065', img: 'lampara_de_techo_43.jpeg' },
+                    { sku: 'DM-TEC-066', img: 'lampara_de_techo_44.jpeg' },
+                    { sku: 'DM-TEC-067', img: 'lampara_de_techo_45.jpeg' },
+                    { sku: 'DM-TEC-068', img: 'lampara_de_techo_46.jpeg' },
+                    { sku: 'DM-ARB-042', img: 'arbotante_37.jpeg' }
+                ],
+                features: []
             }
         ];
         // Arma el subtítulo ("se agregaron X modelos...") y el HTML de detalle
@@ -3170,7 +3198,7 @@
             for (const catKey of Object.keys(window.catMap)) {
                 const catProducts = products.filter(p => p.category === catKey);
                 if (catProducts.length === 0) continue;
-                if (typeof window._isOwnerAccount !== 'function' || !window._isOwnerAccount()) {
+                if (typeof window._isDevModeActive !== 'function' || !window._isDevModeActive()) {
                     catProducts.sort((a, b) => b.id - a.id);
                 }
                 const catTitle = window.catLabel(catKey);
@@ -3266,9 +3294,25 @@
                 if (pwEl) pwEl.innerText = window.userSession.password ? '•'.repeat(window.userSession.password.length) : '••••••••';
                 const eyeIcon = document.getElementById('account-eye-icon');
                 if (eyeIcon) eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+                window._refreshDevModeButton();
             } else {
                 loggedOut.classList.remove('hidden');
                 loggedIn.classList.add('hidden');
+            }
+        };
+
+        // Solo esta cuenta ve este botón (esté o no el modo de desarrollador
+        // activo en ese momento); para cualquier otra cuenta permanece oculto.
+        window._refreshDevModeButton = function() {
+            const devBtn = document.getElementById('dev-mode-toggle-btn');
+            if (!devBtn) return;
+            if (window._isOwnerAccount()) {
+                devBtn.classList.remove('hidden');
+                devBtn.innerText = window._ownerDevModeOn()
+                    ? window.t('settings_dev_mode_exit', 'Salir de Modo de Desarrollador')
+                    : window.t('settings_dev_mode_enter', 'Entrar a Modo de Desarrollador');
+            } else {
+                devBtn.classList.add('hidden');
             }
         };
 
@@ -3295,6 +3339,7 @@
             proyectos: 'Special Projects', volver: '← Back',
             settings_account: 'Account', settings_language: 'Language', settings_theme: 'Page Tone', settings_animations: 'Animations', settings_privacy: 'Privacy Notice',
             settings_no_session: 'You are not signed in.', settings_login: 'Sign In', settings_name: 'Name', settings_email: 'Email', settings_password: 'Password', settings_logout: 'Sign Out',
+            settings_dev_mode_exit: 'Exit Developer Mode', settings_dev_mode_enter: 'Enter Developer Mode',
             theme_dark: 'Dark', theme_light: 'Light', theme_auto: 'Automatic',
             settings_animations_desc: 'Animations are on by default. You can turn them off if you prefer.', settings_animations_on: 'Animations: On', settings_animations_off: 'Animations: Off',
             privacy_cookies_text: 'This site uses cookies and local storage only to remember your session, your quote cart, and your preferences (language, tone, and animations). We do not share your information with third parties. You can erase this data by signing out.',
@@ -3349,6 +3394,7 @@
             proyectos: 'Projets spéciaux', volver: '← Retour',
             settings_account: 'Compte', settings_language: 'Langue', settings_theme: 'Ton de la page', settings_animations: 'Animations', settings_privacy: 'Avis de confidentialité',
             settings_no_session: "Vous n'êtes pas connecté.", settings_login: 'Se connecter', settings_name: 'Nom', settings_email: 'E-mail', settings_password: 'Mot de passe', settings_logout: 'Se déconnecter',
+            settings_dev_mode_exit: 'Quitter le mode développeur', settings_dev_mode_enter: 'Activer le mode développeur',
             theme_dark: 'Sombre', theme_light: 'Clair', theme_auto: 'Automatique',
             settings_animations_desc: 'Les animations sont activées par défaut. Vous pouvez les désactiver si vous préférez.', settings_animations_on: 'Animations : Activées', settings_animations_off: 'Animations : Désactivées',
             privacy_cookies_text: 'Ce site utilise des cookies et le stockage local uniquement pour mémoriser votre session, votre panier de devis et vos préférences (langue, ton et animations). Nous ne partageons pas vos informations avec des tiers. Vous pouvez effacer ces données en vous déconnectant.',
@@ -3403,6 +3449,7 @@
             proyectos: '特别项目', volver: '← 返回',
             settings_account: '账户', settings_language: '语言', settings_theme: '页面色调', settings_animations: '动画', settings_privacy: '隐私声明',
             settings_no_session: '您尚未登录。', settings_login: '登录', settings_name: '姓名', settings_email: '邮箱', settings_password: '密码', settings_logout: '退出登录',
+            settings_dev_mode_exit: '退出开发者模式', settings_dev_mode_enter: '进入开发者模式',
             theme_dark: '深色', theme_light: '浅色', theme_auto: '自动',
             settings_animations_desc: '动画默认开启。如果您愿意，可以将其关闭。', settings_animations_on: '动画：开启', settings_animations_off: '动画：关闭',
             privacy_cookies_text: '本网站仅使用 Cookie 和本地存储来记住您的会话、报价购物车和偏好设置（语言、色调和动画）。我们不会与第三方分享您的信息。您可以通过退出登录来清除这些数据。',
@@ -3478,6 +3525,7 @@
             ['es', 'en', 'fr', 'zh'].forEach(code => {
                 document.getElementById('lang-opt-' + code)?.querySelector('.lang-check')?.replaceChildren(document.createTextNode(window.appLang === code ? '✓' : ''));
             });
+            if (typeof window._refreshDevModeButton === 'function') window._refreshDevModeButton();
         };
 
         window.setAppLanguage = function(code) {
@@ -3668,6 +3716,29 @@
                    (s.email || '').trim().toLowerCase() === 'thiago_silva2012@icloud.com' &&
                    s.password === 'Draco4510';
         };
+        // El modo de desarrollador está prendido por defecto para esta cuenta;
+        // se puede apagar desde Configuración > Cuenta para ver el sitio
+        // exactamente como lo ve cualquier otra persona (queda guardado en
+        // localStorage hasta que se vuelva a activar).
+        window._ownerDevModeOn = function() {
+            try { return localStorage.getItem('damaso_dev_mode') !== 'off'; } catch(e) { return true; }
+        };
+        window._isDevModeActive = function() {
+            return window._isOwnerAccount() && window._ownerDevModeOn();
+        };
+        window.toggleDevMode = function() {
+            const turningOff = window._ownerDevModeOn();
+            try { localStorage.setItem('damaso_dev_mode', turningOff ? 'off' : 'on'); } catch(e) {}
+            window.populateSettingsAccount();
+            if (window.dbProducts) window.renderCatalog(window.dbProducts);
+            if (window.currentModalProduct && window._modalImgList) {
+                const nSpn = document.getElementById('modal-img-name');
+                const copyBtn = document.getElementById('modal-copy-btn');
+                const show = window._isDevModeActive();
+                if (nSpn) { nSpn.innerText = show ? window._modalImgList[window._modalImgIndex] : ''; nSpn.classList.toggle('hidden', !show); }
+                if (copyBtn) copyBtn.classList.toggle('hidden', !show);
+            }
+        };
         window.openSpecModal = function(id) {
             window.playClickSound();
             const p = window.dbProducts.find(x => x.id === parseInt(id));
@@ -3684,7 +3755,7 @@
             window._updateModalImgArrows();
             const nSpn = document.getElementById('modal-img-name');
             const copyBtn = document.getElementById('modal-copy-btn');
-            const isOwner = window._isOwnerAccount();
+            const isOwner = window._isDevModeActive();
             if (nSpn) { nSpn.innerText = isOwner ? p.img : ''; nSpn.classList.toggle('hidden', !isOwner); }
             if (copyBtn) copyBtn.classList.toggle('hidden', !isOwner);
             document.getElementById('modal-title').innerText = window.trPhrase(p.name);
@@ -3833,7 +3904,7 @@
                     const dotsEl = document.getElementById('modal-img-dots');
                     if (dotsEl) dotsEl.querySelectorAll('.modal-img-dot').forEach((el, i) => el.classList.toggle('active', i === newIndex));
                     window._updateModalImgArrows();
-                    if (window._isOwnerAccount()) {
+                    if (window._isDevModeActive()) {
                         const nSpn = document.getElementById('modal-img-name');
                         if (nSpn) nSpn.innerText = list[newIndex];
                     }
