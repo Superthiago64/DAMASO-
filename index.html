@@ -441,15 +441,16 @@
                 animation: specModalPanelSlideIn 1.6s cubic-bezier(0.16,1,0.3,1) 0.35s both;
             }
             /* Al salir: las especificaciones se deslizan de regreso hacia la
-               izquierda. La imagen no lleva animación propia al salir (solo
-               desaparece junto con el resto del modal) para que cerrar no se
-               sienta lento. */
+               izquierda, pero rápido — todo el modal (imagen incluida) se
+               cierra justo detrás, para que la imagen nunca se quede sola en
+               pantalla esperando. La imagen no lleva animación propia al
+               salir; solo desaparece junto con el resto del modal. */
             @keyframes specModalPanelSlideOut {
                 0% { opacity: 1; transform: translateX(0); }
                 100% { opacity: 0; transform: translateX(-36px); }
             }
             #spec-modal.spec-modal-closing .spec-modal-specs-col {
-                animation: specModalPanelSlideOut 1.6s cubic-bezier(0.16,1,0.3,1) both;
+                animation: specModalPanelSlideOut 0.35s cubic-bezier(0.4,0,0.2,1) both;
             }
         }
 
@@ -2981,6 +2982,14 @@
                 features: [
                     { type: 'fix', title: 'Cierre más rápido en especificaciones', desc: 'La animación de salida de la ficha de especificaciones (computadora) tardaba casi 2 segundos en cerrar por completo. Ahora se cierra en cuanto terminan de deslizarse las especificaciones, más rápido.' }
                 ]
+            },
+            {
+                id: 'upd-2026-08-17-spec-exit-anim-speed-29',
+                code: 'DMS-029',
+                images: [],
+                features: [
+                    { type: 'fix', title: 'Cierre todavía más rápido en especificaciones', desc: 'El cierre de la ficha de especificaciones (computadora) seguía sintiéndose lento. Ahora las especificaciones se deslizan hacia la izquierda mucho más rápido y todo el resto del modal se cierra justo detrás, sin dejar la imagen sola en pantalla.' }
+                ]
             }
         ];
         // Arma el subtítulo ("se agregaron X modelos...") y el HTML de detalle
@@ -3916,17 +3925,17 @@
                 window.toggleNavbarState(true);
                 window.currentModalProduct = null;
             };
-            // En computadora, antes de cerrar de verdad se reproduce la
-            // animación de salida de las especificaciones (se deslizan hacia
-            // la izquierda; la imagen no lleva animación propia, para que no
-            // se sienta lento) y solo hasta que termina se oculta el modal.
+            // En computadora, antes de cerrar de verdad se reproduce una
+            // animación de salida rápida (las especificaciones se deslizan
+            // hacia la izquierda) y justo detrás se oculta todo el modal —
+            // así la imagen nunca se queda sola en pantalla esperando.
             // En celular no aplica (esas reglas viven dentro de un @media de
             // computadora) así que se cierra de inmediato, como siempre.
             clearTimeout(window._specModalCloseAnimTimer);
             if (modal && !modal.classList.contains('opacity-0') && window.matchMedia('(min-width: 768px)').matches) {
                 modal.classList.remove('spec-modal-opening');
                 modal.classList.add('spec-modal-closing');
-                window._specModalCloseAnimTimer = setTimeout(finishClose, 1600);
+                window._specModalCloseAnimTimer = setTimeout(finishClose, 350);
                 return;
             }
             finishClose();
