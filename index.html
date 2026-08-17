@@ -440,6 +440,25 @@
             #spec-modal.spec-modal-opening .spec-modal-specs-col {
                 animation: specModalPanelSlideIn 1.6s cubic-bezier(0.16,1,0.3,1) 0.35s both;
             }
+            /* Al salir: exactamente la animación de entrada en reversa. Las
+               especificaciones se deslizan de regreso hacia la izquierda desde
+               el principio, y la imagen se encoge a su lugar correspondiente
+               fuera de las especificaciones justo cuando el panel termina de
+               irse — el mismo orden de la entrada, pero al revés. */
+            @keyframes specModalImageShrink {
+                0% { opacity: 1; transform: scale(1); }
+                100% { opacity: 0; transform: scale(0.82); }
+            }
+            @keyframes specModalPanelSlideOut {
+                0% { opacity: 1; transform: translateX(0); }
+                100% { opacity: 0; transform: translateX(-36px); }
+            }
+            #spec-modal.spec-modal-closing .spec-modal-image-col {
+                animation: specModalImageShrink 0.9s cubic-bezier(0.16,1,0.3,1) 1.05s both;
+            }
+            #spec-modal.spec-modal-closing .spec-modal-specs-col {
+                animation: specModalPanelSlideOut 1.6s cubic-bezier(0.16,1,0.3,1) both;
+            }
         }
 
         /* ── LOADER PRINCIPAL: D LUMINOSA (barrido de luz de abajo hacia arriba) ── */
@@ -2954,6 +2973,14 @@
                     { sku: 'DM-PIE-013', img: 'lampara_de_pie_13.jpeg' }
                 ],
                 features: []
+            },
+            {
+                id: 'upd-2026-08-17-spec-exit-anim-27',
+                code: 'DMS-027',
+                images: [],
+                features: [
+                    { title: 'Animación de salida de especificaciones', desc: 'En computadora, al cerrar la ficha de especificaciones ahora se ve una animación de salida: el panel se desliza suavemente hacia la izquierda y la imagen se encoge a su lugar, en el mismo orden pero al revés de cuando se abre.' }
+                ]
             }
         ];
         // Arma el subtítulo ("se agregaron X modelos...") y el HTML de detalle
@@ -3834,7 +3861,8 @@
             if (modalPanel) modalPanel.scrollTop = 0;
             const modal = document.getElementById('spec-modal');
             if (modal) {
-                modal.classList.remove('opacity-0', 'pointer-events-none');
+                clearTimeout(window._specModalCloseAnimTimer);
+                modal.classList.remove('spec-modal-closing', 'opacity-0', 'pointer-events-none');
                 document.body.style.overflow = 'hidden';
                 // Animación de entrada (computadora): la imagen crece y las
                 // especificaciones se deslizan suavemente hasta su lugar.
@@ -3877,14 +3905,31 @@
         };
         window._closeSpecModalVisual = function() {
             const modal = document.getElementById('spec-modal');
-            if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
-            document.body.style.overflow = '';
-            document.getElementById('spec-modal-close-btn')?.classList.add('hidden');
-            document.getElementById('spec-modal-close-btn')?.classList.remove('flex');
-            window.closeModalAI();
-            window._navLockedByOverlay = false;
-            window.toggleNavbarState(true);
-            window.currentModalProduct = null;
+            const finishClose = () => {
+                if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+                modal?.classList.remove('spec-modal-closing');
+                document.body.style.overflow = '';
+                document.getElementById('spec-modal-close-btn')?.classList.add('hidden');
+                document.getElementById('spec-modal-close-btn')?.classList.remove('flex');
+                window.closeModalAI();
+                window._navLockedByOverlay = false;
+                window.toggleNavbarState(true);
+                window.currentModalProduct = null;
+            };
+            // En computadora, antes de cerrar de verdad se reproduce la
+            // animación de salida (justo al revés de la de entrada: las
+            // especificaciones se deslizan hacia la izquierda y la imagen se
+            // encoge a su lugar) y solo hasta que termina se oculta el modal.
+            // En celular no aplica (esas reglas viven dentro de un @media de
+            // computadora) así que se cierra de inmediato, como siempre.
+            clearTimeout(window._specModalCloseAnimTimer);
+            if (modal && !modal.classList.contains('opacity-0') && window.matchMedia('(min-width: 768px)').matches) {
+                modal.classList.remove('spec-modal-opening');
+                modal.classList.add('spec-modal-closing');
+                window._specModalCloseAnimTimer = setTimeout(finishClose, 1950);
+                return;
+            }
+            finishClose();
         };
 
         // ── CARRUSEL DE IMÁGENES EN ESPECIFICACIONES ──
