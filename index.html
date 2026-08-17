@@ -440,21 +440,13 @@
             #spec-modal.spec-modal-opening .spec-modal-specs-col {
                 animation: specModalPanelSlideIn 1.6s cubic-bezier(0.16,1,0.3,1) 0.35s both;
             }
-            /* Al salir: exactamente la animación de entrada en reversa. Las
-               especificaciones se deslizan de regreso hacia la izquierda desde
-               el principio, y la imagen se encoge a su lugar correspondiente
-               fuera de las especificaciones justo cuando el panel termina de
-               irse — el mismo orden de la entrada, pero al revés. */
-            @keyframes specModalImageShrink {
-                0% { opacity: 1; transform: scale(1); }
-                100% { opacity: 0; transform: scale(0.82); }
-            }
+            /* Al salir: las especificaciones se deslizan de regreso hacia la
+               izquierda. La imagen no lleva animación propia al salir (solo
+               desaparece junto con el resto del modal) para que cerrar no se
+               sienta lento. */
             @keyframes specModalPanelSlideOut {
                 0% { opacity: 1; transform: translateX(0); }
                 100% { opacity: 0; transform: translateX(-36px); }
-            }
-            #spec-modal.spec-modal-closing .spec-modal-image-col {
-                animation: specModalImageShrink 0.9s cubic-bezier(0.16,1,0.3,1) 1.05s both;
             }
             #spec-modal.spec-modal-closing .spec-modal-specs-col {
                 animation: specModalPanelSlideOut 1.6s cubic-bezier(0.16,1,0.3,1) both;
@@ -2979,7 +2971,7 @@
                 code: 'DMS-027',
                 images: [],
                 features: [
-                    { title: 'Animación de salida de especificaciones', desc: 'En computadora, al cerrar la ficha de especificaciones ahora se ve una animación de salida: el panel se desliza suavemente hacia la izquierda y la imagen se encoge a su lugar, en el mismo orden pero al revés de cuando se abre.' }
+                    { title: 'Animación de salida de especificaciones', desc: 'En computadora, al cerrar la ficha de especificaciones ahora se ve una animación de salida: el panel se desliza suavemente hacia la izquierda antes de que se cierre por completo.' }
                 ]
             }
         ];
@@ -3917,16 +3909,16 @@
                 window.currentModalProduct = null;
             };
             // En computadora, antes de cerrar de verdad se reproduce la
-            // animación de salida (justo al revés de la de entrada: las
-            // especificaciones se deslizan hacia la izquierda y la imagen se
-            // encoge a su lugar) y solo hasta que termina se oculta el modal.
+            // animación de salida de las especificaciones (se deslizan hacia
+            // la izquierda; la imagen no lleva animación propia, para que no
+            // se sienta lento) y solo hasta que termina se oculta el modal.
             // En celular no aplica (esas reglas viven dentro de un @media de
             // computadora) así que se cierra de inmediato, como siempre.
             clearTimeout(window._specModalCloseAnimTimer);
             if (modal && !modal.classList.contains('opacity-0') && window.matchMedia('(min-width: 768px)').matches) {
                 modal.classList.remove('spec-modal-opening');
                 modal.classList.add('spec-modal-closing');
-                window._specModalCloseAnimTimer = setTimeout(finishClose, 1950);
+                window._specModalCloseAnimTimer = setTimeout(finishClose, 1600);
                 return;
             }
             finishClose();
