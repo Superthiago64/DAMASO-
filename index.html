@@ -440,18 +440,6 @@
             #spec-modal.spec-modal-opening .spec-modal-specs-col {
                 animation: specModalPanelSlideIn 1.6s cubic-bezier(0.16,1,0.3,1) 0.35s both;
             }
-            /* Al salir: las especificaciones se deslizan de regreso hacia la
-               izquierda, pero rápido — todo el modal (imagen incluida) se
-               cierra justo detrás, para que la imagen nunca se quede sola en
-               pantalla esperando. La imagen no lleva animación propia al
-               salir; solo desaparece junto con el resto del modal. */
-            @keyframes specModalPanelSlideOut {
-                0% { opacity: 1; transform: translateX(0); }
-                100% { opacity: 0; transform: translateX(-36px); }
-            }
-            #spec-modal.spec-modal-closing .spec-modal-specs-col {
-                animation: specModalPanelSlideOut 0.35s cubic-bezier(0.4,0,0.2,1) both;
-            }
         }
 
         /* ── LOADER PRINCIPAL: D LUMINOSA (barrido de luz de abajo hacia arriba) ── */
@@ -2990,6 +2978,14 @@
                 features: [
                     { type: 'fix', title: 'Cierre todavía más rápido en especificaciones', desc: 'El cierre de la ficha de especificaciones (computadora) seguía sintiéndose lento. Ahora las especificaciones se deslizan hacia la izquierda mucho más rápido y todo el resto del modal se cierra justo detrás, sin dejar la imagen sola en pantalla.' }
                 ]
+            },
+            {
+                id: 'upd-2026-08-17-spec-exit-anim-removed-30',
+                code: 'DMS-030',
+                images: [],
+                features: [
+                    { type: 'fix', title: 'Cierre inmediato en especificaciones', desc: 'Se quitó la animación al cerrar la ficha de especificaciones (computadora): ahora cierra de inmediato, igual que en celular.' }
+                ]
             }
         ];
         // Arma el subtítulo ("se agregaron X modelos...") y el HTML de detalle
@@ -3870,8 +3866,7 @@
             if (modalPanel) modalPanel.scrollTop = 0;
             const modal = document.getElementById('spec-modal');
             if (modal) {
-                clearTimeout(window._specModalCloseAnimTimer);
-                modal.classList.remove('spec-modal-closing', 'opacity-0', 'pointer-events-none');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
                 document.body.style.overflow = 'hidden';
                 // Animación de entrada (computadora): la imagen crece y las
                 // especificaciones se deslizan suavemente hasta su lugar.
@@ -3914,31 +3909,14 @@
         };
         window._closeSpecModalVisual = function() {
             const modal = document.getElementById('spec-modal');
-            const finishClose = () => {
-                if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
-                modal?.classList.remove('spec-modal-closing');
-                document.body.style.overflow = '';
-                document.getElementById('spec-modal-close-btn')?.classList.add('hidden');
-                document.getElementById('spec-modal-close-btn')?.classList.remove('flex');
-                window.closeModalAI();
-                window._navLockedByOverlay = false;
-                window.toggleNavbarState(true);
-                window.currentModalProduct = null;
-            };
-            // En computadora, antes de cerrar de verdad se reproduce una
-            // animación de salida rápida (las especificaciones se deslizan
-            // hacia la izquierda) y justo detrás se oculta todo el modal —
-            // así la imagen nunca se queda sola en pantalla esperando.
-            // En celular no aplica (esas reglas viven dentro de un @media de
-            // computadora) así que se cierra de inmediato, como siempre.
-            clearTimeout(window._specModalCloseAnimTimer);
-            if (modal && !modal.classList.contains('opacity-0') && window.matchMedia('(min-width: 768px)').matches) {
-                modal.classList.remove('spec-modal-opening');
-                modal.classList.add('spec-modal-closing');
-                window._specModalCloseAnimTimer = setTimeout(finishClose, 350);
-                return;
-            }
-            finishClose();
+            if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = '';
+            document.getElementById('spec-modal-close-btn')?.classList.add('hidden');
+            document.getElementById('spec-modal-close-btn')?.classList.remove('flex');
+            window.closeModalAI();
+            window._navLockedByOverlay = false;
+            window.toggleNavbarState(true);
+            window.currentModalProduct = null;
         };
 
         // ── CARRUSEL DE IMÁGENES EN ESPECIFICACIONES ──
