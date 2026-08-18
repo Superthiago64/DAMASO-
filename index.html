@@ -492,11 +492,27 @@
             text-transform: uppercase;
         }
 
-        /* ── DAMASO ILUMINÁNDOSE LENTAMENTE — capa de barrido sobre el logo base blanco ──
-           Antes se recortaba con background-clip:text sobre el texto; ahora el
-           wordmark es una imagen, así que el recorte se hace con mask-image
-           usando la misma imagen como máscara (su canal alfa define la forma). */
+        /* ── DAMASO ILUMINÁNDOSE LENTAMENTE — capa de barrido sobre el texto base blanco (wordmark público) ── */
         #navbar-wordmark-shine {
+            opacity: 0;
+            white-space: nowrap;
+            background-image: linear-gradient(180deg,
+                rgba(255,255,255,0.25) 0%,
+                rgba(255,255,255,0.25) 35%,
+                #ffffff 50%,
+                rgba(255,255,255,0.25) 65%,
+                rgba(255,255,255,0.25) 100%);
+            background-size: 100% 300%;
+            background-position: 0% 0%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Mismo barrido, pero para el logo del wordmark de desarrollador (imagen):
+           el recorte se hace con mask-image usando la misma imagen como máscara
+           (su canal alfa define la forma) en vez de background-clip:text. */
+        #navbar-wordmark-dev-shine {
             opacity: 0;
             background-image: linear-gradient(180deg,
                 rgba(255,255,255,0.25) 0%,
@@ -506,8 +522,8 @@
                 rgba(255,255,255,0.25) 100%);
             background-size: 100% 300%;
             background-position: 0% 0%;
-            -webkit-mask-image: url('damaso_logo_wordmark.png');
-            mask-image: url('damaso_logo_wordmark.png');
+            -webkit-mask-image: url('damaso_logo_wordmark_dev.png');
+            mask-image: url('damaso_logo_wordmark_dev.png');
             -webkit-mask-size: contain;
             mask-size: contain;
             -webkit-mask-repeat: no-repeat;
@@ -960,9 +976,19 @@
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div id="navbar-left-cluster" class="flex items-center space-x-4 sm:space-x-6">
                 <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center" data-i18n="menu_btn">Menú</button>
-                <a id="navbar-wordmark" href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block ml-2 h-6 sm:h-8">
-                    <img src="damaso_logo_wordmark.png" alt="DAMASO" class="navbar-wordmark-pulse-img h-full w-auto block" draggable="false">
-                    <span id="navbar-wordmark-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true"></span>
+                <a id="navbar-wordmark" href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block ml-2">
+                    <!-- Wordmark público: el texto de siempre, sin cambios. -->
+                    <span id="navbar-wordmark-public" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text navbar-wordmark-pulse uppercase font-bold">
+                        <span>Damaso</span>
+                        <span id="navbar-wordmark-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true">Damaso</span>
+                    </span>
+                    <!-- Wordmark de desarrollador: el logo oficial, más grande, con las
+                         letras rellenas por completo en blanco. Solo se muestra en modo
+                         de desarrollador (ver window._refreshNavbarWordmark). -->
+                    <span id="navbar-wordmark-dev" class="hidden relative inline-block h-9 sm:h-12">
+                        <img src="damaso_logo_wordmark_dev.png" alt="DAMASO" class="navbar-wordmark-pulse-img h-full w-auto block" draggable="false">
+                        <span id="navbar-wordmark-dev-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true"></span>
+                    </span>
                 </a>
             </div>
 
@@ -1483,13 +1509,16 @@
                 window._navHiddenByScroll = false;
                 const peek = document.getElementById('navbar-peek-bar');
                 if (peek) { peek.style.opacity = '0'; peek.style.pointerEvents = 'none'; }
-                const shine = document.getElementById('navbar-wordmark-shine');
-                if (shine) {
+                // Se dispara en ambos wordmarks (público y de desarrollador); el que
+                // esté oculto en ese momento no se ve, así que no hay costo real.
+                ['navbar-wordmark-shine', 'navbar-wordmark-dev-shine'].forEach(id => {
+                    const shine = document.getElementById(id);
+                    if (!shine) return;
                     shine.classList.remove('navbar-wordmark-shine-active');
                     void shine.offsetWidth; // reinicia la animación
                     shine.classList.add('navbar-wordmark-shine-active');
                     setTimeout(() => shine.classList.remove('navbar-wordmark-shine-active'), 5700);
-                }
+                });
             }
         };
 
@@ -2655,6 +2684,7 @@
         window.enterSiteDirectly = function() {
             document.querySelectorAll('.init-overlay').forEach(o => o.classList.add('opacity-0', 'pointer-events-none'));
             document.getElementById('main-body')?.classList.remove('overflow-hidden');
+            if (window._refreshNavbarWordmark) window._refreshNavbarWordmark();
             if (window.userSession) {
                 document.getElementById('logout-btn')?.classList.remove('hidden');
                 const cn = document.getElementById('client-name');
@@ -3063,14 +3093,6 @@
                     { sku: 'DM-TEC-072', img: 'lampara_de_techo_54.webp' }
                 ],
                 features: []
-            },
-            {
-                id: 'upd-2026-08-18-navbar-logo-36',
-                code: 'DMS-036',
-                images: [],
-                features: [
-                    { title: 'Nuevo logo en la barra superior', desc: 'El wordmark "DAMASO" junto al menú ahora usa el logo oficial de la marca, con el mismo brillo que se ilumina que ya tenía.' }
-                ]
             }
         ];
         // Arma el subtítulo ("se agregaron X modelos...") y el HTML de detalle
@@ -3891,10 +3913,20 @@
         window._isDevModeActive = function() {
             return window._isOwnerAccount() && window._ownerDevModeOn();
         };
+        // El wordmark "DAMASO" del navbar: para el público es el texto de
+        // siempre; en modo de desarrollador se cambia por el logo oficial
+        // (más grande, letras rellenas en blanco). Se llama al entrar al
+        // sitio y cada vez que se activa/desactiva el modo de desarrollador.
+        window._refreshNavbarWordmark = function() {
+            const isDev = typeof window._isDevModeActive === 'function' && window._isDevModeActive();
+            document.getElementById('navbar-wordmark-public')?.classList.toggle('hidden', isDev);
+            document.getElementById('navbar-wordmark-dev')?.classList.toggle('hidden', !isDev);
+        };
         window.toggleDevMode = function() {
             const turningOff = window._ownerDevModeOn();
             try { localStorage.setItem('damaso_dev_mode', turningOff ? 'off' : 'on'); } catch(e) {}
             window.populateSettingsAccount();
+            if (window._refreshNavbarWordmark) window._refreshNavbarWordmark();
             if (window.dbProducts) window.renderCatalog(window.dbProducts);
             if (window.currentModalProduct && window._modalImgList) {
                 const nSpn = document.getElementById('modal-img-name');
