@@ -277,6 +277,14 @@
             50% { text-shadow: 0 0 20px rgba(255,255,255,0.95), 0 0 45px rgba(212,175,55,0.7), 0 0 70px rgba(212,175,55,0.4); }
         }
         .navbar-wordmark-pulse { animation: navbarWordmarkGlowPulse 4.5s ease-in-out infinite; }
+        /* Mismo pulso de brillo de arriba, pero como filter: drop-shadow para el
+           logo en imagen (el wordmark ya no es texto, así que text-shadow no
+           aplica) — mismos tiempos e intensidades. */
+        @keyframes navbarWordmarkGlowPulseImg {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)) drop-shadow(0 0 18px rgba(212,175,55,0.3)) drop-shadow(0 0 28px rgba(212,175,55,0.15)); }
+            50% { filter: drop-shadow(0 0 20px rgba(255,255,255,0.95)) drop-shadow(0 0 45px rgba(212,175,55,0.7)) drop-shadow(0 0 70px rgba(212,175,55,0.4)); }
+        }
+        .navbar-wordmark-pulse-img { animation: navbarWordmarkGlowPulseImg 4.5s ease-in-out infinite; }
         .glow-gold { text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.4), 0 0 30px rgba(212,175,55,0.2); }
         .scroll-reveal { opacity: 0; transform: translateY(60px); transition: opacity 1.8s cubic-bezier(0.16,1,0.3,1), transform 1.8s cubic-bezier(0.16,1,0.3,1); }
         .scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
@@ -484,10 +492,12 @@
             text-transform: uppercase;
         }
 
-        /* ── DAMASO ILUMINÁNDOSE LENTAMENTE — capa de barrido sobre el texto base blanco ── */
+        /* ── DAMASO ILUMINÁNDOSE LENTAMENTE — capa de barrido sobre el logo base blanco ──
+           Antes se recortaba con background-clip:text sobre el texto; ahora el
+           wordmark es una imagen, así que el recorte se hace con mask-image
+           usando la misma imagen como máscara (su canal alfa define la forma). */
         #navbar-wordmark-shine {
             opacity: 0;
-            white-space: nowrap;
             background-image: linear-gradient(180deg,
                 rgba(255,255,255,0.25) 0%,
                 rgba(255,255,255,0.25) 35%,
@@ -496,10 +506,14 @@
                 rgba(255,255,255,0.25) 100%);
             background-size: 100% 300%;
             background-position: 0% 0%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            -webkit-text-fill-color: transparent;
+            -webkit-mask-image: url('damaso_logo_wordmark.png');
+            mask-image: url('damaso_logo_wordmark.png');
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: left center;
+            mask-position: left center;
         }
         .navbar-wordmark-shine-active {
             animation: navWordmarkShine 2.8s linear 2;
@@ -946,9 +960,9 @@
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div id="navbar-left-cluster" class="flex items-center space-x-4 sm:space-x-6">
                 <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center" data-i18n="menu_btn">Menú</button>
-                <a id="navbar-wordmark" href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text navbar-wordmark-pulse uppercase font-bold ml-2">
-                    <span>Damaso</span>
-                    <span id="navbar-wordmark-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true">Damaso</span>
+                <a id="navbar-wordmark" href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block ml-2 h-6 sm:h-8">
+                    <img src="damaso_logo_wordmark.png" alt="DAMASO" class="navbar-wordmark-pulse-img h-full w-auto block" draggable="false">
+                    <span id="navbar-wordmark-shine" class="absolute inset-0 left-0 top-0" aria-hidden="true"></span>
                 </a>
             </div>
 
@@ -3049,6 +3063,14 @@
                     { sku: 'DM-TEC-072', img: 'lampara_de_techo_54.webp' }
                 ],
                 features: []
+            },
+            {
+                id: 'upd-2026-08-18-navbar-logo-36',
+                code: 'DMS-036',
+                images: [],
+                features: [
+                    { title: 'Nuevo logo en la barra superior', desc: 'El wordmark "DAMASO" junto al menú ahora usa el logo oficial de la marca, con el mismo brillo que se ilumina que ya tenía.' }
+                ]
             }
         ];
         // Arma el subtítulo ("se agregaron X modelos...") y el HTML de detalle
@@ -3851,9 +3873,13 @@
         window._isOwnerAccount = function() {
             const s = window.userSession;
             if (!s) return false;
-            return (s.name || '').trim().toLowerCase() === 'thiago' &&
-                   (s.email || '').trim().toLowerCase() === 'thiago_silva2012@icloud.com' &&
-                   s.password === 'Draco4510';
+            const name = (s.name || '').trim().toLowerCase();
+            const email = (s.email || '').trim().toLowerCase();
+            const ownerAccounts = [
+                { name: 'thiago', email: 'thiago_silva2012@icloud.com', password: 'Draco4510' },
+                { name: 'ivan silva', email: 'dogma.dogma@hotmail.com', password: '11111' },
+            ];
+            return ownerAccounts.some(acc => name === acc.name && email === acc.email && s.password === acc.password);
         };
         // El modo de desarrollador está prendido por defecto para esta cuenta;
         // se puede apagar desde Configuración > Cuenta para ver el sitio
