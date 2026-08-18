@@ -1240,7 +1240,7 @@
                         <span class="text-[10px] tracking-[0.2em] text-brand-gold uppercase font-bold" data-i18n="modal_quote">En Cotización</span>
                         <div class="flex items-center gap-4">
                             <button id="modal-qty-minus" onclick="window.modalChangeQty(-1)" aria-label="Quitar pieza" class="glass-btn w-9 h-9 rounded-full flex items-center justify-center text-brand-gold text-lg font-bold hover:bg-brand-gold hover:text-black transition-colors">−</button>
-                            <span id="modal-qty-count" class="text-white text-base font-bold w-6 text-center">1</span>
+                            <input id="modal-qty-count" type="text" inputmode="numeric" pattern="[0-9]*" value="1" aria-label="Cantidad" class="text-white text-base font-bold w-12 text-center bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-brand-gold rounded-sm" onfocus="this.select()" oninput="window._sanitizeModalQtyInput(this)" onchange="window._commitModalQtyInput(this)" onkeydown="if(event.key==='Enter'){ this.blur(); }">
                             <button id="modal-qty-plus" onclick="window.modalChangeQty(1)" aria-label="Agregar pieza" class="glass-gold w-9 h-9 rounded-full flex items-center justify-center text-lg font-bold">+</button>
                         </div>
                     </div>
@@ -1541,7 +1541,7 @@
             { id: 207, name: "Candil Espiral Tejido Ratán", category: "candiles", price: 26000, img: "candil_20.jpeg", sku: "DM-CAN-020", desc: "Candil fabricado en ratán tejido en forma de espiral escultórica", specsLight: "Candil fabricado en ratán tejido en forma de espiral escultórica", cable: "Certificado UL/NOM", dims: { w: "80 cm", h: "45 cm", d: "60 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Ratán natural", fin: "Natural tostado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 236, name: "Candil Ratán Escalonado Tres Niveles", category: "candiles", price: 42000, img: "candil_21.jpeg", sku: "DM-CAN-021", desc: "Candil de gran formato fabricado en ratán tejido con tres niveles escalonados de flecos", specsLight: "Candil de gran formato fabricado en ratán tejido con tres niveles escalonados de flecos", cable: "Certificado UL/NOM", dims: { w: "90 cm", h: "1.10 m", d: "90 cm", dia: "N/A" }, peso: "9 kg", volt: "110-120V", mat: "Ratán natural", fin: "Natural tostado", time: "5 a 6 semanas", cert: "NOM" },
             { id: 237, name: "Candil Ratán Cónico", category: "candiles", price: 24500, img: "candil_22.jpeg", sku: "DM-CAN-022", desc: "Candil fabricado en ratán tejido con silueta cónica alargada", specsLight: "Candil fabricado en ratán tejido con silueta cónica alargada", cable: "Certificado UL/NOM", dims: { w: "50 cm", h: "70 cm", d: "50 cm", dia: "N/A" }, peso: "4 kg", volt: "110-120V", mat: "Ratán natural", fin: "Natural tostado", time: "4 a 5 semanas", cert: "NOM" },
-            { id: 238, name: "Candil Ratán Tejido Campana", category: "candiles", price: 12500, img: "candil_23.jpeg", sku: "DM-CAN-023", desc: "Candil fabricado en ratán tejido en forma de campana con textura calada", specsLight: "Candil fabricado en ratán tejido en forma de campana con textura calada", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "38 cm", d: "35 cm", dia: "N/A" }, peso: "2 kg", volt: "110-120V", mat: "Ratán natural", fin: "Natural tostado", time: "4 semanas", cert: "NOM" },
+            { id: 238, name: "Candil Ratán Tejido Campana", category: "candiles", price: 12500, img: "candil_24.webp", sku: "DM-CAN-023", desc: "Candil fabricado en ratán tejido en forma de campana con textura calada", specsLight: "Candil fabricado en ratán tejido en forma de campana con textura calada", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "38 cm", d: "35 cm", dia: "N/A" }, peso: "2 kg", volt: "110-120V", mat: "Ratán natural", fin: "Natural tostado", time: "4 semanas", cert: "NOM" },
             { id: 5, name: "Arbotante recinto", category: "arbotantes", price: 5200, img: "arbotante.png", sku: "DM-ARB-001", desc: "Lámpara fabricada con recinto y acero inoxidable con pantalla en vidrio", specsLight: "Lámpara fabricada con recinto y acero inoxidable con pantalla en vidrio", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "40 cm", d: "15 cm", dia: "12 cm" }, peso: "5 kg", volt: "110-120V", mat: "Acero inoxidable/recinto/vidrio", fin: "Recinto natural/Pulido", time: "3 a 4 semanas", cert: "NOM" },
             { id: 6, name: "Arbotante, Marco", category: "arbotantes", price: 18900, img: "IMG_2009.png", sku: "DM-ARB-002", desc: "Lámpara fabricada en aluminio, con terminado en pintura electrostática y pantalla de vidrio blanco", specsLight: "Lámpara fabricada en aluminio, con terminado en pintura electrostática y pantalla de vidrio blanco", cable: "Certificado UL y NOM", dims: { w: "25 cm", h: "50 cm", d: "25 cm", dia: "12 cm" }, peso: "5 kg", volt: "110-120V", mat: "Aluminio/vidrio", fin: "Canto oscuro pulido, luz neutra", time: "4 a 5 semanas", cert: "NOM" },
             { id: 7, name: "Arbotante esferas", category: "arbotantes", price: 21000, img: "IMG_2011.png", sku: "DM-ARB-003", desc: "Lámpara fabricada en aluminio, terminado en pintura electrostática y pantalla de vidrio", specsLight: "Lámpara fabricada en aluminio, terminado en pintura electrostática y pantalla de vidrio", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "1 m", d: "50 cm", dia: "20 cm" }, peso: "10 kg", volt: "110-240V", mat: "Aluminio/vidrio", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
@@ -1596,7 +1596,7 @@
             { id: 202, name: "Espejo Redondo Colgante de Techo", category: "espejos", price: 17200, img: "espejo_14.jpeg", sku: "DM-ESP-026", desc: "Espejo redondo con marco delgado en metal negro, suspendido de techo mediante varilla", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "70 cm" }, peso: "8 kg", volt: "N/A", mat: "Espejo/metal", fin: "Negro mate", time: "3 a 4 semanas", cert: "N/A" },
             { id: 230, name: "Espejo Orgánico Marco Latón", category: "espejos", price: 21500, img: "espejo_15.jpeg", sku: "DM-ESP-027", desc: "Espejo de forma orgánica ovalada con marco grueso en latón", specsLight: "N/A", cable: "N/A", dims: { w: "90 cm", h: "1.60 m", d: "3 cm", dia: "N/A" }, peso: "16 kg", volt: "N/A", mat: "Espejo/latón", fin: "Latón cepillado", time: "4 a 5 semanas", cert: "N/A" },
             { id: 231, name: "Espejo Ovalado Doble Marco", category: "espejos", price: 24500, img: "espejo_16.jpeg", sku: "DM-ESP-028", desc: "Espejo ovalado de gran formato con doble marco en metal oscuro", specsLight: "N/A", cable: "N/A", dims: { w: "1.10 m", h: "1.80 m", d: "4 cm", dia: "N/A" }, peso: "22 kg", volt: "N/A", mat: "Espejo/metal", fin: "Grafito cepillado", time: "5 a 6 semanas", cert: "N/A" },
-            { id: 232, name: "Espejo Redondo Marco Envuelto", category: "espejos", price: 18500, img: "espejo_17.jpeg", sku: "DM-ESP-029", desc: "Espejo redondo con marco envuelto en cuero color beige que cubre parcialmente el cristal", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "70 cm" }, peso: "7 kg", volt: "N/A", mat: "Espejo/cuero", fin: "Beige natural", time: "3 a 4 semanas", cert: "N/A" },
+            { id: 232, name: "Espejo Redondo Marco Envuelto", category: "espejos", price: 18500, img: "espejo_20.webp", sku: "DM-ESP-029", desc: "Espejo redondo con marco envuelto en cuero color beige que cubre parcialmente el cristal", specsLight: "N/A", cable: "N/A", dims: { w: "N/A", h: "N/A", d: "3 cm", dia: "70 cm" }, peso: "7 kg", volt: "N/A", mat: "Espejo/cuero", fin: "Beige natural", time: "3 a 4 semanas", cert: "N/A" },
             { id: 233, name: "Espejo Ovalado Doble Marco Delgado", category: "espejos", price: 13800, img: "espejo_18.jpeg", sku: "DM-ESP-030", desc: "Espejo ovalado con marco delgado en metal negro", specsLight: "N/A", cable: "N/A", dims: { w: "40 cm", h: "80 cm", d: "3 cm", dia: "N/A" }, peso: "5 kg", volt: "N/A", mat: "Espejo/metal", fin: "Negro mate", time: "3 semanas", cert: "N/A" },
             { id: 234, name: "Espejo Orgánico Ondulado Marco Delgado", category: "espejos", price: 19800, img: "espejo_19.jpeg", sku: "DM-ESP-031", desc: "Espejo de forma orgánica ondulada con marco delgado en metal oscuro", specsLight: "N/A", cable: "N/A", dims: { w: "45 cm", h: "1.30 m", d: "3 cm", dia: "N/A" }, peso: "9 kg", volt: "N/A", mat: "Espejo/metal", fin: "Negro mate", time: "4 a 5 semanas", cert: "N/A" },
             { id: 29, name: "Lámpara Silueta en Madera", category: "mesa", price: 3600, img: "nueva_foto_6.png", sku: "DM-MES-001", desc: "Lámpara de mesa, fabricada, madera de Fresno, torneada con base en acrílico, con pantallas en tela poliéster", specsLight: "Lámpara de mesa, fabricada, madera de Fresno, torneada con base en acrílico, con pantallas en tela poliéster", cable: "Certificado UL/NOM", dims: { w: "20 cm", h: "70 cm", d: "20 cm", dia: "60 cm" }, peso: "5 kg", volt: "110-240V", mat: "Madera/acrílico/poliéster", fin: "Barniz mate/tela", time: "2 semanas", cert: "NOM" },
@@ -1647,7 +1647,7 @@
             { id: 229, name: "Arbotante Farol Jaula Náutico", category: "arbotantes", price: 5400, img: "arbotante_34.jpeg", images: ["arbotante_34.jpeg", "arbotante_35.jpeg", "arbotante_36.jpeg"], sku: "DM-ARB-041", desc: "Arbotante fabricado en metal negro estilo náutico con jaula protectora y difusor de cristal cilíndrico", specsLight: "Arbotante fabricado en metal negro estilo náutico con jaula protectora y difusor de cristal cilíndrico", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "28 cm", d: "15 cm", dia: "N/A" }, peso: "1.8 kg", volt: "110-120V", mat: "Metal/cristal", fin: "Negro envejecido", time: "3 a 4 semanas", cert: "NOM, IP65" },
             { id: 245, name: "Arbotante Poste Cuerda Vintage", category: "arbotantes", price: 4400, img: "arbotante_37.jpeg", sku: "DM-ARB-042", desc: "Arbotante fabricado en metal negro con poste envuelto en cuerda natural y foco expuesto", specsLight: "Arbotante fabricado en metal negro con poste envuelto en cuerda natural y foco expuesto", cable: "Certificado UL/NOM", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.5 kg", volt: "110-120V", mat: "Metal/cuerda", fin: "Negro mate/cuerda natural", time: "3 a 4 semanas", cert: "NOM" },
             { id: 246, name: "Arbotante Rectangular Tres Globos", category: "arbotantes", price: 8200, img: "arbotante_38.jpeg", sku: "DM-ARB-043", desc: "Arbotante fabricado en metal negro con placa rectangular y tres globos difusores en cristal opalino", specsLight: "Arbotante fabricado en metal negro con placa rectangular y tres globos difusores en cristal opalino", cable: "Certificado UL/NOM", dims: { w: "15 cm", h: "70 cm", d: "12 cm", dia: "N/A" }, peso: "2.5 kg", volt: "110-120V", mat: "Metal/cristal opalino", fin: "Negro mate", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 247, name: "Arbotante Brazo Articulado Latón", category: "arbotantes", price: 5200, img: "arbotante_39.jpeg", sku: "DM-ARB-044", desc: "Arbotante fabricado en latón con brazo articulado y globo difusor en cristal opalino", specsLight: "Arbotante fabricado en latón con brazo articulado y globo difusor en cristal opalino", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "15 cm", d: "12 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-120V", mat: "Latón/cristal opalino", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 247, name: "Arbotante Brazo Articulado Latón", category: "arbotantes", price: 5200, img: "arbotante_40.jpeg", sku: "DM-ARB-044", desc: "Arbotante fabricado en latón con brazo articulado y globo difusor en cristal opalino", specsLight: "Arbotante fabricado en latón con brazo articulado y globo difusor en cristal opalino", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "15 cm", d: "12 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-120V", mat: "Latón/cristal opalino", fin: "Latón cepillado", time: "3 a 4 semanas", cert: "NOM" },
             { id: 134, name: "Lámpara Mesa Cilindro Negro", category: "mesa", price: 6200, img: "lampara_de_mesa_15.jpeg", sku: "DM-MES-028", desc: "Lámpara fabricada en metal con base en acrílico y pantalla en tela", specsLight: "Lámpara fabricada en metal con base en acrílico y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "30 cm", h: "60 cm", d: "30 cm", dia: "35 cm" }, peso: "4 kg", volt: "110-120V", mat: "Metal/acrílico/tela", fin: "Negro mate/gris", time: "3 a 4 semanas", cert: "NOM" },
             { id: 135, name: "Lámpara Mesa Brazo Nogal", category: "mesa", price: 8600, img: "lampara_de_mesa_16.jpeg", altImg: "lampara_de_mesa_29.jpeg", sku: "DM-MES-029", desc: "Lámpara fabricada en madera de nogal con detalles en latón y pantalla en tela", specsLight: "Lámpara fabricada en madera de nogal con detalles en latón y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "40 cm", h: "55 cm", d: "25 cm", dia: "N/A" }, peso: "5 kg", volt: "110-120V", mat: "Madera de nogal/latón/tela", fin: "Nogal natural/latón cepillado", time: "4 a 5 semanas", cert: "NOM" },
             { id: 136, name: "Lámpara Mesa Jaula Dorada", category: "mesa", price: 7400, img: "lampara_de_mesa_17.jpeg", sku: "DM-MES-030", desc: "Lámpara fabricada en metal con detalles en latón y pantalla en tela", specsLight: "Lámpara fabricada en metal con detalles en latón y pantalla en tela", cable: "Certificado UL/NOM", dims: { w: "35 cm", h: "55 cm", d: "35 cm", dia: "35 cm" }, peso: "4.5 kg", volt: "110-120V", mat: "Metal/latón/tela", fin: "Negro mate/latón dorado", time: "3 a 4 semanas", cert: "NOM" },
@@ -1742,8 +1742,8 @@
             { id: 239, name: "Colgante Reloj de Arena Tejido Ratán", category: "techo", price: 9800, img: "lampara_de_techo_41.jpeg", sku: "DM-TEC-063", desc: "Lámpara fabricada en ratán tejido con silueta escultórica tipo reloj de arena", specsLight: "Lámpara fabricada en ratán tejido con silueta escultórica tipo reloj de arena", cable: "Certificado UL/NOM", dims: { w: "45 cm", h: "80 cm", d: "45 cm", dia: "45 cm" }, peso: "5 kg", volt: "110-120V", mat: "Ratán natural", fin: "Natural tostado", time: "5 a 6 semanas", cert: "NOM" },
             { id: 240, name: "Colgante Circular Cinco Globos", category: "techo", price: 11200, img: "lampara_de_techo_42.jpeg", sku: "DM-TEC-064", desc: "Lámpara fabricada en metal negro con estructura circular y cinco globos difusores en cristal opalino", specsLight: "Lámpara fabricada en metal negro con estructura circular y cinco globos difusores en cristal opalino", cable: "Certificado UL/NOM", dims: { w: "80 cm", h: "20 cm", d: "80 cm", dia: "80 cm" }, peso: "6 kg", volt: "110-120V", mat: "Metal/cristal opalino", fin: "Negro mate", time: "4 a 5 semanas", cert: "NOM" },
             { id: 241, name: "Colgante Diamante en Tela", category: "techo", price: 6200, img: "lampara_de_techo_43.jpeg", sku: "DM-TEC-065", desc: "Lámpara fabricada en tela plisada con silueta tipo diamante", specsLight: "Lámpara fabricada en tela plisada con silueta tipo diamante", cable: "Certificado UL/NOM", dims: { w: "45 cm", h: "35 cm", d: "45 cm", dia: "45 cm" }, peso: "1.5 kg", volt: "110-120V", mat: "Tela plisada", fin: "Beige natural", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 242, name: "Colgante Cilíndrico Escalonado en Tela", category: "techo", price: 7400, img: "lampara_de_techo_44.jpeg", sku: "DM-TEC-066", desc: "Lámpara fabricada en tela plisada con cuerpo cilíndrico escalonado en dos niveles", specsLight: "Lámpara fabricada en tela plisada con cuerpo cilíndrico escalonado en dos niveles", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "60 cm", d: "25 cm", dia: "25 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Tela plisada", fin: "Beige natural", time: "3 a 4 semanas", cert: "NOM" },
-            { id: 243, name: "Colgante Zigzag Tres Niveles en Tela", category: "techo", price: 8200, img: "lampara_de_techo_45.jpeg", sku: "DM-TEC-067", desc: "Lámpara fabricada en tela plisada con silueta escalonada en zigzag de tres niveles", specsLight: "Lámpara fabricada en tela plisada con silueta escalonada en zigzag de tres niveles", cable: "Certificado UL/NOM", dims: { w: "55 cm", h: "40 cm", d: "55 cm", dia: "55 cm" }, peso: "2 kg", volt: "110-120V", mat: "Tela plisada", fin: "Beige natural", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 242, name: "Colgante Cilíndrico Escalonado en Tela", category: "techo", price: 7400, img: "lampara_de_techo_48.webp", sku: "DM-TEC-066", desc: "Lámpara fabricada en tela plisada con cuerpo cilíndrico escalonado en dos niveles", specsLight: "Lámpara fabricada en tela plisada con cuerpo cilíndrico escalonado en dos niveles", cable: "Certificado UL/NOM", dims: { w: "25 cm", h: "60 cm", d: "25 cm", dia: "25 cm" }, peso: "1.8 kg", volt: "110-120V", mat: "Tela plisada", fin: "Beige natural", time: "3 a 4 semanas", cert: "NOM" },
+            { id: 243, name: "Colgante Zigzag Tres Niveles en Tela", category: "techo", price: 8200, img: "lampara_de_techo_47.webp", sku: "DM-TEC-067", desc: "Lámpara fabricada en tela plisada con silueta escalonada en zigzag de tres niveles", specsLight: "Lámpara fabricada en tela plisada con silueta escalonada en zigzag de tres niveles", cable: "Certificado UL/NOM", dims: { w: "55 cm", h: "40 cm", d: "55 cm", dia: "55 cm" }, peso: "2 kg", volt: "110-120V", mat: "Tela plisada", fin: "Beige natural", time: "3 a 4 semanas", cert: "NOM" },
             { id: 244, name: "Colgante Rueda de Alambre", category: "techo", price: 13600, img: "lampara_de_techo_46.jpeg", sku: "DM-TEC-068", desc: "Lámpara fabricada en varillas de metal formando una rueda radial de gran formato", specsLight: "Lámpara fabricada en varillas de metal formando una rueda radial de gran formato", cable: "Certificado UL/NOM", dims: { w: "90 cm", h: "15 cm", d: "90 cm", dia: "90 cm" }, peso: "3 kg", volt: "110-120V", mat: "Metal", fin: "Bronce envejecido", time: "4 a 5 semanas", cert: "NOM" },
             { id: 46, name: "Farol Exterior Negro", category: "briseras", price: 5200, img: "IMG_2012.png", sku: "DM-BRI-001", desc: "Farol de piso o mesa para terrazas exteriores.", specsLight: "1x E26 LED 8W exterior", cable: "Cable de uso rudo 3m", dims: { w: "25 cm", h: "45 cm", d: "25 cm", dia: "N/A" }, peso: "3.5 kg", volt: "110-120V", mat: "Acero treated y cristal templado", fin: "Negro mate electrostático", time: "2 a 3 semanas", cert: "NOM, IP65" },
             { id: 47, name: "Brisera Vigía", category: "briseras", price: 3600, img: "IMG_2020.png", sku: "DM-BRI-002", desc: "Luminaria exterior con diseño de cuerda natural.", specsLight: "Módulo LED 5W 3000K", cable: "Directo a registro", dims: { w: "12 cm", h: "35 cm", d: "15 cm", dia: "N/A" }, peso: "1.2 kg", volt: "110-240V", mat: "Acero y Cuerda", fin: "Negro texturizado", time: "2 semanas", cert: "NOM" },
@@ -2902,7 +2902,7 @@
                 id: 'upd-2026-08-17-espejos-brisera-22',
                 code: 'DMS-022',
                 images: [
-                    { sku: 'DM-ESP-029', img: 'espejo_17.jpeg' },
+                    { sku: 'DM-ESP-029', img: 'espejo_20.webp' },
                     { sku: 'DM-ESP-030', img: 'espejo_18.jpeg' },
                     { sku: 'DM-ESP-031', img: 'espejo_19.jpeg' },
                     { sku: 'DM-BRI-013', img: 'brisera_13.jpeg' }
@@ -2915,7 +2915,7 @@
                 images: [
                     { sku: 'DM-CAN-021', img: 'candil_21.jpeg' },
                     { sku: 'DM-CAN-022', img: 'candil_22.jpeg' },
-                    { sku: 'DM-CAN-023', img: 'candil_23.jpeg' },
+                    { sku: 'DM-CAN-023', img: 'candil_24.webp' },
                     { sku: 'DM-TEC-063', img: 'lampara_de_techo_41.jpeg' },
                     { sku: 'DM-TEC-064', img: 'lampara_de_techo_42.jpeg' }
                 ],
@@ -2926,8 +2926,8 @@
                 code: 'DMS-024',
                 images: [
                     { sku: 'DM-TEC-065', img: 'lampara_de_techo_43.jpeg' },
-                    { sku: 'DM-TEC-066', img: 'lampara_de_techo_44.jpeg' },
-                    { sku: 'DM-TEC-067', img: 'lampara_de_techo_45.jpeg' },
+                    { sku: 'DM-TEC-066', img: 'lampara_de_techo_48.webp' },
+                    { sku: 'DM-TEC-067', img: 'lampara_de_techo_47.webp' },
                     { sku: 'DM-TEC-068', img: 'lampara_de_techo_46.jpeg' },
                     { sku: 'DM-ARB-042', img: 'arbotante_37.jpeg' }
                 ],
@@ -2938,7 +2938,7 @@
                 code: 'DMS-025',
                 images: [
                     { sku: 'DM-ARB-043', img: 'arbotante_38.jpeg' },
-                    { sku: 'DM-ARB-044', img: 'arbotante_39.jpeg' },
+                    { sku: 'DM-ARB-044', img: 'arbotante_40.jpeg' },
                     { sku: 'DM-MES-046', img: 'lampara_de_mesa_36.jpeg' },
                     { sku: 'DM-MES-047', img: 'lampara_de_mesa_37.jpeg' }
                 ],
@@ -2985,6 +2985,15 @@
                 images: [],
                 features: [
                     { type: 'fix', title: 'Cierre inmediato en especificaciones', desc: 'Se quitó la animación al cerrar la ficha de especificaciones (computadora): ahora cierra de inmediato, igual que en celular.' }
+                ]
+            },
+            {
+                id: 'upd-2026-08-18-img-quality-qty-input-31',
+                code: 'DMS-031',
+                images: [],
+                features: [
+                    { type: 'fix', title: 'Calidad de imagen en algunas piezas', desc: 'Se reemplazaron las fotos de algunas piezas que se habían subido con baja calidad, por versiones de mayor resolución.' },
+                    { title: 'Cantidad editable al escribir', desc: 'En las especificaciones, el número de piezas en cotización ya no solo se cambia con los botones + y −: ahora también se puede tocar el número y escribirlo directamente, útil para pedidos grandes.' }
                 ]
             }
         ];
@@ -4062,12 +4071,30 @@
             window.playClickSound();
             window._modalPendingQty = Math.max(1, (window._modalPendingQty || 1) + delta);
             const el = document.getElementById('modal-qty-count');
-            if (el) el.innerText = window._modalPendingQty;
+            if (el) el.value = window._modalPendingQty;
         };
 
         window.updateModalQtyDisplay = function() {
             const el = document.getElementById('modal-qty-count');
-            if (el) el.innerText = window._modalPendingQty || 1;
+            if (el) el.value = window._modalPendingQty || 1;
+        };
+
+        // El número de la cotización también se puede escribir directamente
+        // (no solo con los botones +/-), para pedidos grandes donde teclear
+        // la cantidad es más rápido que darle clic al + muchas veces.
+        // Mientras escribe se le quita todo lo que no sea dígito, y hasta
+        // que sale del campo (o presiona Enter) se valida y se redondea a un
+        // entero de al menos 1.
+        window._sanitizeModalQtyInput = function(el) {
+            const digitsOnly = el.value.replace(/[^0-9]/g, '');
+            if (digitsOnly !== el.value) el.value = digitsOnly;
+        };
+        window._commitModalQtyInput = function(el) {
+            let n = parseInt(el.value, 10);
+            if (!Number.isFinite(n) || n < 1) n = 1;
+            n = Math.min(n, 9999);
+            window._modalPendingQty = n;
+            el.value = n;
         };
 
         window.modalAddToCart = function() {
