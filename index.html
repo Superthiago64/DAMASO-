@@ -2721,9 +2721,11 @@
                 window._loadingDone = true;
                 clearTimeout(window._loadingTimer);
                 if (loading) loading.classList.add('opacity-0', 'pointer-events-none');
-                // Intro en video: para todo el público, solo en celulares.
-                // Reemplaza la animación de bienvenida de letras y pasa
-                // directo al sitio al terminar.
+                // Intro en video: para todo el público, en computadoras
+                // (con audio) y celulares (silenciado). Reemplaza la
+                // animación de bienvenida de letras y pasa directo al
+                // sitio al terminar; de ahí sigue el aviso de página
+                // actualizada de siempre (enterSiteDirectly lo dispara).
                 if (window._isDevMobileIntroEligible && window._isDevMobileIntroEligible()) {
                     window._playDevIntroVideo(() => window.enterSiteDirectly());
                     return;
@@ -4006,12 +4008,11 @@
         window._isDevModeActive = function() {
             return window._isOwnerAccount() && window._ownerDevModeOn();
         };
-        // Intro en video de marca: para todo el público, solo en
-        // pantallas de celular.
+        // Intro en video de marca: para todo el público, en computadoras
+        // y celulares (se deja el "hook" por si se vuelve a restringir
+        // por dispositivo más adelante).
         window._isDevMobileIntroEligible = function() {
-            try {
-                return window.matchMedia('(max-width: 767px)').matches;
-            } catch(e) { return false; }
+            return true;
         };
         window._playDevIntroVideo = function(onDone) {
             const overlay = document.getElementById('dev-intro-video-overlay');
@@ -4028,11 +4029,27 @@
             video.onended = finish;
             video.onerror = finish;
             try { video.currentTime = 0; } catch(e) {}
+            // Audio: con sonido solo en computadoras; en celulares silenciado.
+            let isMobile = false;
+            try { isMobile = window.matchMedia('(max-width: 767px)').matches; } catch(e) {}
+            video.muted = isMobile;
             overlay.classList.remove('hidden', 'opacity-0');
             void overlay.offsetWidth;
             overlay.classList.remove('pointer-events-none');
             const playPromise = video.play();
-            if (playPromise && playPromise.catch) playPromise.catch(finish);
+            if (playPromise && playPromise.catch) {
+                playPromise.catch(() => {
+                    // El navegador pudo bloquear el autoplay con sonido;
+                    // reintentar silenciado para que al menos se vea el video.
+                    if (!video.muted) {
+                        video.muted = true;
+                        const retry = video.play();
+                        if (retry && retry.catch) retry.catch(finish);
+                    } else {
+                        finish();
+                    }
+                });
+            }
             // Respaldo por si 'ended' nunca se dispara (p. ej. autoplay bloqueado)
             setTimeout(finish, 12000);
         };
