@@ -741,6 +741,26 @@
             overflow: hidden;
         }
 
+        /* ── INTRO EN VIDEO — pantalla completa (solo modo desarrollador, celulares) ── */
+        #dev-intro-video-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            height: 100dvh;
+            margin: 0; padding: 0;
+            overflow: hidden;
+        }
+        #dev-intro-video-overlay video {
+            object-fit: cover;
+        }
+
+        /* ── Ícono de 3 rayitas en el botón Menú: solo modo desarrollador
+             (JS quita/pone .hidden) y solo en celulares (este media query) ── */
+        #btn-menu-dev-icon { display: none; }
+        @media (max-width: 767px) {
+            #btn-menu-dev-icon:not(.hidden) { display: inline-flex; }
+        }
+
         .fallback-active-text { color: #ff4444; text-shadow: 0 0 10px rgba(255,68,68,0.5); }
 
         /* ── LÍNEA DORADA BAJO LAS LETRAS EN TRANSICIÓN ── */
@@ -923,6 +943,14 @@
         <div id="welcome-letters" class="flex flex-wrap justify-center items-center text-center px-4 max-w-[95%] mb-2 leading-tight"></div>
     </div>
 
+    <!-- ── INTRO EN VIDEO (solo modo desarrollador, solo celulares) ── -->
+    <div id="dev-intro-video-overlay" class="fixed inset-0 z-[9999999] bg-[#030303] flex items-center justify-center pointer-events-none opacity-0 hidden transition-opacity duration-500">
+        <video id="dev-intro-video" class="w-full h-full object-cover" muted playsinline webkit-playsinline="true" preload="auto">
+            <source src="dev_intro_video.mp4" type="video/mp4">
+            <source src="dev_intro_video.webm" type="video/webm">
+        </video>
+    </div>
+
     <!-- ── AVISO DE PÁGINA ACTUALIZADA (una sola vez por versión) ── -->
     <div id="update-notice-modal" class="fixed inset-0 z-[9999999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-500 hidden">
         <div class="bg-brand-surface border border-brand-gold p-6 sm:p-10 max-w-lg w-full text-center shadow-[0_0_30px_rgba(212,175,55,0.15)] relative rounded-sm max-h-[85vh] overflow-y-auto">
@@ -975,7 +1003,10 @@
     <nav class="fixed top-0 left-0 right-0 w-full z-[100] glass-nav flex flex-col" id="navbar" style="transform: translate3d(0,0,0);">
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div id="navbar-left-cluster" class="flex items-center space-x-4 sm:space-x-6">
-                <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center" data-i18n="menu_btn">Menú</button>
+                <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center gap-1.5">
+                    <svg id="btn-menu-dev-icon" class="hidden shrink-0" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    <span data-i18n="menu_btn">Menú</span>
+                </button>
                 <a id="navbar-wordmark" href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block ml-2">
                     <!-- Wordmark público: el texto de siempre, sin cambios. -->
                     <span id="navbar-wordmark-public" class="relative inline-block font-editorial text-2xl sm:text-3xl tracking-[0.25em] text-white glow-text navbar-wordmark-pulse uppercase font-bold">
@@ -2682,6 +2713,13 @@
                 window._loadingDone = true;
                 clearTimeout(window._loadingTimer);
                 if (loading) loading.classList.add('opacity-0', 'pointer-events-none');
+                // Intro en video: por ahora solo para cuentas de desarrollador
+                // y solo en celulares. Reemplaza la animación de bienvenida
+                // de letras y pasa directo al sitio al terminar.
+                if (window._isDevMobileIntroEligible && window._isDevMobileIntroEligible()) {
+                    window._playDevIntroVideo(() => window.enterSiteDirectly());
+                    return;
+                }
                 const overlay = document.getElementById('welcome-animation-overlay');
                 const container = document.getElementById('welcome-letters');
                 if (!overlay || !container) { window.enterSiteDirectly(); return; }
@@ -3960,6 +3998,36 @@
         window._isDevModeActive = function() {
             return window._isOwnerAccount() && window._ownerDevModeOn();
         };
+        // Intro en video de marca: por ahora exclusiva de cuentas de
+        // desarrollador y solo en pantallas de celular.
+        window._isDevMobileIntroEligible = function() {
+            try {
+                return window._isDevModeActive() && window.matchMedia('(max-width: 767px)').matches;
+            } catch(e) { return false; }
+        };
+        window._playDevIntroVideo = function(onDone) {
+            const overlay = document.getElementById('dev-intro-video-overlay');
+            const video = document.getElementById('dev-intro-video');
+            if (!overlay || !video) { onDone(); return; }
+            let done = false;
+            const finish = () => {
+                if (done) return;
+                done = true;
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => { overlay.classList.add('hidden'); video.pause(); }, 500);
+                onDone();
+            };
+            video.onended = finish;
+            video.onerror = finish;
+            try { video.currentTime = 0; } catch(e) {}
+            overlay.classList.remove('hidden', 'opacity-0');
+            void overlay.offsetWidth;
+            overlay.classList.remove('pointer-events-none');
+            const playPromise = video.play();
+            if (playPromise && playPromise.catch) playPromise.catch(finish);
+            // Respaldo por si 'ended' nunca se dispara (p. ej. autoplay bloqueado)
+            setTimeout(finish, 12000);
+        };
         // El wordmark "DAMASO" del navbar: para el público es el texto de
         // siempre; en modo de desarrollador se cambia por el logo oficial
         // (más grande, letras rellenas en blanco). Se llama al entrar al
@@ -3968,6 +4036,9 @@
             const isDev = typeof window._isDevModeActive === 'function' && window._isDevModeActive();
             document.getElementById('navbar-wordmark-public')?.classList.toggle('hidden', isDev);
             document.getElementById('navbar-wordmark-dev')?.classList.toggle('hidden', !isDev);
+            // Las tres rayitas del botón Menú: solo modo desarrollador (el
+            // md:hidden del propio ícono ya lo limita a pantallas de celular).
+            document.getElementById('btn-menu-dev-icon')?.classList.toggle('hidden', !isDev);
         };
         window.toggleDevMode = function() {
             const turningOff = window._ownerDevModeOn();
