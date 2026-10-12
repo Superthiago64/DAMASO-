@@ -754,8 +754,8 @@
             object-fit: cover;
         }
 
-        /* ── Ícono de 3 rayitas en el botón Menú: solo modo desarrollador
-             (JS quita/pone .hidden) y solo en celulares (este media query) ── */
+        /* ── Ícono de 3 rayitas en el botón Menú: para todo el público,
+             solo en celulares (este media query) ── */
         #btn-menu-dev-icon { display: none; }
         @media (max-width: 767px) {
             #btn-menu-dev-icon:not(.hidden) { display: inline-flex; }
@@ -1012,7 +1012,7 @@
         <div class="w-full max-w-[95%] mx-auto px-4 h-20 flex justify-between items-center relative">
             <div id="navbar-left-cluster" class="flex items-center space-x-4 sm:space-x-6">
                 <button id="btn-menu" onclick="window.toggleCategories(event)" class="glass-gold relative z-[999] px-6 py-2 rounded-full text-[11px] tracking-[0.2em] font-bold uppercase focus:outline-none cursor-pointer flex items-center justify-center gap-1.5">
-                    <svg id="btn-menu-dev-icon" class="hidden shrink-0" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    <svg id="btn-menu-dev-icon" class="shrink-0" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                     <span data-i18n="menu_btn">Menú</span>
                 </button>
                 <a id="navbar-wordmark" href="#" onclick="window.handleDamasoWordmarkClick(event)" class="relative inline-block ml-2">
@@ -2721,9 +2721,9 @@
                 window._loadingDone = true;
                 clearTimeout(window._loadingTimer);
                 if (loading) loading.classList.add('opacity-0', 'pointer-events-none');
-                // Intro en video: por ahora solo para cuentas de desarrollador
-                // y solo en celulares. Reemplaza la animación de bienvenida
-                // de letras y pasa directo al sitio al terminar.
+                // Intro en video: para todo el público, solo en celulares.
+                // Reemplaza la animación de bienvenida de letras y pasa
+                // directo al sitio al terminar.
                 if (window._isDevMobileIntroEligible && window._isDevMobileIntroEligible()) {
                     window._playDevIntroVideo(() => window.enterSiteDirectly());
                     return;
@@ -4006,11 +4006,11 @@
         window._isDevModeActive = function() {
             return window._isOwnerAccount() && window._ownerDevModeOn();
         };
-        // Intro en video de marca: por ahora exclusiva de cuentas de
-        // desarrollador y solo en pantallas de celular.
+        // Intro en video de marca: para todo el público, solo en
+        // pantallas de celular.
         window._isDevMobileIntroEligible = function() {
             try {
-                return window._isDevModeActive() && window.matchMedia('(max-width: 767px)').matches;
+                return window.matchMedia('(max-width: 767px)').matches;
             } catch(e) { return false; }
         };
         window._playDevIntroVideo = function(onDone) {
@@ -4044,9 +4044,6 @@
             const isDev = typeof window._isDevModeActive === 'function' && window._isDevModeActive();
             document.getElementById('navbar-wordmark-public')?.classList.toggle('hidden', isDev);
             document.getElementById('navbar-wordmark-dev')?.classList.toggle('hidden', !isDev);
-            // Las tres rayitas del botón Menú: solo modo desarrollador (el
-            // md:hidden del propio ícono ya lo limita a pantallas de celular).
-            document.getElementById('btn-menu-dev-icon')?.classList.toggle('hidden', !isDev);
         };
         window.toggleDevMode = function() {
             const turningOff = window._ownerDevModeOn();
