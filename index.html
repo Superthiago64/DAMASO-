@@ -761,8 +761,8 @@
             #btn-menu-dev-icon:not(.hidden) { display: inline-flex; }
         }
 
-        /* ── Botón Menú más compacto: solo modo desarrollador (JS pone esta clase) ── */
-        #btn-menu.btn-menu-dev-compact {
+        /* ── Botón Menú más compacto (para todo el público) ── */
+        #btn-menu {
             padding-left: 1rem;
             padding-right: 1rem;
             gap: 0.25rem;
@@ -4047,8 +4047,6 @@
             // Las tres rayitas del botón Menú: solo modo desarrollador (el
             // md:hidden del propio ícono ya lo limita a pantallas de celular).
             document.getElementById('btn-menu-dev-icon')?.classList.toggle('hidden', !isDev);
-            // Botón Menú más compacto: solo modo desarrollador.
-            document.getElementById('btn-menu')?.classList.toggle('btn-menu-dev-compact', isDev);
         };
         window.toggleDevMode = function() {
             const turningOff = window._ownerDevModeOn();
