@@ -951,11 +951,12 @@
         <div id="welcome-letters" class="flex flex-wrap justify-center items-center text-center px-4 max-w-[95%] mb-2 leading-tight"></div>
     </div>
 
-    <!-- ── INTRO EN VIDEO (solo modo desarrollador, solo celulares) ── -->
+    <!-- ── INTRO EN VIDEO (todo el público: celular con un video vertical
+         silenciado, computadora con un video horizontal con audio) ── -->
     <div id="dev-intro-video-overlay" class="fixed inset-0 z-[9999999] bg-[#030303] flex items-center justify-center pointer-events-none opacity-0 hidden transition-opacity duration-500">
         <video id="dev-intro-video" class="w-full h-full object-cover" muted playsinline webkit-playsinline="true" preload="auto">
-            <source src="dev_intro_video.mp4" type="video/mp4">
-            <source src="dev_intro_video.webm" type="video/webm">
+            <source id="dev-intro-video-src-mp4" src="dev_intro_video.mp4" type="video/mp4">
+            <source id="dev-intro-video-src-webm" src="dev_intro_video.webm" type="video/webm">
         </video>
     </div>
 
@@ -4017,6 +4018,8 @@
         window._playDevIntroVideo = function(onDone) {
             const overlay = document.getElementById('dev-intro-video-overlay');
             const video = document.getElementById('dev-intro-video');
+            const srcMp4 = document.getElementById('dev-intro-video-src-mp4');
+            const srcWebm = document.getElementById('dev-intro-video-src-webm');
             if (!overlay || !video) { onDone(); return; }
             let done = false;
             const finish = () => {
@@ -4028,11 +4031,18 @@
             };
             video.onended = finish;
             video.onerror = finish;
-            try { video.currentTime = 0; } catch(e) {}
             // Audio: con sonido solo en computadoras; en celulares silenciado.
+            // También se elige el video correspondiente: vertical para
+            // celular, horizontal para computadora.
             let isMobile = false;
             try { isMobile = window.matchMedia('(max-width: 767px)').matches; } catch(e) {}
             video.muted = isMobile;
+            if (srcMp4 && srcWebm) {
+                srcMp4.src = isMobile ? 'dev_intro_video.mp4' : 'dev_intro_video_desktop.mp4';
+                srcWebm.src = isMobile ? 'dev_intro_video.webm' : 'dev_intro_video_desktop.webm';
+                video.load();
+            }
+            try { video.currentTime = 0; } catch(e) {}
             overlay.classList.remove('hidden', 'opacity-0');
             void overlay.offsetWidth;
             overlay.classList.remove('pointer-events-none');
