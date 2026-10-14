@@ -1,0 +1,6 @@
+{
+  "name": "damaso-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio de DAMASO Studio con función de servidor en /api/gemini.js para el asistente de IA."
+}
