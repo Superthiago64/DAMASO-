@@ -746,7 +746,10 @@
             overflow: hidden;
         }
 
-        /* ── INTRO EN VIDEO — pantalla completa (solo modo desarrollador, celulares) ── */
+        /* ── INTRO EN VIDEO — pantalla completa, para todo el público ──
+             object-fit: contain para que el video siempre se vea completo
+             (ajustado a la pantalla) sin recortarse en monitores o
+             proporciones distintas a las del video original. */
         #dev-intro-video-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -756,7 +759,7 @@
             overflow: hidden;
         }
         #dev-intro-video-overlay video {
-            object-fit: cover;
+            object-fit: contain;
         }
 
         /* ── Ícono de 3 rayitas en el botón Menú: para todo el público,
@@ -959,7 +962,7 @@
     <!-- ── INTRO EN VIDEO (todo el público: celular con un video vertical
          silenciado, computadora con un video horizontal con audio) ── -->
     <div id="dev-intro-video-overlay" class="fixed inset-0 z-[9999999] bg-[#030303] flex items-center justify-center pointer-events-none opacity-0 hidden transition-opacity duration-500">
-        <video id="dev-intro-video" class="w-full h-full object-cover" muted playsinline webkit-playsinline="true" preload="auto">
+        <video id="dev-intro-video" class="w-full h-full object-contain" muted playsinline webkit-playsinline="true" preload="auto">
             <source id="dev-intro-video-src-mp4" src="dev_intro_video.mp4" type="video/mp4">
             <source id="dev-intro-video-src-webm" src="dev_intro_video.webm" type="video/webm">
         </video>
